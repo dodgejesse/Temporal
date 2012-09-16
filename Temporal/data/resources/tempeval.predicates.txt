@@ -1,0 +1,8 @@
+(
+
+intersect:<s,s>
+catleft:<d,<r,d>>
+before:<s,<r,s>>
+*:<d,<n,d>>
+
+)

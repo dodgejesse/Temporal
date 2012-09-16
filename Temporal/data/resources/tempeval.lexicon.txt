@@ -1,0 +1,21 @@
+#the lexicon
+
+Friday :- NP : friday:s
+
+year :- NP : year:s
+month :- NP : month:d
+March :- NP : march:s
+August :- NP : august:s
+Sept. :- NP : septemeber:s
+Nov. :- NP : november:s
+
+quarter :- NP : quarter:s
+
+yesterday: NP : yesterday:r
+
+// these are the sequences defined as nth day of every month
+8 :- NP : 8d:s
+30 :- NP : 30d:s
+
+// these are numbers, to be multiplied by durations
+three :- NP : 3:n

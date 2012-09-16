@@ -1,0 +1,30 @@
+a month
+month:d
+
+August 
+august:s
+
+Friday
+friday:s
+
+March 30
+(intersect:<s*,s> (march:s) (30d:s))
+
+Nov. 8
+(intersect:<s*,s> (november:s) (8d:s))
+
+Sept. 30
+(intersect:<s*,s> (september:s) (30d:s))
+
+yesterday
+yesterday:range
+
+the past three months
+(catleft:<d,<r,d>> (*:<d,<n,d>> month:d 3:n) ref_time:r)
+
+last year
+(before:<s,<r,s>> year:s ref_time:r)
+
+the latest quarter
+(before:<s,<r,s>> quarter:s ref_time:r)
+

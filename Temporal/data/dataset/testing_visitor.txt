@@ -1,0 +1,15 @@
+(intersect:<s*,s> march:s 30d:s)
+
+
+(intersect:<s*,s> november:s 8d:s)
+
+
+(intersect:<s*,s> september:s 30d:s)
+
+//(catleft:<d,<r,d>> (*:<d,<n,d>> month:d 3:n) ref_time:r)
+
+//(before:<s,<r,s>> year:s ref_time:r)
+
+//(before:<s,<r,s>> quarter:s ref_time:r)
+
+(next:<s,<r,s>> (intersect:<s*,s> august:s 5d:s) ref_time:r)

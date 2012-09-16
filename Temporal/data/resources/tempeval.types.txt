@@ -1,0 +1,9 @@
+(
+// the types file. Contains info on what types the constants can take. 
+
+n	// number
+r	// range
+s	// sequence
+d	// duration
+
+)
