@@ -1,7 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import edu.uw.cs.lil.tiny.mr.lambda.Lambda;
 import edu.uw.cs.lil.tiny.mr.lambda.Literal;

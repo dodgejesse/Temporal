@@ -5,7 +5,8 @@ import edu.uw.cs.lil.tiny.ccg.categories.ICategoryServices;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.IUnaryParseRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.ParseRuleResult;
-import edu.uw.cs.utils.collections.ListUtils;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SentenceCompilation
@@ -20,10 +21,14 @@ public class SentenceCompilation
 
   public Collection<ParseRuleResult<LogicalExpression>> apply(Category<LogicalExpression> category)
   {
-    return 
-      ListUtils.createSingletonList(new ParseRuleResult(
-      "to_s", this.categoryServices.getSentenceCategory()
-      .cloneWithNewSemantics((LogicalExpression)category.getSem())));
+		final Collection<ParseRuleResult<LogicalExpression>> list = new ArrayList<ParseRuleResult<LogicalExpression>>();
+		list.add(new ParseRuleResult<LogicalExpression>("shift_to_s", categoryServices
+				.getSentenceCategory().cloneWithNewSemantics(category.getSem())));
+				return list;
+	  //return 
+      //ListUtils.createSingletonList(new ParseRuleResult(
+      //"to_s", this.categoryServices.getSentenceCategory()
+      //.cloneWithNewSemantics((LogicalExpression)category.getSem())));
   }
 }
 

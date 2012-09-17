@@ -1,25 +1,28 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.ccg.categories.ICategoryServices;
-import edu.uw.cs.lil.tiny.data.DatasetException;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicLanguageServices;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
-import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpressionRuntimeException;
 import edu.uw.cs.lil.tiny.mr.lambda.Ontology;
 import edu.uw.cs.lil.tiny.mr.lambda.ccg.LogicalExpressionCategoryServices;
-import edu.uw.cs.lil.tiny.mr.lambda.visitor.Simplify;
 import edu.uw.cs.lil.tiny.mr.language.type.TypeRepository;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.CKYBinaryParsingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.multi.MultiCKYParser;
+import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.FactoredLexicon;
+import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.Lexeme;
+import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexemeFeatureSet;
+import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexicalTemplateFeatureSet;
+import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.scorers.LexemeCooccurrenceScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSetBuilder;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionCoordinationFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionTypeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ExpLengthLexicalEntryScorer;
+import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ScalingScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.SkippingSensitiveLexicalEntryScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.UniformScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
@@ -43,9 +46,7 @@ import edu.uw.cs.utils.log.LogLevel;
 import edu.uw.cs.utils.log.Logger;
 import edu.uw.cs.utils.log.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class TempEval2Dev {
 		Logger.setSkipPrefix(true);
 		LogLevel.INFO.set();
 
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 
 		// Data directories
 		String datasetDir = "/home/jessedd/workspace/Temporal/data/dataset/";
@@ -128,6 +129,8 @@ public class TempEval2Dev {
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());
 
+		// Below is the code from Geo880DevParameterEstimation. I am replacing this with code from Geo880Dev.
+		/*
 		// Init the lexicon
 		final ILexicon<LogicalExpression> lexicon = new Lexicon<LogicalExpression>();
 		lexicon.addEntriesFromFile(
@@ -159,11 +162,73 @@ public class TempEval2Dev {
 						new LogicalExpressionTypeFeatureSet<Sentence>())
 				.addLexicalFeatureSet(lexPhi)
 				.setLexicon(new Lexicon<LogicalExpression>()).build();
-
+		*/
+		
+		// Init the lexicon
+				// final Lexicon<LogicalExpression> fixed = new
+				// Lexicon<LogicalExpression>();
+		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
+		fixedInput.addEntriesFromFile(new File(resourcesDir
+				+ "tempeval.lexicon.txt"), new StubStringFilter(),
+				categoryServices, EntryOrigin.FIXED_DOMAIN);
+		
+		final ILexicon<LogicalExpression> fixed = new Lexicon<LogicalExpression>();
+		// factor the fixed lexical entries
+		for (final LexicalEntry<LogicalExpression> lex : fixedInput
+				.toCollection()) {
+			fixed.add(FactoredLexicon.factor(lex));
+		}
+		
+		final LexicalFeatureSet<LogicalExpression> lexPhi = new LexicalFeatureSetBuilder<LogicalExpression>()
+				.setInitialFixedScorer(
+						new ExpLengthLexicalEntryScorer<LogicalExpression>(
+								10.0, 1.1))
+				.setInitialScorer(
+						new SkippingSensitiveLexicalEntryScorer<LogicalExpression>(
+								categoryServices,
+								-1.0,
+								new UniformScorer<LexicalEntry<LogicalExpression>>(
+										0.0)))
+				// .setInitialWeightScorer(gizaScores)
+				.build();
+				
+				// Create the lexeme feature set
+				//final LexemeCooccurrenceScorer gizaScores;
+				// final DecoderHelper<LogicalExpression> decoderHelper = new
+				// DecoderHelper<LogicalExpression>(
+				// categoryServices);
+				//try {
+				//	gizaScores = new LexemeCooccurrenceScorer(new File(resourcesDir
+				//			+ "/geo600.dev.giza_probs"));
+				//} catch (final IOException e) {
+				//	System.err.println(e);
+				//	throw new RuntimeException(e);
+				//}
+				//final LexemeFeatureSet lexemeFeats = new LexemeFeatureSet.Builder()
+				//		.setInitialFixedScorer(new UniformScorer<Lexeme>(0.0))
+				//		.setInitialScorer(new ScalingScorer<Lexeme>(10.0, gizaScores))
+				//		.build();
+				
+				final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
+						.setScale(0.1)
+						// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
+						.build();
+				
+				// Create the entire feature collection
+				final Model<Sentence, LogicalExpression> model = new Model.Builder<Sentence, LogicalExpression>()
+						.addParseFeatureSet(
+								new LogicalExpressionCoordinationFeatureSet<Sentence>())
+						.addParseFeatureSet(
+								new LogicalExpressionTypeFeatureSet<Sentence>())
+						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
+						.addLexicalFeatureSet(templateFeats)
+						.setLexicon(new FactoredLexicon()).build();
+				
+		
 		// Initialize lexical features. This is not "natural" for every lexical
 		// feature set, only for this one, so it's done here and not on all
 		// lexical feature sets.
-		model.addFixedLexicalEntries(lexicon.toCollection());
+		model.addFixedLexicalEntries(fixed.toCollection());
 
 		// Parsing rules
 		final RuleSetBuilder<LogicalExpression> ruleSetBuilder = new RuleSetBuilder<LogicalExpression>();
@@ -198,6 +263,7 @@ public class TempEval2Dev {
 						new CKYBinaryParsingRule<LogicalExpression>(
 								new BackwardSkippingRule<LogicalExpression>(
 										categoryServices)))
+				
 				.setMaxNumberOfCellsInSpan(100).build();
 
 		TemporalTesterSmall tester = TemporalTesterSmall.build(test, parser);
