@@ -12,4 +12,6 @@
 
 //(before:<s,<r,s>> quarter:s ref_time:r)
 
-(next:<s,<r,s>> (intersect:<s*,s> august:s 5d:s))
+(next:<s,<r,s>> (intersect:<s*,s> august:s 5d:s) ref_time:r)
+
+(next:<s,<r,s>> monday:s ref_time:r)

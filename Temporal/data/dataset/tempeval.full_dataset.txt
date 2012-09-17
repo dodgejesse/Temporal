@@ -4,12 +4,12 @@ a month
 P1M
 
 //CANBERRA , Australia ( AP ) _ Qantas will almost double its flights between Australia and India by August in the search for new markets untouched by the crippling Asian financial crisis . 
-august 
+August 
 1998-02-13
 1998-08
 
 //Qantas plans daily flights between Sydney and Bombay , up from the current four flights a week , to boost business and tourism ties with India , the airline announced Friday . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
@@ -19,27 +19,27 @@ current
 PRESENT_REF
 
 //In a joint statement with Tourism Minister Andrew Thomson , it said two new flights would leave Bombay on Monday and Tuesday nights from March 30 , with the third departing each Thursday from August 6 . This will add nearly 700 seats a week on the route . 
-monday 
+Monday 
 1998-02-13
 XXXX-WXX-1TNI
 
 //In a joint statement with Tourism Minister Andrew Thomson , it said two new flights would leave Bombay on Monday and Tuesday nights from March 30 , with the third departing each Thursday from August 6 . This will add nearly 700 seats a week on the route . 
-each thursday 
+each Thursday 
 1998-02-13
 XXXX-WXX-4
 
 //In a joint statement with Tourism Minister Andrew Thomson , it said two new flights would leave Bombay on Monday and Tuesday nights from March 30 , with the third departing each Thursday from August 6 . This will add nearly 700 seats a week on the route . 
-august 6 
+August 6 
 1998-02-13
 1998-08-06
 
 //In a joint statement with Tourism Minister Andrew Thomson , it said two new flights would leave Bombay on Monday and Tuesday nights from March 30 , with the third departing each Thursday from August 6 . This will add nearly 700 seats a week on the route . 
-tuesday nights 
+Tuesday nights 
 1998-02-13
 XXXX-WXX-2TNI
 
 //In a joint statement with Tourism Minister Andrew Thomson , it said two new flights would leave Bombay on Monday and Tuesday nights from March 30 , with the third departing each Thursday from August 6 . This will add nearly 700 seats a week on the route . 
-march 30 
+March 30 
 1998-02-13
 1998-03-30
 
@@ -49,22 +49,22 @@ march 30
 1995
 
 //BONN , Germany ( AP ) _ A phony address listed on disclosure forms for a French donor will cost the far-right German People 's Union about 549,000 marks ( dlrs 305,000 ) , parliament said Friday . 
-friday 
+Friday 
 1998-06-26
 1998-06-26
 
 //The extremist party recently took a surprising 13 percent of the vote in elections in a depressed eastern German state , and hopes to win its first seats in the federal parliament this September . 
-this september 
+this September 
 1998-06-26
 1998-09
 
 //The giant foods , tobacco and brewing company said it will issue common-share purchase rights to shareholders of record Nov. 8 . Under certain circumstances , the rights would entitle Philip Morris holders to buy shares of either the company or its acquirer for half price . 
-nov. 8 
+Nov. 8 
 1989-10-26
 1989-11-08
 
 //As of Sept. 30 , Philip Morris had 926 million shares outstanding . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
@@ -74,7 +74,7 @@ yesterday
 1989-10-25
 
 //Now with new construction under way , three of his buyers have backed out . 
-now 
+Now 
 1998-01-08
 PRESENT_REF
 
@@ -84,7 +84,7 @@ the past three months
 P3M
 
 //She estimates her properties , worth a hundred thirty million dollars in October , are worth only half that now . 
-october 
+October 
 1998-01-08
 1997-10
 
@@ -124,12 +124,12 @@ five year
 P5Y
 
 //The reduced dividend is payable Jan. 2 to stock of record Dec. 15 . 
-dec. 15 
+Dec. 15 
 1989-11-02
 1989-12-15
 
 //The reduced dividend is payable Jan. 2 to stock of record Dec. 15 . 
-jan. 2 
+Jan. 2 
 1989-11-02
 1990-01-02
 
@@ -144,17 +144,17 @@ third-quarter
 1989-Q3
 
 //Since KKR bought RJR in February for $25 billion of debt , it has agreed to sell nearly $5 billion of RJR assets . 
-february 
+February 
 1989-10-30
 1989-02
 
 //" RJR Nabisco and Planters LifeSavers will concentrate more on our own core businesses , " Mr. Gerstner said Friday . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Nestle 's share of 7% before Friday 's purchases is far below the shares of market leaders Hershey Foods Corp. and Mars Inc. , which have about 40% and 36% of the market , respectively . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -164,12 +164,12 @@ last year
 1988
 
 //The candy businesses had sales of about $154 million last year , which was roughly 12% of total revenue for RJR 's Planters LifeSavers unit , according to a memorandum distributed by RJR 's owner , Kohlberg Kravis Roberts amp Co. , to bankers last December . 
-last december 
+last December 
 1989-10-30
 1988-12
 
 //The sale , which had been expected , is part of KKR 's program to pay down $5 billion of a $6 billion bridge loan by February . 
-february 
+February 
 1989-10-30
 1990-02
 
@@ -244,7 +244,7 @@ the year
 P1Y
 
 //Elco Industries Inc. said it expects net income in the year ending June 30 , 1990 , to fall below a recent analyst 's estimate of $1.65 a share . 
-june 30 , 1990 
+June 30 , 1990 
 1989-11-02
 1990-06-30
 
@@ -259,7 +259,7 @@ yesterday
 1989-11-01
 
 //BUDAPEST , Hungary ( AP ) _ Tired of being sidelined , Hungarian astronaut Bertalan Farkas is leaving for the United States to start a new career , he said Saturday . 
-saturday 
+Saturday 
 1998-04-18
 1998-04-18
 
@@ -269,17 +269,17 @@ six days
 P6D
 
 //Farkas , an air force captain , was sent into space on board the Soyuz 36 on May 26 , 1980 . 
-may 26 , 1980 
+May 26 , 1980 
 1998-04-18
 1980-05-26
 
 //McBride , 54 , of Lewisburg , West Virginia , was part of a seven-member crew aboard the Orbiter Challenger in October 1984 and later served as assistant administrator for congressional relations for NASA . 
-october 1984 
+October 1984 
 1998-04-18
 1984-10
 
 //However , cited by District of Columbia traffic police in December for driving under the influence of alcohol , Farkas was ordered home and retired . 
-december 
+December 
 1998-04-18
 1997-12
 
@@ -289,22 +289,22 @@ the following year
 1996
 
 //On May 22 , 1995 , Farkas was made a brigadier general , and the following year he was appointed military attache at the Hungarian embassy in Washington . 
-may 22 , 1995 
+May 22 , 1995 
 1998-04-18
 1995-05-22
 
 //In a Securities and Exchange Commission filing , Hewlett-Packard said it now holds 1,384,119 Octel common shares , including 100,000 shares bought from Aug. 26 to Oct. 20 for $23.31 to $24.25 a share . 
-aug. 26 
+Aug. 26 
 1989-10-30
 1989-08-26
 
 //In a Securities and Exchange Commission filing , Hewlett-Packard said it now holds 1,384,119 Octel common shares , including 100,000 shares bought from Aug. 26 to Oct. 20 for $23.31 to $24.25 a share . 
-oct. 20 
+Oct. 20 
 1989-10-30
 1989-10-20
 
 //According to the filing , Hewlett-Packard acquired 730,070 common shares from Octel as a result of an Aug. 10 , 1988 , stock purchase agreement . 
-aug. 10 , 1988 
+Aug. 10 , 1988 
 1989-10-30
 1988-08-10
 
@@ -339,7 +339,7 @@ PRESENT_REF
 1988
 
 //The results made net income for the year ended Aug. 31 C$2.7 million , or 20 Canadian cents a share , down from C$9.7 million , or 70 Canadian cents a share last year . 
-aug. 31 
+Aug. 31 
 1989-10-30
 1989-08-31
 
@@ -369,7 +369,7 @@ the third quarter
 1989-Q3
 
 //--- Personal spending rose 0.2% in September , the smallest gain in a year . 
-september 
+September 
 1989-10-30
 1989-09
 
@@ -389,7 +389,7 @@ this fall
 1989-FA
 
 //Year-earlier results included an extraordinary gain of $1.6 million from a buy-back of convertible subordinated debentures . 
-year-earlier 
+Year-earlier 
 1989-10-26
 1988-Q3
 
@@ -424,7 +424,7 @@ a year earlier
 1988-09-30
 
 //For the quarter ended Sept. 30 , Delta posted net income of $133.1 million , or $2.53 a share , up from $100 million , or $2.03 a share , a year earlier . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
@@ -509,7 +509,7 @@ a three-year period
 P3Y
 
 //The warning by the U.S. attorney 's office follows two decisions by the U.S. Supreme Court last June . 
-last june 
+last June 
 1989-10-27
 1989-06
 
@@ -519,7 +519,7 @@ soon
 FUTURE_REF
 
 //Gabelli Group began raising its Milton Roy stake in July , and holds 14.6% , according to a recent SEC filing . 
-july 
+July 
 1989-10-30
 1989-07
 
@@ -534,7 +534,7 @@ the next four years
 P4Y
 
 //Earlier this month , Milton Roy signed a letter of intent to acquire Automated Custom Systems Inc. , Orange , Calif. , and its sister operation , Environmental Testing Co. , in Aurora , Colo. The companies are automotive-emissions-testing concerns . 
-earlier this month 
+Earlier this month 
 1989-10-30
 1989-10
 
@@ -554,17 +554,17 @@ from time to time
 FUTURE_REF
 
 //In New York Stock Exchange composite trading Friday , Milton Roy shares leaped $2 , to $18.375 each , while Crane sank $1.125 , to $21.125 a share . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Crane holds 504,200 Milton Roy shares , including 254,200 bought from Sept. 14 to Thursday for $15.50 to $16.75 each . 
-sept. 14 
+Sept. 14 
 1989-10-30
 1989-09-14
 
 //Crane holds 504,200 Milton Roy shares , including 254,200 bought from Sept. 14 to Thursday for $15.50 to $16.75 each . 
-thursday 
+Thursday 
 1989-10-30
 1989-10-26
 
@@ -574,17 +574,17 @@ recently
 PAST_REF
 
 //Thermo Electron acquired some 6% of Milton Roy 's common stock before throwing in the towel and reducing its stake in early September . 
-early september 
+early September 
 1989-10-30
 1989-09
 
 //Milton Roy disclosed in May that it was approached for a possible acquisition by Thermo Electron , which agreed to purchase Milton Roy 's liquid-chromatography line for $22 million in February . 
-may 
+May 
 1989-10-30
 1989-05
 
 //Milton Roy disclosed in May that it was approached for a possible acquisition by Thermo Electron , which agreed to purchase Milton Roy 's liquid-chromatography line for $22 million in February . 
-february 
+February 
 1989-10-30
 1990-02
 
@@ -609,7 +609,7 @@ the past two weeks
 P2W
 
 //The stock 's decline accelerated in the past two weeks , from a price of $8 a share on Oct. 9 . Columbia officials said they do n 't know how quickly they will dispose of the thrift 's junk bonds , because federal regulations , such as those that would allow thrifts to continue holding the bonds in separately capitalized subsidiaries , have n 't yet been completed . 
-oct. 9 
+Oct. 9 
 1989-10-26
 1989-10-09
 
@@ -619,12 +619,12 @@ oct. 9
 1989
 
 //Its ratio of tangible equity to total assets as of Sept. 30 was 3.6% , and total equity was $457.9 million . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
 //The price of Columbia shares has been cut nearly in half since August , when they traded at about $10 , as investors apparently realized that the thrift would be forced to take a big write-down . 
-august 
+August 
 1989-10-26
 1989-08
 
@@ -664,12 +664,12 @@ recent years
 PAST_REF
 
 //Columbia also added $227.3 million to reserves for losses on the portfolio , increasing general reserves to $300 million , or about 6.7% of the total portfolio , as of Sept. 30 . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
 //On June 30 , loss reserves stood at $108.3 million . 
-june 30 
+June 30 
 1989-10-26
 1989-06-30
 
@@ -689,7 +689,7 @@ this past spring
 1989-SP
 
 //In recent months a group of lenders , led by Bank of America , has extended Control Data up to $90 million in revolving loans through January , as well as $115 million in standby letters of credit . 
-january 
+January 
 1989-10-30
 1990-01
 
@@ -709,7 +709,7 @@ third-quarter
 1989-Q3
 
 //Last week Control Data reported third-quarter earnings of $9.8 million , or 23 cents a share , on revenue of $763 million . 
-last week 
+Last week 
 1989-10-30
 1989-WXX
 
@@ -794,17 +794,17 @@ two years ago
 1996
 
 //The New York Times said in an editorial on Saturday , April 25 : The Supreme Court took a detour this week from the core principle of gender fairness it vindicated two years ago in its ruling invalidating the use of sexual stereotypes to justify denying women admission to the Virginia Military Institute . 
-april 25 
+April 25 
 1998-04-24
 1998-04-25
 
 //The split and quarterly dividend will be payable Jan. 3 to stock of record Nov. 16 , the company said . 
-jan. 3 
+Jan. 3 
 1989-11-01
 1990-01-03
 
 //The split and quarterly dividend will be payable Jan. 3 to stock of record Nov. 16 , the company said . 
-nov. 16 
+Nov. 16 
 1989-11-01
 1989-11-16
 
@@ -814,12 +814,12 @@ the fourth quarter
 1989-Q4
 
 //Separately , UniFirst reported that net income rose 21% to $3 million , or 29 cents a share adjusted for the split , for the fourth quarter ended Aug. 26 . 
-aug. 26 
+Aug. 26 
 1989-11-01
 1989-08-26
 
 //A year earlier UniFirst earned $2.4 million , or 24 cents a share adjusted for the split . 
-a year earlier 
+A year earlier 
 1989-11-01
 1988-11-01
 
@@ -834,12 +834,12 @@ about two years ago
 P2Y
 
 //I was pleased to note that your Oct. 23 Centennial Journal item recognized the money-fund concept as one of the significant events of the past century . 
-oct. 23 
+Oct. 23 
 1989-11-01
 1989-10-23
 
 //The dollar soared against the pound , which was at $1.5765 compared with $1.6145 Wednesday . 
-wednesday 
+Wednesday 
 1989-10-27
 1989-10-25
 
@@ -859,12 +859,12 @@ coming weeks
 PXW
 
 //In late New York trading the dollar was at 1.8400 marks and 142.10 yen compared with 1.8353 marks and 141.52 yen Wednesday . 
-wednesday 
+Wednesday 
 1989-10-27
 1989-10-25
 
 //Compaq Computer nose-dived $8.625 a share , to $100 , and pulled other technology issues lower after reporting lower-than-expected earnings after the stock market closed Wednesday . 
-wednesday 
+Wednesday 
 1989-10-27
 1989-10-25
 
@@ -884,7 +884,7 @@ third-quarter
 1989-Q3
 
 //Later yesterday the nation 's major auto makers added to the gloom when they each reported their core auto operations were net losers in the third quarter . 
-later yesterday 
+Later yesterday 
 1989-10-27
 1989-10-26
 
@@ -899,7 +899,7 @@ yesterday
 1989-10-26
 
 //Air Force Lieutenant Colonel Eileen Collins will be named commander of the Space Shuttle Columbia for a mission in December . 
-december 
+December 
 1998-03-04
 1998-12
 
@@ -934,7 +934,7 @@ this year
 1989
 
 //Paribas said Monday that it intends to bid to boost its stake in Navigation Mixte to 66.7% , from the 18.7% it already owns . 
-monday 
+Monday 
 1989-10-27
 1989-10-23
 
@@ -959,7 +959,7 @@ now
 PRESENT_REF
 
 //Paribas says it will offer 1,850 francs ( $296.95 ) each for Navigation Mixte shares that enjoy full dividend rights , and 1,800 francs each for a block of shares issued July 1 , which will receive only partial dividends this year . 
-july 1 
+July 1 
 1989-10-27
 1989-07-01
 
@@ -969,7 +969,7 @@ this year
 1989
 
 //But sources said he will be urging his allies to boost their stakes in Navigation Mixte , which is being traded in London and is to resume trading in Paris Tuesday . 
-tuesday 
+Tuesday 
 1989-10-27
 1989-10-31
 
@@ -984,7 +984,7 @@ last year
 1988
 
 //ISTANBUL , Turkey ( AP ) _ Some 1,500 ethnic Albanians marched Sunday in downtown Istanbul , burning Serbian flags to protest the killings of ethnic Albanians by Serb police in southern Serb Kosovo province . 
-sunday 
+Sunday 
 1998-03-08
 1998-03-08
 
@@ -1024,7 +1024,7 @@ next year
 1999
 
 //CANBERRA , Australia ( AP ) _ Turning its back on 210 years of loyalty to the British royal family , a constitutional convention voted overwhelmingly Friday to make Australia a republic under its own president . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
@@ -1034,7 +1034,7 @@ friday
 P210Y
 
 //Treasurer Peter Costello , Environment Minister Robert Hill and Attorney General Daryl Williams all voted to support the republic Friday . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
@@ -1064,7 +1064,7 @@ the first two years
 P2Y
 
 //Previously , it offered $13.65 a share in cash , or $29 million . 
-previously 
+Previously 
 1989-11-02
 PAST_REF
 
@@ -1094,12 +1094,12 @@ yesterday
 1989-11-01
 
 //Dow Jones amp Co. said it extended its $18-a-share offer for Telerate Inc. common stock until 5 p.m. EST Nov. 9 . The offer , valued at about $576 million for the 33% of Telerate that Dow Jones does n 't already own , had been set to expire Nov. 6 . Dow Jones , which owns about 64 million of Telerate 's 95 million common shares outstanding , said that about 24,000 shares have been tendered under its offer . 
-nov. 6 
+Nov. 6 
 1989-11-02
 1989-11-06
 
 //Dow Jones amp Co. said it extended its $18-a-share offer for Telerate Inc. common stock until 5 p.m. EST Nov. 9 . The offer , valued at about $576 million for the 33% of Telerate that Dow Jones does n 't already own , had been set to expire Nov. 6 . Dow Jones , which owns about 64 million of Telerate 's 95 million common shares outstanding , said that about 24,000 shares have been tendered under its offer . 
-5 p.m. est nov. 9 
+5 p.m. EST Nov. 9 
 1989-11-02
 1989-11-09T17:00
 
@@ -1109,12 +1109,12 @@ yesterday
 1989-11-01
 
 //DD Acquisition Corp. , a partnership of Unicorp Canada Corp. 's Kingsbridge Capital Group and Cara Operations Ltd. , extended to Nov. 20 its $45-a-share offer for all Dunkin ' Donuts Inc. shares outstanding . 
-nov. 20 
+Nov. 20 
 1989-11-02
 1989-11-20
 
 //Dunkin ' has set Nov. 10 as the deadline for the receipt of any competing bids . 
-nov. 10 
+Nov. 10 
 1989-11-02
 1989-11-10
 
@@ -1149,7 +1149,7 @@ yesterday
 1989-10-25
 
 //A committee of outside directors for the Garden City , N.Y. , unit is evaluating the proposal ; the parent asked it to respond by Oct. 31 . 
-oct. 31 
+Oct. 31 
 1989-10-26
 1989-10-31
 
@@ -1174,7 +1174,7 @@ third-quarter
 1989-Q3
 
 //Instead , Sununu sought to prove to the president that his supporters outnumber his critics and that he should remain in his post . ; One senior official Monday described the White House as " a collection of small groups of aides holding their breaths , " waiting to see whether Sununu survives . 
-monday 
+Monday 
 1991-12-03
 1991-12-02
 
@@ -1184,12 +1184,12 @@ last week
 1991-W48
 
 //the handwriting was on the wall , " the source said Monday . ; That , the source said , was when Sununu started calling congressional Republicans and asking them to tell Bush that the conservative wing of the party , in particular , would object if he were fired . ; Officials said the president himself met with Sununu Sunday . 
-sunday 
+Sunday 
 1991-12-03
 1991-12-01
 
 //the handwriting was on the wall , " the source said Monday . ; That , the source said , was when Sununu started calling congressional Republicans and asking them to tell Bush that the conservative wing of the party , in particular , would object if he were fired . ; Officials said the president himself met with Sununu Sunday . 
-monday 
+Monday 
 1991-12-03
 1991-12-02
 
@@ -1244,7 +1244,7 @@ later this afternoon
 1998-02-22TAF
 
 //Jayark Corp. agreed to pay $4 million in cash , $2 million of 12% convertible debentures , and 1.6 million common shares to acquire closely held Kofcoh Imports Inc. In over-the-counter trading Friday , Jayark was quoted at 87.5 cents bid , down 15.625 cents . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -1254,7 +1254,7 @@ the quarter
 1989-Q2
 
 //In the quarter ended July 31 , Jayark had an average of 5.6 million shares outstanding . 
-july 31 
+July 31 
 1989-10-30
 1989-07-31
 
@@ -1264,7 +1264,7 @@ as soon as possible
 FUTURE_REF
 
 //Earlier this year , DPC Acquisition made a $15-a-share offer for Dataproducts , which the Dataproducts board said it rejected because the $283.7 million offer was not fully financed . 
-earlier this year 
+Earlier this year 
 1989-10-30
 1989
 
@@ -1284,7 +1284,7 @@ the third quarter
 1989-Q3
 
 //The latest period had profit from continuing operations of $4 million . 
-the latest period 
+The latest period 
 1989-11-01
 1989-Q3
 
@@ -1314,32 +1314,32 @@ current
 PRESENT_REF
 
 //Earlier this month , Security Pacific , which is among the 10 largest bank holding companies in the U.S. , completed the acquisition of San Diego-based Southwest Bancorp . 
-earlier this month 
+Earlier this month 
 1989-10-27
 1989-10
 
 //As of Sept. 30 , the bank had assets of $511 million and deposits of $469 million , Security Pacific said . 
-sept. 30 
+Sept. 30 
 1989-10-27
 1989-09-30
 
 //Automatic Data Processing Inc. plans to redeem on Nov. 16 its $150 million of 6.5% convertible subordinated debentures due March 1 , 2011 . 
-march 1 , 2011 
+March 1 , 2011 
 1989-10-30
 2011-03-01
 
 //Automatic Data Processing Inc. plans to redeem on Nov. 16 its $150 million of 6.5% convertible subordinated debentures due March 1 , 2011 . 
-nov. 16 
+Nov. 16 
 1989-10-30
 1989-11-16
 
 //In New York Stock Exchange composite trading Friday , Automatic Data closed at $46.50 a share , down $2.25 . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //If all the debt is converted to common , Automatic Data will issue about 3.6 million shares ; last Monday , the company had nearly 73 million shares outstanding . 
-last monday 
+last Monday 
 1989-10-30
 1989-10-23
 
@@ -1369,7 +1369,7 @@ the fiscal year
 P1Y
 
 //While this indicates continued strong demand for the company 's desk-top computers , Sun faces increasing competition from Digital Equipment Corp. and Hewlett-Packard Co. Recently , analysts have said Sun also is vulnerable to competition from International Business Machines Corp. , which plans to introduce a group of workstations early next year , and Next Inc. 
-recently 
+Recently 
 1989-10-26
 PAST_REF
 
@@ -1384,7 +1384,7 @@ a year earlier
 1988-QX
 
 //Sun , a maker of computer workstations , reported sales of $538.5 million for the quarter ended Sept. 29 , up 39% from $388.5 million a year earlier . 
-sept. 29 
+Sept. 29 
 1989-10-26
 1989-09-29
 
@@ -1404,7 +1404,7 @@ the 1988 period
 1988-Q1
 
 //In a statement , Scott McNealy , Sun 's chief executive officer , said the company 's performance was hampered by problems tied to the introduction of a major new family of computers in April . 
-april 
+April 
 1989-10-26
 1988-04
 
@@ -1419,7 +1419,7 @@ this month
 1989-10
 
 //More than two-thirds of the systems shipped , meanwhile , were products introduced in April . 
-april 
+April 
 1989-10-26
 1989-04
 
@@ -1434,7 +1434,7 @@ its fourth quarter
 1989-Q4
 
 //These problems also resulted in Sun reporting a $20.3 million loss for its fourth quarter ended June 30 . 
-june 30 
+June 30 
 1989-10-26
 1989-06-30
 
@@ -1489,7 +1489,7 @@ now
 PRESENT_REF
 
 //The so-called poison pill took effect Aug. 9 pending ratification by holders . 
-aug. 9 
+Aug. 9 
 1989-10-26
 1989-08-09
 
@@ -1509,7 +1509,7 @@ the fiscal-first quarter
 1989-Q1
 
 //Separately , Dominion Textile posted net income of 4.7 million Canadian dollars ( $4 million ) , or 12 Canadian cents a share , for the fiscal-first quarter ended Sept. 30 . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
@@ -1539,7 +1539,7 @@ this year 's third quarter
 1987
 
 //Quarterly net income this year has risen just over comparable periods in 1988 , when year-end net was below the 1987 level . 
-quarterly 
+Quarterly 
 1989-10-26
 P3M
 
@@ -1559,7 +1559,7 @@ this year
 1989
 
 //Assets as of Sept. 30 fell to $2.46 billion from about $2.77 billion . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
@@ -1569,7 +1569,7 @@ sept. 30
 1990
 
 //Mr. Schwarz , 52 years old , will succeed Daniel P. Davison Feb. 1 , soon after Mr. Davison reaches the company 's mandatory retirement age of 65 . 
-feb. 1 
+Feb. 1 
 1989-10-26
 1990-02-01
 
@@ -1584,7 +1584,7 @@ PAST_REF
 1974
 
 //U.S. Trust also created a four-member office of the chairman , effective Feb. 1 . It will include Messrs . 
-feb. 1 
+Feb. 1 
 1989-10-26
 1990-02-01
 
@@ -1654,12 +1654,12 @@ the nine months
 P9M
 
 //Third-quarter results included net realized capital gains of $48 million , which included $27 million from the sale of Federated Investors in August and a $15 million tax credit . 
-august 
+August 
 1989-10-30
 1989-08
 
 //Third-quarter results included net realized capital gains of $48 million , which included $27 million from the sale of Federated Investors in August and a $15 million tax credit . 
-third-quarter 
+Third-quarter 
 1989-10-30
 1989-Q3
 
@@ -1674,7 +1674,7 @@ year-earlier
 1988
 
 //Last year catastrophe losses totaled $5 million , when net was $235.5 million , or $2.07 a share . 
-last year 
+Last year 
 1989-10-30
 1988
 
@@ -1699,7 +1699,7 @@ last year
 1988-Q3
 
 //In New York Stock Exchange composite trading Friday , Aetna closed at $60 , down 50 cents . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -1709,7 +1709,7 @@ nearly three years
 P3Y
 
 //Under terms of the agreement , shareholders other than the Underwoods will receive $3,500 a share at closing , which is expected in December . 
-december 
+December 
 1989-11-02
 1989-12
 
@@ -1724,7 +1724,7 @@ three years
 P3Y
 
 //The appointment takes effect Nov. 13 . 
-nov. 13 
+Nov. 13 
 1989-11-02
 1989-11-13
 
@@ -1734,7 +1734,7 @@ yesterday
 1989-11-01
 
 //He succeeds James A. Taylor , who stepped down as chairman , president and chief executive in March for health reasons . 
-march 
+March 
 1989-11-02
 1989-03
 
@@ -1749,7 +1749,7 @@ a year earlier
 1988-Q3
 
 //Those included costs associated with the potential Valley Federal Savings and Loan Association acquisition , which was terminated on Sept. 27 , 1989 . 
-sept. 27 , 1989 
+Sept. 27 , 1989 
 1989-11-02
 1989-11-27
 
@@ -1764,7 +1764,7 @@ yesterday
 1989-10-25
 
 //A year ago , Benjamin Franklin had profit of $1.8 million , or 23 cents a share . 
-a year ago 
+A year ago 
 1989-10-26
 1988
 
@@ -1774,7 +1774,7 @@ within 18 months
 P18M
 
 //Reed International PLC said that net income for the six months ended Oct. 1 slipped 5% to #89.7 million ( $141.9 million ) , or 16 pence a share , from #94.8 million ( $149.9 million ) , or 17.3 pence a share . 
-oct. 1 
+Oct. 1 
 1989-11-02
 1989-10-01
 
@@ -1814,7 +1814,7 @@ yesterday
 1989-11-01
 
 //Society Corp. , which is also a bank , agreed in June to buy Trustcorp for 12.4 million shares of stock with a market value of about $450 million . 
-june 
+June 
 1989-10-30
 1989-06
 
@@ -1829,7 +1829,7 @@ yesterday
 1989-10-31
 
 //Waxman Industries Inc. said holders of $6,542,000 face amount of its 6 1/4% convertible subordinated debentures , due March 15 , 2007 , have elected to convert the debt into about 683,000 common shares . 
-march 15 , 2007 
+March 15 , 2007 
 1989-10-30
 2007-03-15
 
@@ -1849,7 +1849,7 @@ the quarter
 1989-Q3
 
 //The Los Angeles thrift holding company said it had a loss of $92.2 million , or $6.98 a share , for the quarter ended Sept. 30 . 
-sept. 30 
+Sept. 30 
 1989-11-01
 1989-09-30
 
@@ -1874,7 +1874,7 @@ the third quarter
 1989-Q3
 
 //Dresdner Bank said it will also buy all shares tendered by shareholders on the Paris Stock Exchange at the same price from today through Nov. 17 . 
-nov. 17 
+Nov. 17 
 1989-10-27
 1989-11-17
 
@@ -1884,7 +1884,7 @@ today
 1989-10-27
 
 //In addition , the bank has an option to buy a 30.84% stake in BIP from Societe Generale after Jan. 1 , 1990 at 1,015 francs a share . 
-jan. 1 , 1990 
+Jan. 1 , 1990 
 1989-10-27
 1990-01-01
 
@@ -1894,7 +1894,7 @@ today
 PRESENT_REF
 
 //International Women 's Day is this coming Sunday , March eighth . 
-this coming sunday , march eighth 
+this coming Sunday , March eighth 
 1998-03-05
 1998-03-08
 
@@ -1909,17 +1909,17 @@ the past twenty years
 P20Y
 
 //Police confirmed Friday that the body found along a highway in this municipality 15 miles south of San Juan belonged to Jorge Hernandez , 49 . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
 //CAGUAS , Puerto Rico ( AP ) _ Kidnappers kept their promise to kill a store owner they took hostage and police found the man 's dismembered and decapitated body Friday wrapped in plastic garbage bags . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
 //His kidnappers demanded a ransom of dlrs 1 million , but negotiations broke off at noon Thursday . 
-thursday 
+Thursday 
 1998-02-13
 1998-02-12T12:00
 
@@ -1929,7 +1929,7 @@ noon
 1998-02-12T12:00
 
 //Hernandez was kidnapped from his small , neighborhood store in the town of Trujillo Alto at 10 p.m. Wednesday , police said . 
-wednesday 
+Wednesday 
 1998-02-13
 1998-02-11T22:00
 
@@ -1939,37 +1939,37 @@ wednesday
 1998-02-11T22:00
 
 //Dow Jones said it extended the offer to allow shareholders time to review a supplement to the Dow Jones tender offer circular that it mailed last Friday . 
-last friday 
+last Friday 
 1989-10-30
 1989-10-27
 
 //Dow Jones amp Co. extended its tender offer of $18 a share , or about $576 million , for the 33% of Telerate Inc. that it does n 't already own until 5 p.m. EST , Nov. 6 . The offer , which Telerate 's two independent directors have rejected as inadequate , previously had been scheduled to expire at midnight Friday . 
-5 p.m. est , nov. 6 
+5 p.m. EST , Nov. 6 
 1989-10-30
 1989-11-06T17
 
 //Dow Jones amp Co. extended its tender offer of $18 a share , or about $576 million , for the 33% of Telerate Inc. that it does n 't already own until 5 p.m. EST , Nov. 6 . The offer , which Telerate 's two independent directors have rejected as inadequate , previously had been scheduled to expire at midnight Friday . 
-midnight friday 
+midnight Friday 
 1989-10-30
 1989-10-27T24
 
 //The supplement contains various information that has been filed with the Securities and Exchange Commission since Dow Jones launched the offer on Sept. 26 , but it does n 't change the terms and conditions of the offer except to extend its expiration date . 
-sept. 26 
+Sept. 26 
 1989-10-30
 1989-09-26
 
 //Telerate shares fell 50 cents on Friday to close at $20 each in New York Stock Exchange composite trading . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Late last week , representatives of Dow Jones and Telerate began negotiations about the terms of the offer , but those talks did n 't result in any changes in the offer . 
-late last week 
+Late last week 
 1989-10-30
 1989-WXX
 
 //The Russian foreign minister , meanwhile , sought to soften the harsh words of his military counterpart , saying on Friday that Russia now feels the US must hold off at least until UN secretary general Kofi Annan visits Baghdad in a last-ditch effort at diplomacy . 
-friday 
+Friday 
 1998-02-13
 1998-02-13
 
@@ -1994,7 +1994,7 @@ less than one hour
 PT1H
 
 //President Clinton , meantime , glossed over stern warnings from Moscow on Thursday that US air strikes against Iraq could do serious harm to relations with the Kremlin . 
-thursday 
+Thursday 
 1998-02-13
 1998-02-12
 
@@ -2119,17 +2119,17 @@ two years
 P2Y
 
 //Last April , Mr. Drabinsky and a group of financial backers planned to acquire up to 30.2% of Cineplex for C$17.50 a share from Bronfman associates . 
-last april 
+Last April 
 1989-10-26
 1989-04
 
 //" We consider that his bid is an acceptable bid , " said Sandra Kolber , spokeswoman for the independent directors ' committee appointed last May to solicit and review bids for the company in the wake of a dispute between Mr. Drabinsky and Cineplex 's major shareholder , MCA Inc. MCA and Cineplex 's other major shareholder , Montreal-based financier Charles Bronfman and his associates , have agreed to tender their holdings to an offer by Mr. Drabinsky unless a higher offer is made by another bidder . 
-last may 
+last May 
 1989-10-26
 1989-05
 
 //Drabinsky and Gottlieb mail an offer to shareholders by Nov. 22 , it will reimburse them a maximum of C$8.5 million for expenses related to a bid . 
-nov. 22 
+Nov. 22 
 1989-10-26
 1989-11-22
 
@@ -2149,7 +2149,7 @@ a week
 P1W
 
 //In July last year in Phnom Penh , Cambodia 's capital , Second Prime Minister Hun Sen staged a successful coup d'etat against First Prime Minister Prince Norodom Ranariddh . 
-july last year 
+July last year 
 1998-02-19
 1997-06
 
@@ -2164,7 +2164,7 @@ mid-1996
 1996
 
 //But in June last year , the remaining leadership had a falling out , and Pol Pot was arrested . 
-june last year 
+June last year 
 1998-02-19
 1997-06
 
@@ -2179,17 +2179,17 @@ almost two years ago
 P2Y
 
 //O'SMACH , Cambodia ( AP ) _ The top commander of a Cambodian resistance force said Thursday he has sent a team to recover the remains of a British mine removal expert kidnapped and presumed killed by Khmer Rouge guerrillas almost two years ago . 
-thursday 
+Thursday 
 1998-02-19
 1998-02-19
 
 //Howes had been working for the Britain-based Mines Advisory Group when he was abducted with his Cambodian interpreter Houn Hourth in March 1996 . 
-march 1996 
+March 1996 
 1998-02-19
 1996-03
 
 //In January this year , British police officers who had been searching for Howes concluded he had probably been killed soon after being captured . 
-january this year 
+January this year 
 1998-02-19
 1998-01
 
@@ -2204,17 +2204,17 @@ weeks or months
 PXW
 
 //The Foreign Office said it had informed the family of Howes , 37 years old when he was kidnapped , that he probably died within weeks or months of his capture on March 26 , 1996 . 
-march 26 , 1996 
+March 26 , 1996 
 1998-02-19
 1996-03-26
 
 //` ` We will continue to do everything we can to establish what has happened . ' ' Thai military officials who monitor Cambodian affairs said privately Thursday that Britain , through its embassies in Thailand and Cambodia , has been pushing hard to resolve the Howes case as the second anniversary of his abduction nears . 
-thursday 
+Thursday 
 1998-02-19
 1998-02-19
 
 //The company said it expects to release third-quarter results in mid-November . 
-mid-november 
+mid-November 
 1989-10-27
 1989-11
 
@@ -2224,7 +2224,7 @@ the third quarter
 1989-Q3
 
 //In the comparable year-ago quarter , the second quarter ended Oct. 31 , Service Corp. had a loss of about $12.5 million , or 26 cents a share , on revenue of $175.4 million . 
-oct. 31 
+Oct. 31 
 1989-10-27
 1988-10-31
 
@@ -2239,7 +2239,7 @@ second quarter
 1988-Q2
 
 //The funeral home and cemetery operator changed from a fiscal year to a calendar year in December . 
-december 
+December 
 1989-10-27
 1988-12
 
@@ -2264,17 +2264,17 @@ the latest quarter
 1989-Q3
 
 //Last year , DSM had 71 million guilders of extraordinary charges for the restructuring program and other transactions . 
-last year 
+Last year 
 1989-11-02
 1988
 
 //Meanwhile , Egypt 's official Middle East News Agency said Thursday that Saddam was the target of an assassination attempt , which led to ` ` large-scale ' ' arrests , including some close associates of the Iraqi strongman . 
-thursday 
+Thursday 
 1990-08-16
 1990-08-16
 
 //Saddam has been under international quarantine since his Aug. 2 power-grab , or what he calls an ` ` eternal merger ' ' with Kuwait . 
-aug. 2 
+Aug. 2 
 1990-08-16
 1990-08-02
 
@@ -2284,7 +2284,7 @@ now
 PRESENT_REF
 
 //In a long verbal attack read on Iraqi television Thursday , Saddam repeatedly called Bush ` ` a liar ' ' and said a shooting war could produce body bags courtesy of Baghdad . 
-thursday 
+Thursday 
 1990-08-16
 1990-08-16
 
@@ -2294,12 +2294,12 @@ this week
 1990-W33
 
 //Reports attributed to the Japanese foreign ministry said Saudi Arabia told U.S. , European and Japanese oil companies of a 15-20 percent cutback in its oil supply in September . 
-september 
+September 
 1990-08-16
 1990-09
 
 //He also said of trade with Iraq : ` ` There are no shipments at the moment . ' ' A day earlier , scores of trucks , many with Iraqi license plates , streamed north out of Aqaba to Amman and onto the desert highway bound for Iraq . 
-a day earlier 
+A day earlier 
 1990-08-16
 P1D
 
@@ -2309,17 +2309,17 @@ now
 PRESENT_REF
 
 //Thirty-two of the 159 U.N. members had filed compliance reports by Wednesday , and all were honoring the sanctions Iraq . 
-wednesday 
+Wednesday 
 1990-08-16
 1990-08-15
 
 //The Persian Gulf showdown between Iraq and the United States took a more personal turn Thursday when Iraq 's Saddam Hussein called President Bush a liar and said the outbreak of holy war could bring thousands of Americans home in coffins . 
-thursday 
+Thursday 
 1990-08-16
 1990-08-16
 
 //Bush also said Thursday that King Hussein assured him Jordan would close the last remaining free port to most Iraqi trade as the economic embargo on materials to Iraq continued unabated . 
-thursday 
+Thursday 
 1990-08-16
 1990-08-16
 
@@ -2329,7 +2329,7 @@ two-hour
 PT2H
 
 //Also Thursday , Saudi Arabia called for an emergency conference of the Organization of Petroleum Exporting Countries to discuss how much oil to pump . 
-thursday 
+Thursday 
 1990-08-16
 1990-08-16
 
@@ -2339,7 +2339,7 @@ the fiscal year
 1989
 
 //Oshkosh Truck Corp. , Oshkosh , Wis. , estimated earnings for its fourth quarter ended Sept. 30 fell 50% to 75% below the year-earlier $4.5 million , or 51 cents a share . 
-sept. 30 
+Sept. 30 
 1989-11-02
 1989-09
 
@@ -2379,7 +2379,7 @@ a few minutes
 PXM
 
 //We 're not going to dignify the latest false leak with a response . ' ' McCurry on Friday ` ` I want to be absolutely clear , to the extent there is any implication or the slightest suggestion that Mrs. Currie believes that the President or anyone else tried to influence her recollection , that is absolutely false and a mischaracterization of the facts . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
@@ -2389,32 +2389,32 @@ the past few weeks
 PXW
 
 //WASHINGTON _ Following are statements made Friday and Thursday by Lawrence Wechsler , a lawyer for the White House secretary , Betty Currie ; the White House ; White House spokesman Mike McCurry , and President Clinton in response to an article in The New York Times on Friday about her statements regarding a meeting with the president : Wechsler on Thursday ` ` Without commenting on the allegations raised in this article , to the extent that there is any implication or suggestion that Mrs. Currie was aware of any legal or ethical impropriety by anyone , that implication or suggestion is entirely inaccurate . ' ' White House on Thursday ` ` For the past few weeks we ' ve been subjected to false leaks designed to mislead both reporters and the American public . 
-thursday 
+Thursday 
 1998-02-06
 1998-02-05
 
 //WASHINGTON _ Following are statements made Friday and Thursday by Lawrence Wechsler , a lawyer for the White House secretary , Betty Currie ; the White House ; White House spokesman Mike McCurry , and President Clinton in response to an article in The New York Times on Friday about her statements regarding a meeting with the president : Wechsler on Thursday ` ` Without commenting on the allegations raised in this article , to the extent that there is any implication or suggestion that Mrs. Currie was aware of any legal or ethical impropriety by anyone , that implication or suggestion is entirely inaccurate . ' ' White House on Thursday ` ` For the past few weeks we ' ve been subjected to false leaks designed to mislead both reporters and the American public . 
-thursday 
+Thursday 
 1998-02-06
 1998-02-05
 
 //WASHINGTON _ Following are statements made Friday and Thursday by Lawrence Wechsler , a lawyer for the White House secretary , Betty Currie ; the White House ; White House spokesman Mike McCurry , and President Clinton in response to an article in The New York Times on Friday about her statements regarding a meeting with the president : Wechsler on Thursday ` ` Without commenting on the allegations raised in this article , to the extent that there is any implication or suggestion that Mrs. Currie was aware of any legal or ethical impropriety by anyone , that implication or suggestion is entirely inaccurate . ' ' White House on Thursday ` ` For the past few weeks we ' ve been subjected to false leaks designed to mislead both reporters and the American public . 
-thursday 
+Thursday 
 1998-02-06
 1998-02-05
 
 //WASHINGTON _ Following are statements made Friday and Thursday by Lawrence Wechsler , a lawyer for the White House secretary , Betty Currie ; the White House ; White House spokesman Mike McCurry , and President Clinton in response to an article in The New York Times on Friday about her statements regarding a meeting with the president : Wechsler on Thursday ` ` Without commenting on the allegations raised in this article , to the extent that there is any implication or suggestion that Mrs. Currie was aware of any legal or ethical impropriety by anyone , that implication or suggestion is entirely inaccurate . ' ' White House on Thursday ` ` For the past few weeks we ' ve been subjected to false leaks designed to mislead both reporters and the American public . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
 //WASHINGTON _ Following are statements made Friday and Thursday by Lawrence Wechsler , a lawyer for the White House secretary , Betty Currie ; the White House ; White House spokesman Mike McCurry , and President Clinton in response to an article in The New York Times on Friday about her statements regarding a meeting with the president : Wechsler on Thursday ` ` Without commenting on the allegations raised in this article , to the extent that there is any implication or suggestion that Mrs. Currie was aware of any legal or ethical impropriety by anyone , that implication or suggestion is entirely inaccurate . ' ' White House on Thursday ` ` For the past few weeks we ' ve been subjected to false leaks designed to mislead both reporters and the American public . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
 //I am shocked and dismayed by the numerous leaks regarding Mrs. Currie 's grand jury testimony . ' ' Clinton on Friday . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
@@ -2429,17 +2429,17 @@ today
 1998-02-06
 
 //Some of the biggest employment gains came in the construction industry , which added 92,000 jobs in January . 
-january 
+January 
 1998-02-06
 1998-01
 
 //After accounting for a small downward revision Friday to December 's figures , the economy has been creating jobs at a rate of 358,000 a month for the last four months _ and 381,000 over the last three months _ after averaging 242,000 for the first nine months of 1997 . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
 //After accounting for a small downward revision Friday to December 's figures , the economy has been creating jobs at a rate of 358,000 a month for the last four months _ and 381,000 over the last three months _ after averaging 242,000 for the first nine months of 1997 . 
-december 
+December 
 1998-02-06
 1997-12
 
@@ -2464,7 +2464,7 @@ the last four months
 P4M
 
 //The job figures for January extended a surge in employment gains that began last fall , just when the labor market had showed signs of cooling . 
-january 
+January 
 1998-02-06
 1998-01
 
@@ -2474,7 +2474,7 @@ last fall
 1997-FA
 
 //President Clinton welcomed the job figures at a news conference Friday . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
@@ -2484,7 +2484,7 @@ the last few months
 PAST_REF
 
 //` ` Those fumes will exhaust themselves , and the manufacturing sector is going to start getting beat up in the spring . ' ' The figures showed the unemployment rate for adult men declined to 3.8 percent last month from 4.1 percent in December , the lowest figure for almost two decades . 
-december 
+December 
 1998-02-06
 1997-12
 
@@ -2494,7 +2494,7 @@ last month
 1998-01
 
 //Among people with less than a high school education , the rate in January was 7.2 percent . 
-january 
+January 
 1998-02-06
 1998-01
 
@@ -2504,12 +2504,12 @@ last month
 1998-01
 
 //WASHINGTON _ The economy created jobs at a surprisingly robust pace in January , the government reported on Friday , evidence that America 's economic stamina has withstood any disruptions caused so far by the financial tumult in Asia . 
-friday 
+Friday 
 1998-02-06
 1998-02-06
 
 //WASHINGTON _ The economy created jobs at a surprisingly robust pace in January , the government reported on Friday , evidence that America 's economic stamina has withstood any disruptions caused so far by the financial tumult in Asia . 
-january 
+January 
 1998-02-06
 1998-01
 
@@ -2534,7 +2534,7 @@ a year earlier
 1997
 
 //Stocks rose , pushing the Dow Jones industrial average up 72.24 points , to 8,189.49 , leaving the index within 70 points of its record high set on Aug. 6 . In the bond market , a sensitive barometer of inflation anxiety , prices edged up , pushing down the yield on the benchmark 30-year Treasury bond to 5.92 percent from 5.93 percent . 
-aug. 6 
+Aug. 6 
 1998-02-06
 1997-08-06
 
@@ -2589,17 +2589,17 @@ the nineties
 199
 
 //Orkem and Coates said last Wednesday that the two were considering a merger , through Orkem 's British subsidiary , Orkem Coatings U.K. Ltd. Orkem , France 's third-largest chemical group , said it would fund the acquisition through internal resources . 
-last wednesday 
+last Wednesday 
 1989-11-01
 1989-10-25
 
 //ONEIDA Ltd. declared a 10% stock dividend , payable Dec. 15 to stock of record Nov. 17 . 
-dec. 15 
+Dec. 15 
 1989-10-26
 1989-12-15
 
 //ONEIDA Ltd. declared a 10% stock dividend , payable Dec. 15 to stock of record Nov. 17 . 
-nov. 17 
+Nov. 17 
 1989-10-26
 1989-11-17
 
@@ -2624,7 +2624,7 @@ third-quarter
 1989-Q3
 
 //The earnings-per-share figures reflect a 25% stock dividend in June 1989 . 
-june 1989 
+June 1989 
 1989-10-26
 1989-06
 
@@ -2634,7 +2634,7 @@ the latest quarter
 1989-Q3
 
 //The following month , the company put itself up for sale . 
-the following month 
+The following month 
 1989-10-27
 1989-04
 
@@ -2649,7 +2649,7 @@ yesterday
 1989-10-26
 
 //In January , American Medical brought in a new chief executive officer , Richard A. Gilleland , 45 , who will remain as chairman , president and chief executive . 
-january 
+January 
 1989-10-27
 1989-01
 
@@ -2659,12 +2659,12 @@ months
 PXM
 
 //In March , American Medical received a $24-a-share offer to take the company private from an investor group including large holder M. Lee Pearce . 
-march 
+March 
 1989-10-27
 1989-03
 
 //A few days later , American Medical announced sharply lower earnings , taking charges of $24 million for insurance reserves and canceled real estate leases . 
-a few days 
+A few days 
 1989-10-27
 PXD
 
@@ -2704,7 +2704,7 @@ now
 PRESENT_REF
 
 //Foreign ministers of member-states meeting in the Ethiopian capital agreed to set up a seven-member panel to investigate who shot down Rwandan President Juvenal Habyarimana 's plane on April 6 , 1994 . 
-april 6 , 1994 
+April 6 , 1994 
 1998-02-27
 1994-04-06
 
@@ -2714,7 +2714,7 @@ nearly four years ago
 1994
 
 //ADDIS ABABA , Ethiopia ( AP ) _ The Organization of African Unity said Friday it would investigate the Hutu-organized genocide of more than 500,000 minority Tutsis in Rwanda nearly four years ago . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
@@ -2729,12 +2729,12 @@ a year
 P1Y
 
 //JERUSALEM ( AP ) _ Taking the stand in her own defense , a friend of Yitzhak Rabin 's assassin said Friday that she regretted calling the prime minister a traitor and praying for his death . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
 //Amir , 27 , is serving a life sentence for the November 1995 assassination of Rabin at a Tel Aviv peace rally . 
-november 1995 
+November 1995 
 1998-02-27
 1995-11
 
@@ -2744,7 +2744,7 @@ more than four hours
 PT4H
 
 //She took the stand for more than four hours Friday in a Tel Aviv magistrate 's court . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
@@ -2753,7 +2753,7 @@ around 7 1998-02-12
 1998-02-12T19:15
 
 //NEW YORK _ A Brooklyn woman who was watching her clothes dry in a laundromat was killed Thursday evening when two would-be robbers emptied their pistols into the store , the police said . 
-thursday evening 
+Thursday evening 
 1998-02-12
 1998-02-12TEV
 
@@ -2763,17 +2763,17 @@ a few years ago
 199X
 
 //The insurance concern said all conversion rights on the stock will terminate on Nov. 30 . 
-nov. 30 
+Nov. 30 
 1989-10-30
 1989-11-30
 
 //Conseco Inc. said it is calling for the redemption on Dec. 7 of all the 800,000 remaining shares outstanding of its $1.875 Series A convertible preferred stock at $26.805 a share . 
-dec. 7 
+Dec. 7 
 1989-10-30
 1989-12-07
 
 //In New York Stock Exchange trading Friday , Conseco closed at $19.50 , down 25 cents . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -2783,27 +2783,27 @@ then
 1989-11-30
 
 //Institut Merieux S.A. , which offered 942 million Canadian dollars ( US$801.2 million ) , or C$37 a share for Connaught , said it would extend its bid , due to expire last Thursday , to Nov. 6 . A C$30-a-share bid by Ciba-Geigy Ltd. , a pharmaceutical company based in Basel , Switzerland , and California-based Chiron Corp. , a bioresearch concern , was extended to Nov. 16 . 
-last thursday 
+last Thursday 
 1989-10-30
 1989-10-26
 
 //Institut Merieux S.A. , which offered 942 million Canadian dollars ( US$801.2 million ) , or C$37 a share for Connaught , said it would extend its bid , due to expire last Thursday , to Nov. 6 . A C$30-a-share bid by Ciba-Geigy Ltd. , a pharmaceutical company based in Basel , Switzerland , and California-based Chiron Corp. , a bioresearch concern , was extended to Nov. 16 . 
-nov. 6 
+Nov. 6 
 1989-10-30
 1989-11-06
 
 //Institut Merieux S.A. , which offered 942 million Canadian dollars ( US$801.2 million ) , or C$37 a share for Connaught , said it would extend its bid , due to expire last Thursday , to Nov. 6 . A C$30-a-share bid by Ciba-Geigy Ltd. , a pharmaceutical company based in Basel , Switzerland , and California-based Chiron Corp. , a bioresearch concern , was extended to Nov. 16 . 
-nov. 16 
+Nov. 16 
 1989-10-30
 1989-11-16
 
 //Two rival bidders for Connaught BioSciences extended their offers to acquire the Toronto-based vaccine manufacturer Friday . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //It had been due to expire Friday evening . 
-friday evening 
+Friday evening 
 1989-10-30
 1989-10-27TEV
 
@@ -2813,17 +2813,17 @@ last week
 1989-WXX
 
 //Merieux , a vaccine and bioresearch firm based in Lyon , France , is controlled 50.1% by state-owned Rhone Poulenc S.A. The Canadian government previously said Merieux 's bid did n 't offer enough " net benefit " to Canada to be approved , and gave Merieux an until mid-November to submit additional information . 
-mid-november 
+mid-November 
 1989-10-30
 1989-11
 
 //Institut Merieux , which already holds a 12.5% stake in Connaught , said that at the close of business Thursday , 5,745,188 shares of Connaught and C$44.3 million face amount of debentures , convertible into 1,826,596 common shares , had been tendered to its offer . 
-thursday 
+Thursday 
 1989-10-30
 1989-10-26
 
 //At the close of business Thursday , Ciba-Geigy and Chiron said 11,580 common shares had been tendered to their offer . 
-thursday 
+Thursday 
 1989-10-30
 1989-10-26
 
@@ -2833,7 +2833,7 @@ the third quarter
 1989-Q3
 
 //The thrift announced the plan Aug. 21 . 
-aug. 21 
+Aug. 21 
 1989-10-27
 1989-08-21
 
@@ -2843,7 +2843,7 @@ the third quarter
 1989-Q3
 
 //Poughkeepsie said it is continuing to try to sell itself , under a June agreement with a dissident-shareholder group . 
-june 
+June 
 1989-10-27
 1989-06
 
@@ -2853,7 +2853,7 @@ the year-earlier third quarter
 1988-Q3
 
 //The bank also said its effort would continue past the Nov. 1 deadline set in that agreement and that the litigation between the two sides might resume as a result . 
-nov. 1 
+Nov. 1 
 1989-10-27
 1989-11-01
 
@@ -2868,7 +2868,7 @@ the third quarter
 1989-Q3
 
 //Ogden Projects , whose shares began trading on the New York Stock Exchange in August , closed yesterday at $26.875 , down 75 cents . 
-august 
+August 
 1989-11-01
 1989-08
 
@@ -3003,17 +3003,17 @@ two day
 P2D
 
 //Nigeria state radio says thousands of people began gathering in the capital Abuja early Tuesday for the two day rally supporting General Sani Abacha 's candidacy . 
-early tuesday 
+early Tuesday 
 1998-03-03
 1998-03-03
 
 //Today , hundreds of people from the US began to arrive , including some Cuban Americans who left here when Castro came to power and are returning to Havana for the first time . 
-today 
+Today 
 1998-01-20
 1998-01-20
 
 //And so , people are increasingly enthusiastic by the day- [ [ NS ] ] Today , Cuban television , which clings to the Communist Party line , actually began to promote its papal coverage . 
-today 
+Today 
 1998-01-20
 1998-01-20
 
@@ -3058,7 +3058,7 @@ the year
 1989
 
 //For the year ended Sept. 30 , Ralston earned $422.5 million , or $6.44 a share , up 8.9% from $387.8 million , or $5.63 a share . 
-sept. 30 
+Sept. 30 
 1989-11-02
 1989-09-30
 
@@ -3078,7 +3078,7 @@ the full year
 1989
 
 //This year 's results included a gain of $70.2 million on the disposal of seafood operations . 
-this year 
+This year 
 1989-11-02
 1989
 
@@ -3108,12 +3108,12 @@ last week
 1989-WXX
 
 //Earlier yesterday , the Societe de Bourses Francaises was told that a unit of Framatome S.A. also bought Navigation Mixte shares , this purchase covering more than 160,000 shares . 
-earlier yesterday 
+Earlier yesterday 
 1989-11-01
 1989-10-31
 
 //Navigation Mixte 's chairman had suggested that friendly institutions were likely to buy its stock as soon as trading opened Monday . 
-monday 
+Monday 
 1989-11-01
 1989-11-06
 
@@ -3123,7 +3123,7 @@ this week
 1989-W44
 
 //Waertsilae Marine 's bankruptcy proceedings began Tuesday in a Helsinki court . 
-tuesday 
+Tuesday 
 1989-11-02
 1989-10-31
 
@@ -3148,7 +3148,7 @@ two-year
 P2Y
 
 //Earlier staff-reduction moves have trimmed about 300 jobs , the spokesman said . 
-earlier 
+Earlier 
 1989-11-02
 PAST_REF
 
@@ -3163,7 +3163,7 @@ the corresponding period last year
 1988-Q3
 
 //Price Stern Sloan Inc. said it hired an investment banking firm to assist in evaluating restructuring or merger alternatives and reported a net loss of $8.1 million , or $2.14 a share , for the third quarter ended Sept. 30 . 
-sept. 30 
+Sept. 30 
 1989-11-01
 1989-09-30
 
@@ -3173,7 +3173,7 @@ the third quarter
 1989-Q3
 
 //This quarter 's loss includes pretax charges of $4.9 million on the proposed discontinuation of the company 's troubled British subsidiary , and $3.7 million of other write-offs the company said were non-recurring and principally related to inventory , publishing advances and pre-publication costs . 
-this quarter 
+This quarter 
 1989-11-01
 1989-Q3
 
@@ -3193,7 +3193,7 @@ last year 's quarter
 1988-Q3
 
 //Cilcorp said the businesses to be acquired had revenue of $76 million for the year ended March 31 . 
-march 31 
+March 31 
 1989-11-01
 1989-03-31
 
@@ -3243,12 +3243,12 @@ nearly an hour
 PT1H
 
 //In setting out his final challenge to Saddam Hussein , Mr. Bush continued the intensive personal diplomacy he began after the invasion llast August . 
-august 
+August 
 1991-02-25
 1990-08
 
 //Then , a week or so ago , Gen. Schwarzkopf secretly picked Saturday night as the optimal time to start the offensive . 
-saturday night 
+Saturday night 
 1991-02-25
 1991-02-23TNI
 
@@ -3268,12 +3268,12 @@ the four days
 P4D
 
 //The president and his top aides tentatively decided on Feb. 11 that a ground war would be necessary . 
-feb. 11 
+Feb. 11 
 1991-02-25
 1991-02-11
 
 //Finally , when Iraq failed to respond to the U.S. ultimatum , Mr. Bush let the ground offensive begin as previously planned Saturday night . 
-saturday night 
+Saturday night 
 1991-02-25
 1991-02-16TNI
 
@@ -3333,12 +3333,12 @@ a year ago
 1988-Q3
 
 //The stock split , which is subject to holder approval , would be paid on a still unspecified date in January to holders of record Dec. 21 . 
-january 
+January 
 1989-10-26
 1990-01
 
 //The stock split , which is subject to holder approval , would be paid on a still unspecified date in January to holders of record Dec. 21 . 
-dec. 21 
+Dec. 21 
 1989-10-26
 1989-12-21
 
@@ -3353,12 +3353,12 @@ a year ago
 1988-Q3
 
 //The increased dividend will be paid Dec. 14 to holders of record Nov. 15 . 
-dec. 14 
+Dec. 14 
 1989-10-26
 1989-12-14
 
 //The increased dividend will be paid Dec. 14 to holders of record Nov. 15 . 
-nov. 15 
+Nov. 15 
 1989-10-26
 1989-11-15
 
@@ -3383,7 +3383,7 @@ current
 PRESENT_REF
 
 //" We have n 't benefited the shareholder as much as we need to , " said Edgar Woolard Jr. , Du Pont 's chairman and chief executive officer , in an interview several months before he entered his current position in April . 
-april 
+April 
 1989-10-26
 1989-04
 
@@ -3408,7 +3408,7 @@ the third quarter
 1989-Q3
 
 //The latest quarter 's results , however , included a pretax gain of $13.7 million , or 20 cents a share , in the carrying value of the company 's investment in Conner Peripherals Inc. and a $7.6 million gain , or 11 cents a share , from the sale of one million Conner shares . 
-the latest quarter 
+The latest quarter 
 1989-10-26
 1989-Q3
 
@@ -3448,12 +3448,12 @@ the next couple of years
 P2Y
 
 //The preferred shares will carry a floating annual dividend equal to 72% of the 30-day bankers ' acceptance rate until Dec. 31 , 1994 . 
-dec. 31 , 1994 
+Dec. 31 , 1994 
 1989-10-30
 1994-12-31
 
 //John Labatt Ltd. said it plans a private placement of 150 million Canadian dollars ( US$127.5 million ) in preferred shares , to be completed around Nov. 1 . Proceeds will be used to reduce short-term debt at the beer and food concern , said Robert Vaux , vice president , finance . 
-around nov. 1 
+around Nov. 1 
 1989-10-30
 1989-11-01
 
@@ -3513,7 +3513,7 @@ P9M
 1972
 
 //Also Sunday , more than 2,000 Catholic protesters rallied in Portadown against the annual parades by the Orange Order , Northern Ireland 's dominant Protestant fraternal group . 
-sunday 
+Sunday 
 1998-03-22
 1998-02-22
 
@@ -3533,7 +3533,7 @@ this summer
 1998-SU
 
 //Earlier Sunday , police and militant Protestants clashed in a religiously polarized part of north Belfast . 
-earlier sunday 
+Earlier Sunday 
 1998-03-22
 1998-03-22
 
@@ -3543,27 +3543,27 @@ earlier sunday
 P8M
 
 //Chief Superintendent Al McHugh said the bomb discovered in the Irish Republic was destined for an unknown target in Northern Ireland and ` ` would have caused massive destruction . ' ' The discovery appeared to be the latest attempt by extremists opposed to the IRA 's 8-month-old truce to undermine the peace process , set to resume Monday in Belfast . 
-monday 
+Monday 
 1998-03-22
 1998-03-23
 
 //BELFAST , Northern Ireland ( AP ) _ Police seized a car bomb under construction Sunday in a town bordering Northern Ireland on the eve of the return to peace talks by the IRA-allied Sinn Fein party . 
-sunday 
+Sunday 
 1998-03-22
 1998-03-22
 
 //Police found more than 1,300 pounds ( 600 kgs ) of fertilizer-based explosives Sunday in a shed in Dundalk , 50 miles ( 80 kms ) south of Belfast . 
-sunday 
+Sunday 
 1998-03-22
 1998-03-22
 
 //Extremists have bombed two predominantly pro-British Protestant towns and fired mortar shells at a police station since Sinn Fein was expelled from peace talks on Feb. 20 in punishment for two killings blamed on the Irish Republican Army . 
-feb. 20 
+Feb. 20 
 1998-03-22
 1998-02-20
 
 //The British and Irish governments , which cosponsor the multi-party talks that are supposed to conclude by May , invited Sinn Fein to rejoin two weeks ago . 
-may 
+May 
 1998-03-22
 1998-05
 
@@ -3573,12 +3573,12 @@ two weeks ago
 1998-03-08
 
 //` ` We were unjustly pushed out of the talks in February but we are back , ' ' Adams said Sunday . 
-february 
+February 
 1998-03-22
 1998-02
 
 //` ` We were unjustly pushed out of the talks in February but we are back , ' ' Adams said Sunday . 
-sunday 
+Sunday 
 1998-03-22
 1998-03-22
 
@@ -3608,12 +3608,12 @@ nineteen ninety-six
 1996
 
 //Now the ninth US circuit court of appeals has ruled that the original appeal was flawed since it brought up issues that had not been raised before . 
-now 
+Now 
 1998-01-15
 PRESENT_REF
 
 //And powerful political pressures may convince the Conservative government to keep its so-called golden share , which limits any individual holding to 15% , until the restriction expires on Dec. 31 , 1990 . 
-dec. 31 , 1990 
+Dec. 31 , 1990 
 1989-10-27
 1990-12-31
 
@@ -3633,12 +3633,12 @@ P14M
 1984
 
 //This week , the U.S. auto giant paid for 10 House of Commons members and two House of Lords members to fly to Detroit and tour its operations there . 
-this week 
+This week 
 1989-10-27
 1989-WXX
 
 //While the visit was unrelated to Jaguar , GM Chairman Roger Smith answered the legislators ' questions about it over lunch Tuesday . 
-tuesday 
+Tuesday 
 1989-10-27
 1989-10-24
 
@@ -3663,12 +3663,12 @@ yesterday
 1989-10-26
 
 //The GM move follows Tuesday 's declaration by Ford , which holds an unwelcome 12.45% stake in Jaguar , that it is prepared to bid for the entire company . 
-tuesday 
+Tuesday 
 1989-10-27
 1989-10-24
 
 //Since Tuesday , the shares have gained nearly 4% . 
-tuesday 
+Tuesday 
 1989-10-27
 1989-10-24
 
@@ -3698,7 +3698,7 @@ today
 1998-01-11
 
 //Yesterday New York governor George Pataki toured five counties that have been declared under a state of emergency . 
-yesterday 
+Yesterday 
 2010-03-24
 1998-01-10
 
@@ -3713,7 +3713,7 @@ weeks
 PXW
 
 //_The Iraqi ambassador to Venezuela said on Tuesday that Iraq would retaliate against Venezuela and other OPEC oil cartel members if they boost oil production to fill the gap created by blocked supplies from Iraq and Kuwait . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-14
 
@@ -3723,7 +3723,7 @@ now
 1990-08-15T13:37
 
 //The U.N. Security Council on Aug. 6 ordered a global embargo on trade with Iraq as punishment for seizing Kuwait . 
-aug. 6 
+Aug. 6 
 1990-08-15
 1990-08-06
 
@@ -3753,17 +3753,17 @@ now
 PRESENT_REF
 
 //Bush told a news conference on Tuesday that the naval barricade now in force might be extended to Jordan 's Aqaba ` ` if it is a hole through which commerce flows ' ' in and out of Iraq . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-07
 
 //On Tuesday , the United States and Soviet Union conferred in Washington on putting an anti-Iraq naval blockade under a United Nations umbrella . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-07
 
 //Twelve Arab League nations voted for an Arab force to protect Saudi Arabia , with the vanguard of Syria 's contingent arriving Tuesday , according to diplomatic sources in Riyadh , the Saudi capital . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-07
 
@@ -3783,7 +3783,7 @@ today
 1990-08-15
 
 //President Bush on Tuesday said the United States may extend its naval quarantine to Jordan 's Red Sea port of Aqaba to shut off Iraq 's last unhindered trade route . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-14
 
@@ -3798,7 +3798,7 @@ now
 PRESENT_REF
 
 //Iran said an Iraqi diplomatic delegation was en route to Tehran to deliver Saddam 's message , which it said it would review ` ` with optimism . ' ' Saddam appeared to accept a border demarcation treaty he had rejected in peace talks following the August 1988 cease-fire of the eight-year war with Iran . 
-august 1988 
+August 1988 
 1990-08-15
 1988-08
 
@@ -3808,17 +3808,17 @@ eight-year
 P8Y
 
 //In a letter to President Hashemi Rafsanjani of Iran , read by a broadcaster over Baghdad radio , Saddam said he will begin withdrawing troops from Iranian territory on Friday and release Iranian prisoners of war . 
-friday 
+Friday 
 1990-08-15
 1990-08-10
 
 //The move seemed aimed at heading off more trouble with Iran , which had condemned Iraq 's invasion of Kuwait on Aug. 2 but also criticized the multinational force dispatched to Saudi Arabia . 
-aug. 2 
+Aug. 2 
 1990-08-15
 1990-08-02
 
 //_Soviet Foreign Ministry spokesman Yuri Gremitskikh said special ambassador Mikhail Sytenko left Tuesday for consultations with the governments of Syria , Jordan , Egypt and other Arab countries . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-14
 
@@ -3848,17 +3848,17 @@ today
 1990-08-15
 
 //The monarch will meet Bush on Thursday in Kennebunkport , Maine . 
-thursday 
+Thursday 
 1990-08-15
 1990-08-09
 
 //King Hussein was reportedly carrying a message to Bush from Iraq 's Saddam , with whom the king met Monday . 
-monday 
+Monday 
 1990-08-15
 1990-08-06
 
 //Truckloads of goods rolled into Iraq from Jordan on Tuesday and Iraqi-bound cargo was unloaded from ships at the Red Sea port ofAqaba despite the U.N.-ordered sanctions . 
-tuesday 
+Tuesday 
 1990-08-15
 1990-08-07
 
@@ -3898,12 +3898,12 @@ recent years
 PAST_REF
 
 //Last month , Polly Peck posted a 38% jump in pretax profit for the first half to #54.8 million from #39.8 million on a 63% rise in sales . 
-last month 
+Last month 
 1989-10-30
 1989-09
 
 //In September , it announced plans to acquire the tropical-fruit business of RJR Nabisco Inc. 's Del Monte foods unit for #557 million ( $878 million ) . 
-september 
+September 
 1989-10-30
 1989-09
 
@@ -3913,7 +3913,7 @@ september
 1980
 
 //Polly Peck 's chairman , Asil Nadir , echoed the official Japanese view of the accord , which was announced Friday . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -3938,7 +3938,7 @@ this year
 1989
 
 //Earlier this month , a group led by three of the company 's directors , Burt Sugarman , James M. Trotter III and Willam E. Trotter II , indicated it had a 45.2% stake in the Louisville , Ky. , fast-food company and that it planned to seek a majority of seats on Rally 's nine-member board . 
-earlier this month 
+Earlier this month 
 1989-11-01
 1989-11
 
@@ -3948,7 +3948,7 @@ earlier this month
 1994
 
 //Only McCaw 's proposal requires the company to begin an auction process in June 1994 for remaining shares at third-party prices . 
-june 1994 
+June 1994 
 1989-10-30
 1994-06
 
@@ -3978,7 +3978,7 @@ the weekend
 1984
 
 //In composite trading Friday on the New York Stock Exchange , BellSouth shares fell 87.5 cents to $52.125 . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4003,7 +4003,7 @@ the short term
 FUTURE_REF
 
 //But under new terms of the agreement , announced Friday , LIN holders would receive a special cash dividend of $42 a share , representing a payout of about $2.23 billion , shortly before the proposed merger . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4023,7 +4023,7 @@ now
 PRESENT_REF
 
 //The average daily share turnover for October is almost 148 million shares . 
-october 
+October 
 1989-10-30
 1989-10
 
@@ -4058,32 +4058,32 @@ past years
 PAST_REF
 
 //Friday 's trading volume totaled 132.8 million shares . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Weakness in big technology stocks hurt the composite as well as the Nasdaq 100 Index , which fell 1.4% , or 6.43 , on Friday , to 437.68 . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Three days later , as of Friday 's close , the Nasdaq Composite was down 6% , compared with 5.9% for the industrial average , 5.7% for the SampP 500 and 5.8% for the Big Board Composite . 
-three days 
+Three days 
 1989-10-30
 P3D
 
 //Three days later , as of Friday 's close , the Nasdaq Composite was down 6% , compared with 5.9% for the industrial average , 5.7% for the SampP 500 and 5.8% for the Big Board Composite . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Eight trading days after Oct. 12 , the day before the stock market plunge , for instance , the Nasdaq Composite had fallen 4.3% , compared with 3.3% for the SampP 500 , 3.5% for the New York Stock Exchange Composite Index and 3.6% for the industrial average . 
-eight trading days 
+Eight trading days 
 1989-10-30
 P8D
 
 //Eight trading days after Oct. 12 , the day before the stock market plunge , for instance , the Nasdaq Composite had fallen 4.3% , compared with 3.3% for the SampP 500 , 3.5% for the New York Stock Exchange Composite Index and 3.6% for the industrial average . 
-oct. 12 
+Oct. 12 
 1989-10-30
 1989-10-12
 
@@ -4098,17 +4098,17 @@ the week
 1989-WXX
 
 //The portion of OTC volume attributable to program trading isn 't known , as it is on the New York Stock Exchange , where it amounted to more than 13% in September . 
-september 
+September 
 1989-10-30
 1989-09
 
 //--- Friday 's Market Activity The Nasdaq Composite Index tumbled 5.39 , or 1.2% to 452.76 on Friday . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //The stock fell 7/8 Thursday amid concerns over problems discovered with the chip . 
-thursday 
+Thursday 
 1989-10-30
 1989-10-26
 
@@ -4123,12 +4123,12 @@ the 1988 quarter
 1988-Q3
 
 //MOSCOW ( AP ) _ The mayor of Moscow has allocated funds to help build a museum in honor of Mikhail Kalashnikov , the Russian who gave his name to the world 's most widely wielded weapon , according to a news agency report Friday . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
 //Seventy-five million copies of the rifle have been built since it entered production in February 1947 , making it history 's most widely distributed weapon . 
-february 1947 
+February 1947 
 1998-02-27
 1947-02
 
@@ -4148,7 +4148,7 @@ mid-afternoon yesterday
 1989-11-01TAF
 
 //The sweetened offer has acceptances from more than 50% of Weisfield 's shareholders , and it is scheduled for completion by Dec. 10 . 
-dec. 10 
+Dec. 10 
 1989-11-02
 1989-12-10
 
@@ -4163,7 +4163,7 @@ today
 1998-02-05
 
 //With the general election due this September , record figures could n 't have come at a worst time for Chancellor Kohl . 
-this september 
+this September 
 1998-02-05
 1998-09
 
@@ -4233,7 +4233,7 @@ third-quarter
 1989-Q3
 
 //A year earlier , net income was $2.1 million , or six cents a share , on revenue of $169.9 million . 
-a year earlier 
+A year earlier 
 1989-11-02
 1988-Q3
 
@@ -4243,12 +4243,12 @@ yesterday
 1989-10-26
 
 //The gross proceeds from the sale of the notes , which will be due on Nov. 1 , 2004 , will be used to reduce existing debt and for general corporate purposes , the company said . 
-nov. 1 , 2004 
+Nov. 1 , 2004 
 1989-10-27
 2004-11-01
 
 //Last year , Russian officials assailed Ukraine for holding joint naval exercises with NATO in the Black Sea _ an area Moscow considers its own turf . 
-last year 
+Last year 
 1998-02-27
 1997
 
@@ -4258,7 +4258,7 @@ the past
 PAST_REF
 
 //The two presidents on Friday signed the plan , which calls for cooperation in the metallurgy , fuel , energy , aircraft building , missile , space and chemical industries . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
@@ -4283,12 +4283,12 @@ centuries
 PXE
 
 //MOSCOW ( AP ) _ Presidents Leonid Kuchma of Ukraine and Boris Yeltsin of Russia signed an economic cooperation plan Friday , and Yeltsin claimed they resolved even more nagging problems . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
 //A major dispute concerns a broad political treaty calling for border demarcation , which the two presidents signed last May . 
-last may 
+last May 
 1998-02-27
 1997-05
 
@@ -4308,12 +4308,12 @@ the 1988 third quarter
 1988-Q3
 
 //AEP INDUSTRIES Inc. directors authorized a 3-for-2 split of the common , payable Dec. 7 to stock of record Nov. 22 . 
-dec. 7 
+Dec. 7 
 1989-10-27
 1989-12-07
 
 //AEP INDUSTRIES Inc. directors authorized a 3-for-2 split of the common , payable Dec. 7 to stock of record Nov. 22 . 
-nov. 22 
+Nov. 22 
 1989-10-27
 1989-11-22
 
@@ -4323,7 +4323,7 @@ yesterday
 1989-10-26
 
 //Starpointe holders , who approved the plan last April , will receive $21 in cash a share , or a total $63 million . 
-last april 
+last April 
 1989-10-27
 1989-04
 
@@ -4338,7 +4338,7 @@ at least 30 days
 P30D
 
 //The thrifts agreed to the transaction in August 1988 . 
-august 1988 
+August 1988 
 1989-10-27
 1988-08
 
@@ -4348,22 +4348,22 @@ last year
 1988
 
 //capital markets , with terms and syndicate manager , as compiled by Dow Jones Capital Markets Report : @ CORPORATES Sun Microsystems Inc. -- $125 million of 6 3/8% convertible subordinated debentures due Oct. 15 , 1999 , priced at 84.90 to yield 7.51% . 
-oct. 15 , 1999 
+Oct. 15 , 1999 
 1989-10-30
 1999-10-15
 
 //The following were among Friday 's offerings and pricings in the U.S. and non-U.S . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
 //Rated single-B-1 by Moody 's Investors Service Inc. and single-B-plus by Standard amp Poor 's Corp. , the issue will be sold through underwriters led by Goldman , Sachs amp Co. Hertz Corp. -- $100 million of senior notes due Nov. 1 , 2009 , priced at par to yield 9% . 
-nov. 1 , 2009 
+Nov. 1 , 2009 
 1989-10-30
 2009-11-01
 
 //The debentures are convertible into common stock at $25 a share , representing a 24% conversion premium over Thursday 's closing price . 
-thursday 
+Thursday 
 1989-10-30
 1989-10-26
 
@@ -4373,7 +4373,7 @@ thursday
 1999
 
 //@ EUROBONDS Canadian Imperial Bank of Commerce ( Canada ) -- 10 billion yen of 5.7% bonds due Nov. 17 , 1992 , priced at 101 1/4 to yield 5.75% less full fees , via LTCB International Ltd. Fees 1 3/8 . 
-nov. 17 , 1992 
+Nov. 17 , 1992 
 1989-10-30
 1992-11-17
 
@@ -4393,12 +4393,12 @@ right now
 PRESENT_REF
 
 //Last year , the company earned $480.4 million , or $3.90 a share , on sales of $4.3 billion . 
-last year 
+Last year 
 1989-10-30
 1988
 
 //Another analyst , John C. Maxwell Jr. of Wheat , First Securities in Richmond , Va. , recently went to a " sell " recommendation on Kellogg stock , which closed Friday at $71.75 , down 75 cents , in New York Stock Exchange composite trading . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4443,7 +4443,7 @@ recently
 PAST_REF
 
 //Last Friday 's announcement was the first official word that the project was in trouble and that the company 's plans for a surge in market share may have been overly optimistic . 
-last friday 
+Last Friday 
 1989-10-30
 1989-10-27
 
@@ -4498,7 +4498,7 @@ late yesterday
 1989-10-26
 
 //For the year ended July 2 , Rally had net income of $2.4 million , or 34 cents a share , on revenue of $52.9 million . 
-july 2 
+July 2 
 1989-10-30
 1989-07-02
 
@@ -4588,7 +4588,7 @@ PXY
 1988
 
 //THE HAGUE , Netherlands ( AP ) _ The World Court Friday rejected U.S. and British objections to a Libyan World Court case that has blocked the trial of two Libyans suspected of blowing up a Pan Am jumbo jet over Scotland in 1988 . 
-friday 
+Friday 
 1998-02-27
 1998-02-27
 
@@ -4608,7 +4608,7 @@ quarter
 1989-QX
 
 //Sales increased in the quarter ended Sept. 30 to $747.8 million from $623.5 million a year ago . 
-sept. 30 
+Sept. 30 
 1989-10-26
 1989-09-30
 
@@ -4618,7 +4618,7 @@ a year ago
 1988-QX
 
 //The latest period includes gains of $9.1 million from early retirement of debt and tax loss carry-forward . 
-the latest period 
+The latest period 
 1989-10-26
 1989-Q2
 
@@ -4648,7 +4648,7 @@ the fourth quarter
 1989-Q4
 
 //At the same time , production costs , compared with a year ago , were boosted by higher raw material and employment costs , which resulted from the company 's new labor pact effective June 1 . " We anticipate that steel market conditions will exhibit a further moderate decline in the fourth quarter as the automotive sector remains weak and customers continue to adjust inventories , " said Bethlehem Chairman Walter F. Williams . 
-june 1 
+June 1 
 1989-10-26
 1990-06-01
 
@@ -4673,7 +4673,7 @@ fiscal second-quarter
 1989-Q2
 
 //Last year 's results were hurt by $41.3 million in restructuring charges . 
-last year 
+Last year 
 1989-10-26
 1988-Q2
 
@@ -4713,7 +4713,7 @@ year-ago period
 1988-Q3
 
 //Third-quarter sales dropped 11% to $1.27 billion from $1.43 billion a year ago . 
-third-quarter 
+Third-quarter 
 1989-10-26
 1989-Q3
 
@@ -4723,7 +4723,7 @@ a year ago
 1988-Q3
 
 //Sun Microsystems Inc. , a computer maker , announced the effectiveness of its registration statement for $125 million of 6 3/8% convertible subordinated debentures due Oct. 15 , 1999 . 
-oct. 15 , 1999 
+Oct. 15 , 1999 
 1989-10-30
 1999-10-15
 
@@ -4788,7 +4788,7 @@ a year
 1988
 
 //But the company said Friday that it had losses of $673.3 million through the first nine months , compared with earnings a year earlier of $382.2 million , or $2.22 a share fully diluted , as revenue inched up 1.4% to $7.13 billion from $7.03 billion . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4823,7 +4823,7 @@ next year
 1990
 
 //Unisys Corp. 's announcement Friday of a $648.2 million loss for the third quarter showed that the company is moving even faster than expected to take write-offs on its various problems and prepare for a turnaround next year . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4848,7 +4848,7 @@ the quarter
 1989-Q3
 
 //Reflecting the concern , Unisys stock fell a further 75 cents to $16.25 in composite trading Friday on the New York Stock Exchange . 
-friday 
+Friday 
 1989-10-30
 1989-10-27
 
@@ -4883,12 +4883,12 @@ this month
 1989-11
 
 //Sony Corp. completed its tender offer for Columbia Pictures Entertainment Inc. , with Columbia shareholders tendering 99.3% of all common shares outstanding by the Tuesday deadline . 
-tuesday 
+Tuesday 
 1989-11-02
 1989-10-31
 
 //Sony 's planned acquisition of Guber/Peters Entertainment Co. for $200 million is scheduled to close Monday . 
-monday 
+Monday 
 1989-11-02
 1989-11-06
 
@@ -4908,7 +4908,7 @@ the early 1980s
 1983
 
 //But as the craze died , Coleco failed to come up with another winner and filed for bankruptcy-law protection in July 1988 . 
-july 1988 
+July 1988 
 1989-11-02
 1988-07
 
@@ -4923,7 +4923,7 @@ now
 PRESENT_REF
 
 //First of America , which now has 45 banks and $12.5 billion in assets , announced an agreement to acquire the Peoria , Ill. , bank holding company in January . 
-january 
+January 
 1989-11-02
 1990-01
 
@@ -4968,12 +4968,12 @@ currently
 PRESENT_REF
 
 //CAMBREX Corp. , Bayonne , N.J. , declared its initial quarterly of five cents a share , payable Dec. 1 to stock of record Nov. 10 . 
-dec. 1 
+Dec. 1 
 1989-10-27
 1989-12-01
 
 //CAMBREX Corp. , Bayonne , N.J. , declared its initial quarterly of five cents a share , payable Dec. 1 to stock of record Nov. 10 . 
-nov. 10 
+Nov. 10 
 1989-10-27
 1989-11-10
 
@@ -5008,7 +5008,7 @@ the year-earlier quarter
 1988-Q3
 
 //However , the company 's petroleum services segment , while profitable , was hurt by high financing costs associated with the company 's buy-out of a 50% stake in Eastman Christensen Co. from Texas Eastern Corp. last June . 
-last june 
+last June 
 1989-10-27
 1989-06
 
@@ -5023,12 +5023,12 @@ earlier this month
 1989-10
 
 //Vanguard 's $1 billion High Yield Bond Portfolio has seen $161 million flow out since early September ; $14 million of that seeped out Friday Oct. 13 alone . 
-early september 
+early September 
 1989-10-27
 1989-09
 
 //Vanguard 's $1 billion High Yield Bond Portfolio has seen $161 million flow out since early September ; $14 million of that seeped out Friday Oct. 13 alone . 
-friday oct. 13 
+Friday Oct. 13 
 1989-10-27
 1989-10-13
 
@@ -5083,7 +5083,7 @@ the past two months
 P2M
 
 //Through Oct. 19 , high-yield funds had an average 0.85% total return ( the price change plus dividends on fund shares ) , according to Lipper Analytical Services Inc. 
-oct. 19 
+Oct. 19 
 1989-10-27
 1989-10-19
 
@@ -5098,12 +5098,12 @@ this year
 1989
 
 //Those withdrawals , most of which were transferred to other T. Rowe Price funds , followed little change in the fund 's sales picture this year through August . 
-august 
+August 
 1989-10-27
 1989-08
 
 //" The last two months have been the whole ball game , " says Steven Norwitz , a vice president . 
-the last two months 
+The last two months 
 1989-10-27
 P2M
 
@@ -5118,12 +5118,12 @@ now
 PRESENT_REF
 
 //Last week alone , an eye-popping $1.6 billion flowed out of the junk funds , or nearly 5% of their total assets , according to estimates by Dalbar Financial Services Inc. , a Boston research firm . 
-last week 
+Last week 
 1989-10-27
 1989-WXX
 
 //Fidelity 's junk fund has fallen 2.08% this year through Oct. 19 , Lipper says ; the Vanguard fund rose 1.84% ; and the T. Rowe Price fund edged up 0.66% . 
-oct. 19 
+Oct. 19 
 1989-10-27
 1989-10-19
 
@@ -5178,7 +5178,7 @@ the latest fiscal year
 1988
 
 //Last month , Canadian Bond Rating Service downgraded Provigo 's commercial paper and debentures because of its lackluster performance . 
-last month 
+Last month 
 1989-10-26
 1989-09
 
@@ -5198,7 +5198,7 @@ P2Y
 1988-08-12
 
 //For the six months ended Aug. 12 , Provigo posted net income of C$6.5 million , or eight Canadian cents a share , compared with C$18.1 million , or 21 Canadian cents a share , a year earlier . 
-aug. 12 
+Aug. 12 
 1989-10-26
 1989-08-12
 
@@ -5213,7 +5213,7 @@ today
 1998-02-23
 
 //Oil prices have come down from the middle of October from a twenty-two dollar barrel level down to the fourteen dollars we ' re seeing today . 
-the middle of october 
+the middle of October 
 1998-02-23
 1997-10
 
@@ -5238,7 +5238,7 @@ next year 's first quarter
 1990-Q1
 
 //The divested Courtaulds textile operations had operating profit of #50 million on #980 million in revenue in the year ended March 31 . 
-march 31 
+March 31 
 1989-10-31
 1989-03-31
 

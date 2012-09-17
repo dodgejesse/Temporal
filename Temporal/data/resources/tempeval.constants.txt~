@@ -1,0 +1,17 @@
+(
+// the constants file. Contains the list of constants.
+
+friday:s
+
+year:s
+month:d
+march:s
+august:s
+septemeber:s
+november:s
+
+quarter:s
+
+yesterday:r
+
+)

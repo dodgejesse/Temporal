@@ -35,7 +35,7 @@ month :- NP : month:d
 
 quarter :- NP : quarter:s
 
-yesterday:- NP : yesterday:r
+yesterday: NP : yesterday:r
 
 
 

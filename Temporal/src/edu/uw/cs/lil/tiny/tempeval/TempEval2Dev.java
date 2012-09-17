@@ -72,28 +72,24 @@ public class TempEval2Dev {
 		
 		
 		
-		
-		LogicLanguageServices.getTypeRepository();
-		
+		/*		
 		// TESTING
 		try {
 
-			File f = new File(
-					"/home/jessedd/workspace/Temporal/data/dataset/testing_visitor.txt");
+			File f = new File(datasetDir + "tempeval.training.txt");
 			BufferedReader in = new BufferedReader(new FileReader(f));
 
 			String line;
 			while ((line = in.readLine()) != null) {
 				if ((!line.startsWith("//")) && (!line.equals(""))) {
-					System.out.println("made it here!");
-
 					LogicalExpression exp;
 					exp = LogicalExpression.parse(line,
 							LogicLanguageServices.getTypeRepository(),
 							LogicLanguageServices.getTypeComparator(),
 							false);
 					System.out.println(exp);
-					TemporalVisitor.of(exp);
+					System.out.println(TemporalVisitor.of(exp, "1987-07-15"));
+					
 					System.out.println();
 					System.out.println();
 				}
@@ -105,11 +101,9 @@ public class TempEval2Dev {
 		
 		System.exit(0);
 		
+		// END TESTING
+		*/
 		
-		
-		
-
-
 		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices(
 				false);
 
@@ -126,11 +120,10 @@ public class TempEval2Dev {
 		}
 
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> train = TemporalSentenceDataset
-				.read(new File("tempeval.full_dataset"),
+				.read(new File(datasetDir + "tempeval.dataset.txt"),
 						new StubStringFilter(), true);
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test = TemporalSentenceDataset
-				.read(new File(
-						"/home/Jesse/UW/LSZ_research/parsing_time/parser_files/tempeval/tempeval.full_dataset"),
+				.read(new File(datasetDir + "tempeval.dataset.txt"),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());
@@ -139,7 +132,7 @@ public class TempEval2Dev {
 		final ILexicon<LogicalExpression> lexicon = new Lexicon<LogicalExpression>();
 		lexicon.addEntriesFromFile(
 				new File(
-						"/home/Jesse/UW/LSZ_research/parsing_time/parser_files/tempeval/tempeval.lexicon"),
+						resourcesDir + "tempeval.lexicon.txt"),
 				new StubStringFilter(), categoryServices,
 				EntryOrigin.FIXED_DOMAIN);
 
@@ -223,7 +216,7 @@ public class TempEval2Dev {
 		// visitor on each logical expression!
 		tester.test(model);
 
-		LOG.info("Total runtime %.4f seconds", Double.valueOf(System
-				.currentTimeMillis() - startTime / 1000.0D));
+		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
+		//		.currentTimeMillis() - startTime / 1000.0D));
 	}
 }

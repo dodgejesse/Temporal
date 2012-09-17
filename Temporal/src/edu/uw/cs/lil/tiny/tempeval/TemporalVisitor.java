@@ -44,22 +44,15 @@ public class TemporalVisitor implements ILogicalExpressionVisitor{
 			arg.accept(this);
 			tmpPred.storeISO(iso);
 		}		
-		iso = tmpPred.perform();
-		System.out.println("After combining simple constants:");
-		System.out.println(iso);
-		
+		iso = tmpPred.perform();		
 	}
 
 	@Override
 	public void visit(LogicalConstant logicalConstant) {
 		final Type type = logicalConstant.getType();
 		if (type.isComplex()){
-			System.out.println("Found a complex logicalConstant:");
-			System.out.println(logicalConstant);
 			pred = map.findComplexMap(logicalConstant);
 		} else{
-			System.out.println("Found a non-complex logicalConstant:");
-			System.out.println(logicalConstant);
 			iso = map.findNonComplexMap(logicalConstant);
 		}
 	}

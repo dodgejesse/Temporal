@@ -70,6 +70,19 @@ public class TemporalMap {
 	private TemporalISO findRangeMap(LogicalConstant l){
 		if (l.getName().equals("ref_time:r")){
 			return TemporalDate.readDocumentDate(ref_time);
+		} else if (isNumber(l.getName().substring(0,l.getName().length()-2))){
+			int year = Integer.parseInt(l.getName().substring(0,l.getName().length()-2));
+			return new TemporalDate("year", year);
+		} else 
+			throw new IllegalArgumentException("constants of type range other than years and document times are not implemented.");
+	}
+	
+	private boolean isNumber(String s){
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch(NumberFormatException nfe){
+			return false;
 		}
 	}
 	

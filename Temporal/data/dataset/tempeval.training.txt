@@ -1,0 +1,8 @@
+august
+august:s
+
+friday
+friday:s
+
+august 6
+(intersect:<s*,s> august:s 6d:s)
