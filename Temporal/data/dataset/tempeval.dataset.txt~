@@ -3,10 +3,6 @@ a month
 1998-02-13
 P1M
 
-a year
-1998-02-13
-P1Y
-
 //CANBERRA , Australia ( AP ) _ Qantas will almost double its flights between Australia and India by August in the search for new markets untouched by the crippling Asian financial crisis . 
 august 
 1998-02-13
@@ -2753,7 +2749,8 @@ friday
 1998-02-27
 
 //The men appeared in the store at 469 Vermont St. in Brownsville around 7:15 p.m. , after the victim , Linda Sanders , 35 , had finished her cleaning and was waiting for her clothes to dry , detectives said . 
-around 7 1998-02-12
+around 7 
+1998-02-12
 1998-02-12T19:15
 
 //NEW YORK _ A Brooklyn woman who was watching her clothes dry in a laundromat was killed Thursday evening when two would-be robbers emptied their pistols into the store , the police said . 
@@ -5260,12 +5257,4 @@ today
 minute and a half 
 1998-01-14
 PT1M30S
-
-//the number of times Parsing Time had the wrong type: 104
-24
-4411
-09125
-
-//the percentage of types correct: 0.851711026616
-.631178707224
 

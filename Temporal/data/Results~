@@ -1,0 +1,5 @@
+Date: Tuesday, 10/18/2012
+Correct: 96/1050 = 9.12%
+incorrect: 86/1050 = 8.17%
+Parse problem: 870/1050
+Notes: Parses single word phrases, limited to years, months, and days of the week. 

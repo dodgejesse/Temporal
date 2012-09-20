@@ -61,4 +61,23 @@ public abstract class TemporalISO {
 		}
 		return keyInFields;
 	}
+	
+	// Sort of a hack, doesn't work if there is more than one value for a given
+	// field!
+	public static int getValueFromDate(TemporalISO d, String s) {
+		int value = -1;
+		if (d.getVal(s).size() > 1) {
+			throw new IllegalArgumentException(
+					"There is more than one value for " + s
+							+ " and that's not implemented.");
+		}
+		for (int i : d.getVal(s)) {
+			value = i;
+		}
+		if (value == -1) {
+			throw new IllegalArgumentException(
+					"Problem getting value in getValueFromDate, within TemporalISO");
+		}
+		return value;
+	}
 }

@@ -2,8 +2,8 @@
 // the types file. Contains info on what types the constants can take. 
 
 n	// number
-s	// sequence
 (r s)	// range, a subtype of sequence
+s	// sequence
 d	// duration
 
 )

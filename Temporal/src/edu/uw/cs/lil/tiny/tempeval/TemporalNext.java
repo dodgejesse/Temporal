@@ -13,9 +13,9 @@ public class TemporalNext extends TemporalPredicate {
 	}
 
 	private TemporalDate compareDates(TemporalDate f, TemporalDate s) {
-		LocalDate d1 = makeLocalDate(f);
-		LocalDate d2 = makeLocalDate(s);
-		LocalDate ref_time = makeLocalDate(this.second);
+		LocalDate d1 = TemporalJoda.convertISOToLocalDate(f);
+		LocalDate d2 = TemporalJoda.convertISOToLocalDate(s);
+		LocalDate ref_time = TemporalJoda.convertISOToLocalDate(this.second);
 		if ((ref_time.isBefore(d1)) && (d1.isBefore(d2)))
 			return f;
 		if ((d1.isBefore(ref_time)) && (ref_time.isBefore(d2)))
@@ -38,14 +38,14 @@ public class TemporalNext extends TemporalPredicate {
 		} else {
 			if ((this.first.getKeys().contains("month"))
 					&& (!this.first.getKeys().contains("day"))) {
-				int ref_timeMonth = getValueFromDate(this.second, "month");
-				int dMonth = getValueFromDate(this.first, "month");
+				int ref_timeMonth = TemporalISO.getValueFromDate(this.second, "month");
+				int dMonth = TemporalISO.getValueFromDate(this.first, "month");
 				Map<String, Set<Integer>> tmpMap = makeMap(this.first);
 				if (ref_timeMonth < dMonth) {
 					tmpMap.put("year", this.second.getVal("year"));
 				} else {
 					Set<Integer> tmpInt = new HashSet<Integer>();
-					for (int i : tmpMap.get("year")) {
+					for (int i : this.second.getVal("year")) {
 						tmpInt.add(Integer.valueOf(i + 1));
 					}
 					tmpMap.put("year", tmpInt);
@@ -68,16 +68,16 @@ public class TemporalNext extends TemporalPredicate {
 					if ((this.first.getKeys().contains("weekday"))
 							&& (!this.first.getKeys().contains("month"))
 							&& (!this.first.getKeys().contains("day"))) {
-						LocalDate date = makeLocalDate(this.second);
-						if (date.getDayOfWeek() == getValueFromDate(this.first,
+						LocalDate date = TemporalJoda.convertISOToLocalDate(this.second);
+						if (date.getDayOfWeek() == TemporalISO.getValueFromDate(this.first,
 								"weekday")) {
 							date.plusDays(1);
 						}
-						while (date.getDayOfWeek() != getValueFromDate(
+						while (date.getDayOfWeek() != TemporalISO.getValueFromDate(
 								this.first, "weekday")) {
 							date = date.plusDays(1);
 						}
-						nextDate = makeDateFromJodaLocalDate(date);
+						nextDate = TemporalJoda.convertLocalDateToISO(date);
 					} else {
 						throw new IllegalArgumentException(
 								"haven't implemented things other than dates with months or days.");
@@ -86,43 +86,6 @@ public class TemporalNext extends TemporalPredicate {
 			}
 		}
  		return nextDate;
-	}
-
-	// Sort of a hack, doesn't work if there is more than one value for a given
-	// field!
-	private int getValueFromDate(TemporalISO d, String s) {
-		int value = -1;
-		if (d.getVal(s).size() > 1) {
-			throw new IllegalArgumentException(
-					"There is more than one value for " + s
-							+ " and that's not implemented.");
-		}
-		for (int i : d.getVal(s)) {
-			value = i;
-		}
-		if (value == -1) {
-			throw new IllegalArgumentException(
-					"Problem getting value in getValueFromDate");
-		}
-		return value;
-	}
-
-	private TemporalDate makeDateFromJodaLocalDate(LocalDate date) {
-		Map<String, Set<Integer>> tmpMap = new HashMap<String, Set<Integer>>();
-		tmpMap.put("year", new HashSet<Integer>());
-		tmpMap.put("month", new HashSet<Integer>());
-		tmpMap.put("day", new HashSet<Integer>());
-		(tmpMap.get("year")).add(Integer.valueOf(date.getYear()));
-		(tmpMap.get("month")).add(Integer.valueOf(date.getMonthOfYear()));
-		(tmpMap.get("day")).add(Integer.valueOf(date.getDayOfMonth()));
-		return new TemporalDate(tmpMap);
-	}
-
-	private LocalDate makeLocalDate(TemporalISO d) {
-		int year = getValueFromDate(d, "year");
-		int month = getValueFromDate(d, "month");
-		int day = getValueFromDate(d, "day");
-		return new LocalDate(year, month, day);
 	}
 
 	private Map<String, Set<Integer>> makeMap(TemporalISO f) {

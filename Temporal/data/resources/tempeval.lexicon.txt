@@ -20,7 +20,7 @@ june :- NP : june:s
 july :- NP : july:s
 august :- NP : august:s
 aug. :- NP : august:s
-september :- NP : septemeber:s
+september :- NP : september:s
 sept. :- NP : september:s
 october:s :- NP : october:s
 oct. :- NP : october:s
@@ -30,12 +30,14 @@ december :- NP : december:s
 dec. :- NP : december:s
 
 
-year :- NP : year:s
-month :- NP : month:d
+//year :- NP : year:s
+//month :- NP : month:d
 
-quarter :- NP : quarter:s
+//quarter :- NP : quarter:s
 
-yesterday:- NP : yesterday:r
+tomorrow :- NP : tomorrow:r
+today :- NP : today:r
+yesterday :- NP : yesterday:r
 
 
 
@@ -44,37 +46,37 @@ yesterday:- NP : yesterday:r
 three :- NP : 3:n
 
 // these are the sequences defined as nth day of every month
-1 :- NP : (lambda $0:s (intersect:<s*,s> $0 1:s))
-2 :- NP : (lambda $0:s (intersect:<s*,s> $0 2:s))
-3 :- NP : (lambda $0:s (intersect:<s*,s> $0 3:s))
-4 :- NP : (lambda $0:s (intersect:<s*,s> $0 4:s))
-5 :- NP : (lambda $0:s (intersect:<s*,s> $0 5:s))
-6 :- NP : (lambda $0:s (intersect:<s*,s> $0 6:s))
-7 :- NP : (lambda $0:s (intersect:<s*,s> $0 7:s))
-8 :- NP : (lambda $0:s (intersect:<s*,s> $0 8:s))
-9 :- NP : (lambda $0:s (intersect:<s*,s> $0 9:s))
-10 :- NP : (lambda $0:s (intersect:<s*,s> $0 10:s))
-11 :- NP : (lambda $0:s (intersect:<s*,s> $0 11:s))
-12 :- NP : (lambda $0:s (intersect:<s*,s> $0 12:s))
-13 :- NP : (lambda $0:s (intersect:<s*,s> $0 13:s))
-14 :- NP : (lambda $0:s (intersect:<s*,s> $0 14:s))
-15 :- NP : (lambda $0:s (intersect:<s*,s> $0 15:s))
-16 :- NP : (lambda $0:s (intersect:<s*,s> $0 16:s))
-17 :- NP : (lambda $0:s (intersect:<s*,s> $0 17:s))
-18 :- NP : (lambda $0:s (intersect:<s*,s> $0 18:s))
-19 :- NP : (lambda $0:s (intersect:<s*,s> $0 19:s))
-20 :- NP : (lambda $0:s (intersect:<s*,s> $0 20:s))
-21 :- NP : (lambda $0:s (intersect:<s*,s> $0 21:s))
-22 :- NP : (lambda $0:s (intersect:<s*,s> $0 22:s))
-23 :- NP : (lambda $0:s (intersect:<s*,s> $0 23:s))
-24 :- NP : (lambda $0:s (intersect:<s*,s> $0 24:s))
-25 :- NP : (lambda $0:s (intersect:<s*,s> $0 25:s))
-26 :- NP : (lambda $0:s (intersect:<s*,s> $0 26:s))
-27 :- NP : (lambda $0:s (intersect:<s*,s> $0 27:s))
-28 :- NP : (lambda $0:s (intersect:<s*,s> $0 28:s))
-29 :- NP : (lambda $0:s (intersect:<s*,s> $0 29:s))
-30 :- NP : (lambda $0:s (intersect:<s*,s> $0 30:s))
-31 :- NP : (lambda $0:s (intersect:<s*,s> $0 31:s))
+1 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 1d:s))
+2 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2d:s))
+3 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 3d:s))
+4 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 4d:s))
+5 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 5d:s))
+6 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 6d:s))
+7 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 7d:s))
+8 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 8d:s))
+9 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 9d:s))
+10 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 10d:s))
+11 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 11d:s))
+12 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 12d:s))
+13 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 13d:s))
+14 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 14d:s))
+15 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 15d:s))
+16 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 16d:s))
+17 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 17d:s))
+18 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 18d:s))
+19 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 19d:s))
+20 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 20d:s))
+21 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 21d:s))
+22 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 22d:s))
+23 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 23d:s))
+24 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 24d:s))
+25 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 25d:s))
+26 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 26d:s))
+27 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 27d:s))
+28 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 28d:s))
+29 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 29d:s))
+30 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 30d:s))
+31 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 31d:s))
 
 1900 :- NP : 1900:r
 1901 :- NP : 1901:r

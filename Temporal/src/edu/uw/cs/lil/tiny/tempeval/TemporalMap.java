@@ -4,6 +4,8 @@ import edu.uw.cs.lil.tiny.mr.lambda.LogicalConstant;
 
 import java.util.*;
 
+import org.joda.time.LocalDate;
+
 public class TemporalMap {
 		final Map<String, Integer> months;
 		final Map<String, Integer> weekdays;
@@ -57,11 +59,11 @@ public class TemporalMap {
 	
 	// Finds map for all simple constants.
 	public TemporalISO findNonComplexMap(LogicalConstant l){
-		if (l.getName().endsWith("s")){
+		if (l.getType().getName().toString().equals("s")){
 			return findSequenceMap(l);
-		} else if (l.getName().endsWith(":r")){
+		} else if (l.getType().getName().toString().equals("r")){
 			return findRangeMap(l);
-		}else if (l.getName().endsWith("d")){
+		}else if (l.getType().getName().toString().equals("d")){
 			throw new IllegalArgumentException("haven't implemented durations in TemporalMap yet.");
 		} else
 			throw new IllegalArgumentException("Unknown logical constant " + l);
@@ -70,11 +72,27 @@ public class TemporalMap {
 	private TemporalISO findRangeMap(LogicalConstant l){
 		if (l.getName().equals("ref_time:r")){
 			return TemporalDate.readDocumentDate(ref_time);
-		} else if (isNumber(l.getName().substring(0,l.getName().length()-2))){
+		} else if (l.getName().equals("today:r")){
+			return TemporalDate.readDocumentDate(ref_time);
+		} else if (l.getName().equals("tomorrow:r")){
+			return shiftISOByDay(TemporalDate.readDocumentDate(ref_time), 1);
+		} else if (l.getName().equals("yesterday:r")){
+			return shiftISOByDay(TemporalDate.readDocumentDate(ref_time), -1);
+		}else if (isNumber(l.getName().substring(0,l.getName().length()-2))){
 			int year = Integer.parseInt(l.getName().substring(0,l.getName().length()-2));
 			return new TemporalDate("year", year);
 		} else 
 			throw new IllegalArgumentException("constants of type range other than years and document times are not implemented.");
+	}
+	
+	// Shifts a given ISO by n days. If n is negative, shifts it backwards in time.
+	private TemporalISO shiftISOByDay(TemporalISO t, int n){
+		LocalDate tmp = TemporalJoda.convertISOToLocalDate(t);
+		if (n >0)
+			tmp = tmp.plusDays(n);
+		else if (n < 0)
+			tmp = tmp.minusDays(-n);
+		return TemporalJoda.convertLocalDateToISO(tmp);
 	}
 	
 	private boolean isNumber(String s){

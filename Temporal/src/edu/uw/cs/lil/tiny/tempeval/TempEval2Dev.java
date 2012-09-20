@@ -12,6 +12,8 @@ import edu.uw.cs.lil.tiny.mr.language.type.TypeRepository;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.CKYBinaryParsingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.multi.MultiCKYParser;
+import edu.uw.cs.lil.tiny.parser.ccg.cky.single.CKYParser;
+import edu.uw.cs.lil.tiny.parser.ccg.cky.single.CKYUnaryParsingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.FactoredLexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.Lexeme;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexemeFeatureSet;
@@ -121,10 +123,10 @@ public class TempEval2Dev {
 		}
 
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> train = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.txt"),//"tmp_dataset.txt"),
 						new StubStringFilter(), true);
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.txt"),//"tmp_dataset.txt"),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());
@@ -178,6 +180,7 @@ public class TempEval2Dev {
 				.toCollection()) {
 			fixed.add(FactoredLexicon.factor(lex));
 		}
+		//System.out.println(fixed);
 		
 		final LexicalFeatureSet<LogicalExpression> lexPhi = new LexicalFeatureSetBuilder<LogicalExpression>()
 				.setInitialFixedScorer(
@@ -250,8 +253,8 @@ public class TempEval2Dev {
 		LOG.info("Using %d threads", Runtime.getRuntime().availableProcessors());
 
 		// Create the parser -- support empty rule
-		final AbstractCKYParser<LogicalExpression> parser = new MultiCKYParser.Builder<LogicalExpression>(
-				categoryServices, executor)
+		final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
+				categoryServices)//, executor)
 				.addBinaryParseRule(
 						new CKYBinaryParsingRule<LogicalExpression>(
 								ruleSetBuilder.build()))
@@ -263,7 +266,7 @@ public class TempEval2Dev {
 						new CKYBinaryParsingRule<LogicalExpression>(
 								new BackwardSkippingRule<LogicalExpression>(
 										categoryServices)))
-				
+				.addUnaryParseRule(new CKYUnaryParsingRule<LogicalExpression>(new SentenceCompilation(categoryServices), true))
 				.setMaxNumberOfCellsInSpan(100).build();
 
 		TemporalTesterSmall tester = TemporalTesterSmall.build(test, parser);
