@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class TemporalISO {
-	private final String[] fields = { "year", "month", "week", "day", "hour",
-			"minute", "weekday" };
+	private final String[] fields = { "year", "quarter", "month", "week", "day", "hour",
+			"minute", "weekday", "present_ref"};
 	private final Map<String, Set<Integer>> value;
+	
 
 	public TemporalISO(Map<String, Set<Integer>> data) {
 		this.value = new HashMap<String, Set<Integer>>();
@@ -17,6 +18,15 @@ public abstract class TemporalISO {
 			tmpSet.addAll(data.get(s));
 			this.value.put(s, tmpSet);
 		}
+	}
+	
+	public Map<String, Set<Integer>> getFullMapping() {
+		Map<String, Set<Integer>> tmpMap = new HashMap<String, Set<Integer>>();
+		for (String s : this.getKeys()) {
+			tmpMap.put(s, new HashSet<Integer>());
+			(tmpMap.get(s)).addAll(this.getVal(s));
+		}
+		return tmpMap;
 	}
 
 	public TemporalISO(String field, int num) {

@@ -1,6 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class TemporalNext extends TemporalPredicate {
 					&& (!this.first.getKeys().contains("day"))) {
 				int ref_timeMonth = TemporalISO.getValueFromDate(this.second, "month");
 				int dMonth = TemporalISO.getValueFromDate(this.first, "month");
-				Map<String, Set<Integer>> tmpMap = makeMap(this.first);
+				Map<String, Set<Integer>> tmpMap = this.first.getFullMapping();
 				if (ref_timeMonth < dMonth) {
 					tmpMap.put("year", this.second.getVal("year"));
 				} else {
@@ -54,7 +53,7 @@ public class TemporalNext extends TemporalPredicate {
 			} else {
 				if ((this.first.getKeys().contains("month"))
 						&& (this.first.getKeys().contains("day"))) {
-					Map<String, Set<Integer>> tmpMap = makeMap(this.first);
+					Map<String, Set<Integer>> tmpMap = this.first.getFullMapping();
 					tmpMap.put("year", this.second.getVal("year"));
 					TemporalDate firstTmpDate = new TemporalDate(tmpMap);
 					Set<Integer> tmpInt = new HashSet<Integer>();
@@ -88,14 +87,7 @@ public class TemporalNext extends TemporalPredicate {
  		return nextDate;
 	}
 
-	private Map<String, Set<Integer>> makeMap(TemporalISO f) {
-		Map<String, Set<Integer>> tmpMap = new HashMap<String, Set<Integer>>();
-		for (String s : f.getKeys()) {
-			tmpMap.put(s, new HashSet<Integer>());
-			(tmpMap.get(s)).addAll(f.getVal(s));
-		}
-		return tmpMap;
-	}
+
 
 	private void testStoredDates() {
 		if ((!this.first.getClass().toString().endsWith("TemporalDate"))

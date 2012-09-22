@@ -32,9 +32,22 @@ public class TemporalDate extends TemporalISO{
 	public String toString(){
 		if (super.isSet("weekday") || super.isSet("week")){
 			return weekFormat();
+		} else if (super.isSet("quarter")){
+			return quarterFormat();
+		} else if (super.isSet("present_ref")){
+			return "PRESENT_REF";
 		} else {
 			return dateFormat();
 		}
+	}
+	
+	private String quarterFormat(){
+		String s = "";
+		s = s + super.getValueFromDate(this, "year");
+		if (super.getValueFromDate(this, "quarter") == 0)
+			return s + "-QX";
+		else
+			return s + "-Q" + super.getValueFromDate(this, "quarter");
 	}
 	
 	private String weekFormat(){

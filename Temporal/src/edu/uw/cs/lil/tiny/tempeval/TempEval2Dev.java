@@ -123,10 +123,10 @@ public class TempEval2Dev {
 		}
 
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> train = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.txt"),//"tmp_dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),//"tmp_dataset.txt"),
 						new StubStringFilter(), true);
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.txt"),//"tmp_dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),//"tmp_dataset.txt"),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());

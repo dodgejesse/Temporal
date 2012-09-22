@@ -51,6 +51,8 @@ public class TemporalMap {
 			return new TemporalIntersect();
 		} else if (l.getName().equals("next:<s,<r,s>>")){
 			return new TemporalNext();
+		} else if (l.getName().equals("this:<s,<r,s>>")){
+			return new TemporalThis();
 		} else {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
 			
@@ -72,6 +74,8 @@ public class TemporalMap {
 	private TemporalISO findRangeMap(LogicalConstant l){
 		if (l.getName().equals("ref_time:r")){
 			return TemporalDate.readDocumentDate(ref_time);
+		} else if (l.getName().equals("present_ref:r")){
+			return new TemporalDate("present_ref", 0);
 		} else if (l.getName().equals("today:r")){
 			return TemporalDate.readDocumentDate(ref_time);
 		} else if (l.getName().equals("tomorrow:r")){
@@ -111,8 +115,24 @@ public class TemporalMap {
 			return findMonthMap(l);
 		} else if (weekdays.containsKey(l.getName().substring(0, l.getName().length()-2))){
 			return findWeekdayMap(l);
+		} else if (l.getName().toLowerCase().contains("quarter")){
+			return findQuarterMap(l);
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
+	}
+	
+	private TemporalISO findQuarterMap(LogicalConstant l){
+		if (l.getName().equals("firstQuarter:s")){
+			return new TemporalDate("quarter", 1);
+		} else if (l.getName().equals("secondQuarter:s")){
+			return new TemporalDate("quarter", 2);
+		} else if (l.getName().equals("thirdQuarter:s")){
+			return new TemporalDate("quarter", 3);
+		} else if (l.getName().equals("fourthQuarter:s")){
+			return new TemporalDate("quarter", 4);
+		} else {
+			throw new IllegalArgumentException("Trying to map a constant " + l + " which isn't an implemented quarter!");
+		}
 	}
 	
 	private TemporalISO findWeekdayMap(LogicalConstant l){

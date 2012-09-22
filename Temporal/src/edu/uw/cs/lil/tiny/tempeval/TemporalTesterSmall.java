@@ -14,6 +14,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
+	final boolean ONLYPRINTINCORRECT = false;
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -59,7 +60,6 @@ public class TemporalTesterSmall {
 
 	private int test(ILabeledDataItem<Pair<Sentence, String>, String> dataItem,
 			Model<Sentence, LogicalExpression> model, int counter) {
-		final boolean ONLYPRINTINCORRECT = true;
 		
 		Sentence s = dataItem.getSample().first();
 		String goldISO = dataItem.getLabel();
@@ -109,6 +109,8 @@ public class TemporalTesterSmall {
 	
 	// A hack to wrap the logical expression within a "next", in place of context. 
 	private LogicalExpression wrapNextAroundLogic(LogicalExpression l){
+		if (l.getType().getName().toString().equals("r") || l.toString().contains("this:<s,<r,s>>") || l.toString().contains("previous:<s,<r,s>>"))
+			return l;
 		LogicalExpression nextFunction = categoryServices.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
 		return categoryServices.doSemanticApplication(nextFunction, l);
 	}

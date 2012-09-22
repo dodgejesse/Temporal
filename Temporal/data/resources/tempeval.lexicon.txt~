@@ -1,5 +1,10 @@
 //the lexicon
 
+now :- NP : present_ref:r
+currently :- NP : present_ref:r
+current :- NP : present_ref:r
+
+
 monday :- NP : monday:s
 tuesday :- NP : tuesday:s
 wednesday :- NP : wednesday:s
@@ -29,15 +34,28 @@ nov. :- NP : november:s
 december :- NP : december:s
 dec. :- NP : december:s
 
+// things involving quarters.
+first-quarter :- NP : (this:<s,<r,s>> firstQuarter:s ref_time:r)
+first quarter :- NP : (this:<s,<r,s>> firstQuarter:s ref_time:r)
+second-quarter :- NP : (this:<s,<r,s>> secondQuarter:s ref_time:r)
+second quarter :- NP : (this:<s,<r,s>> secondQuarter:s ref_time:r)
+third-quarter :- NP : (this:<s,<r,s>> thirdQuarter:s ref_time:r)
+third quarter :- NP : (this:<s,<r,s>> thirdQuarter:s ref_time:r)
+fourth-quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
+fourth quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
+
+// those with empty semantics
+the :- NP/NP : (lambda $0:s ($0))
+
 
 //year :- NP : year:s
 //month :- NP : month:d
 
 //quarter :- NP : quarter:s
 
-//tomorrow :- NP : tomorrow:r
+tomorrow :- NP : tomorrow:r
 today :- NP : today:r
-//yesterday :- NP : yesterday:r
+yesterday :- NP : yesterday:r
 
 
 
