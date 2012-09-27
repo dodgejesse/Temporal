@@ -43,7 +43,10 @@ public class TemporalDate extends TemporalISO{
 	
 	private String quarterFormat(){
 		String s = "";
-		s = s + super.getValueFromDate(this, "year");
+		if (super.isSet("year"))
+				s = s + super.getValueFromDate(this, "year");
+		else 
+			s = s + "XXXX";
 		if (super.getValueFromDate(this, "quarter") == 0)
 			return s + "-QX";
 		else
@@ -51,7 +54,18 @@ public class TemporalDate extends TemporalISO{
 	}
 	
 	private String weekFormat(){
-		throw new IllegalArgumentException("Week format printing for TemporalDates is not implemented!");
+		String s = "";
+		if (super.isSet("year"))
+			s = s + getIntValue("year");
+		else
+			s = s + "XXXX";
+		if (super.isSet("week"))
+			s = s + "-W" + getIntValue("week");
+		else 
+			s = s + "-WXX";
+		if (super.isSet("weekday"))
+			s = s + "-" + getIntValue("weekday");
+		return s;
 	}
 	
 	private String dateFormat(){

@@ -45,7 +45,7 @@ fourth-quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
 fourth quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
 
 // those with empty semantics
-the :- NP/NP : (lambda $0:s ($0))
+the :- NP/NP : (lambda $0:s $0)
 
 
 //year :- NP : year:s

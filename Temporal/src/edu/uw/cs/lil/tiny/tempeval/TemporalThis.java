@@ -10,7 +10,7 @@ public class TemporalThis extends TemporalPredicate{
 	
 	private TemporalISO findThis(){
 		if (first.isSet("present_ref"))
-			throw new IllegalArgumentException("PRESENT_REF found when we should have a regular date! Problem in TemporalThis");
+			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		if (!tmpMap.containsKey("year")){
 			Set<Integer> tmpSet = new HashSet<Integer>();

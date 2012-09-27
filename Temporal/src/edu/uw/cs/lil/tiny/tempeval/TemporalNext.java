@@ -29,10 +29,16 @@ public class TemporalNext extends TemporalPredicate {
 		throw new IllegalArgumentException(
 				"Problem! Shouldn't be in this else clause.");
 	}
-
+/*
+		if (l.getType().getName().toString().equals("r")
+		|| l.toString().contains("this:<s,<r,s>>")
+		|| l.toString().contains("previous:<s,<r,s>>")
+		|| newLogicalExpression == null)
+	return l;
+		*/
 	private TemporalISO findNext() {
 		TemporalDate nextDate;
-		if (this.first.getKeys().contains("year")) {
+		if (this.first.getKeys().contains("year") || this.first.isSet("present_ref")) {
 			nextDate = (TemporalDate) this.first;
 		} else {
 			if ((this.first.getKeys().contains("month"))
@@ -49,6 +55,13 @@ public class TemporalNext extends TemporalPredicate {
 					}
 					tmpMap.put("year", tmpInt);
 				}
+				nextDate = new TemporalDate(tmpMap);
+			} else if (first.isSet("quarter")) {
+				int ref_timeYear = TemporalISO.getValueFromDate(second, "year") + 1;
+				Map<String, Set<Integer>> tmpMap = this.first.getFullMapping();
+				Set<Integer> tmpSet = new HashSet<Integer>();
+				tmpSet.add(ref_timeYear);
+				tmpMap.put("year", tmpSet);
 				nextDate = new TemporalDate(tmpMap);
 			} else {
 				if ((this.first.getKeys().contains("month"))
@@ -79,7 +92,7 @@ public class TemporalNext extends TemporalPredicate {
 						nextDate = TemporalJoda.convertLocalDateToISO(date);
 					} else {
 						throw new IllegalArgumentException(
-								"haven't implemented things other than dates with months or days.");
+								"haven't implemented things other than" + " dates with months or days. Problem in TemporalNext's findNext()");
 					}
 				}
 			}

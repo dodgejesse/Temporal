@@ -1,6 +1,6 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.util.List;
+import java.util.*;
 
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
@@ -15,6 +15,8 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
+	final boolean ONLYPRINTONEPHRASE = false;
+	final String PHRASE = "the";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -24,8 +26,8 @@ public class TemporalTesterSmall {
 			AbstractCKYParser<LogicalExpression> parser) {
 		this.test = test;
 		this.parser = parser;
-		
-	    categoryServices = new LogicalExpressionCategoryServices(false);
+
+		categoryServices = new LogicalExpressionCategoryServices(false);
 	}
 
 	public void test(Model<Sentence, LogicalExpression> model) {
@@ -40,79 +42,153 @@ public class TemporalTesterSmall {
 		int correct = 0;
 		// Parsed, but not executed
 		int incorrect = 0;
-		// Not parsed or too many parses
-		int parseProblem = 0;
+		// Too many parses
+		int tooManyParses = 0;
+		// Not parsed
+		int notParsed = 0;
 		for (final ILabeledDataItem<Pair<Sentence, String>, String> item : testData) {
 			counter++;
-			int c = test(item,model,counter);
-			if(c == 0){
+			int c = test(item, model, counter);
+			if (c == 0) {
 				correct += 1;
-			}else if (c == 1)
+			} else if (c == 1)
 				incorrect += 1;
+			else if (c == 2)
+				tooManyParses += 1;
 			else
-				parseProblem += 1;
+				notParsed += 1;
 		}
 		System.out.println("Total phrases: " + counter);
-		System.out.println("Number correctly parsed and executed: " + correct + ", which is " + (double)correct*100/counter+ " percent");
-		System.out.println("Number parsed, but without correct output (either parser or executer): " + incorrect + ", which his " + (double)incorrect*100/counter + " percent");
-		System.out.println("Number not parsed: " + parseProblem);
+		System.out
+				.println("Number correctly parsed and executed: " + correct
+						+ ", which is " + (double) correct * 100 / counter
+						+ " percent");
+		System.out
+				.println("Number parsed, but without correct output (either parser or executer): "
+						+ incorrect
+						+ ", which his "
+						+ (double) incorrect
+						* 100
+						/ counter + " percent");
+		System.out.println("Number with too many parses: " + tooManyParses);
+		System.out.println("Number with no parses: " + notParsed);
 	}
 
 	private int test(ILabeledDataItem<Pair<Sentence, String>, String> dataItem,
 			Model<Sentence, LogicalExpression> model, int counter) {
-		
+		int output;
+		boolean c = false;
+		LogicalExpression label = null;
+		TemporalISO tmp = null;
 		Sentence s = dataItem.getSample().first();
 		String goldISO = dataItem.getLabel();
 		String ref_time = dataItem.getSample().second();
-		final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(s,
-				model.createDataItemModel(s));
-		
-		
+		final IParserOutput<LogicalExpression> modelParserOutput = parser
+				.parse(s, model.createDataItemModel(s));
+
 		final List<IParseResult<LogicalExpression>> bestModelParses = modelParserOutput
 				.getBestParses();
-		if (!ONLYPRINTINCORRECT)
-			System.out.println("Phrase: " + s.toString());
 		if (bestModelParses.size() == 1) {
 			// Case we have a single parse
-			final IParseResult<LogicalExpression> parse = bestModelParses.get(0);
-			LogicalExpression label = parse.getY();
-			label = wrapNextAroundLogic(label);
-			TemporalISO tmp = TemporalVisitor.of(label, ref_time);
-			boolean c = tmp.toString().equals(goldISO);
-			if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT)
-				printing(label, goldISO, tmp, s.toString(), c, ref_time);
-			return c ? 0 : 1;
+			final IParseResult<LogicalExpression> parse = bestModelParses
+					.get(0);
+			label = parse.getY();
+			LogicalExpression[] labels = getArrayOfLabels(label);
+
+			int n = findCorrectLabel(labels, ref_time, goldISO);
+			if (n>=0){
+				label = labels[n];
+				c = true;
+			} else 
+				c = false;
+			tmp = TemporalVisitor.of(label, ref_time);
+			// if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT)
+			// printing(label, goldISO, tmp, s.toString(), c, ref_time);
+			output = c ? 0 : 1;
 		} else if (bestModelParses.size() > 1) {
-			if (!ONLYPRINTINCORRECT){
-				System.out.println("Too many parses! Will implement something here when we have learning.");
-				System.out.println();
-			}
-			return 2;
+
+			output = 2;
 		} else {
-			if (!ONLYPRINTINCORRECT) {
-				System.out.println("No parses! Will implement something to throw out words and try again.");
+			output = 3;
+		}
+		printing(label, goldISO, tmp, s.toString(), c, ref_time, output, s);
+		return output;
+	}
+	
+	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String goldISO){
+		for (int i = 0; i < labels.length; i++){
+			TemporalISO tmp;
+			
+			// I'm keeping these try / catch statements here because I'll probably need them again in the future.
+			//try {
+				tmp = TemporalVisitor.of(labels[i], ref_time);
+			//} catch (Exception e){
+			//	System.out.println(e);
+			//	continue;
+			//}
+			//try {
+				if (tmp.toString().equals(goldISO))
+					return i;
+			//} catch (Exception e){
+			//	System.out.println(e);
+			//}
+		}
+		return -1;
+	}
+
+	private void printing(LogicalExpression label, String goldISO,
+			TemporalISO output, String phrase, boolean c, String ref_time,
+			int correct, Sentence s) {
+		if (!ONLYPRINTONEPHRASE
+				|| (ONLYPRINTONEPHRASE && s.toString().contains(PHRASE))) {
+			if (correct == 0 || correct == 1) {
+				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT) {
+					//System.out.println("Phrase:   " + phrase);
+					System.out.println("Phrase:   " + s.toString());
+					System.out.println("Logic:    " + label);
+					System.out.println("ref_time: " + ref_time);
+					System.out.println("Gold:     " + goldISO);
+					System.out.println("Guess:    " + output);
+					System.out.println("Correct?  " + c);
+					System.out.println();
+				}
+			} else if (correct == 2 && !ONLYPRINTINCORRECT) {
+				System.out.println("Phrase:   " + s.toString());
+				System.out.println("Too many parses! Will implement"
+						+ " something here when we have learning.");
+				System.out.println();
+			} else if (correct == 3 && !ONLYPRINTINCORRECT) {
+				System.out.println("Phrase:   " + s.toString());
+				System.out.println("No parses! Will implement something"
+						+ " to throw out words and try again.");
 				System.out.println();
 			}
-			return 2;
 		}
 	}
-	
-	private void printing(LogicalExpression label, String goldISO, TemporalISO output, String phrase, boolean c, String ref_time){
-		System.out.println("Phrase:   " + phrase);
-		System.out.println("Logic:    " + label);
-		System.out.println("ref_time: " + ref_time);
-		System.out.println("Gold:     " + goldISO);
-		System.out.println("Guess:    " + output);
-		System.out.println("Correct?  " + c);
-		System.out.println();
-	}
-	
-	// A hack to wrap the logical expression within a "next", in place of context. 
-	private LogicalExpression wrapNextAroundLogic(LogicalExpression l){
-		if (l.getType().getName().toString().equals("r") || l.toString().contains("this:<s,<r,s>>") || l.toString().contains("previous:<s,<r,s>>"))
-			return l;
-		LogicalExpression nextFunction = categoryServices.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
-		return categoryServices.doSemanticApplication(nextFunction, l);
+
+	// A hack to wrap the logical expression within a "next", in place of
+	// context.
+
+	private LogicalExpression[] getArrayOfLabels(LogicalExpression l) {
+		int numOfFunctions = 2;
+		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
+		LogicalExpression[] functions = new LogicalExpression[numOfFunctions];
+		// Making the Predicates to apply to the logical expressions
+		functions[0] = categoryServices
+				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
+		functions[1] = categoryServices
+				.parseSemantics("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))");
+		
+		// Looping over the predicates, applying them each to the given logical expression
+		for (int i = 0; i < functions.length; i++){
+			newLogicArray[i] = categoryServices
+					.doSemanticApplication(functions[i], l);
+			if (newLogicArray[i] == null) 
+				newLogicArray[i] = l;
+		}
+		newLogicArray[newLogicArray.length - 1] = l;
+
+		return newLogicArray;
 	}
 
 	public static TemporalTesterSmall build(

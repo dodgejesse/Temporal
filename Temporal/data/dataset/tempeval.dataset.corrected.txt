@@ -3209,7 +3209,7 @@ currently
 PRESENT_REF
 
 //U.S. commanders said 5,500 Iraqi prisoners were taken in the first hours of the ground war , though some military officials later said the total may have climbed above 8,000 . 
-the 
+the first hours
 1991-02-25
 PXD
 

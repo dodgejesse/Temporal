@@ -35,14 +35,15 @@ december :- NP : december:s
 dec. :- NP : december:s
 
 // things involving quarters.
-first-quarter :- NP : (this:<s,<r,s>> firstQuarter:s ref_time:r)
-first quarter :- NP : (this:<s,<r,s>> firstQuarter:s ref_time:r)
-second-quarter :- NP : (this:<s,<r,s>> secondQuarter:s ref_time:r)
-second quarter :- NP : (this:<s,<r,s>> secondQuarter:s ref_time:r)
-third-quarter :- NP : (this:<s,<r,s>> thirdQuarter:s ref_time:r)
-third quarter :- NP : (this:<s,<r,s>> thirdQuarter:s ref_time:r)
-fourth-quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
-fourth quarter :- NP : (this:<s,<r,s>> fourthQuarter:s ref_time:r)
+// this is going to change. not sure exactly how, but it will.
+first-quarter :- NP : firstQuarter:s
+first quarter :- NP : firstQuarter:s
+second-quarter :- NP : secondQuarter:s
+second quarter :- NP : secondQuarter:s
+third-quarter :- NP : thirdQuarter:s
+third quarter :- NP : thirdQuarter:s
+fourth-quarter :- NP : fourthQuarter:s
+fourth quarter :- NP : fourthQuarter:s
 
 // those with empty semantics
 the :- NP/NP : (lambda $0:s $0)
