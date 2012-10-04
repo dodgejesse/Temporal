@@ -122,11 +122,15 @@ public class TempEval2Dev {
 			throw new RuntimeException(e);
 		}
 
+		
+		// The two dataset locations:
+		// "tempeval.dataset.corrected.txt"),
+		// "other_dataset_versions/tempeval.small_testing_dataset.txt"),
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> train = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),//"tmp_dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),
 						new StubStringFilter(), true);
 		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test = TemporalSentenceDataset
-				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),//"tmp_dataset.txt"),
+				.read(new File(datasetDir + "tempeval.dataset.corrected.txt"),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());

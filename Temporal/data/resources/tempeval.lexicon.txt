@@ -36,17 +36,33 @@ dec. :- NP : december:s
 
 // things involving quarters.
 // this is going to change. not sure exactly how, but it will.
-first-quarter :- NP : firstQuarter:s
-first quarter :- NP : firstQuarter:s
-second-quarter :- NP : secondQuarter:s
-second quarter :- NP : secondQuarter:s
-third-quarter :- NP : thirdQuarter:s
-third quarter :- NP : thirdQuarter:s
-fourth-quarter :- NP : fourthQuarter:s
-fourth quarter :- NP : fourthQuarter:s
+//first-quarter :- NP : firstQuarter:s
+//first quarter :- NP : firstQuarter:s
+//second-quarter :- NP : secondQuarter:s
+//second quarter :- NP : secondQuarter:s
+//third-quarter :- NP : thirdQuarter:s
+//third quarter :- NP : thirdQuarter:s
+//fourth-quarter :- NP : fourthQuarter:s
+//fourth quarter :- NP : fourthQuarter:s
 
-// those with empty semantics
-the :- NP/NP : (lambda $0:s $0)
+// Ordinal numbers
+first :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 1o:n))
+second :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 2o:n))
+third :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 3o:n))
+fourth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 4o:n))
+fifth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 5o:n))
+sixth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 6o:n))
+seventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 7o:n))
+eighth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 8o:n))
+ninth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 9o:n))
+tenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 10o:n))
+eleventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 11o:n))
+twelfth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 12o:n))
+thirteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 13o:n))
+fourteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 14o:n))
+fifteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 15o:n))
+
+quarter :- NP : quarter:s 
 
 
 //year :- NP : year:s
@@ -57,8 +73,6 @@ the :- NP/NP : (lambda $0:s $0)
 tomorrow :- NP : tomorrow:r
 today :- NP : today:r
 yesterday :- NP : yesterday:r
-
-
 
 
 // these are numbers, to be multiplied by durations
@@ -218,4 +232,5 @@ three :- NP : 3:n
 2018 :- NP : 2018:r
 2019 :- NP : 2019:r
 
-
+// those with empty semantics
+the :- NP/NP : (lambda $0:s $0)

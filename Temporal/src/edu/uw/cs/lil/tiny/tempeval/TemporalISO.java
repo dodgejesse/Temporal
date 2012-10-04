@@ -9,15 +9,42 @@ public abstract class TemporalISO {
 	private final String[] fields = { "year", "quarter", "month", "week", "day", "hour",
 			"minute", "weekday", "present_ref"};
 	private final Map<String, Set<Integer>> value;
-	
+	private final boolean convexSet;
 
 	public TemporalISO(Map<String, Set<Integer>> data) {
+		convexSet = false;
+		for (String field : data.keySet()){
+			if (!stringInFields(field))
+				throw new IllegalArgumentException(field
+						+ " is not a valid key! Problem in TemporalISO.");
+		}
 		this.value = new HashMap<String, Set<Integer>>();
 		for (String s : data.keySet()) {
 			Set<Integer> tmpSet = new HashSet<Integer>();
 			tmpSet.addAll(data.get(s));
 			this.value.put(s, tmpSet);
 		}
+		
+	}
+	
+	// This constructor is for convex sets, like the set of all months, or the set of all quarters. 
+	public TemporalISO(String field){
+		this(field,-1, true);
+	}
+
+	public TemporalISO(String field, int num) {
+		this(field, num, false);
+	}
+	
+	private TemporalISO(String field, int num, boolean ordinal){
+		convexSet = ordinal;
+		if (!stringInFields(field))
+			throw new IllegalArgumentException(field
+					+ " is not a valid key! Problem in TemporalISO.");
+		this.value = new HashMap<String, Set<Integer>>();
+		Set<Integer> newValueSet = new HashSet<Integer>();
+		newValueSet.add(Integer.valueOf(num));
+		this.value.put(field, newValueSet);
 	}
 	
 	public Map<String, Set<Integer>> getFullMapping() {
@@ -27,16 +54,6 @@ public abstract class TemporalISO {
 			(tmpMap.get(s)).addAll(this.getVal(s));
 		}
 		return tmpMap;
-	}
-
-	public TemporalISO(String field, int num) {
-		if (!stringInFields(field))
-			throw new IllegalArgumentException(field
-					+ " is not a valid key! Problem in TemporalISO.");
-		this.value = new HashMap<String, Set<Integer>>();
-		Set<Integer> newValueSet = new HashSet<Integer>();
-		newValueSet.add(Integer.valueOf(num));
-		this.value.put(field, newValueSet);
 	}
 
 	public Set<String> getKeys() {
@@ -72,10 +89,14 @@ public abstract class TemporalISO {
 		return keyInFields;
 	}
 	
+	public boolean isConvexSet(){
+		return convexSet;
+	}
+	
 	// Sort of a hack, doesn't work if there is more than one value for a given
 	// field!
 	public static int getValueFromDate(TemporalISO d, String s) {
-		int value = -1;
+		int value = -2;
 		if (d.getVal(s).size() > 1) {
 			throw new IllegalArgumentException(
 					"There is more than one value for " + s
@@ -84,9 +105,9 @@ public abstract class TemporalISO {
 		for (int i : d.getVal(s)) {
 			value = i;
 		}
-		if (value == -1) {
+		if (value == -2) {
 			throw new IllegalArgumentException(
-					"Problem getting value in getValueFromDate, within TemporalISO");
+					"Problem getting value of " + s + " in getValueFromDate for ISO " + d + ", within TemporalISO");
 		}
 		return value;
 	}

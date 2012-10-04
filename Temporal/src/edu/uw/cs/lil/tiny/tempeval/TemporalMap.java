@@ -53,9 +53,10 @@ public class TemporalMap {
 			return new TemporalNext();
 		} else if (l.getName().equals("this:<s,<r,s>>")){
 			return new TemporalThis();
+		} else if (l.getName().equals("nth:<s,<n,s>>")){
+			return new TemporalNth();
 		} else {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
-			
 		}
 	}
 	
@@ -65,10 +66,23 @@ public class TemporalMap {
 			return findSequenceMap(l);
 		} else if (l.getType().getName().toString().equals("r")){
 			return findRangeMap(l);
-		}else if (l.getType().getName().toString().equals("d")){
+		} else if (l.getType().getName().toString().equals("d")){
 			throw new IllegalArgumentException("haven't implemented durations in TemporalMap yet.");
-		} else
+		} else if (l.getType().getName().toString().equals("n")){
+			return findNumberMap(l);
+		} else 
 			throw new IllegalArgumentException("Unknown logical constant " + l);
+	}
+	
+	private TemporalISO findNumberMap(LogicalConstant l){
+		if (l.getName().toString().endsWith("o:n")){
+			int n = Integer.parseInt(l.getName().substring(0,l.getName().length()-3));
+			return new TemporalNumber(n, true);
+		} else if (l.getName().toString().endsWith(":n")){
+			int n = Integer.parseInt(l.getName().substring(0,l.getName().length()-2));
+			return new TemporalNumber(n, false);
+		} else
+			throw new IllegalArgumentException("Unknown number in findNumberMap, within TemporalMap!");
 	}
 	
 	private TemporalISO findRangeMap(LogicalConstant l){
@@ -92,7 +106,7 @@ public class TemporalMap {
 	// Shifts a given ISO by n days. If n is negative, shifts it backwards in time.
 	private TemporalISO shiftISOByDay(TemporalISO t, int n){
 		LocalDate tmp = TemporalJoda.convertISOToLocalDate(t);
-		if (n >0)
+		if (n > 0)
 			tmp = tmp.plusDays(n);
 		else if (n < 0)
 			tmp = tmp.minusDays(-n);
@@ -115,24 +129,10 @@ public class TemporalMap {
 			return findMonthMap(l);
 		} else if (weekdays.containsKey(l.getName().substring(0, l.getName().length()-2))){
 			return findWeekdayMap(l);
-		} else if (l.getName().toLowerCase().contains("quarter")){
-			return findQuarterMap(l);
+		} else if (l.getName().equals("quarter:s")){
+			return new TemporalDate("quarter");
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
-	}
-	
-	private TemporalISO findQuarterMap(LogicalConstant l){
-		if (l.getName().equals("firstQuarter:s")){
-			return new TemporalDate("quarter", 1);
-		} else if (l.getName().equals("secondQuarter:s")){
-			return new TemporalDate("quarter", 2);
-		} else if (l.getName().equals("thirdQuarter:s")){
-			return new TemporalDate("quarter", 3);
-		} else if (l.getName().equals("fourthQuarter:s")){
-			return new TemporalDate("quarter", 4);
-		} else {
-			throw new IllegalArgumentException("Trying to map a constant " + l + " which isn't an implemented quarter!");
-		}
 	}
 	
 	private TemporalISO findWeekdayMap(LogicalConstant l){
@@ -150,3 +150,19 @@ public class TemporalMap {
 		return new TemporalDate("day",num);
 	}
 }
+
+/*
+private TemporalISO findQuarterMap(LogicalConstant l){
+	if (l.getName().equals("firstQuarter:s")){
+		return new TemporalDate("quarter", 1);
+	} else if (l.getName().equals("secondQuarter:s")){
+		return new TemporalDate("quarter", 2);
+	} else if (l.getName().equals("thirdQuarter:s")){
+		return new TemporalDate("quarter", 3);
+	} else if (l.getName().equals("fourthQuarter:s")){
+		return new TemporalDate("quarter", 4);
+	} else {
+		throw new IllegalArgumentException("Trying to map a constant " + l + " which isn't an implemented quarter!");
+	}
+}
+*/

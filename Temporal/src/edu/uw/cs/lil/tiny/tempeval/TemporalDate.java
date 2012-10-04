@@ -12,6 +12,10 @@ public class TemporalDate extends TemporalISO{
 		super(s,n);
 	}
 	
+	public TemporalDate(String s){
+		super(s);
+	}
+	
 	public static TemporalDate readDocumentDate(String s){
 		Map<String, Set<Integer>> data = new HashMap<String, Set<Integer>>();
 		String[] dateInfo = s.split("-");
@@ -30,7 +34,9 @@ public class TemporalDate extends TemporalISO{
 	}
 	
 	public String toString(){
-		if (super.isSet("weekday") || super.isSet("week")){
+		if (super.isConvexSet())
+			return convexSetFormat();
+		else if (super.isSet("weekday") || super.isSet("week")){
 			return weekFormat();
 		} else if (super.isSet("quarter")){
 			return quarterFormat();
@@ -41,6 +47,13 @@ public class TemporalDate extends TemporalISO{
 		}
 	}
 	
+	private String convexSetFormat(){
+		if (super.isSet("quarter"))
+			return "XXXX-QX";
+		else 
+			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters.");
+	}
+	
 	private String quarterFormat(){
 		String s = "";
 		if (super.isSet("year"))
@@ -49,8 +62,11 @@ public class TemporalDate extends TemporalISO{
 			s = s + "XXXX";
 		if (super.getValueFromDate(this, "quarter") == 0)
 			return s + "-QX";
-		else
-			return s + "-Q" + super.getValueFromDate(this, "quarter");
+		else{
+			int qNum = super.getValueFromDate(this, "quarter");
+			String q = (qNum == -1) ? "X" : "" + qNum;
+			return s + "-Q" + q;
+		}
 	}
 	
 	private String weekFormat(){

@@ -14,9 +14,9 @@ import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
-	final boolean ONLYPRINTINCORRECT = false;
+	final boolean ONLYPRINTINCORRECT = true;
 	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "the";
+	final String PHRASE = "fourth";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;

@@ -22,11 +22,13 @@ public class TemporalThis extends TemporalPredicate{
 			tmpSet.add(TemporalISO.getValueFromDate(second, "month"));
 			tmpMap.put("month", tmpSet);
 		}
+		/*
 		if (!(first.isSet("quarter") || first.isSet("week") || first.isSet("day") || first.isSet("weekday"))){
 			Set<Integer> tmpSet = new HashSet<Integer>();
 			tmpSet.add(TemporalISO.getValueFromDate(second, "day"));
 			tmpMap.put("day", tmpSet);
 		}
+		*/
 		return new TemporalDate(tmpMap);
 		
 	}

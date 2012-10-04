@@ -37,6 +37,7 @@ public class TemporalSentenceDataset implements
 					if (currentSentence == null) {
 						// Case we don't have a sentence, so we are supposed to get
 						// a sentence
+						line = line.replace("-", " ");
 						currentSentence = textFilter.filter(line);
 					} else if (currentRefDate == null) {
 						currentRefDate = textFilter.filter(line);
