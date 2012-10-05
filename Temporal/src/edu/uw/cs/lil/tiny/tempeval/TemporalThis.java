@@ -22,6 +22,7 @@ public class TemporalThis extends TemporalPredicate{
 			tmpSet.add(TemporalISO.getValueFromDate(second, "month"));
 			tmpMap.put("month", tmpSet);
 		}
+		// TODO: Find a case where this is useful. I don't think it is, but look anyway. 
 		/*
 		if (!(first.isSet("quarter") || first.isSet("week") || first.isSet("day") || first.isSet("weekday"))){
 			Set<Integer> tmpSet = new HashSet<Integer>();

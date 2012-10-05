@@ -11,31 +11,6 @@ public class TemporalNext extends TemporalPredicate {
 		return findNext();
 	}
 
-	private TemporalDate compareDates(TemporalDate f, TemporalDate s) {
-		LocalDate d1 = TemporalJoda.convertISOToLocalDate(f);
-		LocalDate d2 = TemporalJoda.convertISOToLocalDate(s);
-		LocalDate ref_time = TemporalJoda.convertISOToLocalDate(this.second);
-		if ((ref_time.isBefore(d1)) && (d1.isBefore(d2)))
-			return f;
-		if ((d1.isBefore(ref_time)) && (ref_time.isBefore(d2)))
-			return s;
-		if (d2.isBefore(ref_time))
-			throw new IllegalArgumentException(
-					"We have two dates that are before ref_time, when at least one should be after it.");
-		if (d2.isBefore(d1)) {
-			throw new IllegalArgumentException(
-					"d2 is before d1, which shouldn't ever happen. In compareDates, TemporalNext");
-		}
-		throw new IllegalArgumentException(
-				"Problem! Shouldn't be in this else clause.");
-	}
-/*
-		if (l.getType().getName().toString().equals("r")
-		|| l.toString().contains("this:<s,<r,s>>")
-		|| l.toString().contains("previous:<s,<r,s>>")
-		|| newLogicalExpression == null)
-	return l;
-		*/
 	private TemporalISO findNext() {
 		TemporalDate nextDate;
 		if (this.first.getKeys().contains("year") || this.first.isSet("present_ref")) {
@@ -56,6 +31,8 @@ public class TemporalNext extends TemporalPredicate {
 					tmpMap.put("year", tmpInt);
 				}
 				nextDate = new TemporalDate(tmpMap);
+			// TODO: Change this to accurately give next if I say "next third quarter" in Jaunary. Should be same year.
+			// 		 That's not possible with this. 
 			} else if (first.isSet("quarter")) {
 				int ref_timeYear = TemporalISO.getValueFromDate(second, "year") + 1;
 				Map<String, Set<Integer>> tmpMap = this.first.getFullMapping();
@@ -75,7 +52,10 @@ public class TemporalNext extends TemporalPredicate {
 					}
 					tmpMap.put("year", tmpInt);
 					TemporalDate secondTmpDate = new TemporalDate(tmpMap);
-					nextDate = compareDates(firstTmpDate, secondTmpDate);
+					if (areTemporallyOrdered(firstTmpDate, secondTmpDate))
+						nextDate = firstTmpDate;
+					else
+						nextDate = secondTmpDate;
 				} else {
 					if ((this.first.getKeys().contains("weekday"))
 							&& (!this.first.getKeys().contains("month"))
@@ -100,6 +80,34 @@ public class TemporalNext extends TemporalPredicate {
  		return nextDate;
 	}
 
+	// Takes two TemporalDates, turns them into JodaTime LocalDate objects, and
+	// compares them.
+	// Assumes this.second is ref_time
+	// Assumes f and s are TemporalDates with the fields "year", "month", and
+	// "day", or
+	// TemporalJoda.convertISOToLocalDate throws an error.
+	public boolean areTemporallyOrdered(TemporalDate f, TemporalDate s) {
+		LocalDate d1 = TemporalJoda.convertISOToLocalDate(f);
+		LocalDate d2 = TemporalJoda.convertISOToLocalDate(s);
+		LocalDate ref_time = TemporalJoda.convertISOToLocalDate(this.second);
+		if ((ref_time.isBefore(d1)) && (d1.isBefore(d2)))
+			return true;
+		if ((d1.isBefore(ref_time)) && (ref_time.isBefore(d2)))
+			return false;
+		if (d2.isBefore(ref_time))
+			throw new IllegalArgumentException(
+					"We have two dates that are before ref_time, when at least one should be after it.");
+		if (d2.isBefore(d1)) {
+			throw new IllegalArgumentException(
+					"d2 is before d1, which shouldn't ever happen. In compareDates, TemporalNext");
+		}
+		throw new IllegalArgumentException(
+				"Problem! Shouldn't be in this else clause. Could be because "
+						+ f
+						+ " and "
+						+ s
+						+ " are equal. Should test for this in predicate that calls this function.");
+	}
 
 
 	private void testStoredDates() {
