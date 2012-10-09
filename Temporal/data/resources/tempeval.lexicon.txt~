@@ -46,27 +46,28 @@ dec. :- NP : december:s
 //fourth quarter :- NP : fourthQuarter:s
 
 // Ordinal numbers
-first :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 1o:n))
-second :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 2o:n))
-third :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 3o:n))
-fourth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 4o:n))
-fifth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 5o:n))
-sixth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 6o:n))
-seventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 7o:n))
-eighth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 8o:n))
-ninth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 9o:n))
-tenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 10o:n))
-eleventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 11o:n))
-twelfth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 12o:n))
-thirteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 13o:n))
-fourteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 14o:n))
-fifteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0:s 15o:n))
+first :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 1o:n))
+second :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 2o:n))
+third :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 3o:n))
+fourth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 4o:n))
+fifth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 5o:n))
+sixth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 6o:n))
+seventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 7o:n))
+eighth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 8o:n))
+ninth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 9o:n))
+tenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 10o:n))
+eleventh :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 11o:n))
+twelfth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 12o:n))
+thirteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 13o:n))
+fourteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 14o:n))
+fifteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 15o:n))
 
 quarter :- NP : quarter:s 
 
 
-//year :- NP : year:s
-//month :- NP : month:d
+year :- NP : year:s
+month :- NP : month:s
+//week :- NP : week:s
 
 //quarter :- NP : quarter:s
 
@@ -74,6 +75,9 @@ tomorrow :- NP : tomorrow:r
 today :- NP : today:r
 yesterday :- NP : yesterday:r
 
+next :- NP/NP : (lambda $0:s (next:<s,<r,s>> $0 ref_time:r))
+last :- NP/NP : (lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))
+//this :- NP/NP : (lambda $0:s (this:<s,<r,s>> $0 ref_time:r))
 
 // these are numbers, to be multiplied by durations
 three :- NP : 3:n

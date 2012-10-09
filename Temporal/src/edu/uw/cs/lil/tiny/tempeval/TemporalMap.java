@@ -49,6 +49,8 @@ public class TemporalMap {
 	public TemporalPredicate findComplexMap(LogicalConstant l){
 		if (l.getName().equals("intersect:<s*,s>")){
 			return new TemporalIntersect();
+		} else if (l.getName().equals("previous:<s,<r,s>>")){
+			return new TemporalPrevious();
 		} else if (l.getName().equals("next:<s,<r,s>>")){
 			return new TemporalNext();
 		} else if (l.getName().equals("this:<s,<r,s>>")){
@@ -131,6 +133,10 @@ public class TemporalMap {
 			return findWeekdayMap(l);
 		} else if (l.getName().equals("quarter:s")){
 			return new TemporalDate("quarter");
+		} else if (l.getName().equals("year:s")){
+			return new TemporalDate("year");
+		} else if (l.getName().equals("month:s")){
+			return new TemporalDate("month");
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
 	}

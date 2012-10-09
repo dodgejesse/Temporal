@@ -50,6 +50,8 @@ public class TemporalDate extends TemporalISO{
 	private String convexSetFormat(){
 		if (super.isSet("quarter"))
 			return "XXXX-QX";
+		else if (super.isSet("year"))
+			return "XXXX";
 		else 
 			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters.");
 	}

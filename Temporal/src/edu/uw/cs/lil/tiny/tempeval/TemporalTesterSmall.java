@@ -16,7 +16,7 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = true;
 	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "fourth";
+	final String PHRASE = "month";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -170,14 +170,17 @@ public class TemporalTesterSmall {
 	// context.
 
 	private LogicalExpression[] getArrayOfLabels(LogicalExpression l) {
-		int numOfFunctions = 2;
+		int numOfFunctions = 3;
 		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
 		LogicalExpression[] functions = new LogicalExpression[numOfFunctions];
 		// Making the Predicates to apply to the logical expressions
 		functions[0] = categoryServices
-				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
+				.parseSemantics("(lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))");
 		functions[1] = categoryServices
 				.parseSemantics("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))");
+		functions[2] = categoryServices
+				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
+
 		
 		// Looping over the predicates, applying them each to the given logical expression
 		for (int i = 0; i < functions.length; i++){
