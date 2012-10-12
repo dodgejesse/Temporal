@@ -11,7 +11,7 @@ public class TemporalThis extends TemporalPredicate {
 	}
 
 	private TemporalISO findThis() {
-		if (first.isSet("present_ref"))
+		if (first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref"))
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		if (!first.isConvexSet()) {
@@ -41,7 +41,7 @@ public class TemporalThis extends TemporalPredicate {
 				weekNums.add(weekNum);
 				tmpMap.put("week", weekNums);
 				tmpMap.put("year", second.getVal("year"));
-			}
+			} 
 		}
 
 		return new TemporalDate(tmpMap);

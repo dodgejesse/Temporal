@@ -74,7 +74,7 @@ public class TemporalPrevious extends TemporalPredicate{
 	}
 	
 	private TemporalDate convexQuarter(){
-		int quarterNum = (TemporalDate.getValueFromDate(first, "quarter") + 4)/4;
+		int quarterNum = (TemporalDate.getValueFromDate(second, "month") + 4)/4;
 		int year = TemporalDate.getValueFromDate(second,"year");
 		if (quarterNum == 1){
 			year = year - 1;
@@ -92,13 +92,41 @@ public class TemporalPrevious extends TemporalPredicate{
 	}
 	
 	private TemporalDate convexMonth(){
-		int tmpMonth = TemporalDate.getValueFromDate(second, "month");
-		return new TemporalDate("month", tmpMonth - 1);
+		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
+		Set<Integer> tmpSetMonth = second.getVal("month");
+		Set<Integer> tmpSetYear = second.getVal("year");
+		if (TemporalDate.getValueFromDate(second, "month") == 1){
+			tmpSetMonth.clear();
+			tmpSetMonth.add(12);
+			tmpSetYear.clear();
+			tmpSetYear.add(TemporalDate.getValueFromDate(second, "year") - 1);
+			// must subtract one from year
+		} else {
+			tmpSetMonth = subtractOne(tmpSetMonth);
+		}
+		tmpMap.put("month", tmpSetMonth);
+		tmpMap.put("year", tmpSetYear);
+		return new TemporalDate(tmpMap);
+	}
+	
+	private TemporalDate convexWeek(){
+		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
+		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
+		tmpLocalDate = tmpLocalDate.minusWeeks(1);
+		int weekNum = tmpLocalDate.getWeekOfWeekyear();
+		Set<Integer> weekNums = new HashSet<Integer>();
+		weekNums.add(weekNum);
+		int yearNum = tmpLocalDate.getYear();
+		Set<Integer> yearNums = new HashSet<Integer>();
+		yearNums.add(yearNum);
+		tmpMap.put("year", yearNums);
+		tmpMap.put("week", weekNums);
+		return new TemporalDate(tmpMap);
 	}
 	
 	private TemporalISO findPrevious(){
 		TemporalDate prevDate;
-		if ((first.isSet("year") && !first.isConvexSet()) || first.isSet("present_ref"))
+		if ((first.isSet("year") && !first.isConvexSet()) || first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref"))
 			return first;
 		else{
 			if (first.isSet("quarter") && !first.isConvexSet()){
@@ -117,9 +145,7 @@ public class TemporalPrevious extends TemporalPredicate{
 				} else if (first.isSet("month")){
 					prevDate = convexMonth();
 				} else if (first.isSet("week")){
-					throw new IllegalArgumentException("Haven't implemented 'last week', as it's weird in the data.");
-					//int tmpWeek = TemporalDate.getValueFromDate(second, "week");
-					//TemporalDate tmpDate = new TemporalDate("week", tmpWeek - 1);
+					prevDate = convexWeek();
 				} else 
 					throw new IllegalArgumentException("Haven't implemented 'prevous' for convex set " + first);
 			} else
@@ -128,7 +154,7 @@ public class TemporalPrevious extends TemporalPredicate{
 		
 		return prevDate;
 	}
-	
+
 	
 	
 	// Only called when first is a quarter, and returns true if it is before the ref_time, false otherwise.
@@ -144,7 +170,7 @@ public class TemporalPrevious extends TemporalPredicate{
 	
 	private Set<Integer> subtractOne(Set<Integer> oldIntSet){
 		Set<Integer> tmpInt = new HashSet<Integer>();
-		for (int i : this.second.getVal("year")) {
+		for (int i : oldIntSet) {
 			tmpInt.add(Integer.valueOf(i - 1));
 		}
 		return tmpInt;

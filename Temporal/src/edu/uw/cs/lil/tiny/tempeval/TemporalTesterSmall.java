@@ -15,8 +15,9 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = true;
-	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "month";
+	final boolean ONLYPRINTMULTIPLEPARSES = false;
+	final boolean ONLYPRINTONEPHRASE = true;
+	final String PHRASE = "year";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -143,7 +144,6 @@ public class TemporalTesterSmall {
 				|| (ONLYPRINTONEPHRASE && s.toString().contains(PHRASE))) {
 			if (correct == 0 || correct == 1) {
 				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT) {
-					//System.out.println("Phrase:   " + phrase);
 					System.out.println("Phrase:   " + s.toString());
 					System.out.println("Logic:    " + label);
 					System.out.println("ref_time: " + ref_time);

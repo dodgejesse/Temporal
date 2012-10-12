@@ -92,6 +92,8 @@ public class TemporalMap {
 			return TemporalDate.readDocumentDate(ref_time);
 		} else if (l.getName().equals("present_ref:r")){
 			return new TemporalDate("present_ref", 0);
+		} else if (l.getName().equals("past_ref:r")){
+			return new TemporalDate("past_ref", 0);
 		} else if (l.getName().equals("today:r")){
 			return TemporalDate.readDocumentDate(ref_time);
 		} else if (l.getName().equals("tomorrow:r")){
@@ -137,6 +139,8 @@ public class TemporalMap {
 			return new TemporalDate("year");
 		} else if (l.getName().equals("month:s")){
 			return new TemporalDate("month");
+		} else if (l.getName().equals("week:s")){
+			return new TemporalDate("week");
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
 	}

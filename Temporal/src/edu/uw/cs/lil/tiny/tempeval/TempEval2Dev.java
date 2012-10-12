@@ -58,7 +58,6 @@ public class TempEval2Dev {
 
 	public static void main(String[] args) {
 		boolean testingDataset = false;
-
 		
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);

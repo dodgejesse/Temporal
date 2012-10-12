@@ -1,6 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import org.joda.time.LocalDate;
 
 // The only predicates that take three arguments are:
 // NthOfEach

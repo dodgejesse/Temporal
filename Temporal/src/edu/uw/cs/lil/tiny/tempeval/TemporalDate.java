@@ -42,6 +42,10 @@ public class TemporalDate extends TemporalISO{
 			return quarterFormat();
 		} else if (super.isSet("present_ref")){
 			return "PRESENT_REF";
+		} else if (super.isSet("past_ref")){
+			return "PAST_REF";
+		} else if (super.isSet("future_ref")){
+			return "FUTURE_REF";
 		} else {
 			return dateFormat();
 		}
@@ -52,8 +56,12 @@ public class TemporalDate extends TemporalISO{
 			return "XXXX-QX";
 		else if (super.isSet("year"))
 			return "XXXX";
+		else if (super.isSet("week"))
+			return "XXXX-WXX";
+		else if (super.isSet("month"))
+			return "XXXX-XX";
 		else 
-			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters.");
+			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters, years and weeks.");
 	}
 	
 	private String quarterFormat(){
@@ -77,8 +85,15 @@ public class TemporalDate extends TemporalISO{
 			s = s + getIntValue("year");
 		else
 			s = s + "XXXX";
-		if (super.isSet("week"))
-			s = s + "-W" + getIntValue("week");
+		if (super.isSet("week")){
+			int weekNum = getIntValue("week");
+			String weekString;
+			if (weekNum < 10)
+				weekString = "0" + weekNum;
+			else
+				weekString = "" + weekNum;
+			s = s + "-W" + weekString;
+		}
 		else 
 			s = s + "-WXX";
 		if (super.isSet("weekday"))
