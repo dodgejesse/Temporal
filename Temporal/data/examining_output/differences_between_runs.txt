@@ -1,0 +1,177 @@
+22,28d21
+< Phrase:   the 1988 second quarter
+< Logic:    1988:r
+< ref_time: 1989-11-02
+< Gold:     1988-Q2
+< Guess:    1988
+< Correct?  false
+< 
+50,56d42
+< Phrase:   year earlier
+< Logic:    year:s
+< ref_time: 1989-10-26
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+141,154d126
+< Phrase:   year earlier
+< Logic:    year:s
+< ref_time: 1989-10-26
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+< Phrase:   the current quarter
+< Logic:    present_ref:r
+< ref_time: 1989-10-26
+< Gold:     1989-Q4
+< Guess:    PRESENT_REF
+< Correct?  false
+< 
+211,224d182
+< Phrase:   july last year
+< Logic:    july:s
+< ref_time: 1998-02-19
+< Gold:     1997-06
+< Guess:    XXXX-07
+< Correct?  false
+< 
+< Phrase:   march 1996
+< Logic:    march:s
+< ref_time: 1998-02-19
+< Gold:     1996-03
+< Guess:    XXXX-03
+< Correct?  false
+< 
+246,252d203
+< Phrase:   the year earlier quarter
+< Logic:    year:s
+< ref_time: 1989-10-26
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+260,273d210
+< Phrase:   the year earlier third quarter
+< Logic:    year:s
+< ref_time: 1989-10-27
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+< Phrase:   the current year
+< Logic:    present_ref:r
+< ref_time: 1989-10-26
+< Gold:     1989
+< Guess:    PRESENT_REF
+< Correct?  false
+< 
+288,294d224
+< Phrase:   earlier yesterday
+< Logic:    past_ref:r
+< ref_time: 1989-11-01
+< Gold:     1989-10-31
+< Guess:    PAST_REF
+< Correct?  false
+< 
+323,329d252
+< Phrase:   earlier sunday
+< Logic:    past_ref:r
+< ref_time: 1998-03-22
+< Gold:     1998-03-22
+< Guess:    PAST_REF
+< Correct?  false
+< 
+372,378d294
+< Phrase:   august 1988
+< Logic:    august:s
+< ref_time: 1990-08-15
+< Gold:     1988-08
+< Guess:    XXXX-08
+< Correct?  false
+< 
+393,399d308
+< Phrase:   recent years
+< Logic:    past_ref:r
+< ref_time: 1989-10-30
+< Gold:     PXY
+< Guess:    PAST_REF
+< Correct?  false
+< 
+407,413d315
+< Phrase:   june 1994
+< Logic:    june:s
+< ref_time: 1989-10-30
+< Gold:     1994-06
+< Guess:    XXXX-06
+< Correct?  false
+< 
+421,441d322
+< Phrase:   the 1988 quarter
+< Logic:    1988:r
+< ref_time: 1989-10-30
+< Gold:     1988-Q3
+< Guess:    1988
+< Correct?  false
+< 
+< Phrase:   february 1947
+< Logic:    february:s
+< ref_time: 1998-02-27
+< Gold:     1947-02
+< Guess:    XXXX-02
+< Correct?  false
+< 
+< Phrase:   year earlier
+< Logic:    year:s
+< ref_time: 1989-11-02
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+449,469d329
+< Phrase:   year earlier
+< Logic:    year:s
+< ref_time: 1989-11-02
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+< Phrase:   the 1988 third quarter
+< Logic:    1988:r
+< ref_time: 1989-10-26
+< Gold:     1988-Q3
+< Guess:    1988
+< Correct?  false
+< 
+< Phrase:   august 1988
+< Logic:    august:s
+< ref_time: 1989-10-27
+< Gold:     1988-08
+< Guess:    XXXX-08
+< Correct?  false
+< 
+519,525d378
+< Phrase:   the year earlier quarter
+< Logic:    year:s
+< ref_time: 1989-10-30
+< Gold:     1988-Q3
+< Guess:    XXXX
+< Correct?  false
+< 
+533,539d385
+< Phrase:   july 1988
+< Logic:    july:s
+< ref_time: 1989-11-02
+< Gold:     1988-07
+< Guess:    XXXX-07
+< Correct?  false
+< 
+545,551d390
+< Correct?  false
+< 
+< Phrase:   the year earlier quarter
+< Logic:    year:s
+< ref_time: 1989-10-27
+< Gold:     1988-Q3
+< Guess:    XXXX

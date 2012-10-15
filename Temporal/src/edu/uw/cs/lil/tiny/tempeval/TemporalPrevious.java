@@ -178,7 +178,7 @@ public class TemporalPrevious extends TemporalPredicate{
 
 	private void testStoredDates(){
 
-		if (!(first instanceof TemporalDate) || !(second instanceof TemporalDate))
+		if (!(first instanceof TemporalDate || first instanceof TemporalDuration) || !(second instanceof TemporalDate))
 			throw new IllegalArgumentException("The two parameters to TemporalPrevious aren't TemporalDate objects, which they should be.");
 	}
 }

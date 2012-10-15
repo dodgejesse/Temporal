@@ -65,10 +65,11 @@ public class TempEval2Dev {
 
 		//long startTime = System.currentTimeMillis();
 
-		// Data directories
-		String datasetDir = "/home/jessedd/workspace/Temporal/data/dataset/";
-		String resourcesDir = "/home/jessedd/workspace/Temporal/data/resources/";
+		// Relative path for data directories
+		String datasetDir = "./data/dataset/";
+		String resourcesDir = "./data/resources/";
 
+		
 		// Init the logical expression type system
 		LogicLanguageServices.setInstance(new LogicLanguageServices(
 				new TypeRepository(

@@ -69,11 +69,16 @@ public class TemporalMap {
 		} else if (l.getType().getName().toString().equals("r")){
 			return findRangeMap(l);
 		} else if (l.getType().getName().toString().equals("d")){
-			throw new IllegalArgumentException("haven't implemented durations in TemporalMap yet.");
+			return findDurationMap(l);
 		} else if (l.getType().getName().toString().equals("n")){
 			return findNumberMap(l);
 		} else 
 			throw new IllegalArgumentException("Unknown logical constant " + l);
+	}
+	
+	private TemporalISO findDurationMap(LogicalConstant l){
+		if (l.getName().equals("year"))
+			return new TemporalDuration("year");
 	}
 	
 	private TemporalISO findNumberMap(LogicalConstant l){

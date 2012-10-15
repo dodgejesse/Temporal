@@ -198,8 +198,8 @@ public class TemporalNext extends TemporalPredicate {
 	}
 	
 	private void testStoredDates() {
-		if ((!this.first.getClass().toString().endsWith("TemporalDate"))
-				|| (!this.second.getClass().toString().endsWith("TemporalDate")))
+		if (!(first instanceof TemporalDate || first instanceof TemporalDuration)
+				|| (!(second instanceof TemporalDate)))
 			throw new IllegalArgumentException(
 					"The two parameters to TemporalNext aren't TemporalDate objects, which they should be.");
 	}

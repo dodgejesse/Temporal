@@ -7,7 +7,7 @@ current :- NP : present_ref:r
 earlier :- NP : past_ref:r
 recently :- NP : past_ref:r
 recent :- NP : past_ref:r
-recent :- NP/NP : (lambda $0:s past_ref:r)
+//recent :- NP/NP : (lambda $0:s past_ref:r)
 
 
 monday :- NP : monday:s
@@ -39,16 +39,27 @@ nov. :- NP : november:s
 december :- NP : december:s
 dec. :- NP : december:s
 
-// things involving quarters.
-// this is going to change. not sure exactly how, but it will.
-//first-quarter :- NP : firstQuarter:s
-//first quarter :- NP : firstQuarter:s
-//second-quarter :- NP : secondQuarter:s
-//second quarter :- NP : secondQuarter:s
-//third-quarter :- NP : thirdQuarter:s
-//third quarter :- NP : thirdQuarter:s
-//fourth-quarter :- NP : fourthQuarter:s
-//fourth quarter :- NP : fourthQuarter:s
+january :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 january:s))
+jan. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 january:s))
+february :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 february:s))
+feb. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 february:s))
+march :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 march:s))
+mar. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 march:s))
+april :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 april:s))
+may :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 may:s))
+june :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 june:s))
+july :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 july:s))
+august :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 august:s))
+aug. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 august:s))
+september :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 september:s))
+sept. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 september:s))
+october:s :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 october:s))
+oct. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 october:s))
+november:s :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 november:s))
+nov. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 november:s))
+december :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 december:s))
+dec. :- NP/NP : (lambda $0:r (intersect:<s*,s> $0 december:s))
+
 
 // Ordinal numbers
 first :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 1o:n))
@@ -72,8 +83,8 @@ quarter :- NP : quarter:s
 // Convex sets
 year :- NP : year:s
 years :- NP : year:s
-month :- NP : month:s
-months :- NP : month:s
+//month :- NP : month:s
+//months :- NP : month:s
 week :- NP : week:s
 
 

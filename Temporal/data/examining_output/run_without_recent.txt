@@ -1,0 +1,419 @@
+Phrase:   monday
+Logic:    monday:s
+ref_time: 1998-02-13
+Gold:     XXXX-WXX-1TNI
+Guess:    XXXX-WXX-1
+Correct?  false
+
+Phrase:   week
+Logic:    week:s
+ref_time: 1998-01-08
+Gold:     P1W
+Guess:    XXXX-WXX
+Correct?  false
+
+Phrase:   last year
+Logic:    (previous:<s,<r,s>> year:s ref_time:r)
+ref_time: 1989-11-02
+Gold:     1988-Q3
+Guess:    1988
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-11-02
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-10-30
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false
+
+Phrase:   this week
+Logic:    (this:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-30
+Gold:     1989-WXX
+Guess:    1989-W44
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-QX
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-QX
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-QX
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-30
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   this week
+Logic:    (this:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-27
+Gold:     1989-WXX
+Guess:    1989-W43
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-30
+Gold:     1989-WXX
+Guess:    1989-W43
+Correct?  false
+
+Phrase:   last
+Logic:    (lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))
+ref_time: 1989-10-27
+Gold:     1988
+Guess:    1989
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     P1Q
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   april
+Logic:    april:s
+ref_time: 1989-10-26
+Gold:     1988-04
+Guess:    XXXX-04
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-Q1
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-Q1
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   last year
+Logic:    (previous:<s,<r,s>> year:s ref_time:r)
+ref_time: 1989-10-30
+Gold:     1988-Q3
+Guess:    1988
+Correct?  false
+
+Phrase:   1988
+Logic:    1988:r
+ref_time: 1989-11-02
+Gold:     1998
+Guess:    1988
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-11-01
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   today
+Logic:    today:r
+ref_time: 1998-03-05
+Gold:     PRESENT_REF
+Guess:    1998-03-05
+Correct?  false
+
+Phrase:   thursday
+Logic:    thursday:s
+ref_time: 1998-02-13
+Gold:     1998-02-12T12:00
+Guess:    XXXX-WXX-4
+Correct?  false
+
+Phrase:   wednesday
+Logic:    wednesday:s
+ref_time: 1998-02-13
+Gold:     1998-02-11T22:00
+Guess:    XXXX-WXX-3
+Correct?  false
+
+Phrase:   next week
+Logic:    (next:<s,<r,s>> week:s ref_time:r)
+ref_time: 1998-02-13
+Gold:     1998-WXX
+Guess:    1998-W08
+Correct?  false
+
+Phrase:   the years
+Logic:    year:s
+ref_time: 1998-03-31
+Gold:     PXY
+Guess:    XXXX
+Correct?  false
+
+Phrase:   second quarter
+Logic:    (nth:<s,<n,s>> quarter:s 2o:n)
+ref_time: 1989-10-27
+Gold:     1988-Q2
+Guess:    XXXX-Q2
+Correct?  false
+
+Phrase:   sept. 30
+Logic:    (intersect:<s*,s> september:s 30d:s)
+ref_time: 1989-11-02
+Gold:     1989-09
+Guess:    XXXX-09-30
+Correct?  false
+
+Phrase:   fourth quarter
+Logic:    (nth:<s,<n,s>> quarter:s 4o:n)
+ref_time: 1989-11-02
+Gold:     1998-Q4
+Guess:    XXXX-Q4
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-30
+Gold:     1989-WXX
+Guess:    1989-W43
+Correct?  false
+
+Phrase:   last year
+Logic:    (previous:<s,<r,s>> year:s ref_time:r)
+ref_time: 1989-11-02
+Gold:     1988-Q4
+Guess:    1988
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-11-01
+Gold:     1989-WXX
+Guess:    1989-W43
+Correct?  false
+
+Phrase:   this quarter
+Logic:    (this:<s,<r,s>> quarter:s ref_time:r)
+ref_time: 1989-11-01
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-11-01
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   sunday
+Logic:    sunday:s
+ref_time: 1998-03-22
+Gold:     1998-02-22
+Guess:    XXXX-WXX-7
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1998-03-22
+Gold:     1998-W12
+Guess:    1998-W11
+Correct?  false
+
+Phrase:   this week
+Logic:    (this:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-27
+Gold:     1989-WXX
+Guess:    1989-W43
+Correct?  false
+
+Phrase:   now
+Logic:    present_ref:r
+ref_time: 1990-08-15
+Gold:     1990-08-15T13:37
+Guess:    PRESENT_REF
+Correct?  false
+
+Phrase:   tuesday
+Logic:    tuesday:s
+ref_time: 1990-08-15
+Gold:     1990-08-07
+Guess:    XXXX-WXX-2
+Correct?  false
+
+Phrase:   tuesday
+Logic:    tuesday:s
+ref_time: 1990-08-15
+Gold:     1990-08-07
+Guess:    XXXX-WXX-2
+Correct?  false
+
+Phrase:   tuesday
+Logic:    tuesday:s
+ref_time: 1990-08-15
+Gold:     1990-08-07
+Guess:    XXXX-WXX-2
+Correct?  false
+
+Phrase:   monday
+Logic:    monday:s
+ref_time: 1990-08-15
+Gold:     1990-08-06
+Guess:    XXXX-WXX-1
+Correct?  false
+
+Phrase:   tuesday
+Logic:    tuesday:s
+ref_time: 1990-08-15
+Gold:     1990-08-07
+Guess:    XXXX-WXX-2
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-10-30
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false
+
+Phrase:   the week
+Logic:    week:s
+ref_time: 1989-10-30
+Gold:     1989-WXX
+Guess:    XXXX-WXX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-11-02
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-10-30
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false
+
+Phrase:   years
+Logic:    year:s
+ref_time: 1989-10-26
+Gold:     PXY
+Guess:    XXXX
+Correct?  false
+
+Phrase:   quarter
+Logic:    quarter:s
+ref_time: 1989-10-26
+Gold:     1989-QX
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   last year
+Logic:    (previous:<s,<r,s>> year:s ref_time:r)
+ref_time: 1989-10-26
+Gold:     1988-Q2
+Guess:    1988
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-30
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-30
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-30
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-10-30
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   the quarter
+Logic:    quarter:s
+ref_time: 1989-11-02
+Gold:     1989-Q3
+Guess:    XXXX-QX
+Correct?  false
+
+Phrase:   week
+Logic:    week:s
+ref_time: 1989-10-27
+Gold:     1989-WXX
+Guess:    XXXX-WXX
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-27
+Gold:     1989-WXX
+Guess:    1989-W42
+Correct?  false
+
+Phrase:   last week
+Logic:    (previous:<s,<r,s>> week:s ref_time:r)
+ref_time: 1989-10-27
+Gold:     1989-WXX
+Guess:    1989-W42
+Correct?  false
+
+Phrase:   the year
+Logic:    year:s
+ref_time: 1989-10-31
+Gold:     P1Y
+Guess:    XXXX
+Correct?  false

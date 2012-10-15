@@ -15,9 +15,9 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = true;
-	final boolean ONLYPRINTMULTIPLEPARSES = false;
-	final boolean ONLYPRINTONEPHRASE = true;
-	final String PHRASE = "year";
+	final boolean ONLYPRINTTOOMANYPARSES = false;
+	final boolean ONLYPRINTONEPHRASE = false;
+	final String PHRASE = "recent";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -59,6 +59,7 @@ public class TemporalTesterSmall {
 			else
 				notParsed += 1;
 		}
+		System.out.println();
 		System.out.println("Total phrases: " + counter);
 		System.out
 				.println("Number correctly parsed and executed: " + correct
@@ -143,25 +144,25 @@ public class TemporalTesterSmall {
 		if (!ONLYPRINTONEPHRASE
 				|| (ONLYPRINTONEPHRASE && s.toString().contains(PHRASE))) {
 			if (correct == 0 || correct == 1) {
-				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT) {
+				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) {
+					System.out.println();
 					System.out.println("Phrase:   " + s.toString());
 					System.out.println("Logic:    " + label);
 					System.out.println("ref_time: " + ref_time);
 					System.out.println("Gold:     " + goldISO);
 					System.out.println("Guess:    " + output);
 					System.out.println("Correct?  " + c);
-					System.out.println();
 				}
 			} else if (correct == 2 && !ONLYPRINTINCORRECT) {
+				System.out.println();
 				System.out.println("Phrase:   " + s.toString());
 				System.out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
+			} else if (correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) {
 				System.out.println();
-			} else if (correct == 3 && !ONLYPRINTINCORRECT) {
 				System.out.println("Phrase:   " + s.toString());
 				System.out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
-				System.out.println();
 			}
 		}
 	}
