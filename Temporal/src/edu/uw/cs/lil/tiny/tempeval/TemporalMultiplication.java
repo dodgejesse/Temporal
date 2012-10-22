@@ -1,22 +1,27 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-public class TemporalMultiplication extends TemporalPredicate
-{
-  TemporalDuration dur;
-  int num;
+public class TemporalMultiplication extends TemporalPredicate {
 
-  public void addDur(TemporalDuration d)
-  {
-    this.dur = d;
-  }
+	public TemporalDuration perform() {
+		checkInput();
+		TemporalNumber temporalNum = (TemporalNumber)second;
 
-  public void addInt(int n) {
-    this.num = n;
-  }
-
-  public TemporalDuration perform()
-  {
-    throw new IllegalArgumentException("the 'multiply' method within TemporalMultiplication hasn't been implemented yet.");
-  }
+		String baseDuration = "";
+		for (String key : first.getKeys()){
+			baseDuration = key;
+		}
+		
+		return new TemporalDuration(baseDuration, temporalNum.getNum());
+		
+	}
+	
+	private void checkInput(){
+		if (first.getFullMapping().keySet().size() > 1)
+			throw new IllegalArgumentException("Tryngi to multiply a number against a duration with more than one item set.");
+		if (!(first instanceof TemporalDuration))
+			throw new IllegalArgumentException("The first element in TemporalMultiply isn't a TemporalDuration.");
+		if (!(second instanceof TemporalNumber))
+			throw new IllegalArgumentException("The second element in TemporalMultiply isn't a TemporalNumber");
+		
+	}
 }
-

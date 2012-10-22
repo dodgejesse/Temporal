@@ -36,8 +36,8 @@ public abstract class TemporalISO {
 		this(field, num, false);
 	}
 	
-	private TemporalISO(String field, int num, boolean ordinal){
-		convexSet = ordinal;
+	public TemporalISO(String field, int num, boolean convex){
+		convexSet = convex;
 		if (!stringInFields(field))
 			throw new IllegalArgumentException(field
 					+ " is not a valid key! Problem in TemporalISO.");

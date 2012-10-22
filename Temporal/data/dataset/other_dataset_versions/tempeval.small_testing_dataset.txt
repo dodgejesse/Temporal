@@ -1,3 +1,95 @@
-earlier yesterday
-1989-11-01
-1989-10-31
+year
+1998-03-05
+P1Y
+
+years
+1998-03-05
+PXY
+
+the year
+1998-03-05
+P1Y
+
+a year 
+1998-03-03
+P1Y
+
+one years
+1998-01-14
+P1Y
+
+two years
+1998-01-14
+P2Y
+
+month
+1998-03-05
+P1M
+
+months
+1998-03-05
+PXM
+
+the month
+1998-03-05
+P1M
+
+a month
+1998-03-03
+P1M
+
+one months
+1998-01-14
+P1M
+
+two months
+1998-01-14
+P2M
+
+week
+1998-03-05
+P1W
+
+weeks
+1998-03-05
+PXW
+
+the week
+1998-03-05
+P1W
+
+a week 
+1998-03-03
+P1W
+
+one week
+1998-01-14
+P1W
+
+two weeks
+1998-01-13
+P2W
+
+day
+1998-03-05
+P1D
+
+days
+1998-03-05
+PXD
+
+the day
+1998-03-05
+P1D
+
+a day 
+1998-03-03
+P1D
+
+one day
+1998-01-14
+P1D
+
+two days
+1998-01-13
+P2D

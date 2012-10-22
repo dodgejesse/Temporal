@@ -57,6 +57,8 @@ public class TemporalMap {
 			return new TemporalThis();
 		} else if (l.getName().equals("nth:<s,<n,s>>")){
 			return new TemporalNth();
+		} else if (l.getName().equals("*:<d,<n,d>>")){
+			return new TemporalMultiplication();
 		} else {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
 		}
@@ -77,8 +79,24 @@ public class TemporalMap {
 	}
 	
 	private TemporalISO findDurationMap(LogicalConstant l){
-		if (l.getName().equals("year"))
+		if (l.getName().equals("year:d"))
 			return new TemporalDuration("year");
+		else if (l.getName().equals("years:d"))
+			return new TemporalDuration("year", true);
+		else if (l.getName().equals("month:d"))
+			return new TemporalDuration("month");
+		else if (l.getName().equals("months:d"))
+			return new TemporalDuration("month", true);
+		else if (l.getName().equals("week:d"))
+			return new TemporalDuration("week");
+		else if (l.getName().equals("weeks:d"))
+			return new TemporalDuration("week", true);
+		else if (l.getName().equals("day:d"))
+			return new TemporalDuration("day");
+		else if (l.getName().equals("days:d"))
+			return new TemporalDuration("day", true);
+		else
+			throw new IllegalArgumentException("Unimplemented stuff in TemporalMap's findDurationMap.");
 	}
 	
 	private TemporalISO findNumberMap(LogicalConstant l){
@@ -146,6 +164,8 @@ public class TemporalMap {
 			return new TemporalDate("month");
 		} else if (l.getName().equals("week:s")){
 			return new TemporalDate("week");
+		} else if (l.getName().equals("day:s")) {
+			return new TemporalDate("day");
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
 	}

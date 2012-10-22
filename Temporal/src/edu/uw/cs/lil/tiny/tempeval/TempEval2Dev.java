@@ -77,39 +77,6 @@ public class TempEval2Dev {
 
 		
 		
-		
-		/*		
-		// TESTING
-		try {
-
-			File f = new File(datasetDir + "tempeval.training.txt");
-			BufferedReader in = new BufferedReader(new FileReader(f));
-
-			String line;
-			while ((line = in.readLine()) != null) {
-				if ((!line.startsWith("//")) && (!line.equals(""))) {
-					LogicalExpression exp;
-					exp = LogicalExpression.parse(line,
-							LogicLanguageServices.getTypeRepository(),
-							LogicLanguageServices.getTypeComparator(),
-							false);
-					System.out.println(exp);
-					System.out.println(TemporalVisitor.of(exp, "1987-07-15"));
-					
-					System.out.println();
-					System.out.println();
-				}
-			}
-			in.close();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		
-		System.exit(0);
-		
-		// END TESTING
-		*/
-		
 		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices(
 				false);
 
@@ -185,11 +152,12 @@ public class TempEval2Dev {
 				categoryServices, EntryOrigin.FIXED_DOMAIN);
 		
 		final ILexicon<LogicalExpression> fixed = new Lexicon<LogicalExpression>();
+		
 		// factor the fixed lexical entries
-		for (final LexicalEntry<LogicalExpression> lex : fixedInput
-				.toCollection()) {
-			fixed.add(FactoredLexicon.factor(lex));
-		}
+		//for (final LexicalEntry<LogicalExpression> lex : fixedInput
+		//		.toCollection()) {
+		//	fixed.add(FactoredLexicon.factor(lex));
+		//}
 		//System.out.println(fixed);
 		
 		final LexicalFeatureSet<LogicalExpression> lexPhi = new LexicalFeatureSetBuilder<LogicalExpression>()
@@ -222,12 +190,14 @@ public class TempEval2Dev {
 				//		.setInitialScorer(new ScalingScorer<Lexeme>(10.0, gizaScores))
 				//		.build();
 				
+				// This was used for initializing the factored lexicon
 				final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
 						.setScale(0.1)
 						// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
 						.build();
 				
 				// Create the entire feature collection
+				// Adjusted to move away from a factored lexicon
 				final Model<Sentence, LogicalExpression> model = new Model.Builder<Sentence, LogicalExpression>()
 						.addParseFeatureSet(
 								new LogicalExpressionCoordinationFeatureSet<Sentence>())
@@ -235,7 +205,7 @@ public class TempEval2Dev {
 								new LogicalExpressionTypeFeatureSet<Sentence>())
 						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
 						.addLexicalFeatureSet(templateFeats)
-						.setLexicon(new FactoredLexicon()).build();
+						.setLexicon(new Lexicon<LogicalExpression>()).build();
 				
 		
 		// Initialize lexical features. This is not "natural" for every lexical
