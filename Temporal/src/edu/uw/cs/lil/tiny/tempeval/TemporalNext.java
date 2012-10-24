@@ -13,7 +13,7 @@ public class TemporalNext extends TemporalPredicate {
 	}
 
 	private TemporalISO findNext() {
-		TemporalDate nextDate;
+		TemporalISO nextDate;
 		if (!first.isConvexSet()) {
 			if (this.first.getKeys().contains("year")
 					|| this.first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref")) {
@@ -104,12 +104,19 @@ public class TemporalNext extends TemporalPredicate {
 		return nextDate;
 	}
 	
-	private TemporalDate convexYear(){
+	private TemporalISO convexYear(){
+		// TODO: test if the 'year' has a value other than 1 or -1 or whatever X is (as in PXY).
+		int firstYear = TemporalDate.getValueFromDate(first, "year");
+		if (firstYear > 0)
+			return first;
 		int tmpYear = TemporalDate.getValueFromDate(second, "year");
 		return new TemporalDate("year", tmpYear + 1);
 	}
 	
-	private TemporalDate convexQuarter(){
+	private TemporalISO convexQuarter(){
+		int firstQuarter = TemporalDate.getValueFromDate(first, "quarter");
+		if (firstQuarter > 0)
+			return first;
 		int quarterNum = (TemporalDate.getValueFromDate(second, "month") + 4)/4;
 		int year = TemporalDate.getValueFromDate(second,"year");
 		if (quarterNum == 4){
@@ -127,7 +134,10 @@ public class TemporalNext extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 	
-	private TemporalDate convexMonth(){
+	private TemporalISO convexMonth(){
+		int firstMonth = TemporalDate.getValueFromDate(first, "month");
+		if (firstMonth > 0)
+			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		Set<Integer> tmpSetMonth = second.getVal("month");
 		Set<Integer> tmpSetYear = second.getVal("year");
@@ -145,7 +155,10 @@ public class TemporalNext extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 	
-	private TemporalDate convexWeek(){
+	private TemporalISO convexWeek(){
+		int firstWeek = TemporalDate.getValueFromDate(first, "week");
+		if (firstWeek > 0)
+			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
 		tmpLocalDate = tmpLocalDate.plusWeeks(1);

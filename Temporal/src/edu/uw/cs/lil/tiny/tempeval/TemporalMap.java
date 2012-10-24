@@ -51,7 +51,7 @@ public class TemporalMap {
 			return new TemporalIntersect();
 		} else if (l.getName().equals("previous:<s,<r,s>>")){
 			return new TemporalPrevious();
-		} else if (l.getName().equals("next:<s,<r,s>>")){
+		} else if (l.getName().equals("next:<s,<r,s>>") || l.getName().equals("next:<d,<r,s>>")){
 			return new TemporalNext();
 		} else if (l.getName().equals("this:<s,<r,s>>")){
 			return new TemporalThis();

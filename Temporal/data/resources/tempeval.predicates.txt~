@@ -9,5 +9,6 @@ nth:<s,<n,s>>
 
 next:<s,<r,s>>
 this:<s,<r,s>>
+previous:<s,<r,s>>
 
 )

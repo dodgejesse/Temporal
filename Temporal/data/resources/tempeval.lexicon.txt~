@@ -8,7 +8,7 @@ past :- NP : past_ref:r
 earlier :- NP : past_ref:r
 recently :- NP : past_ref:r
 recent :- NP : past_ref:r
-//recent :- NP/NP : (lambda $0:s past_ref:r)
+recent :- NP/NP : (lambda $0:d past_ref:r)
 
 
 monday :- NP : monday:s
@@ -80,6 +80,7 @@ fourteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 14o:n))
 fifteenth :- NP/NP : (lambda $0:s (nth:<s,<n,s>> $0 15o:n))
 
 quarter :- NP : quarter:s 
+period :- NP : quarter:s
 
 // Convex sets
 year :- NP : year:s
@@ -100,13 +101,13 @@ day :- NP : day:d
 days :- NP : days:d
 
 
-
 tomorrow :- NP : tomorrow:r
 today :- NP : today:r
 yesterday :- NP : yesterday:r
 
-next :- NP/NP : (lambda $0:s (next:<s,<r,s>> $0 ref_time:r))
+next :- NP/NP : (lambda $0:d (next:<d,<r,s>> $0 ref_time:r))
 last :- NP/NP : (lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))
+latest :- NP/NP : (lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))
 this :- NP/NP : (lambda $0:s (this:<s,<r,s>> $0 ref_time:r))
 
 // these are numbers, to be multiplied by durations
@@ -128,10 +129,15 @@ eleven :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 11:n))
 twelve :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 12:n))
 thirteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 13:n))
 twenty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 20:n))
+14 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 14:n))
 20 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 20:n))
 22 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 22:n))
 52 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 52:n))
 90 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 90:n))
+a couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
+next couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
+prevous couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
+couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
 
 // these are the sequences defined as nth day of every month
 1 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 1d:s))
@@ -295,11 +301,17 @@ or so :- NP\NP : (lambda $0:d $0)
 earlier this :- NP/NP : (lambda $0:s $0)
 earlier in the :- NP/NP : (lambda $0:s $0)
 early :- NP/NP : (lambda $0:d $0)
+early :- NP/NP : (lambda $0:s $0)
 late :- NP/NP : (lambda $0:d $0)
 later :- NP/NP : (lambda $0:d $0)
 at least :-NP/NP : (lambda $0:d $0)
 past :- NP/NP : (lambda $0:d $0)
-next :- NP/NP : (lambda $0:d $0)
+late :- NP/NP : (lambda $0:s $0)
+ahead :- NP\NP : (lambda $0:s $0)
+//next :- NP/NP : (lambda $0:d $0)
+
+fiscal :- NP/NP : (lambda $0:s $0)
+
 
 
 // Not sure if this guy is useful. Check in the data more throughly.

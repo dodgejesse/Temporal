@@ -17,7 +17,7 @@ public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
 	final boolean ONLYPRINTTOOMANYPARSES = false;
 	final boolean ONLYPRINTONEPHRASE = true;
-	final String PHRASE = "past";
+	final String PHRASE = "ahead";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;

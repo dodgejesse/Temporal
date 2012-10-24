@@ -160,6 +160,11 @@ public class TempEval2Dev {
 		//}
 		//System.out.println(fixed);
 		
+		// try two at factoring the fixed lexical entries:
+		for (final LexicalEntry<LogicalExpression> lex : fixedInput.toCollection()){
+		    fixed.add(lex);
+		}
+		
 		final LexicalFeatureSet<LogicalExpression> lexPhi = new LexicalFeatureSetBuilder<LogicalExpression>()
 				.setInitialFixedScorer(
 						new ExpLengthLexicalEntryScorer<LogicalExpression>(

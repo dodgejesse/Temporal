@@ -30,7 +30,7 @@ public class TemporalPrevious extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 
-	private TemporalDate monthAndNotDay() {
+	private TemporalISO monthAndNotDay() {
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		// if ref_time is past first.month, return this year. else return last
 		// year
@@ -42,7 +42,7 @@ public class TemporalPrevious extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 
-	private TemporalDate monthAndDay() {
+	private TemporalISO monthAndDay() {
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		if (TemporalDate.getValueFromDate(second, "month") > TemporalDate
 				.getValueFromDate(first, "month"))
@@ -61,7 +61,7 @@ public class TemporalPrevious extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 
-	private TemporalDate weekdayAndNotMonthOrDay() {
+	private TemporalISO weekdayAndNotMonthOrDay() {
 		LocalDate date = TemporalJoda.convertISOToLocalDate(second);
 		if (date.getDayOfWeek() == TemporalISO.getValueFromDate(this.first,
 				"weekday")) {
@@ -74,13 +74,17 @@ public class TemporalPrevious extends TemporalPredicate {
 		return TemporalJoda.convertLocalDateToISO(date);
 	}
 
-	private TemporalDate convexYear() {
+	private TemporalISO convexYear() {
+		if (TemporalDate.getValueFromDate(first, "year")> 0)
+			return first;
 		int tmpYear = TemporalDate.getValueFromDate(second, "year");
 		return new TemporalDate("year", tmpYear - 1);
 	}
 
-	private TemporalDate convexQuarter() {
-		int quarterNum = (TemporalDate.getValueFromDate(second, "month") + 4) / 4;
+	private TemporalISO convexQuarter() {
+		if (TemporalDate.getValueFromDate(first, "quarter")> 0)
+			return first;		
+		int quarterNum = (TemporalDate.getValueFromDate(second, "month") + 2) / 3;
 		int year = TemporalDate.getValueFromDate(second, "year");
 		if (quarterNum == 1) {
 			year = year - 1;
@@ -97,7 +101,9 @@ public class TemporalPrevious extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 
-	private TemporalDate convexMonth() {
+	private TemporalISO convexMonth() {
+		if (TemporalDate.getValueFromDate(first, "month")> 0)
+			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		Set<Integer> tmpSetMonth = second.getVal("month");
 		Set<Integer> tmpSetYear = second.getVal("year");
@@ -115,7 +121,9 @@ public class TemporalPrevious extends TemporalPredicate {
 		return new TemporalDate(tmpMap);
 	}
 
-	private TemporalDate convexWeek() {
+	private TemporalISO convexWeek() {
+		if (TemporalDate.getValueFromDate(first, "week")> 0)
+			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
 		tmpLocalDate = tmpLocalDate.minusWeeks(1);
@@ -131,7 +139,7 @@ public class TemporalPrevious extends TemporalPredicate {
 	}
 
 	private TemporalISO findPrevious() {
-		TemporalDate prevDate;
+		TemporalISO prevDate;
 		if ((first.isSet("year") && !first.isConvexSet())
 				|| first.isSet("present_ref") || first.isSet("past_ref")
 				|| first.isSet("future_ref"))
@@ -147,6 +155,7 @@ public class TemporalPrevious extends TemporalPredicate {
 			} else if (first.isSet("weekday") && !first.isSet("month")
 					&& !first.isSet("day")) {
 				prevDate = weekdayAndNotMonthOrDay();
+			// TODO should change this to be if (first instanceof TemporalDuration)
 			} else if (first.isConvexSet()) {
 				if (first.isSet("year")) {
 					prevDate = convexYear();

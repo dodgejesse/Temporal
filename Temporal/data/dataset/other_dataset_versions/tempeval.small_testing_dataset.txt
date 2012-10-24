@@ -1,95 +1,20 @@
-year
-1998-03-05
-P1Y
-
-years
-1998-03-05
-PXY
-
-the year
-1998-03-05
-P1Y
-
-a year 
-1998-03-03
-P1Y
-
-one years
-1998-01-14
-P1Y
-
-two years
-1998-01-14
-P2Y
-
-month
-1998-03-05
-P1M
-
-months
-1998-03-05
+next months
+1998-01-29
 PXM
 
-the month
-1998-03-05
-P1M
+the next 14 years 
+1989-10-27
+P14Y
 
-a month
-1998-03-03
-P1M
+the next four years 
+1989-10-30
+P4Y
 
-one months
-1998-01-14
-P1M
+the next year or so 
+1989-11-02
+1990
 
-two months
-1998-01-14
-P2M
+the next two years 
+1998-02-19
+P2Y
 
-week
-1998-03-05
-P1W
-
-weeks
-1998-03-05
-PXW
-
-the week
-1998-03-05
-P1W
-
-a week 
-1998-03-03
-P1W
-
-one week
-1998-01-14
-P1W
-
-two weeks
-1998-01-13
-P2W
-
-day
-1998-03-05
-P1D
-
-days
-1998-03-05
-PXD
-
-the day
-1998-03-05
-P1D
-
-a day 
-1998-03-03
-P1D
-
-one day
-1998-01-14
-P1D
-
-two days
-1998-01-13
-P2D
