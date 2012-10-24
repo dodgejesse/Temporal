@@ -49,13 +49,13 @@ public class TemporalMap {
 	public TemporalPredicate findComplexMap(LogicalConstant l){
 		if (l.getName().equals("intersect:<s*,s>")){
 			return new TemporalIntersect();
-		} else if (l.getName().equals("previous:<s,<r,s>>")){
+		} else if (l.getName().equals("previous:<s,<r,s>>") || l.getName().equals("previous:<d,<r,s>>")){
 			return new TemporalPrevious();
 		} else if (l.getName().equals("next:<s,<r,s>>") || l.getName().equals("next:<d,<r,s>>")){
 			return new TemporalNext();
-		} else if (l.getName().equals("this:<s,<r,s>>")){
+		} else if (l.getName().equals("this:<s,<r,s>>") || l.getName().equals("this:<d,<r,s>>")){
 			return new TemporalThis();
-		} else if (l.getName().equals("nth:<s,<n,s>>")){
+		} else if (l.getName().equals("nth:<d,<n,s>>")){
 			return new TemporalNth();
 		} else if (l.getName().equals("*:<d,<n,d>>")){
 			return new TemporalMultiplication();
@@ -83,6 +83,10 @@ public class TemporalMap {
 			return new TemporalDuration("year");
 		else if (l.getName().equals("years:d"))
 			return new TemporalDuration("year", true);
+		else if (l.getName().equals("quarter:d"))
+			return new TemporalDuration("quarter");
+//		else if (l.getName().equals("quarters:d"))
+//			return new TemporalDuration("quarter",true);
 		else if (l.getName().equals("month:d"))
 			return new TemporalDuration("month");
 		else if (l.getName().equals("months:d"))

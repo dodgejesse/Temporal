@@ -33,6 +33,19 @@ public final class TemporalDuration extends TemporalISO {
 			
 	}
 	
+	private String convexSetFormat(){
+		if (super.isSet("quarter"))
+			return "XXXX-QX";
+		else if (super.isSet("year"))
+			return "XXXX";
+		else if (super.isSet("week"))
+			return "XXXX-WXX";
+		else if (super.isSet("month"))
+			return "XXXX-XX";
+		else 
+			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters, years and weeks.");
+	}
+	
 	private String addString(String dur, String s, String abrev){
 		int durNum = TemporalISO.getValueFromDate(this, dur);
 		if (durNum == -1 && super.isConvexSet())

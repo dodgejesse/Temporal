@@ -73,6 +73,10 @@ public class TemporalPrevious extends TemporalPredicate {
 		}
 		return TemporalJoda.convertLocalDateToISO(date);
 	}
+	
+	private TemporalISO dayAndNotMonth(){
+		
+	}
 
 	private TemporalISO convexYear() {
 		if (TemporalDate.getValueFromDate(first, "year")> 0)
@@ -155,7 +159,8 @@ public class TemporalPrevious extends TemporalPredicate {
 			} else if (first.isSet("weekday") && !first.isSet("month")
 					&& !first.isSet("day")) {
 				prevDate = weekdayAndNotMonthOrDay();
-			// TODO should change this to be if (first instanceof TemporalDuration)
+			} else if (first.isSet("day") && !first.isSet("month")){
+				prevDate = dayAndNotMonth();
 			} else if (first.isConvexSet()) {
 				if (first.isSet("year")) {
 					prevDate = convexYear();

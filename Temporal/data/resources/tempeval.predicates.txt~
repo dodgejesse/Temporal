@@ -7,8 +7,10 @@ before:<s,<r,s>>
 
 nth:<s,<n,s>>
 
-next:<s,<r,s>>
+next:<d,<r,s>>
 this:<s,<r,s>>
+this:<d,<r,s>>
 previous:<s,<r,s>>
+previous:<d,<r,s>>
 
 )

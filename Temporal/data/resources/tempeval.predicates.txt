@@ -5,10 +5,12 @@ catleft:<d,<r,d>>
 before:<s,<r,s>>
 *:<d,<n,d>>
 
-nth:<s,<n,s>>
+nth:<d,<n,s>>
 
 next:<d,<r,s>>
 this:<s,<r,s>>
+this:<d,<r,s>>
 previous:<s,<r,s>>
+previous:<d,<r,s>>
 
 )

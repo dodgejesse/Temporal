@@ -16,8 +16,8 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
 	final boolean ONLYPRINTTOOMANYPARSES = false;
-	final boolean ONLYPRINTONEPHRASE = true;
-	final String PHRASE = "ahead";
+	final boolean ONLYPRINTONEPHRASE = false;
+	final String PHRASE = "quarter";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -118,6 +118,7 @@ public class TemporalTesterSmall {
 	}
 	
 	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String goldISO){
+		int returnNum = -1;
 		for (int i = 0; i < labels.length; i++){
 			TemporalISO tmp;
 			
@@ -130,12 +131,12 @@ public class TemporalTesterSmall {
 			//}
 			//try {
 				if (tmp.toString().equals(goldISO))
-					return i;
+					returnNum = i;
 			//} catch (Exception e){
 			//	System.out.println(e);
 			//}
 		}
-		return -1;
+		return returnNum;
 	}
 
 	private void printing(LogicalExpression label, String goldISO,
@@ -185,12 +186,12 @@ public class TemporalTesterSmall {
 		
 		// Looping over the predicates, applying them each to the given logical expression
 		for (int i = 0; i < functions.length; i++){
-			newLogicArray[i] = categoryServices
+			newLogicArray[i+1] = categoryServices
 					.doSemanticApplication(functions[i], l);
-			if (newLogicArray[i] == null) 
-				newLogicArray[i] = l;
+			if (newLogicArray[i+1] == null) 
+				newLogicArray[i+1] = l;
 		}
-		newLogicArray[newLogicArray.length - 1] = l;
+		newLogicArray[0] = l;
 
 		return newLogicArray;
 	}
