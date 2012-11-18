@@ -9,8 +9,8 @@ public class TemporalNthOfEach extends TemporalPredicate{
 	// weekday of week
 	// 
 	public TemporalISO perform() {
-		if (!first.isConvexSet())
-			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a convex set! (It really should  be.) ");
+		if (!(first instanceof TemporalDuration))
+			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a TemporalDuration! (It really should  be.) ");
 		if (!(second instanceof TemporalNumber))
 			throw new IllegalArgumentException("The second ISO stored in TemporalNth is not a number!");
 		TemporalNumber secondNum = (TemporalNumber)second;

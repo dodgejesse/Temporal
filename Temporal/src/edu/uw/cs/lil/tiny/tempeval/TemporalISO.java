@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class TemporalISO {
-	private final String[] fields = { "year", "quarter", "month", "week", "day", "hour",
+	private final String[] fields = { "year", "quarter", "season", "month", "week", "day", "hour",
 			"minute", "weekday", "present_ref", "past_ref", "future_ref"};
 	private final Map<String, Set<Integer>> value;
 	private final boolean convexSet;

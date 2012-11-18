@@ -9,14 +9,25 @@ import org.joda.time.LocalDate;
 public class TemporalMap {
 		final Map<String, Integer> months;
 		final Map<String, Integer> weekdays;
+		final Map<String, Integer> seasons;
 		final String ref_time;
 		
 	public TemporalMap(String ref_time){
 		months = new HashMap<String, Integer>();
 		weekdays = new HashMap<String, Integer>();
+		seasons = new HashMap<String, Integer>();
 		this.ref_time = ref_time;
 		makeMonths();
 		makeWeekdays();
+		makeSeasons();
+	}
+	
+	private void makeSeasons(){
+		seasons.put("spring", 1);
+		seasons.put("summer", 2);
+		seasons.put("fall", 3);
+		seasons.put("autumn", 3);
+		seasons.put("winter", 4);
 	}
 	
 	private void makeWeekdays(){
@@ -85,8 +96,8 @@ public class TemporalMap {
 			return new TemporalDuration("year", true);
 		else if (l.getName().equals("quarter:d"))
 			return new TemporalDuration("quarter");
-//		else if (l.getName().equals("quarters:d"))
-//			return new TemporalDuration("quarter",true);
+		else if (l.getName().equals("quarters:d"))
+			return new TemporalDuration("quarter",true);
 		else if (l.getName().equals("month:d"))
 			return new TemporalDuration("month");
 		else if (l.getName().equals("months:d"))
@@ -121,6 +132,8 @@ public class TemporalMap {
 			return new TemporalDate("present_ref", 0);
 		} else if (l.getName().equals("past_ref:r")){
 			return new TemporalDate("past_ref", 0);
+		} else if (l.getName().equals("future_ref:r")) {
+			return new TemporalDate("future_ref",0);
 		} else if (l.getName().equals("today:r")){
 			return TemporalDate.readDocumentDate(ref_time);
 		} else if (l.getName().equals("tomorrow:r")){
@@ -160,6 +173,8 @@ public class TemporalMap {
 			return findMonthMap(l);
 		} else if (weekdays.containsKey(l.getName().substring(0, l.getName().length()-2))){
 			return findWeekdayMap(l);
+		} else if (seasons.containsKey(l.getName().substring(0, l.getName().length()-2))){
+			return findSeasonMap(l);
 		} else if (l.getName().equals("quarter:s")){
 			return new TemporalDate("quarter");
 		} else if (l.getName().equals("year:s")){
@@ -172,6 +187,11 @@ public class TemporalMap {
 			return new TemporalDate("day");
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
+	}
+	
+	private TemporalISO findSeasonMap(LogicalConstant l){
+		int num = seasons.get((l.getName().substring(0, l.getName().length()-2)));
+		return new TemporalDate("season", num);
 	}
 	
 	private TemporalISO findWeekdayMap(LogicalConstant l){

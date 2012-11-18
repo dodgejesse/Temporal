@@ -57,7 +57,7 @@ public class TempEval2Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval2Dev.class);
 
 	public static void main(String[] args) {
-		boolean testingDataset = true;
+		boolean testingDataset = false;
 		
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);

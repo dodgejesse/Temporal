@@ -34,12 +34,14 @@ public class TemporalDate extends TemporalISO{
 	}
 	
 	public String toString(){
-		if (super.isConvexSet())
+		if (super.isConvexSet()){
 			return convexSetFormat();
-		else if (super.isSet("weekday") || super.isSet("week")){
+		} else if (super.isSet("weekday") || super.isSet("week")){
 			return weekFormat();
 		} else if (super.isSet("quarter")){
 			return quarterFormat();
+		} else if (super.isSet("season")){
+			return seasonFormat();
 		} else if (super.isSet("present_ref")){
 			return "PRESENT_REF";
 		} else if (super.isSet("past_ref")){
@@ -123,6 +125,26 @@ public class TemporalDate extends TemporalISO{
 				s = s + "-" + v;
 		}
 		return s;
+	}
+	
+	private String seasonFormat(){
+		String s = "";
+		if (super.isSet("year")){
+			s = s + getIntValue("year");
+		} else {
+			s = s + "XXXX";
+		}
+		int seasonNum = getIntValue("season");
+		if (seasonNum == 1)
+			s = s + "-SP";
+		else if (seasonNum == 2)
+			s = s + "-SU";
+		else if (seasonNum == 3)
+			s = s + "-FA";
+		else if (seasonNum == 4)
+			s = s + "-WI";
+		return s;
+		
 	}
 	
 	private int getIntValue(String key){

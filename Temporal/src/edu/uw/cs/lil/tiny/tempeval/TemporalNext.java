@@ -14,10 +14,12 @@ public class TemporalNext extends TemporalPredicate {
 
 	private TemporalISO findNext() {
 		TemporalISO nextDate;
-		if (!first.isConvexSet()) {
+		//if (!first.isConvexSet()) {
+		if (!(first instanceof TemporalDuration)) {
+
 			if (this.first.getKeys().contains("year")
 					|| this.first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref")) {
-				nextDate = (TemporalDate) this.first;
+				nextDate = this.first;
 			} else {
 				if ((this.first.getKeys().contains("month"))
 						&& (!this.first.getKeys().contains("day"))) {
@@ -49,6 +51,10 @@ public class TemporalNext extends TemporalPredicate {
 					tmpSet.add(ref_timeYear);
 					tmpMap.put("year", tmpSet);
 					nextDate = new TemporalDate(tmpMap);
+				} else if (first.isSet("season")){
+					nextDate = season();
+				} else if (first.isSet("day") && !first.isSet("month") && !first.isSet("week") && !first.isSet("year")){
+					nextDate = dayAndNotMonth();
 				} else {
 					if ((this.first.getKeys().contains("month"))
 							&& (this.first.getKeys().contains("day"))) {
@@ -98,10 +104,51 @@ public class TemporalNext extends TemporalPredicate {
 				nextDate = convexMonth();
 			} else if (first.isSet("week")){
 				nextDate = convexWeek();
+			} else if (first.isSet("day")){
+				nextDate = convexDay();
 			} else 
-				throw new IllegalArgumentException("Haven't implemented 'prevous' for convex set " + first);
+				throw new IllegalArgumentException("Haven't implemented 'next' for convex set " + first);
 		}
 		return nextDate;
+	}
+	
+	private TemporalISO season(){
+		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
+		tmpMap.put("year", addOne(second.getVal("year")));
+		return new TemporalDate(tmpMap);
+		/*
+		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
+		int refSeason = super.getSeason(second);
+		if (TemporalDate.getValueFromDate(first, "season") > refSeason)
+			tmpMap.put("year",  second.getVal("year"));
+		else
+			tmpMap.put("year", addOne(second.getVal("year")));
+		return new TemporalDate(tmpMap);
+		*/
+	}
+	
+	private TemporalISO convexDay(){
+		if (TemporalDate.getValueFromDate(first, "day") > 0)
+			return first;
+		LocalDate refDate = TemporalJoda.convertISOToLocalDate(second);
+		refDate = refDate.plusDays(1);
+		return TemporalJoda.convertLocalDateToISO(refDate);
+	}
+	
+	private TemporalISO dayAndNotMonth(){
+		Map<String, Set<Integer>> tmpMap = second.getFullMapping();
+		tmpMap.put("day", first.getVal("day"));
+		if (TemporalDate.getValueFromDate(first, "day") <= TemporalDate.getValueFromDate(second, "day")){
+			if (TemporalDate.getValueFromDate(second, "month") != 12)
+				tmpMap.put("month", addOne(tmpMap.get("month")));
+			else {
+				tmpMap.put("year", addOne(tmpMap.get("year")));
+				HashSet<Integer> tmpSet = new HashSet<Integer>();
+				tmpSet.add(1);
+				tmpMap.put("month", tmpSet);
+			}
+		}
+		return new TemporalDate(tmpMap);
 	}
 	
 	private TemporalISO convexYear(){

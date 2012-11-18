@@ -7,8 +7,7 @@ public class TemporalNth extends TemporalPredicate{
 	@Override
 	public TemporalISO perform() {
 		if (first instanceof TemporalNumber){
-			throw new IllegalArgumentException("what the F are we doing here?");
-			//return new TemporalDate("quarter", 2);
+			return new TemporalDate("quarter", ((TemporalNumber) first).getNum());
 			
 		}
 		
@@ -18,8 +17,9 @@ public class TemporalNth extends TemporalPredicate{
 			return first;
 		
 		
-		if (!first.isConvexSet())
-			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a convex set! (It really should  be.) ");
+		if (!(first instanceof TemporalDuration)){
+			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a TemporalDuration! (It really should  be.) ");
+		}
 		if (!(second instanceof TemporalNumber))
 			throw new IllegalArgumentException("The second ISO stored in TemporalNth is not a number!");
 		TemporalNthOfEach nthOfEach = new TemporalNthOfEach();

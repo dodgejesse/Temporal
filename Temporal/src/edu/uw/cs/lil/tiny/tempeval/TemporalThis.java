@@ -14,19 +14,20 @@ public class TemporalThis extends TemporalPredicate {
 		if (first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref"))
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
-		if (!first.isConvexSet()) {
+		if (!(first instanceof TemporalDuration)) {
 			if (!tmpMap.containsKey("year")) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
 				tmpSet.add(TemporalISO.getValueFromDate(second, "year"));
 				tmpMap.put("year", tmpSet);
 			}
 			if (!(first.isSet("quarter") || first.isSet("month")
-					|| first.isSet("week") || first.isSet("weekday"))) {
+					|| first.isSet("week") || first.isSet("weekday")
+					|| first.isSet("season"))) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
 				tmpSet.add(TemporalISO.getValueFromDate(second, "month"));
 				tmpMap.put("month", tmpSet);
 			}
-		// Case where first is a convex set. Will implement 'this year', 'this month' and 'this week'
+		// Case where first is a duration. Will implement 'this year', 'this month' and 'this week'
 		} else {
 			if (first.isSet("year"))
 				tmpMap.put("year", second.getVal("year"));

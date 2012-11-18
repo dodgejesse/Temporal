@@ -27,10 +27,19 @@ public final class TemporalDuration extends TemporalISO {
 			s = addString("week", s, "W");
 		} else if (super.isSet("day")){
 			s = addString("day", s, "D");
+		} else if (super.isSet("quarter")){
+			s = addString("quarter", s, "Q");
 		} else
-			s = "Haven't implemented toString for durations other than years";
+			throw new IllegalArgumentException("Printing for durations is limited. You're trying to print something not implemented yet.");
+			//s = "Haven't implemented toString for durations other than years";
 		return s;
 			
+	}
+	
+	private String quarterFormat(){
+		String s = "";
+		//if ()
+		return s;
 	}
 	
 	private String convexSetFormat(){

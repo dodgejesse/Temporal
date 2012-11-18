@@ -16,8 +16,8 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
 	final boolean ONLYPRINTTOOMANYPARSES = false;
-	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "quarter";
+	final boolean ONLYPRINTONEPHRASE = true;
+	final String PHRASE = "winter";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
@@ -174,20 +174,34 @@ public class TemporalTesterSmall {
 	private LogicalExpression[] getArrayOfLabels(LogicalExpression l) {
 		int numOfFunctions = 3;
 		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
-		LogicalExpression[] functions = new LogicalExpression[numOfFunctions];
-		// Making the Predicates to apply to the logical expressions
-		functions[0] = categoryServices
+		LogicalExpression[] functionsS = new LogicalExpression[numOfFunctions];
+		LogicalExpression[] functionsD = new LogicalExpression[numOfFunctions];
+		// Making the Predicates to apply to the logical expressions for SEQUENCES
+		functionsS[0] = categoryServices
 				.parseSemantics("(lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))");
-		functions[1] = categoryServices
+		functionsS[1] = categoryServices
 				.parseSemantics("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))");
-		functions[2] = categoryServices
+		functionsS[2] = categoryServices
 				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
 
-		
+		// Making the Predicates to apply to the logical expressions for DURATIONS
+		functionsD[0] = categoryServices
+				.parseSemantics("(lambda $0:d (previous:<d,<r,s>> $0 ref_time:r))");
+		functionsD[1] = categoryServices
+				.parseSemantics("(lambda $0:d (this:<d,<r,s>> $0 ref_time:r))");
+		functionsD[2] = categoryServices
+				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");		
+
 		// Looping over the predicates, applying them each to the given logical expression
-		for (int i = 0; i < functions.length; i++){
+		for (int i = 0; i < functionsS.length; i++){
 			newLogicArray[i+1] = categoryServices
-					.doSemanticApplication(functions[i], l);
+					.doSemanticApplication(functionsS[i], l);
+
+			if (newLogicArray[i+1] == null){
+				newLogicArray[i+1] = categoryServices
+					.doSemanticApplication(functionsD[i], l);
+			}
+			
 			if (newLogicArray[i+1] == null) 
 				newLogicArray[i+1] = l;
 		}
