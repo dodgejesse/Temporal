@@ -1,6 +1,5 @@
 //the lexicon
 
-
 earlier :- NP : past_ref:r
 recently :- NP : past_ref:r
 recent :- NP : past_ref:r
@@ -47,11 +46,11 @@ saturday :- NP : saturday:s
 sunday :- NP : sunday:s
 
 monday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 monday:s))
-tuesday :- NP : (lambda $0:s (intersect:<s*,s> $0 tuesday:s))
-wednesday :- NP : (lambda $0:s (intersect:<s*,s> $0 wednesday:s))
-thursday :- NP : (lambda $0:s (intersect:<s*,s> $0 thursday:s))
+tuesday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 tuesday:s))
+wednesday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 wednesday:s))
+thursday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 thursday:s))
 friday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 friday:s))
-saturday :- NP : (lambda $0:s (intersect:<s*,s> $0 saturday:s))
+saturday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 saturday:s))
 sunday :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 sunday:s))
 
 january :- NP : january:s
@@ -117,7 +116,11 @@ thirteenth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 13o:n))
 fourteenth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 14o:n))
 fifteenth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 15o:n))
 
-
+// For phrases such as "the 1988 third quarter".
+first :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 1o:n))))
+second :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 2o:n))))
+third :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 3o:n))))
+fourth :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 4o:n))))
 
 // Convex sets
 //year :- NP : year:s
@@ -448,6 +451,15 @@ two thousand :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2000:n))
 2019 :- NP : 2019:r
 
 nineties :- NP : 199:r
+20s :- NP : 192:r
+30s :- NP : 193:r
+40s :- NP : 194:r
+50s :- NP : 195:r
+60s :- NP : 196:r
+70s :- NP : 197:r
+80s :- NP : 198:r
+90s :- NP : 199:r
+
 1800s :- NP : 18:r
 1810s :- NP : 181:r
 1820s :- NP : 182:r
@@ -643,8 +655,11 @@ around :- NP/NP : (lambda $0:s $0)
 weeks and months :- NP\NP : (lambda $0:r $0)
 each of the :- NP/NP : (lambda $0:d $0)
 a good part of :- NP/NP : (lambda $0:s $0)
+last half of :- NP/NP : (lambda $0:r $0)
 
 more :- NP/NP : (lambda $0:d $0)
+
+' :- NP/NP : (lambda $0:s $0)
 
 , :- NP\NP : (lambda $0:s $0)
 , :- NP/NP : (lambda $0:d $0)
