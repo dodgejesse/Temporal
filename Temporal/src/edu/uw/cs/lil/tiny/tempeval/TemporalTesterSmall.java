@@ -16,8 +16,8 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
 	final boolean ONLYPRINTTOOMANYPARSES = false;
-	final boolean ONLYPRINTNOPARSES = false;
-	final boolean ONLYPRINTONEPHRASE = true;
+	final boolean ONLYPRINTNOPARSES = true;
+	final boolean ONLYPRINTONEPHRASE = false;
 	final String PHRASE = "'";
 	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
 	final AbstractCKYParser<LogicalExpression> parser;

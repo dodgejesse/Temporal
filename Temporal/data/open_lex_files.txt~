@@ -1,6 +1,0 @@
-#!/bin/bash
-gedit /home/jessedd/workspace/Temporal/data/resources/*.txt &
-gedit /home/jessedd/workspace/Temporal/data/dataset/tempeval.dataset.corrected.txt
-gedit /home/jessedd/workspace/Temporal/data/dataset/calculating_word_stats/word_stats.txt
-gedit /home/jessedd/workspace/Temporal/data/dataset/calculating_word_stats/phrase_stats.txt
-gedit /home/jessedd/workspace/Temporal/data/dataset/other_dataset_versions/tempeval.small_testing_dataset.txt
