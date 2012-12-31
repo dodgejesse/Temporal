@@ -18,4 +18,14 @@ public class TemporalNumber extends TemporalISO {
 	public int getNum(){
 		return TemporalISO.getValueFromDate(this, "num");
 	}
+	
+	// This method shouldn't ever be called. Hopefully that's true.
+	public String getType(){
+		return "NUMBER";
+	}
+	
+	// This method shouldn't ever be called. Hopefully that's true. 
+	public String getVal(){
+		return "" + this.getNum();
+	}
 }

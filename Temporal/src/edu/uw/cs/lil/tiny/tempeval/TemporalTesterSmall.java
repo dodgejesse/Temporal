@@ -56,17 +56,17 @@ public class TemporalTesterSmall {
 		for (final ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> item : testData) {
 			counter++;
 			int c = test(item, model, counter);
-			if (c == 0)
+			if (c == -1)
+				incorrect++;
+			else if (c == 0)
 				correct++;
 			else if (c == 1)
-				incorrect++;
-			else if (c == 2)
 				correctType++;
-			else if (c == 3)
+			else if (c == 2)
 				correctVal++;
-			else if (c == 4)
+			else if (c == 3)
 				tooManyParses++;
-			else
+			else// if (c == 4)
 				notParsed++;
 		}
 		System.out.println();
@@ -109,14 +109,18 @@ public class TemporalTesterSmall {
 				.getBestParses();
 		if (bestModelParses.size() == 1) {
 			Pair<LogicalExpression, Integer> correctParse = oneParse(bestModelParses, label, temporalISO, ref_time, type, val);
+			label = correctParse.first();
 			temporalISO = TemporalVisitor.of(label, ref_time);
+			output = correctParse.second();
+			
+		// TODO: Check every parse to make sure a correct one is included.
 		} else if (bestModelParses.size() > 1) {
 
-			output = 2;
-		} else { // zero parses
 			output = 3;
+		} else { // zero parses
+			output = 4;
 		}
-		printing(label, type, val, temporalISO, phrase.toString(), c, ref_time, output);
+		printing(label, type, val, temporalISO, phrase.toString(), ref_time, output);
 		return output;
 	}
 	
@@ -124,7 +128,6 @@ public class TemporalTesterSmall {
 	// return a Pair<label, int>, where the int indicates if the label is correct.
 	private Pair<LogicalExpression, Integer> oneParse(List<IParseResult<LogicalExpression>> bestModelParses,
 			LogicalExpression label, TemporalISO temporalISO, String ref_time, String type, String val){
-		int output;
 		final IParseResult<LogicalExpression> parse = bestModelParses
 				.get(0);
 		label = parse.getY();
@@ -132,7 +135,7 @@ public class TemporalTesterSmall {
 
 		int n = findCorrectLabel(labels, ref_time, type, val);
 		// if the logic (label) executes with the correct type and value.
-		if (n > 0 && n < labels.length)
+		if (n >= 0 && n < labels.length)
 			return Pair.of(labels[n],0);
 		// if the label executes with the correct type, but not value.
 		else if (n >= labels.length && n < labels.length * 2)
@@ -143,8 +146,8 @@ public class TemporalTesterSmall {
 		// if n == -1
 		else
 			if (n != -1)
-				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall");
-			return null;
+				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall. n = " + n);
+			return Pair.of(label,  -1);
 		
 	}
 	
@@ -184,36 +187,38 @@ public class TemporalTesterSmall {
 
 	// args: output is the output of the system
 	private void printing(LogicalExpression label, String type, String val,
-			TemporalISO output, String phrase, boolean c, String ref_time,
+			TemporalISO output, String phrase, String ref_time,
 			int correct) {
-		//boolean c = n>=0;
+		//boolean c = (correct == 0);
 		if (!ONLYPRINTONEPHRASE
 				|| (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
-			if (correct == 0 || correct == 1) {
-				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
+			if (correct >= -1 && correct <= 2) {
+				if ((ONLYPRINTINCORRECT && (correct == -1)) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
 					System.out.println();
-					System.out.println("Phrase:     " + phrase);
-					System.out.println("Logic:      " + label);
-					System.out.println("ref_time:   " + ref_time);
-					System.out.println("Gold type:  " + type);
-					System.out.println("gold val:   " + val);
-					System.out.println("Guess:      " + output);
-					System.out.println("Correct?    " + c);
+					System.out.println("Phrase:        " + phrase);
+					System.out.println("Logic:         " + label);
+					System.out.println("ref_time:      " + ref_time);
+					System.out.println("Gold type:     " + type);
+					System.out.println("gold val:      " + val);
+					System.out.println("Guess type:    " + output.getType());
+					System.out.println("Guess val:     " + output.getVal());
+					System.out.println("Correct type?  " + (correct == 0 || correct == 1));
+					System.out.println("Correct val?   " + (correct == 0 || correct == 2));					
 				}
-			} else if (correct == 2 && !ONLYPRINTINCORRECT &&!ONLYPRINTNOPARSES) {
+			} else if (correct == 3 && !ONLYPRINTINCORRECT &&!ONLYPRINTNOPARSES) {
 				System.out.println();
-				System.out.println("Phrase:   " + phrase);
-				System.out.println("ref_time: " + ref_time);
-				System.out.println("Gold type:  " + type);
-				System.out.println("gold val:   " + val);
+				System.out.println("Phrase:        " + phrase);
+				System.out.println("ref_time:      " + ref_time);
+				System.out.println("Gold type:     " + type);
+				System.out.println("gold val:      " + val);
 				System.out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 			} else if ((correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 3 && ONLYPRINTNOPARSES) {
 				System.out.println();
-				System.out.println("Phrase:   " + phrase);
-				System.out.println("ref_time: " + ref_time);
-				System.out.println("Gold type:  " + type);
-				System.out.println("gold val:   " + val);
+				System.out.println("Phrase:        " + phrase);
+				System.out.println("ref_time:      " + ref_time);
+				System.out.println("Gold type:     " + type);
+				System.out.println("gold val:      " + val);
 				System.out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 			}
