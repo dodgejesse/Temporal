@@ -41,7 +41,7 @@ public class TemporalVisitor implements ILogicalExpressionVisitor{
 		for (final LogicalExpression arg : literal.getArguments()) {
 			arg.accept(this);
 			tmpPred.storeISO(iso);
-		}		
+		}
 		iso = tmpPred.perform();		
 	}
 

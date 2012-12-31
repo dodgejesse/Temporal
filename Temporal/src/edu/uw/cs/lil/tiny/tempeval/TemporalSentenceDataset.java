@@ -21,32 +21,46 @@ public class TemporalSentenceDataset implements
 		this.data = Collections.unmodifiableList(data);
 	}
 
+	// TODO: Test this!
 	public static TemporalSentenceDataset read(File f,
 			IStringFilter textFilter, boolean lockConstants) {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(f));
 			List<TemporalSentence> data = new LinkedList<TemporalSentence>();
-
-			String currentSentence = null;
-			String currentRefDate = null;
-			String currentISO = null;
+			
+			String docID = null;
+			String sentence = null;
+			String phrase = null;
+			String refDate = null;
+			String type = null;
+			String val = null;
 			String line;
 			while ((line = in.readLine()) != null) {
 				if ((!line.startsWith("//")) && (!line.equals(""))) {
 					line = line.trim();
-					if (currentSentence == null) {
-						// Case we don't have a sentence, so we are supposed to get
-						// a sentence
+					if (docID == null)
+						docID = textFilter.filter(line);
+					else if (sentence == null)
+						sentence = textFilter.filter(line);
+					else if (phrase == null) {
+						// Case we don't have a phrase, so we are supposed to get one.
 						line = line.replace("-", " ");
-						currentSentence = textFilter.filter(line);
-					} else if (currentRefDate == null) {
-						currentRefDate = textFilter.filter(line);
-					} else {
-						currentISO = textFilter.filter(line);
-						data.add(new TemporalSentence(new Sentence(
-								currentSentence), currentRefDate, currentISO));
-						currentSentence = null;
-						currentRefDate = null;
+						phrase = textFilter.filter(line);
+					} else if (refDate == null) {
+						refDate = textFilter.filter(line);
+					} else if (type == null){
+						type = textFilter.filter(line);
+					} else if (val == null){
+						val = textFilter.filter(line);
+						data.add(new TemporalSentence(docID, sentence, new Sentence(phrase), refDate, type, val));
+						
+						// To reset the variables to null. 
+						docID = null;
+						sentence = null;
+						phrase = null;
+						refDate = null;
+						type = null;
+						val = null;
 					}
 				}
 			}

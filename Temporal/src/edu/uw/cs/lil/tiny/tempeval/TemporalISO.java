@@ -111,4 +111,8 @@ public abstract class TemporalISO {
 		}
 		return value;
 	}
+	
+	public abstract String getType();
+	
+	public abstract String getVal();
 }

@@ -33,6 +33,14 @@ public class TemporalDate extends TemporalISO{
 		data.get(s).add(n);
 	}
 	
+	public String getType(){
+		return "DATE";
+	}
+	
+	public String getVal(){
+		return this.toString();
+	}
+	
 	public String toString(){
 		if (super.isConvexSet()){
 			return convexSetFormat();

@@ -6,4 +6,4 @@ Temporal
 		-.class files (compiled files
 	-data
 		-datasets
-		-
+		-geoquery example

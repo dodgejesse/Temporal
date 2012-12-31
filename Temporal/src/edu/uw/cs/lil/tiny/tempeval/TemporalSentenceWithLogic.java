@@ -19,6 +19,8 @@ import java.util.Map.Entry;
  * to
  * implements ILabeledDataItem<Pair<Sentence, String>, Pair<String, LogicalExpression>>
  */
+
+
 public class TemporalSentenceWithLogic implements
 		ILabeledDataItem<Pair<Sentence, String>, Pair<String, LogicalExpression>> {
 	private final Map<LogicalConstant, Counter> predCounts;

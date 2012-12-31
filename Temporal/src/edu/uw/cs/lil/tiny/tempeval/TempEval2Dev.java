@@ -98,11 +98,12 @@ public class TempEval2Dev {
 		if (testingDataset)
 			dataLoc = "other_dataset_versions/tempeval.small_testing_dataset.txt";
 		else
-			dataLoc = "tempeval.dataset.corrected.txt";
-		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> train = TemporalSentenceDataset
+			dataLoc = "tempeval3.dataset.txt";
+			//dataLoc = "tempeval.dataset.corrected.txt";
+		IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> train = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
-		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test = TemporalSentenceDataset
+		IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());

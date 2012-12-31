@@ -4,19 +4,28 @@ import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
 
+/*
+ * Author: Jesse Dodge
+ * 
+ * Represents a single mention, AKA a set of docID, sentence, phrase, refDate, type, and val.
+ */
+
 public class TemporalSentence implements
-		ILabeledDataItem<Pair<Sentence, String>, String> {
-	//private final Map<LogicalConstant, Counter> predCounts;
-	private final String referenceDate;
-	private final String ISO;
-	private final Sentence sentence;
+		ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> {
+	private final String docID;
+	private final String sentence;
+	private final Sentence phrase;
+	private final String refDate;
+	private final String type;
+	private final String val;
 
-	public TemporalSentence(Sentence sentence, String referenceDate,
-			String ISO) {
-		this.sentence = sentence;
-		this.ISO = ISO;
-		this.referenceDate = referenceDate;
-
+	public TemporalSentence(String d, String s, Sentence p, String r, String t, String v) {
+		docID = d;
+		sentence = s;
+		phrase = p;
+		refDate = r;
+		type = t;
+		val = v;
 		//this.predCounts = GetPredicateCounts.of(semantics);
 
 		//final Iterator<Entry<LogicalConstant, Counter>> iterator = this.predCounts.entrySet().iterator();
@@ -28,16 +37,29 @@ public class TemporalSentence implements
 		//}
 	}
 
-	public String getLabel() {
-		return this.ISO;
+	public Pair<String, String> getLabel() {
+		return Pair.of(type, val);
 	}
 
 	public String getRefDate() {
-		return this.referenceDate;
+		return this.refDate;
+	}
+	
+	public String getSentence(){
+		return sentence;
+	}
+	
+	public String getType(){
+		return type;
+	}
+	
+	public String getVal(){
+		return val;
 	}
 
-	public Pair<Sentence, String> getSample() {
-		return Pair.of(this.sentence, this.referenceDate);
+	public Pair<String[], Sentence> getSample() {
+		String[] s = {docID, sentence, refDate};
+		return Pair.of(s, phrase);
 	}
 
 	/*
@@ -62,24 +84,21 @@ public class TemporalSentence implements
 	}
 
 	public String toString() {
-		return this.sentence.toString() + '\n' + this.ISO;
+		return docID + "\n" + sentence + "\n" + phrase.toString() + "\n" + refDate + "\n" + type + "\n" + val;
 	}
 
 	@Override
-	public double calculateLoss(String label) {
-		if (label.equals(this.ISO))
-			return 0.0;
-		else
-			return 0;
+	public boolean isCorrect(Pair<String, String> l) {
+		return l.first().equals(type) && l.second().equals(val);
 	}
 
 	@Override
-	public boolean prune(String y) {
+	public double calculateLoss(Pair<String, String> label) {
+		return 0;
+	}
+
+	@Override
+	public boolean prune(Pair<String, String> y) {
 		throw new IllegalArgumentException("Cannot prune a TemporalSentence becuase it doesn't contain logic.");
-	}
-
-	@Override
-	public boolean isCorrect(String label) {
-		return label.equals(ISO);
 	}
 }

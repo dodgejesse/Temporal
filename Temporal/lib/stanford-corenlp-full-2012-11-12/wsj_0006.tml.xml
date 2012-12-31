@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="CoreNLP-to-HTML.xsl" type="text/xsl"?>
+<root>
+  <document>
+    <sentences>
+      <sentence id="1">
+        <tokens>
+          <token id="1">
+            <word>&lt;?xml version="1.0" ?&gt;</word>
+            <CharacterOffsetBegin>0</CharacterOffsetBegin>
+            <CharacterOffsetEnd>22</CharacterOffsetEnd>
+          </token>
+          <token id="2">
+            <word>&lt;TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd"&gt;</word>
+            <CharacterOffsetBegin>23</CharacterOffsetBegin>
+            <CharacterOffsetEnd>163</CharacterOffsetEnd>
+          </token>
+          <token id="3">
+            <word>&lt;DOCID&gt;</word>
+            <CharacterOffsetBegin>165</CharacterOffsetBegin>
+            <CharacterOffsetEnd>172</CharacterOffsetEnd>
+          </token>
+          <token id="4">
+            <word>wsj_0006</word>
+            <CharacterOffsetBegin>172</CharacterOffsetBegin>
+            <CharacterOffsetEnd>180</CharacterOffsetEnd>
+          </token>
+          <token id="5">
+            <word>&lt;/DOCID&gt;</word>
+            <CharacterOffsetBegin>180</CharacterOffsetBegin>
+            <CharacterOffsetEnd>188</CharacterOffsetEnd>
+          </token>
+          <token id="6">
+            <word>&lt;DCT&gt;</word>
+            <CharacterOffsetBegin>190</CharacterOffsetBegin>
+            <CharacterOffsetEnd>195</CharacterOffsetEnd>
+          </token>
+          <token id="7">
+            <word>&lt;TIMEX3 tid="t0" type="DATE" value="1989-11-02" temporalFunction="false" functionInDocument="CREATION_TIME"&gt;</word>
+            <CharacterOffsetBegin>195</CharacterOffsetBegin>
+            <CharacterOffsetEnd>303</CharacterOffsetEnd>
+          </token>
+          <token id="8">
+            <word>11\/02\/89</word>
+            <CharacterOffsetBegin>303</CharacterOffsetBegin>
+            <CharacterOffsetEnd>311</CharacterOffsetEnd>
+          </token>
+          <token id="9">
+            <word>&lt;/TIMEX3&gt;</word>
+            <CharacterOffsetBegin>311</CharacterOffsetBegin>
+            <CharacterOffsetEnd>320</CharacterOffsetEnd>
+          </token>
+          <token id="10">
+            <word>&lt;/DCT&gt;</word>
+            <CharacterOffsetBegin>320</CharacterOffsetBegin>
+            <CharacterOffsetEnd>326</CharacterOffsetEnd>
+          </token>
+          <token id="11">
+            <word>&lt;EXTRAINFO&gt;</word>
+            <CharacterOffsetBegin>328</CharacterOffsetBegin>
+            <CharacterOffsetEnd>339</CharacterOffsetEnd>
+          </token>
+          <token id="12">
+            <word>WSJ891102-0188</word>
+            <CharacterOffsetBegin>340</CharacterOffsetBegin>
+            <CharacterOffsetEnd>354</CharacterOffsetEnd>
+          </token>
+          <token id="13">
+            <word>=</word>
+            <CharacterOffsetBegin>355</CharacterOffsetBegin>
+            <CharacterOffsetEnd>356</CharacterOffsetEnd>
+          </token>
+          <token id="14">
+            <word>891102</word>
+            <CharacterOffsetBegin>357</CharacterOffsetBegin>
+            <CharacterOffsetEnd>363</CharacterOffsetEnd>
+          </token>
+          <token id="15">
+            <word>891102-0188</word>
+            <CharacterOffsetBegin>364</CharacterOffsetBegin>
+            <CharacterOffsetEnd>375</CharacterOffsetEnd>
+          </token>
+          <token id="16">
+            <word>.</word>
+            <CharacterOffsetBegin>375</CharacterOffsetBegin>
+            <CharacterOffsetEnd>376</CharacterOffsetEnd>
+          </token>
+        </tokens>
+      </sentence>
+      <sentence id="2">
+        <tokens>
+          <token id="1">
+            <word>Pacific</word>
+            <CharacterOffsetBegin>377</CharacterOffsetBegin>
+            <CharacterOffsetEnd>384</CharacterOffsetEnd>
+          </token>
+          <token id="2">
+            <word>First</word>
+            <CharacterOffsetBegin>385</CharacterOffsetBegin>
+            <CharacterOffsetEnd>390</CharacterOffsetEnd>
+          </token>
+          <token id="3">
+            <word>Financial</word>
+            <CharacterOffsetBegin>391</CharacterOffsetBegin>
+            <CharacterOffsetEnd>400</CharacterOffsetEnd>
+          </token>
+          <token id="4">
+            <word>Corp.</word>
+            <CharacterOffsetBegin>401</CharacterOffsetBegin>
+            <CharacterOffsetEnd>406</CharacterOffsetEnd>
+          </token>
+          <token id="5">
+            <word>11\/02\/89</word>
+            <CharacterOffsetBegin>407</CharacterOffsetBegin>
+            <CharacterOffsetEnd>415</CharacterOffsetEnd>
+          </token>
+          <token id="6">
+            <word>WALL</word>
+            <CharacterOffsetBegin>416</CharacterOffsetBegin>
+            <CharacterOffsetEnd>420</CharacterOffsetEnd>
+          </token>
+          <token id="7">
+            <word>STREET</word>
+            <CharacterOffsetBegin>421</CharacterOffsetBegin>
+            <CharacterOffsetEnd>427</CharacterOffsetEnd>
+          </token>
+          <token id="8">
+            <word>JOURNAL</word>
+            <CharacterOffsetBegin>428</CharacterOffsetBegin>
+            <CharacterOffsetEnd>435</CharacterOffsetEnd>
+          </token>
+          <token id="9">
+            <word>-LRB-</word>
+            <CharacterOffsetBegin>436</CharacterOffsetBegin>
+            <CharacterOffsetEnd>437</CharacterOffsetEnd>
+          </token>
+          <token id="10">
+            <word>J</word>
+            <CharacterOffsetBegin>437</CharacterOffsetBegin>
+            <CharacterOffsetEnd>438</CharacterOffsetEnd>
+          </token>
+          <token id="11">
+            <word>-RRB-</word>
+            <CharacterOffsetBegin>438</CharacterOffsetBegin>
+            <CharacterOffsetEnd>439</CharacterOffsetEnd>
+          </token>
+          <token id="12">
+            <word>PFFS</word>
+            <CharacterOffsetBegin>440</CharacterOffsetBegin>
+            <CharacterOffsetEnd>444</CharacterOffsetEnd>
+          </token>
+          <token id="13">
+            <word>T.</word>
+            <CharacterOffsetBegin>445</CharacterOffsetBegin>
+            <CharacterOffsetEnd>447</CharacterOffsetEnd>
+          </token>
+          <token id="14">
+            <word>RYL</word>
+            <CharacterOffsetBegin>447</CharacterOffsetBegin>
+            <CharacterOffsetEnd>450</CharacterOffsetEnd>
+          </token>
+          <token id="15">
+            <word>TENDER</word>
+            <CharacterOffsetBegin>451</CharacterOffsetBegin>
+            <CharacterOffsetEnd>457</CharacterOffsetEnd>
+          </token>
+          <token id="16">
+            <word>OFFERS</word>
+            <CharacterOffsetBegin>458</CharacterOffsetBegin>
+            <CharacterOffsetEnd>464</CharacterOffsetEnd>
+          </token>
+          <token id="17">
+            <word>,</word>
+            <CharacterOffsetBegin>464</CharacterOffsetBegin>
+            <CharacterOffsetEnd>465</CharacterOffsetEnd>
+          </token>
+          <token id="18">
+            <word>MERGERS</word>
+            <CharacterOffsetBegin>466</CharacterOffsetBegin>
+            <CharacterOffsetEnd>473</CharacterOffsetEnd>
+          </token>
+          <token id="19">
+            <word>,</word>
+            <CharacterOffsetBegin>473</CharacterOffsetBegin>
+            <CharacterOffsetEnd>474</CharacterOffsetEnd>
+          </token>
+          <token id="20">
+            <word>ACQUISITIONS</word>
+            <CharacterOffsetBegin>475</CharacterOffsetBegin>
+            <CharacterOffsetEnd>487</CharacterOffsetEnd>
+          </token>
+          <token id="21">
+            <word>-LRB-</word>
+            <CharacterOffsetBegin>488</CharacterOffsetBegin>
+            <CharacterOffsetEnd>489</CharacterOffsetEnd>
+          </token>
+          <token id="22">
+            <word>TNM</word>
+            <CharacterOffsetBegin>489</CharacterOffsetBegin>
+            <CharacterOffsetEnd>492</CharacterOffsetEnd>
+          </token>
+          <token id="23">
+            <word>-RRB-</word>
+            <CharacterOffsetBegin>492</CharacterOffsetBegin>
+            <CharacterOffsetEnd>493</CharacterOffsetEnd>
+          </token>
+          <token id="24">
+            <word>SAVINGS</word>
+            <CharacterOffsetBegin>494</CharacterOffsetBegin>
+            <CharacterOffsetEnd>501</CharacterOffsetEnd>
+          </token>
+          <token id="25">
+            <word>AND</word>
+            <CharacterOffsetBegin>502</CharacterOffsetBegin>
+            <CharacterOffsetEnd>505</CharacterOffsetEnd>
+          </token>
+          <token id="26">
+            <word>LOANS</word>
+            <CharacterOffsetBegin>506</CharacterOffsetBegin>
+            <CharacterOffsetEnd>511</CharacterOffsetEnd>
+          </token>
+          <token id="27">
+            <word>,</word>
+            <CharacterOffsetBegin>511</CharacterOffsetBegin>
+            <CharacterOffsetEnd>512</CharacterOffsetEnd>
+          </token>
+          <token id="28">
+            <word>THRIFTS</word>
+            <CharacterOffsetBegin>513</CharacterOffsetBegin>
+            <CharacterOffsetEnd>520</CharacterOffsetEnd>
+          </token>
+          <token id="29">
+            <word>,</word>
+            <CharacterOffsetBegin>520</CharacterOffsetBegin>
+            <CharacterOffsetEnd>521</CharacterOffsetEnd>
+          </token>
+          <token id="30">
+            <word>CREDIT</word>
+            <CharacterOffsetBegin>522</CharacterOffsetBegin>
+            <CharacterOffsetEnd>528</CharacterOffsetEnd>
+          </token>
+          <token id="31">
+            <word>UNIONS</word>
+            <CharacterOffsetBegin>529</CharacterOffsetBegin>
+            <CharacterOffsetEnd>535</CharacterOffsetEnd>
+          </token>
+          <token id="32">
+            <word>-LRB-</word>
+            <CharacterOffsetBegin>536</CharacterOffsetBegin>
+            <CharacterOffsetEnd>537</CharacterOffsetEnd>
+          </token>
+          <token id="33">
+            <word>SAL</word>
+            <CharacterOffsetBegin>537</CharacterOffsetBegin>
+            <CharacterOffsetEnd>540</CharacterOffsetEnd>
+          </token>
+          <token id="34">
+            <word>-RRB-</word>
+            <CharacterOffsetBegin>540</CharacterOffsetBegin>
+            <CharacterOffsetEnd>541</CharacterOffsetEnd>
+          </token>
+          <token id="35">
+            <word>SEATTLE</word>
+            <CharacterOffsetBegin>542</CharacterOffsetBegin>
+            <CharacterOffsetEnd>549</CharacterOffsetEnd>
+          </token>
+          <token id="36">
+            <word>&lt;/EXTRAINFO&gt;</word>
+            <CharacterOffsetBegin>550</CharacterOffsetBegin>
+            <CharacterOffsetEnd>562</CharacterOffsetEnd>
+          </token>
+          <token id="37">
+            <word>&lt;TEXT&gt;</word>
+            <CharacterOffsetBegin>564</CharacterOffsetBegin>
+            <CharacterOffsetEnd>570</CharacterOffsetEnd>
+          </token>
+          <token id="38">
+            <word>Pacific</word>
+            <CharacterOffsetBegin>571</CharacterOffsetBegin>
+            <CharacterOffsetEnd>578</CharacterOffsetEnd>
+          </token>
+          <token id="39">
+            <word>First</word>
+            <CharacterOffsetBegin>579</CharacterOffsetBegin>
+            <CharacterOffsetEnd>584</CharacterOffsetEnd>
+          </token>
+          <token id="40">
+            <word>Financial</word>
+            <CharacterOffsetBegin>585</CharacterOffsetBegin>
+            <CharacterOffsetEnd>594</CharacterOffsetEnd>
+          </token>
+          <token id="41">
+            <word>Corp.</word>
+            <CharacterOffsetBegin>595</CharacterOffsetBegin>
+            <CharacterOffsetEnd>599</CharacterOffsetEnd>
+          </token>
+          <token id="42">
+            <word>.</word>
+            <CharacterOffsetBegin>599</CharacterOffsetBegin>
+            <CharacterOffsetEnd>600</CharacterOffsetEnd>
+          </token>
+        </tokens>
+      </sentence>
+      <sentence id="3">
+        <tokens>
+          <token id="1">
+            <word>&lt;EVENT eid="e1" class="REPORTING"&gt;</word>
+            <CharacterOffsetBegin>601</CharacterOffsetBegin>
+            <CharacterOffsetEnd>635</CharacterOffsetEnd>
+          </token>
+          <token id="2">
+            <word>said</word>
+            <CharacterOffsetBegin>635</CharacterOffsetBegin>
+            <CharacterOffsetEnd>639</CharacterOffsetEnd>
+          </token>
+          <token id="3">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>639</CharacterOffsetBegin>
+            <CharacterOffsetEnd>647</CharacterOffsetEnd>
+          </token>
+          <token id="4">
+            <word>shareholders</word>
+            <CharacterOffsetBegin>648</CharacterOffsetBegin>
+            <CharacterOffsetEnd>660</CharacterOffsetEnd>
+          </token>
+          <token id="5">
+            <word>&lt;EVENT eid="e2" class="OCCURRENCE"&gt;</word>
+            <CharacterOffsetBegin>661</CharacterOffsetBegin>
+            <CharacterOffsetEnd>696</CharacterOffsetEnd>
+          </token>
+          <token id="6">
+            <word>approved</word>
+            <CharacterOffsetBegin>696</CharacterOffsetBegin>
+            <CharacterOffsetEnd>704</CharacterOffsetEnd>
+          </token>
+          <token id="7">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>704</CharacterOffsetBegin>
+            <CharacterOffsetEnd>712</CharacterOffsetEnd>
+          </token>
+          <token id="8">
+            <word>its</word>
+            <CharacterOffsetBegin>713</CharacterOffsetBegin>
+            <CharacterOffsetEnd>716</CharacterOffsetEnd>
+          </token>
+          <token id="9">
+            <word>&lt;EVENT eid="e8" class="OCCURRENCE"&gt;</word>
+            <CharacterOffsetBegin>717</CharacterOffsetBegin>
+            <CharacterOffsetEnd>752</CharacterOffsetEnd>
+          </token>
+          <token id="10">
+            <word>acquisition</word>
+            <CharacterOffsetBegin>752</CharacterOffsetBegin>
+            <CharacterOffsetEnd>763</CharacterOffsetEnd>
+          </token>
+          <token id="11">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>763</CharacterOffsetBegin>
+            <CharacterOffsetEnd>771</CharacterOffsetEnd>
+          </token>
+          <token id="12">
+            <word>by</word>
+            <CharacterOffsetBegin>772</CharacterOffsetBegin>
+            <CharacterOffsetEnd>774</CharacterOffsetEnd>
+          </token>
+          <token id="13">
+            <word>Royal</word>
+            <CharacterOffsetBegin>775</CharacterOffsetBegin>
+            <CharacterOffsetEnd>780</CharacterOffsetEnd>
+          </token>
+          <token id="14">
+            <word>Trustco</word>
+            <CharacterOffsetBegin>781</CharacterOffsetBegin>
+            <CharacterOffsetEnd>788</CharacterOffsetEnd>
+          </token>
+          <token id="15">
+            <word>Ltd.</word>
+            <CharacterOffsetBegin>789</CharacterOffsetBegin>
+            <CharacterOffsetEnd>793</CharacterOffsetEnd>
+          </token>
+          <token id="16">
+            <word>of</word>
+            <CharacterOffsetBegin>794</CharacterOffsetBegin>
+            <CharacterOffsetEnd>796</CharacterOffsetEnd>
+          </token>
+          <token id="17">
+            <word>Toronto</word>
+            <CharacterOffsetBegin>797</CharacterOffsetBegin>
+            <CharacterOffsetEnd>804</CharacterOffsetEnd>
+          </token>
+          <token id="18">
+            <word>for</word>
+            <CharacterOffsetBegin>805</CharacterOffsetBegin>
+            <CharacterOffsetEnd>808</CharacterOffsetEnd>
+          </token>
+          <token id="19">
+            <word>$</word>
+            <CharacterOffsetBegin>809</CharacterOffsetBegin>
+            <CharacterOffsetEnd>810</CharacterOffsetEnd>
+          </token>
+          <token id="20">
+            <word>27</word>
+            <CharacterOffsetBegin>810</CharacterOffsetBegin>
+            <CharacterOffsetEnd>812</CharacterOffsetEnd>
+          </token>
+          <token id="21">
+            <word>a</word>
+            <CharacterOffsetBegin>813</CharacterOffsetBegin>
+            <CharacterOffsetEnd>814</CharacterOffsetEnd>
+          </token>
+          <token id="22">
+            <word>share</word>
+            <CharacterOffsetBegin>815</CharacterOffsetBegin>
+            <CharacterOffsetEnd>820</CharacterOffsetEnd>
+          </token>
+          <token id="23">
+            <word>,</word>
+            <CharacterOffsetBegin>820</CharacterOffsetBegin>
+            <CharacterOffsetEnd>821</CharacterOffsetEnd>
+          </token>
+          <token id="24">
+            <word>or</word>
+            <CharacterOffsetBegin>822</CharacterOffsetBegin>
+            <CharacterOffsetEnd>824</CharacterOffsetEnd>
+          </token>
+          <token id="25">
+            <word>$</word>
+            <CharacterOffsetBegin>825</CharacterOffsetBegin>
+            <CharacterOffsetEnd>826</CharacterOffsetEnd>
+          </token>
+          <token id="26">
+            <word>212</word>
+            <CharacterOffsetBegin>826</CharacterOffsetBegin>
+            <CharacterOffsetEnd>829</CharacterOffsetEnd>
+          </token>
+          <token id="27">
+            <word>million</word>
+            <CharacterOffsetBegin>830</CharacterOffsetBegin>
+            <CharacterOffsetEnd>837</CharacterOffsetEnd>
+          </token>
+          <token id="28">
+            <word>.</word>
+            <CharacterOffsetBegin>837</CharacterOffsetBegin>
+            <CharacterOffsetEnd>838</CharacterOffsetEnd>
+          </token>
+        </tokens>
+      </sentence>
+      <sentence id="4">
+        <tokens>
+          <token id="1">
+            <word>The</word>
+            <CharacterOffsetBegin>840</CharacterOffsetBegin>
+            <CharacterOffsetEnd>843</CharacterOffsetEnd>
+          </token>
+          <token id="2">
+            <word>thrift</word>
+            <CharacterOffsetBegin>844</CharacterOffsetBegin>
+            <CharacterOffsetEnd>850</CharacterOffsetEnd>
+          </token>
+          <token id="3">
+            <word>holding</word>
+            <CharacterOffsetBegin>851</CharacterOffsetBegin>
+            <CharacterOffsetEnd>858</CharacterOffsetEnd>
+          </token>
+          <token id="4">
+            <word>company</word>
+            <CharacterOffsetBegin>859</CharacterOffsetBegin>
+            <CharacterOffsetEnd>866</CharacterOffsetEnd>
+          </token>
+          <token id="5">
+            <word>&lt;EVENT eid="e4" class="REPORTING"&gt;</word>
+            <CharacterOffsetBegin>867</CharacterOffsetBegin>
+            <CharacterOffsetEnd>901</CharacterOffsetEnd>
+          </token>
+          <token id="6">
+            <word>said</word>
+            <CharacterOffsetBegin>901</CharacterOffsetBegin>
+            <CharacterOffsetEnd>905</CharacterOffsetEnd>
+          </token>
+          <token id="7">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>905</CharacterOffsetBegin>
+            <CharacterOffsetEnd>913</CharacterOffsetEnd>
+          </token>
+          <token id="8">
+            <word>it</word>
+            <CharacterOffsetBegin>914</CharacterOffsetBegin>
+            <CharacterOffsetEnd>916</CharacterOffsetEnd>
+          </token>
+          <token id="9">
+            <word>&lt;EVENT eid="e5" class="I_STATE"&gt;</word>
+            <CharacterOffsetBegin>917</CharacterOffsetBegin>
+            <CharacterOffsetEnd>949</CharacterOffsetEnd>
+          </token>
+          <token id="10">
+            <word>expects</word>
+            <CharacterOffsetBegin>949</CharacterOffsetBegin>
+            <CharacterOffsetEnd>956</CharacterOffsetEnd>
+          </token>
+          <token id="11">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>956</CharacterOffsetBegin>
+            <CharacterOffsetEnd>964</CharacterOffsetEnd>
+          </token>
+          <token id="12">
+            <word>to</word>
+            <CharacterOffsetBegin>965</CharacterOffsetBegin>
+            <CharacterOffsetEnd>967</CharacterOffsetEnd>
+          </token>
+          <token id="13">
+            <word>&lt;EVENT eid="e6" class="OCCURRENCE"&gt;</word>
+            <CharacterOffsetBegin>968</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1003</CharacterOffsetEnd>
+          </token>
+          <token id="14">
+            <word>obtain</word>
+            <CharacterOffsetBegin>1003</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1009</CharacterOffsetEnd>
+          </token>
+          <token id="15">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>1009</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1017</CharacterOffsetEnd>
+          </token>
+          <token id="16">
+            <word>regulatory</word>
+            <CharacterOffsetBegin>1018</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1028</CharacterOffsetEnd>
+          </token>
+          <token id="17">
+            <word>&lt;EVENT eid="e19" class="OCCURRENCE"&gt;</word>
+            <CharacterOffsetBegin>1029</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1065</CharacterOffsetEnd>
+          </token>
+          <token id="18">
+            <word>approval</word>
+            <CharacterOffsetBegin>1065</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1073</CharacterOffsetEnd>
+          </token>
+          <token id="19">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>1073</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1081</CharacterOffsetEnd>
+          </token>
+          <token id="20">
+            <word>and</word>
+            <CharacterOffsetBegin>1082</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1085</CharacterOffsetEnd>
+          </token>
+          <token id="21">
+            <word>&lt;EVENT eid="e7" class="ASPECTUAL"&gt;</word>
+            <CharacterOffsetBegin>1086</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1120</CharacterOffsetEnd>
+          </token>
+          <token id="22">
+            <word>complete</word>
+            <CharacterOffsetBegin>1120</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1128</CharacterOffsetEnd>
+          </token>
+          <token id="23">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>1128</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1136</CharacterOffsetEnd>
+          </token>
+          <token id="24">
+            <word>the</word>
+            <CharacterOffsetBegin>1137</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1140</CharacterOffsetEnd>
+          </token>
+          <token id="25">
+            <word>&lt;EVENT eid="e20" class="OCCURRENCE"&gt;</word>
+            <CharacterOffsetBegin>1141</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1177</CharacterOffsetEnd>
+          </token>
+          <token id="26">
+            <word>transaction</word>
+            <CharacterOffsetBegin>1177</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1188</CharacterOffsetEnd>
+          </token>
+          <token id="27">
+            <word>&lt;/EVENT&gt;</word>
+            <CharacterOffsetBegin>1188</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1196</CharacterOffsetEnd>
+          </token>
+          <token id="28">
+            <word>by</word>
+            <CharacterOffsetBegin>1197</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1199</CharacterOffsetEnd>
+          </token>
+          <token id="29">
+            <word>&lt;TIMEX3 tid="t10" type="DATE" value="1989-12-31" temporalFunction="true" functionInDocument="NONE" anchorTimeID="t0"&gt;</word>
+            <CharacterOffsetBegin>1200</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1317</CharacterOffsetEnd>
+          </token>
+          <token id="30">
+            <word>year-end</word>
+            <CharacterOffsetBegin>1317</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1325</CharacterOffsetEnd>
+          </token>
+          <token id="31">
+            <word>&lt;/TIMEX3&gt;</word>
+            <CharacterOffsetBegin>1325</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1334</CharacterOffsetEnd>
+          </token>
+          <token id="32">
+            <word>.</word>
+            <CharacterOffsetBegin>1334</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1335</CharacterOffsetEnd>
+          </token>
+        </tokens>
+      </sentence>
+      <sentence id="5">
+        <tokens>
+          <token id="1">
+            <word>&lt;/TEXT&gt;</word>
+            <CharacterOffsetBegin>1336</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1343</CharacterOffsetEnd>
+          </token>
+          <token id="2">
+            <word>&lt;MAKEINSTANCE eventID="e19" eiid="ei79" tense="NONE" aspect="NONE" polarity="POS" pos="NOUN" /&gt;</word>
+            <CharacterOffsetBegin>1345</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1440</CharacterOffsetEnd>
+          </token>
+          <token id="3">
+            <word>&lt;MAKEINSTANCE eventID="e4" eiid="ei76" tense="PAST" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>1441</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1535</CharacterOffsetEnd>
+          </token>
+          <token id="4">
+            <word>&lt;MAKEINSTANCE eventID="e5" eiid="ei77" tense="PRESENT" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>1536</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1633</CharacterOffsetEnd>
+          </token>
+          <token id="5">
+            <word>&lt;MAKEINSTANCE eventID="e1" eiid="ei73" tense="PAST" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>1634</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1728</CharacterOffsetEnd>
+          </token>
+          <token id="6">
+            <word>&lt;MAKEINSTANCE eventID="e20" eiid="ei81" tense="NONE" aspect="NONE" polarity="POS" pos="NOUN" /&gt;</word>
+            <CharacterOffsetBegin>1729</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1824</CharacterOffsetEnd>
+          </token>
+          <token id="7">
+            <word>&lt;MAKEINSTANCE eventID="e2" eiid="ei74" tense="PAST" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>1825</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1919</CharacterOffsetEnd>
+          </token>
+          <token id="8">
+            <word>&lt;MAKEINSTANCE eventID="e7" eiid="ei80" tense="PRESENT" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>1920</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2017</CharacterOffsetEnd>
+          </token>
+          <token id="9">
+            <word>&lt;MAKEINSTANCE eventID="e6" eiid="ei78" tense="INFINITIVE" aspect="NONE" polarity="POS" pos="VERB" /&gt;</word>
+            <CharacterOffsetBegin>2018</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2118</CharacterOffsetEnd>
+          </token>
+          <token id="10">
+            <word>&lt;MAKEINSTANCE eventID="e8" eiid="ei75" tense="NONE" aspect="NONE" polarity="POS" pos="NOUN" /&gt;</word>
+            <CharacterOffsetBegin>2119</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2213</CharacterOffsetEnd>
+          </token>
+          <token id="11">
+            <word>&lt;TLINK lid="l1" relType="BEFORE" eventInstanceID="ei80" relatedToTime="t10"  /&gt;</word>
+            <CharacterOffsetBegin>2214</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2293</CharacterOffsetEnd>
+          </token>
+          <token id="12">
+            <word>&lt;TLINK lid="l2" relType="BEFORE" eventInstanceID="ei73" relatedToTime="t0" /&gt;</word>
+            <CharacterOffsetBegin>2294</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2371</CharacterOffsetEnd>
+          </token>
+          <token id="13">
+            <word>&lt;TLINK lid="l3" relType="BEFORE" eventInstanceID="ei74" relatedToEventInstance="ei73" /&gt;</word>
+            <CharacterOffsetBegin>2372</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2460</CharacterOffsetEnd>
+          </token>
+          <token id="14">
+            <word>&lt;TLINK lid="l4" relType="AFTER" eventInstanceID="ei74" relatedToEventInstance="ei75" /&gt;</word>
+            <CharacterOffsetBegin>2461</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2548</CharacterOffsetEnd>
+          </token>
+          <token id="15">
+            <word>&lt;TLINK lid="l5" relType="SIMULTANEOUS" eventInstanceID="ei76" relatedToEventInstance="ei73" /&gt;</word>
+            <CharacterOffsetBegin>2549</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2643</CharacterOffsetEnd>
+          </token>
+          <token id="16">
+            <word>&lt;TLINK lid="l6" relType="ENDS" eventInstanceID="ei80" relatedToEventInstance="ei81" /&gt;</word>
+            <CharacterOffsetBegin>2644</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2730</CharacterOffsetEnd>
+          </token>
+          <token id="17">
+            <word>&lt;SLINK lid="l13" relType="MODAL" eventInstanceID="ei74" subordinatedEventInstance="ei75" /&gt;</word>
+            <CharacterOffsetBegin>2731</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2822</CharacterOffsetEnd>
+          </token>
+          <token id="18">
+            <word>&lt;SLINK lid="l7" relType="EVIDENTIAL" eventInstanceID="ei73" subordinatedEventInstance="ei74" /&gt;</word>
+            <CharacterOffsetBegin>2823</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2918</CharacterOffsetEnd>
+          </token>
+          <token id="19">
+            <word>&lt;SLINK lid="l8" relType="EVIDENTIAL" eventInstanceID="ei76" subordinatedEventInstance="ei77" /&gt;</word>
+            <CharacterOffsetBegin>2919</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3014</CharacterOffsetEnd>
+          </token>
+          <token id="20">
+            <word>&lt;SLINK lid="l9" relType="MODAL" eventInstanceID="ei77" subordinatedEventInstance="ei78" /&gt;</word>
+            <CharacterOffsetBegin>3015</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3105</CharacterOffsetEnd>
+          </token>
+          <token id="21">
+            <word>&lt;SLINK lid="l10" relType="FACTIVE" eventInstanceID="ei78" subordinatedEventInstance="ei79" /&gt;</word>
+            <CharacterOffsetBegin>3106</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3199</CharacterOffsetEnd>
+          </token>
+          <token id="22">
+            <word>&lt;SLINK lid="l11" relType="MODAL" eventInstanceID="ei77" subordinatedEventInstance="ei80" /&gt;</word>
+            <CharacterOffsetBegin>3200</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3291</CharacterOffsetEnd>
+          </token>
+          <token id="23">
+            <word>&lt;ALINK lid="l12" relType="CULMINATES" eventInstanceID="ei80" relatedToEventInstance="ei81" /&gt;</word>
+            <CharacterOffsetBegin>3292</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3385</CharacterOffsetEnd>
+          </token>
+          <token id="24">
+            <word>&lt;/TimeML&gt;</word>
+            <CharacterOffsetBegin>3387</CharacterOffsetBegin>
+            <CharacterOffsetEnd>3396</CharacterOffsetEnd>
+          </token>
+        </tokens>
+      </sentence>
+    </sentences>
+  </document>
+</root>

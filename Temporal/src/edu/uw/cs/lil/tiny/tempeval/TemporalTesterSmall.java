@@ -16,15 +16,15 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTesterSmall {
 	final boolean ONLYPRINTINCORRECT = false;
 	final boolean ONLYPRINTTOOMANYPARSES = false;
-	final boolean ONLYPRINTNOPARSES = true;
+	final boolean ONLYPRINTNOPARSES = false;
 	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "'";
-	final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test;
+	final String PHRASE = "";
+	final IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test;
 	final AbstractCKYParser<LogicalExpression> parser;
 	final LogicalExpressionCategoryServices categoryServices;
 
 	private TemporalTesterSmall(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> parser) {
 		this.test = test;
 		this.parser = parser;
@@ -37,28 +37,37 @@ public class TemporalTesterSmall {
 	}
 
 	private void test(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> testData,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> testData,
 			Model<Sentence, LogicalExpression> model) {
+		// The number of phrases in total.
 		int counter = 0;
-		// Correctly parsed and executed
+		// Correctly parsed and executed, both type and val.
 		int correct = 0;
-		// Parsed, but not executed
+		// Parsed and executed, but either type or val are wrong.
 		int incorrect = 0;
-		// Too many parses
+		// Number with the correct type.
+		int correctType = 0;
+		// Number with the correct value.
+		int correctVal = 0;
+		// Too many parses.
 		int tooManyParses = 0;
-		// Not parsed
+		// Not parsed.
 		int notParsed = 0;
-		for (final ILabeledDataItem<Pair<Sentence, String>, String> item : testData) {
+		for (final ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> item : testData) {
 			counter++;
 			int c = test(item, model, counter);
-			if (c == 0) {
-				correct += 1;
-			} else if (c == 1)
-				incorrect += 1;
+			if (c == 0)
+				correct++;
+			else if (c == 1)
+				incorrect++;
 			else if (c == 2)
-				tooManyParses += 1;
+				correctType++;
+			else if (c == 3)
+				correctVal++;
+			else if (c == 4)
+				tooManyParses++;
 			else
-				notParsed += 1;
+				notParsed++;
 		}
 		System.out.println();
 		System.out.println("Total phrases: " + counter);
@@ -77,96 +86,134 @@ public class TemporalTesterSmall {
 		System.out.println("Number with no parses: " + notParsed);
 	}
 
-	private int test(ILabeledDataItem<Pair<Sentence, String>, String> dataItem,
+	private int test(ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> dataItem,
 			Model<Sentence, LogicalExpression> model, int counter) {
 		int output;
 		boolean c = false;
 		LogicalExpression label = null;
-		TemporalISO tmp = null;
-		Sentence s = dataItem.getSample().first();
-		String goldISO = dataItem.getLabel();
-		String ref_time = dataItem.getSample().second();
+		TemporalISO temporalISO = null;
+		
+		// To extract all of the information from the mention.
+		// The key to know how to unpack this is in TemporalSentence.java.
+		String docID = dataItem.getSample().first()[0];
+		String sentence = dataItem.getSample().first()[1];
+		Sentence phrase = dataItem.getSample().second();
+		String ref_time = dataItem.getSample().first()[2];
+		String type = dataItem.getLabel().first();
+		String val = dataItem.getLabel().second();
+		
 		final IParserOutput<LogicalExpression> modelParserOutput = parser
-				.parse(s, model.createDataItemModel(s));
+				.parse(phrase, model.createDataItemModel(phrase));
 
 		final List<IParseResult<LogicalExpression>> bestModelParses = modelParserOutput
 				.getBestParses();
 		if (bestModelParses.size() == 1) {
-			// Case we have a single parse
-			final IParseResult<LogicalExpression> parse = bestModelParses
-					.get(0);
-			label = parse.getY();
-			LogicalExpression[] labels = getArrayOfLabels(label);
-
-			int n = findCorrectLabel(labels, ref_time, goldISO);
-			if (n>=0){
-				label = labels[n];
-				c = true;
-			} else 
-				c = false;
-			tmp = TemporalVisitor.of(label, ref_time);
-			// if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT)
-			// printing(label, goldISO, tmp, s.toString(), c, ref_time);
-			output = c ? 0 : 1;
+			Pair<LogicalExpression, Integer> correctParse = oneParse(bestModelParses, label, temporalISO, ref_time, type, val);
+			temporalISO = TemporalVisitor.of(label, ref_time);
 		} else if (bestModelParses.size() > 1) {
 
 			output = 2;
 		} else { // zero parses
 			output = 3;
 		}
-		printing(label, goldISO, tmp, s.toString(), c, ref_time, output, s);
+		printing(label, type, val, temporalISO, phrase.toString(), c, ref_time, output);
 		return output;
 	}
 	
-	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String goldISO){
+	// Case we have a single parse
+	// return a Pair<label, int>, where the int indicates if the label is correct.
+	private Pair<LogicalExpression, Integer> oneParse(List<IParseResult<LogicalExpression>> bestModelParses,
+			LogicalExpression label, TemporalISO temporalISO, String ref_time, String type, String val){
+		int output;
+		final IParseResult<LogicalExpression> parse = bestModelParses
+				.get(0);
+		label = parse.getY();
+		LogicalExpression[] labels = getArrayOfLabels(label);
+
+		int n = findCorrectLabel(labels, ref_time, type, val);
+		// if the logic (label) executes with the correct type and value.
+		if (n > 0 && n < labels.length)
+			return Pair.of(labels[n],0);
+		// if the label executes with the correct type, but not value.
+		else if (n >= labels.length && n < labels.length * 2)
+			return Pair.of(labels[n-labels.length],1);
+		// if the label executes with the incorrect type, but correct value.
+		else if (n >= labels.length*2 && n < labels.length *3)
+			return Pair.of(labels[n-labels.length*2],2);
+		// if n == -1
+		else
+			if (n != -1)
+				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall");
+			return null;
+		
+	}
+	
+	// returns an int n.
+	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String type, String val){
 		int returnNum = -1;
+		// To test that the logic executes, and has the correct type and value.
 		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp;
-			
-			// I'm keeping these try / catch statements here because I'll probably need them again in the future.
-			//try {
-				tmp = TemporalVisitor.of(labels[i], ref_time);
-			//} catch (Exception e){
-			//	System.out.println(e);
-			//	continue;
-			//}
-			//try {
-				if (tmp.toString().equals(goldISO))
-					returnNum = i;
-			//} catch (Exception e){
-			//	System.out.println(e);
-			//}
+			TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time);
+			if (tmp.getType().equals(type) && tmp.getVal().equals(val))
+				returnNum = i;
 		}
+		// if both type and value are correct for at least one of the labels, return.
+		if (returnNum > 0)
+			return returnNum;
+		// To test that the logic to an ISO that has the correct value, but not the correct type.
+		for (int i = 0; i < labels.length; i++){
+			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time);
+			if (!tmp.getType().equals(type) && tmp.getVal().equals(val))
+				returnNum = i + labels.length;
+		}
+		// if value is correct, but type is not, return.
+		if (returnNum > 0)
+			return returnNum;
+		// To test that the logic to an ISO that has the correct type, but not the correct value.		
+		for (int i = 0; i < labels.length; i++){
+			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time);
+			if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
+				returnNum = i + labels.length * 2;
+		}
+		// if type is correct, but value is not, return. 
+		// Also returns -1 if nothing matches. 
 		return returnNum;
+		
+		
 	}
 
-	private void printing(LogicalExpression label, String goldISO,
+	// args: output is the output of the system
+	private void printing(LogicalExpression label, String type, String val,
 			TemporalISO output, String phrase, boolean c, String ref_time,
-			int correct, Sentence s) {
+			int correct) {
+		//boolean c = n>=0;
 		if (!ONLYPRINTONEPHRASE
-				|| (ONLYPRINTONEPHRASE && s.toString().contains(PHRASE))) {
+				|| (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
 			if (correct == 0 || correct == 1) {
 				if ((ONLYPRINTINCORRECT && !c) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
 					System.out.println();
-					System.out.println("Phrase:   " + s.toString());
-					System.out.println("Logic:    " + label);
-					System.out.println("ref_time: " + ref_time);
-					System.out.println("Gold:     " + goldISO);
-					System.out.println("Guess:    " + output);
-					System.out.println("Correct?  " + c);
+					System.out.println("Phrase:     " + phrase);
+					System.out.println("Logic:      " + label);
+					System.out.println("ref_time:   " + ref_time);
+					System.out.println("Gold type:  " + type);
+					System.out.println("gold val:   " + val);
+					System.out.println("Guess:      " + output);
+					System.out.println("Correct?    " + c);
 				}
 			} else if (correct == 2 && !ONLYPRINTINCORRECT &&!ONLYPRINTNOPARSES) {
 				System.out.println();
-				System.out.println("Phrase:   " + s.toString());
+				System.out.println("Phrase:   " + phrase);
 				System.out.println("ref_time: " + ref_time);
-				System.out.println("Gold:     " + goldISO);
+				System.out.println("Gold type:  " + type);
+				System.out.println("gold val:   " + val);
 				System.out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 			} else if ((correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 3 && ONLYPRINTNOPARSES) {
 				System.out.println();
-				System.out.println("Phrase:   " + s.toString());
+				System.out.println("Phrase:   " + phrase);
 				System.out.println("ref_time: " + ref_time);
-				System.out.println("Gold:     " + goldISO);
+				System.out.println("Gold type:  " + type);
+				System.out.println("gold val:   " + val);
 				System.out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 			}
@@ -216,7 +263,7 @@ public class TemporalTesterSmall {
 	}
 
 	public static TemporalTesterSmall build(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String>, String>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> parser) {
 		return new TemporalTesterSmall(test, parser);
 	}

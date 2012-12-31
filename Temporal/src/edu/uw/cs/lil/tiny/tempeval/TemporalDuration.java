@@ -17,6 +17,14 @@ public final class TemporalDuration extends TemporalISO {
 		super(field, n, true);
 	}
 	
+	public String getType(){
+		return "DURATION";
+	}
+	
+	public String getVal(){
+		return this.toString();
+	}
+	
 	public String toString(){
 		String s = "P";
 		if (super.isSet("year")){
