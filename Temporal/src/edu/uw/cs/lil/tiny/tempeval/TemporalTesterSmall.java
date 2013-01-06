@@ -70,18 +70,14 @@ public class TemporalTesterSmall {
 				notParsed++;
 		}
 		System.out.println();
+		System.out.println();
 		System.out.println("Total phrases: " + counter);
-		System.out
-				.println("Number correctly parsed and executed: " + correct
-						+ ", which is " + (double) correct * 100 / counter
-						+ " percent");
-		System.out
-				.println("Number parsed, but without correct output (either parser or executer): "
-						+ incorrect
-						+ ", which his "
-						+ (double) incorrect
-						* 100
-						/ counter + " percent");
+		System.out.println("Number correctly parsed and executed, with correct type and val: " + correct
+						+ ", which is " + (double) correct * 100 / counter + " percent");
+		System.out.println("Number parsed with correct val, but not type: " + correctVal + ", which is "  + (double) correctVal * 100 / counter + " percent.");
+		System.out.println("Number parsed with correct type, but not val: " + correctType + ", which is "  + (double) correctType * 100 / counter + " percent.");
+		System.out.println("Number parsed, but with incorrect type and val: "
+						+ incorrect + ", which his " + (double) incorrect * 100 / counter + " percent");
 		System.out.println("Number with too many parses: " + tooManyParses);
 		System.out.println("Number with no parses: " + notParsed);
 	}
@@ -133,6 +129,10 @@ public class TemporalTesterSmall {
 		label = parse.getY();
 		LogicalExpression[] labels = getArrayOfLabels(label);
 
+		System.out.println();
+		System.out.println("Type: " + label.getType());
+		System.out.println("Is complex: " + label.getType().isComplex());
+		
 		int n = findCorrectLabel(labels, ref_time, type, val);
 		// if the logic (label) executes with the correct type and value.
 		if (n >= 0 && n < labels.length)

@@ -32,10 +32,10 @@ public class ReadXMLFiles{
 		//	System.out.println("\n\n\n\n\n");
 		//}
 		//System.out.println("Testing TimeBank");
-		Map<String, Map<String, String[]>> info = new TreeMap<String, Map<String, String[]>>();
+		Map<String, Map<Integer, String[]>> info = new TreeMap<String, Map<Integer, String[]>>();
 		//readFiles(inputFiles[0], info);
 		//readFiles(inputFiles[1], info);
-		readFiles(inputFiles[3], info);
+		readFiles(inputFiles[0], info);
 		
 		printDataset(info);
 		//System.out.println("\n\n\n\n\nTesting AQUAINT");
@@ -44,33 +44,39 @@ public class ReadXMLFiles{
 		//readFiles(inputFiles[2]);
 	}
 	
-	private static void printDataset(Map<String, Map<String, String[]>> info){
-		for (String doc : info.keySet()){
-			for (String tid : info.get(doc).keySet()){
-				if (tid == "t0")
-					continue;
-				System.out.println(doc);
-				System.out.println(info.get(doc).get(tid)[1]);
-				System.out.println(info.get(doc).get(tid)[2].toLowerCase());
-				System.out.println(info.get(doc).get("t0")[1]);
-				System.out.println(info.get(doc).get(tid)[3]);
-				System.out.println(info.get(doc).get(tid)[4]);
-				System.out.println();
+	private static void printDataset(Map<String, Map<Integer, String[]>> info){
+		try{
+			BufferedWriter out = new BufferedWriter(new FileWriter("data/dataset/tempeval3.dataset.testout.txt"));
+			for (String doc : info.keySet()){
+				for (int tid : info.get(doc).keySet()){
+					if (tid == 0)
+						continue;
+					out.write(doc + "\n");
+					out.write(info.get(doc).get(tid)[1] + "\n");
+					out.write(info.get(doc).get(tid)[2].toLowerCase() + "\n");
+					out.write(info.get(doc).get(0)[1] + "\n");
+					out.write(info.get(doc).get(tid)[3] + "\n");
+					out.write(info.get(doc).get(tid)[4] + "\n");
+					out.write("\n");
+				}
 			}
+			out.close();
+		} catch (Exception e){
+			System.err.println("Error: " + e);
 		}
 	}
 	
-	private static Map<String, Map<String, String[]>> readFiles(File doc, Map<String, Map<String, String[]>> info) throws IOException{
+	private static Map<String, Map<Integer, String[]>> readFiles(File doc, Map<String, Map<Integer, String[]>> info) throws IOException{
 		SentenceSplitter splitter = new SentenceSplitter();
 		String[] fList = doc.list();
 		// Map from document name to tempID to string[] of data, which will be the output. 
 		for (int i = 0; i < fList.length; i++){
 			File f = new File(doc.toString() + "/" + fList[i]);
 			
-			//Splitting the sentences within the <TEXT></TEXT> tags. 
+			//Splitting the sentences within the <TEXT></TEXT> tags.
 			splitter.split(f);
 			f = new File(doc.toString() + "/" + fList[i] + ".ssplit");
-			Map<String, String[]> oneDocData = new TreeMap<String, String[]>();
+			Map<Integer, String[]> oneDocData = new TreeMap<Integer, String[]>();
 			getDataFromDoc(f, oneDocData);
 			info.put(f.toString(), oneDocData);
 			if (!f.delete())
@@ -87,26 +93,31 @@ public class ReadXMLFiles{
 		return info;
 	}
 	
-	private static void getDataFromDoc(File f, Map<String, String[]> oneDocData) throws IOException{
+	private static void getDataFromDoc(File f, Map<Integer, String[]> oneDocData) throws IOException{
 		BufferedReader br;
 		String thisLine;
 		br = new BufferedReader(new FileReader(f.getAbsoluteFile()));
+		int counter = 0;
 		while ((thisLine = br.readLine()) != null) {
-			processLine(thisLine, oneDocData);
+			counter += (processLine(thisLine, oneDocData, counter));
 			//System.out.println(thisLine);
 		}
 		br.close();
 	}
 	
-	private static void processLine(String l, Map<String, String[]> oneDocData){
+	private static int processLine(String l, Map<Integer, String[]> oneDocData, int counter){
 		// Idea for when there are multiple TIMEX3s on a line:
 		// Split on "/TIMEX3", then pass each of them to this function.
+		// This is necessary in case there is more than one Timex on this line.
+		int numOnThisLine = 0;
 		if (l.contains("TIMEX3")){
 			if (l.contains("functionInDocument=\"CREATION_TIME\"")){
 				String[] strs = getCreationTime(l);
-				oneDocData.put(strs[0], strs);
+				oneDocData.put(counter, strs);
+				if (counter != 0)
+					System.err.println("Problem in processLine, within ReadXMLFiles!");
+				numOnThisLine++;
 			} else if (l.contains("TIMEX3 tid=")){
-				//System.out.println(l);
 				Pattern p = Pattern.compile("<TIMEX3 tid=.+?</TIMEX3>");
 				Matcher m = p.matcher(l);
 				String sent = l.replaceAll("\\<.*?\\>", "");
@@ -114,13 +125,12 @@ public class ReadXMLFiles{
 					String[] strs = getTimex(m.group(0));
 					// To replace the place holder with the actual sentence
 					strs[1] = sent;
-					oneDocData.put(strs[0], strs);
+					oneDocData.put(counter + numOnThisLine, strs);
+					numOnThisLine++;
 				}
-				//System.out.println();
-				// Split into multiple timexs
-				// Process each one individually
 			}
 		}
+		return numOnThisLine;
 	}
 	
 	
@@ -177,7 +187,6 @@ public class ReadXMLFiles{
 		String[] strs = {"t0", val};
 		//System.out.println(val);
 		return strs;
-
 	}
 }
 

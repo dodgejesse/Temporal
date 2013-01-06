@@ -8,6 +8,7 @@ import edu.uw.cs.utils.composites.Pair;
  * Author: Jesse Dodge
  * 
  * Represents a single mention, AKA a set of docID, sentence, phrase, refDate, type, and val.
+ * 
  */
 
 public class TemporalSentence implements
@@ -18,14 +19,16 @@ public class TemporalSentence implements
 	private final String refDate;
 	private final String type;
 	private final String val;
+	private final TemporalSentence previous;
 
-	public TemporalSentence(String d, String s, Sentence p, String r, String t, String v) {
+	public TemporalSentence(String d, String s, Sentence p, String r, String t, String v, TemporalSentence prev) {
 		docID = d;
 		sentence = s;
 		phrase = p;
 		refDate = r;
 		type = t;
 		val = v;
+		previous = prev;
 		//this.predCounts = GetPredicateCounts.of(semantics);
 
 		//final Iterator<Entry<LogicalConstant, Counter>> iterator = this.predCounts.entrySet().iterator();
@@ -55,6 +58,10 @@ public class TemporalSentence implements
 	
 	public String getVal(){
 		return val;
+	}
+	
+	public TemporalSentence getPrev(){
+		return previous;
 	}
 
 	public Pair<String[], Sentence> getSample() {
