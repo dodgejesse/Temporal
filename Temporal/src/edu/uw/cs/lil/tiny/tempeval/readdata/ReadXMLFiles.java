@@ -123,7 +123,7 @@ public class ReadXMLFiles{
 				String sent = l.replaceAll("\\<.*?\\>", "");
 				while(m.find()){
 					String[] strs = getTimex(m.group(0));
-					// To replace the place holder with the actual sentence
+					// To replace a place holder with the actual sentence
 					strs[1] = sent;
 					oneDocData.put(counter + numOnThisLine, strs);
 					numOnThisLine++;

@@ -11,6 +11,7 @@ public class TemporalMultiplication extends TemporalPredicate {
 			baseDuration = key;
 		}
 		
+		// Doesn't actually multiply! 
 		return new TemporalDuration(baseDuration, temporalNum.getNum());
 		
 	}

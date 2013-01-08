@@ -13,13 +13,15 @@ public class TemporalVisitor implements ILogicalExpressionVisitor{
 	private TemporalPredicate pred;
 	private TemporalISO iso;
 	private TemporalMap map;
+	private TemporalISO previous;
 	
-	private TemporalVisitor(String ref_time) {
+	private TemporalVisitor(String ref_time, TemporalISO prev) {
 		map = new TemporalMap(ref_time);
+		previous = prev;
 	}
 	
-	public static TemporalISO of(LogicalExpression exp, String ref_time) {
-		final TemporalVisitor visitor = new TemporalVisitor(ref_time);
+	public static TemporalISO of(LogicalExpression exp, String ref_time, TemporalISO prev) {
+		final TemporalVisitor visitor = new TemporalVisitor(ref_time, prev);
 		visitor.visit(exp);
 		return visitor.getISO();
 	}
@@ -49,7 +51,7 @@ public class TemporalVisitor implements ILogicalExpressionVisitor{
 	public void visit(LogicalConstant logicalConstant) {
 		final Type type = logicalConstant.getType();
 		if (type.isComplex()){
-			pred = map.findComplexMap(logicalConstant);
+			pred = map.findComplexMap(logicalConstant, previous);
 		} else{
 			iso = map.findNonComplexMap(logicalConstant);
 		}

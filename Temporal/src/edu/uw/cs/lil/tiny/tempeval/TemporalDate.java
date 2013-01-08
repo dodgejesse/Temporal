@@ -80,7 +80,7 @@ public class TemporalDate extends TemporalISO{
 				s = s + super.getValueFromDate(this, "year");
 		else 
 			s = s + "XXXX";
-		if (super.getValueFromDate(this, "quarter") == 0)
+		if (TemporalISO.getValueFromDate(this, "quarter") == 0)
 			return s + "-QX";
 		else{
 			int qNum = super.getValueFromDate(this, "quarter");

@@ -14,17 +14,18 @@ import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
-	final boolean ONLYPRINTINCORRECT = false;
-	final boolean ONLYPRINTTOOMANYPARSES = false;
-	final boolean ONLYPRINTNOPARSES = false;
-	final boolean ONLYPRINTONEPHRASE = false;
-	final String PHRASE = "";
-	final IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test;
-	final AbstractCKYParser<LogicalExpression> parser;
-	final LogicalExpressionCategoryServices categoryServices;
+	private final boolean ONLYPRINTINCORRECT = false;
+	private final boolean ONLYPRINTTOOMANYPARSES = false;
+	private final boolean ONLYPRINTNOPARSES = false;
+	private final boolean ONLYPRINTONEPHRASE = false;
+	private final String PHRASE = "following";
+	private final IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test;
+	private final AbstractCKYParser<LogicalExpression> parser;
+	private final LogicalExpressionCategoryServices categoryServices;
+	private TemporalISO previous;
 
 	private TemporalTesterSmall(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence,TemporalSentence>>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> parser) {
 		this.test = test;
 		this.parser = parser;
@@ -37,7 +38,7 @@ public class TemporalTesterSmall {
 	}
 
 	private void test(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> testData,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> testData,
 			Model<Sentence, LogicalExpression> model) {
 		// The number of phrases in total.
 		int counter = 0;
@@ -53,7 +54,7 @@ public class TemporalTesterSmall {
 		int tooManyParses = 0;
 		// Not parsed.
 		int notParsed = 0;
-		for (final ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> item : testData) {
+		for (final ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>> item : testData) {
 			counter++;
 			int c = test(item, model, counter);
 			if (c == -1)
@@ -82,10 +83,9 @@ public class TemporalTesterSmall {
 		System.out.println("Number with no parses: " + notParsed);
 	}
 
-	private int test(ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> dataItem,
+	private int test(ILabeledDataItem<Pair<String[], Pair<Sentence,TemporalSentence>>, Pair<String, String>> dataItem,
 			Model<Sentence, LogicalExpression> model, int counter) {
 		int output;
-		boolean c = false;
 		LogicalExpression label = null;
 		TemporalISO temporalISO = null;
 		
@@ -93,45 +93,50 @@ public class TemporalTesterSmall {
 		// The key to know how to unpack this is in TemporalSentence.java.
 		String docID = dataItem.getSample().first()[0];
 		String sentence = dataItem.getSample().first()[1];
-		Sentence phrase = dataItem.getSample().second();
+		Sentence phrase = dataItem.getSample().second().first();
+		TemporalSentence prev = dataItem.getSample().second().second();
 		String ref_time = dataItem.getSample().first()[2];
 		String type = dataItem.getLabel().first();
 		String val = dataItem.getLabel().second();
+		boolean sameDocID = (prev == null || prev.getSample().first()[0].equals(docID));
 		
 		final IParserOutput<LogicalExpression> modelParserOutput = parser
 				.parse(phrase, model.createDataItemModel(phrase));
-
-		final List<IParseResult<LogicalExpression>> bestModelParses = modelParserOutput
-				.getBestParses();
+		final List<IParseResult<LogicalExpression>> bestModelParses = 
+				pruneLogicWithLambdas(modelParserOutput.getBestParses());
+		
 		if (bestModelParses.size() == 1) {
-			Pair<LogicalExpression, Integer> correctParse = oneParse(bestModelParses, label, temporalISO, ref_time, type, val);
+			LogicalExpression parse = bestModelParses.get(0).getY();
+			Pair<LogicalExpression, Integer> correctParse = oneParse(parse, sameDocID, ref_time, type, val);
 			label = correctParse.first();
-			temporalISO = TemporalVisitor.of(label, ref_time);
+			temporalISO = TemporalVisitor.of(label, ref_time, previous);
 			output = correctParse.second();
 			
 		// TODO: Check every parse to make sure a correct one is included.
-		} else if (bestModelParses.size() > 1) {
-
+		} else if (bestModelParses.size() > 1) {	
 			output = 3;
 		} else { // zero parses
 			output = 4;
 		}
 		printing(label, type, val, temporalISO, phrase.toString(), ref_time, output);
+		this.previous = temporalISO;
 		return output;
+	}
+	
+	// To create a list without those parses that still have lambdas.
+	private List<IParseResult<LogicalExpression>> pruneLogicWithLambdas(List<IParseResult<LogicalExpression>> bestModelParses){
+		List<IParseResult<LogicalExpression>> newBestModelParses = new ArrayList<IParseResult<LogicalExpression>>();
+		for (IParseResult<LogicalExpression> p : bestModelParses){
+			if (!p.getY().getType().isComplex())
+				newBestModelParses.add(p);
+		}
+		return newBestModelParses;
 	}
 	
 	// Case we have a single parse
 	// return a Pair<label, int>, where the int indicates if the label is correct.
-	private Pair<LogicalExpression, Integer> oneParse(List<IParseResult<LogicalExpression>> bestModelParses,
-			LogicalExpression label, TemporalISO temporalISO, String ref_time, String type, String val){
-		final IParseResult<LogicalExpression> parse = bestModelParses
-				.get(0);
-		label = parse.getY();
-		LogicalExpression[] labels = getArrayOfLabels(label);
-
-		System.out.println();
-		System.out.println("Type: " + label.getType());
-		System.out.println("Is complex: " + label.getType().isComplex());
+	private Pair<LogicalExpression, Integer> oneParse(LogicalExpression parse, boolean sameDocID, String ref_time, String type, String val){
+		LogicalExpression[] labels = getArrayOfLabels(parse, sameDocID);
 		
 		int n = findCorrectLabel(labels, ref_time, type, val);
 		// if the logic (label) executes with the correct type and value.
@@ -147,7 +152,7 @@ public class TemporalTesterSmall {
 		else
 			if (n != -1)
 				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall. n = " + n);
-			return Pair.of(label,  -1);
+			return Pair.of(parse,  -1);
 		
 	}
 	
@@ -156,7 +161,7 @@ public class TemporalTesterSmall {
 		int returnNum = -1;
 		// To test that the logic executes, and has the correct type and value.
 		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time);
+			TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time, previous);
 			if (tmp.getType().equals(type) && tmp.getVal().equals(val))
 				returnNum = i;
 		}
@@ -165,7 +170,7 @@ public class TemporalTesterSmall {
 			return returnNum;
 		// To test that the logic to an ISO that has the correct value, but not the correct type.
 		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time);
+			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
 			if (!tmp.getType().equals(type) && tmp.getVal().equals(val))
 				returnNum = i + labels.length;
 		}
@@ -174,15 +179,13 @@ public class TemporalTesterSmall {
 			return returnNum;
 		// To test that the logic to an ISO that has the correct type, but not the correct value.		
 		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time);
+			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
 			if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
 				returnNum = i + labels.length * 2;
 		}
 		// if type is correct, but value is not, return. 
 		// Also returns -1 if nothing matches. 
 		return returnNum;
-		
-		
 	}
 
 	// args: output is the output of the system
@@ -213,7 +216,7 @@ public class TemporalTesterSmall {
 				System.out.println("gold val:      " + val);
 				System.out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
-			} else if ((correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 3 && ONLYPRINTNOPARSES) {
+			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
 				System.out.println();
 				System.out.println("Phrase:        " + phrase);
 				System.out.println("ref_time:      " + ref_time);
@@ -228,8 +231,8 @@ public class TemporalTesterSmall {
 	// A hack to wrap the logical expression within a "next", in place of
 	// context.
 
-	private LogicalExpression[] getArrayOfLabels(LogicalExpression l) {
-		int numOfFunctions = 3;
+	private LogicalExpression[] getArrayOfLabels(LogicalExpression l, boolean sameDocID) {
+		int numOfFunctions = 4;
 		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
 		LogicalExpression[] functionsS = new LogicalExpression[numOfFunctions];
 		LogicalExpression[] functionsD = new LogicalExpression[numOfFunctions];
@@ -240,6 +243,11 @@ public class TemporalTesterSmall {
 				.parseSemantics("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))");
 		functionsS[2] = categoryServices
 				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
+		if (sameDocID)
+			functionsS[3] = categoryServices
+				.parseSemantics("(lambda $0:s (temporal_ref:<s,s> $0))");
+		else
+			functionsS[3] = l;			
 
 		// Making the Predicates to apply to the logical expressions for DURATIONS
 		functionsD[0] = categoryServices
@@ -247,8 +255,14 @@ public class TemporalTesterSmall {
 		functionsD[1] = categoryServices
 				.parseSemantics("(lambda $0:d (this:<d,<r,s>> $0 ref_time:r))");
 		functionsD[2] = categoryServices
-				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");		
-
+				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");
+		if (sameDocID)
+			functionsD[3] = categoryServices
+				.parseSemantics("(lambda $0:d (temproal_ref:<d,s> $0))");
+		else
+			functionsD[3] = l;			
+		
+		
 		// Looping over the predicates, applying them each to the given logical expression
 		for (int i = 0; i < functionsS.length; i++){
 			newLogicArray[i+1] = categoryServices
@@ -268,7 +282,7 @@ public class TemporalTesterSmall {
 	}
 
 	public static TemporalTesterSmall build(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> parser) {
 		return new TemporalTesterSmall(test, parser);
 	}

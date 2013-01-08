@@ -57,7 +57,7 @@ public class TemporalMap {
 	
 
 	// Finds maps for predicates. Should just be about 10 if statements.
-	public TemporalPredicate findComplexMap(LogicalConstant l){
+	public TemporalPredicate findComplexMap(LogicalConstant l, TemporalISO previous){
 		if (l.getName().equals("intersect:<s*,s>")){
 			return new TemporalIntersect();
 		} else if (l.getName().equals("previous:<s,<r,s>>") || l.getName().equals("previous:<d,<r,s>>")){
@@ -70,6 +70,8 @@ public class TemporalMap {
 			return new TemporalNth();
 		} else if (l.getName().equals("*:<d,<n,d>>")){
 			return new TemporalMultiplication();
+		} else if (l.getName().equals("temporal_ref:<s,s>") || l.getName().equals("temproal_ref:<d,s>")){
+			return new TemporalReference(previous);
 		} else {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
 		}

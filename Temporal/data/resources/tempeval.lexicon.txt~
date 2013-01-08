@@ -122,14 +122,6 @@ second :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s
 third :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 3o:n))))
 fourth :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 4o:n))))
 
-// Convex sets
-//year :- NP : year:s
-//years :- NP : year:s
-//month :- NP : month:s
-//months :- NP : month:s
-//week :- NP : week:s
-//day :- NP : day:s
-
 // Durations
 year :- NP : year:d
 years :- NP : years:d
@@ -164,6 +156,11 @@ this :- NP/NP : (lambda $0:s (this:<s,<r,s>> $0 ref_time:r))
 this :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 full :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 current :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
+earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
+
+// For using temporal refernce
+earlier :- NP\NP : (lambda $0:d (*:<d,<n,d>> $0 -1:n))
+
 
 // these are numbers, to be multiplied by durations
 three :- NP : 3:n
@@ -611,7 +608,6 @@ nineteen ninety-four :- NP : 1994:r
 2018 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2018:r))
 2019 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2019:r))
 
-
 // those with empty semantics
 a :- NP/NP : (lambda $0:s $0)
 the :- NP/NP : (lambda $0:s $0)
@@ -619,7 +615,6 @@ the :- NP/NP : (lambda $0:d $0)
 or so :- NP\NP : (lambda $0:s $0)
 or so :- NP\NP : (lambda $0:d $0)
 earlier :- NP/NP : (lambda $0:s $0)
-earlier in the :- NP/NP : (lambda $0:s $0)
 early :- NP/NP : (lambda $0:d $0)
 early :- NP/NP : (lambda $0:s $0)
 late :- NP/NP : (lambda $0:d $0)
@@ -657,9 +652,10 @@ each of the :- NP/NP : (lambda $0:d $0)
 a good part of :- NP/NP : (lambda $0:s $0)
 last half of :- NP/NP : (lambda $0:r $0)
 
+
 more :- NP/NP : (lambda $0:d $0)
 
-' :- NP/NP : (lambda $0:r $0)
+' :- NP/NP : (lambda $0:s $0)
 
 , :- NP\NP : (lambda $0:s $0)
 , :- NP/NP : (lambda $0:d $0)
@@ -668,4 +664,4 @@ fiscal :- NP/NP : (lambda $0:s $0)
 
 
 // Not sure if this guy is useful. Check in the data more throughly.
-//a :- NP/NP : (lambda $0:d $0)
+a :- NP/NP : (lambda $0:d $0)

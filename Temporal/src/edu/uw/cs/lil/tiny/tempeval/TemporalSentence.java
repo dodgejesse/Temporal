@@ -12,7 +12,7 @@ import edu.uw.cs.utils.composites.Pair;
  */
 
 public class TemporalSentence implements
-		ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>> {
+		ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>> {
 	private final String docID;
 	private final String sentence;
 	private final Sentence phrase;
@@ -59,14 +59,10 @@ public class TemporalSentence implements
 	public String getVal(){
 		return val;
 	}
-	
-	public TemporalSentence getPrev(){
-		return previous;
-	}
 
-	public Pair<String[], Sentence> getSample() {
+	public Pair<String[], Pair<Sentence, TemporalSentence>> getSample() {
 		String[] s = {docID, sentence, refDate};
-		return Pair.of(s, phrase);
+		return Pair.of(s, Pair.of(phrase, previous));
 	}
 
 	/*

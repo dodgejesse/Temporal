@@ -57,7 +57,7 @@ public class TempEval2Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval2Dev.class);
 
 	public static void main(String[] args) {
-		boolean testingDataset =true;
+		boolean testingDataset = false;
 		
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
@@ -96,14 +96,14 @@ public class TempEval2Dev {
 		// When running on testing dataset, testingDataset = true
 		String dataLoc;
 		if (testingDataset)
-			dataLoc = "tempeval3.timebank.small.txt";
+			dataLoc = "tempeval3.testing.txt";
 		else
 			dataLoc = "tempeval3.timebank.txt";
 			//dataLoc = "tempeval.dataset.corrected.txt";
-		IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> train = TemporalSentenceDataset
+		IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> train = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
-		IDataCollection<? extends ILabeledDataItem<Pair<String[], Sentence>, Pair<String, String>>> test = TemporalSentenceDataset
+		IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
