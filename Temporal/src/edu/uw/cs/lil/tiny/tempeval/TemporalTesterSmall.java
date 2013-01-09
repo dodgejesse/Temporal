@@ -30,7 +30,7 @@ public class TemporalTesterSmall {
 		this.test = test;
 		this.parser = parser;
 
-		categoryServices = new LogicalExpressionCategoryServices(false);
+		categoryServices = new LogicalExpressionCategoryServices();
 	}
 
 	public void test(Model<Sentence, LogicalExpression> model) {

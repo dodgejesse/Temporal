@@ -20,7 +20,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexemeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexicalTemplateFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.scorers.LexemeCooccurrenceScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
-import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSetBuilder;
+//import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSetBuilder;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionCoordinationFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionTypeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ExpLengthLexicalEntryScorer;
@@ -29,7 +29,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.SkippingSensitiveLexi
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.UniformScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
-import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry.EntryOrigin;
+//import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry.EntryOrigin;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.RuleSetBuilder;
@@ -76,9 +76,9 @@ public class TempEval2Dev {
 						new File(resourcesDir + "tempeval.types.txt")), "i"));
 
 		
+		// TODO: Check the constructors for this. There is a second one, that takes two booleans.
+		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices();
 		
-		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices(
-				false);
 
 		// Load the ontology
 		List<File> ontologyFiles = new LinkedList<File>();
@@ -150,7 +150,7 @@ public class TempEval2Dev {
 		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
 		fixedInput.addEntriesFromFile(new File(resourcesDir
 				+ "tempeval.lexicon.txt"), new StubStringFilter(),
-				categoryServices, EntryOrigin.FIXED_DOMAIN);
+				categoryServices, LexicalEntry.Origin.FIXED_DOMAIN);
 		
 		final ILexicon<LogicalExpression> fixed = new Lexicon<LogicalExpression>();
 		
@@ -166,7 +166,7 @@ public class TempEval2Dev {
 		    fixed.add(lex);
 		}
 		
-		final LexicalFeatureSet<LogicalExpression> lexPhi = new LexicalFeatureSetBuilder<LogicalExpression>()
+		final LexicalFeatureSet<Sentence, LogicalExpression> lexPhi = new LexicalFeatureSet.Builder<Sentence,LogicalExpression>()
 				.setInitialFixedScorer(
 						new ExpLengthLexicalEntryScorer<LogicalExpression>(
 								10.0, 1.1))
@@ -206,7 +206,7 @@ public class TempEval2Dev {
 				// Adjusted to move away from a factored lexicon
 				final Model<Sentence, LogicalExpression> model = new Model.Builder<Sentence, LogicalExpression>()
 						.addParseFeatureSet(
-								new LogicalExpressionCoordinationFeatureSet<Sentence>())
+								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
 						.addParseFeatureSet(
 								new LogicalExpressionTypeFeatureSet<Sentence>())
 						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)

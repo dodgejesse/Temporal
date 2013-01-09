@@ -19,6 +19,7 @@ public class TemporalReference extends TemporalPredicate{
 
 		
 		// TODO: Test here if first is a fully specified calendar date. If so, return it.
+		// TODO: Test to see if going back or forward by a day changes the month, etc.
 		
 		Map<String, Set<Integer>> tmpMap = previous.getFullMapping();
 		
