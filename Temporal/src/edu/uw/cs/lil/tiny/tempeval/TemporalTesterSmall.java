@@ -17,8 +17,8 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTINCORRECT = false;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
-	private final boolean ONLYPRINTONEPHRASE = false;
-	private final String PHRASE = "following";
+	private final boolean ONLYPRINTONEPHRASE = true;
+	private final String PHRASE = "a year earlier";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test;
 	private final AbstractCKYParser<LogicalExpression> parser;
 	private final LogicalExpressionCategoryServices categoryServices;
@@ -62,9 +62,9 @@ public class TemporalTesterSmall {
 			else if (c == 0)
 				correct++;
 			else if (c == 1)
-				correctType++;
-			else if (c == 2)
 				correctVal++;
+			else if (c == 2)
+				correctType++;
 			else if (c == 3)
 				tooManyParses++;
 			else// if (c == 4)
@@ -205,10 +205,10 @@ public class TemporalTesterSmall {
 					System.out.println("gold val:      " + val);
 					System.out.println("Guess type:    " + output.getType());
 					System.out.println("Guess val:     " + output.getVal());
-					System.out.println("Correct type?  " + (correct == 0 || correct == 1));
-					System.out.println("Correct val?   " + (correct == 0 || correct == 2));					
+					System.out.println("Correct type?  " + (correct == 0 || correct == 2));
+					System.out.println("Correct val?   " + (correct == 0 || correct == 1));					
 				}
-			} else if (correct == 3 && !ONLYPRINTINCORRECT &&!ONLYPRINTNOPARSES) {
+			} else if (correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTNOPARSES) {
 				System.out.println();
 				System.out.println("Phrase:        " + phrase);
 				System.out.println("ref_time:      " + ref_time);
