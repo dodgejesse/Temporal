@@ -13,7 +13,6 @@ public class TemporalMultiplication extends TemporalPredicate {
 		
 		// Doesn't actually multiply! 
 		return new TemporalDuration(baseDuration, temporalNum.getNum());
-		
 	}
 	
 	private void checkInput(){
@@ -28,6 +27,5 @@ public class TemporalMultiplication extends TemporalPredicate {
 			throw new IllegalArgumentException("The first element in TemporalMultiply isn't a TemporalDuration.");
 		else if (!(second instanceof TemporalNumber))
 			throw new IllegalArgumentException("The second element in TemporalMultiply isn't a TemporalNumber");
-		
 	}
 }

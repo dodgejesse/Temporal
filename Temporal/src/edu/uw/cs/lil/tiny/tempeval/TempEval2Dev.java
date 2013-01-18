@@ -39,6 +39,8 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
+import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
+import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.utils.concurrency.TinyExecutorService;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import edu.uw.cs.utils.composites.Pair;
@@ -204,7 +206,8 @@ public class TempEval2Dev {
 				
 				// Create the entire feature collection
 				// Adjusted to move away from a factored lexicon
-				final Model<Sentence, LogicalExpression> model = new Model.Builder<Sentence, LogicalExpression>()
+				final JointModel<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>> model
+				= new JointModel.Builder<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>>()
 						.addParseFeatureSet(
 								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
 						.addParseFeatureSet(
@@ -213,7 +216,6 @@ public class TempEval2Dev {
 						.addLexicalFeatureSet(templateFeats)
 						.setLexicon(new Lexicon<LogicalExpression>()).build();
 				
-		
 		// Initialize lexical features. This is not "natural" for every lexical
 		// feature set, only for this one, so it's done here and not on all
 		// lexical feature sets.
@@ -256,6 +258,8 @@ public class TempEval2Dev {
 				.setMaxNumberOfCellsInSpan(100).build();
 
 		TemporalTesterSmall tester = TemporalTesterSmall.build(test, parser);
+		
+		
 
 		// Make new training set from old training set. Should include logical
 		// expressions for phrases.
