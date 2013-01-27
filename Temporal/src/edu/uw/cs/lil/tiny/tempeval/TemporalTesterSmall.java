@@ -23,14 +23,14 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTNOPARSES = false;
 	private final boolean ONLYPRINTONEPHRASE = true;
 	private final String PHRASE = "a year earlier";
-	private final IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test;
+	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test;
 	private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;
 	private final LogicalExpressionCategoryServices categoryServices;
 	private TemporalISO previous;
 
 	private TemporalTesterSmall(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence,TemporalSentence>>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> baseParser) {
 		this.test = test;
 		this.baseParser = baseParser;
@@ -40,13 +40,13 @@ public class TemporalTesterSmall {
 		categoryServices = new LogicalExpressionCategoryServices();
 	}
 
-	public void test(JointModel<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>> model) {
+	public void test(JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model) {
 		test(test, model);
 	}
 
 	private void test(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> testData,
-			JointModel<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>> model) {
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> testData,
+			JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model) {
 		// The number of phrases in total.
 		int counter = 0;
 		// Correctly parsed and executed, both type and val.
@@ -61,7 +61,7 @@ public class TemporalTesterSmall {
 		int tooManyParses = 0;
 		// Not parsed.
 		int notParsed = 0;
-		for (final ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>> item : testData) {
+		for (final ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> item : testData) {
 			counter++;
 			int c = test(item, model, counter);
 			if (c == -1)
@@ -90,31 +90,31 @@ public class TemporalTesterSmall {
 		System.out.println("Number with no parses: " + notParsed);
 	}
 
-	private int test(ILabeledDataItem<Pair<String[], Pair<Sentence,TemporalSentence>>, Pair<String, String>> dataItem,
-			JointModel<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>> model, int counter) {
+	private int test(ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> dataItem,
+			JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model, int counter) {
 		int output;
 		LogicalExpression label = null;
 		TemporalISO temporalISO = null;
 				
 		// To extract all of the information from the mention.
 		// The key to know how to unpack this is in TemporalSentence.java.
-		String docID = dataItem.getSample().first()[0];
-		String sentence = dataItem.getSample().first()[1];
-		Sentence phrase = dataItem.getSample().second().first();
-		TemporalSentence prev = dataItem.getSample().second().second();
-		String ref_time = dataItem.getSample().first()[2];
+		Sentence phrase = dataItem.getSample().first();
+		String docID = dataItem.getSample().second()[0];
+		String sentence = dataItem.getSample().second()[1];
+		String ref_time = dataItem.getSample().second()[2];
+		String prevDocID = dataItem.getSample().second()[3];
 		String type = dataItem.getLabel().first();
 		String val = dataItem.getLabel().second();
-		boolean sameDocID = (prev == null || prev.getSample().first()[0].equals(docID));
+		boolean sameDocID = (previous == null || prevDocID.equals(docID));
 		
 		
-		//final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
+		final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
 		
 		//to make the dataItem for the jointParser:
 		TemporalDataItem tmpDataItem = new TemporalDataItem(dataItem.getSample());
-		JointDataItemModel<Sentence, Pair<String[], Pair<Sentence, TemporalSentence>>, 
-				LogicalExpression, Pair<String, String>> jModel = new JointDataItemModel<Sentence, 
-				Pair<String[], Pair<Sentence, TemporalSentence>>, LogicalExpression, Pair<String, String>>(model, tmpDataItem);
+		JointDataItemModel<Sentence, String[], LogicalExpression, Pair<String, String>> jModel = new JointDataItemModel<Sentence, 
+				String[], LogicalExpression, Pair<String, String>>(model, tmpDataItem);
+		
 		
 		final IJointOutput<LogicalExpression, Pair<String, String>> jointParserOutput = jointParser.parse(tmpDataItem, jModel);
 		
@@ -297,7 +297,7 @@ public class TemporalTesterSmall {
 	}
 
 	public static TemporalTesterSmall build(
-			IDataCollection<? extends ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
 			AbstractCKYParser<LogicalExpression> parser) {
 		return new TemporalTesterSmall(test, parser);
 	}

@@ -3,7 +3,6 @@ package edu.uw.cs.lil.tiny.tempeval;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
-import edu.uw.cs.lil.tiny.data.IDataItem;
 
 
 /*
@@ -14,15 +13,17 @@ import edu.uw.cs.lil.tiny.data.IDataItem;
  */
 
 public class TemporalSentence implements
-		ILabeledDataItem<Pair<String[], Pair<Sentence, TemporalSentence>>, Pair<String, String>> {
+		ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> {
 	private final String docID;
 	private final String sentence;
 	private final Sentence phrase;
 	private final String refDate;
 	private final String type;
 	private final String val;
-	private final TemporalSentence previous;
+	private final String prevDocID;
 
+	
+	// This previous isn't actually being used! Could take it out. Will need to change temporalSentenceDataset.
 	public TemporalSentence(String d, String s, Sentence p, String r, String t, String v, TemporalSentence prev) {
 		docID = d;
 		sentence = s;
@@ -30,7 +31,10 @@ public class TemporalSentence implements
 		refDate = r;
 		type = t;
 		val = v;
-		previous = prev;
+		if (prev != null)
+			prevDocID = prev.getSample().second()[0];
+		else
+			prevDocID = "";
 		//this.predCounts = GetPredicateCounts.of(semantics);
 
 		//final Iterator<Entry<LogicalConstant, Counter>> iterator = this.predCounts.entrySet().iterator();
@@ -62,9 +66,9 @@ public class TemporalSentence implements
 		return val;
 	}
 
-	public Pair<String[], Pair<Sentence, TemporalSentence>> getSample() {
-		String[] s = {docID, sentence, refDate};
-		return Pair.of(s, Pair.of(phrase, previous));
+	public Pair<Sentence, String[]> getSample() {
+		String[] s = {docID, sentence, refDate, prevDocID};
+		return Pair.of(phrase, s);
 	}
 
 	/*

@@ -21,8 +21,6 @@ public class TemporalSentenceDataset implements
 		this.data = Collections.unmodifiableList(data);
 	}
 
-	// TODO: Test this!
-	// Make pointer to previous mention.
 	public static TemporalSentenceDataset read(File f,
 			IStringFilter textFilter, boolean lockConstants) {
 		try {
@@ -55,7 +53,7 @@ public class TemporalSentenceDataset implements
 					} else if (val == null){
 						val = textFilter.filter(line);
 						TemporalSentence current;
-						if (prev != null && prev.getSample().first()[0].equals(docID))
+						if (prev != null && prev.getSample().second()[0].equals(docID))
 							current = new TemporalSentence(docID, sentence, new Sentence(phrase), refDate, type, val, prev);
 						else
 							current = new TemporalSentence(docID, sentence, new Sentence(phrase), refDate, type, val, null);
