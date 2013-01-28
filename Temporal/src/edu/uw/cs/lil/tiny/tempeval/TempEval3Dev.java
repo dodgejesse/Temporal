@@ -284,11 +284,13 @@ public class TempEval3Dev {
 				.addUnaryParseRule(new CKYUnaryParsingRule<LogicalExpression>(new SentenceCompilation(categoryServices), true))
 				.setMaxNumberOfCellsInSpan(100).build();
 
-		TemporalTesterSmall tester = TemporalTesterSmall.build(test, parser);
 		
 		
 		// Creating a joint parser.
 		final TemporalJointParser jParser = new TemporalJointParser(parser);
+		
+		final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
+ 
 		
 		final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
 		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
@@ -298,7 +300,7 @@ public class TempEval3Dev {
 
 		// Within this tester, I should go through each example and use the
 		// visitor on each logical expression!
-		//tester.test(model);
+		tester.test(model);
 
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
 		//		.currentTimeMillis() - startTime / 1000.0D));

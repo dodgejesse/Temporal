@@ -4,6 +4,7 @@ import java.util.*;
 
 import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
+import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
@@ -13,8 +14,7 @@ import edu.uw.cs.lil.tiny.parser.IParserOutput;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.lil.tiny.parser.joint.IJointOutput;
-import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
-import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
+import edu.uw.cs.lil.tiny.parser.joint.model.*;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
@@ -24,29 +24,27 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTONEPHRASE = true;
 	private final String PHRASE = "a year earlier";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test;
-	private final AbstractCKYParser<LogicalExpression> baseParser;
+	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;
 	private final LogicalExpressionCategoryServices categoryServices;
 	private TemporalISO previous;
 
 	private TemporalTesterSmall(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
-			AbstractCKYParser<LogicalExpression> baseParser) {
+					TemporalJointParser jointParser) {
 		this.test = test;
-		this.baseParser = baseParser;
-		
-		jointParser = new TemporalJointParser(baseParser);
+		this.jointParser = jointParser;
 		
 		categoryServices = new LogicalExpressionCategoryServices();
 	}
 
-	public void test(JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model) {
+	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		test(test, model);
 	}
 
 	private void test(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> testData,
-			JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model) {
+			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		// The number of phrases in total.
 		int counter = 0;
 		// Correctly parsed and executed, both type and val.
@@ -91,7 +89,7 @@ public class TemporalTesterSmall {
 	}
 
 	private int test(ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> dataItem,
-			JointModel<Sentence, String[], LogicalExpression, Pair<String, String>> model, int counter) {
+			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, int counter) {
 		int output;
 		LogicalExpression label = null;
 		TemporalISO temporalISO = null;
@@ -108,29 +106,30 @@ public class TemporalTesterSmall {
 		boolean sameDocID = (previous == null || prevDocID.equals(docID));
 		
 		
-		final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
+		//final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
 		
 		//to make the dataItem for the jointParser:
-		TemporalDataItem tmpDataItem = new TemporalDataItem(dataItem.getSample());
-		JointDataItemModel<Sentence, String[], LogicalExpression, Pair<String, String>> jModel = new JointDataItemModel<Sentence, 
-				String[], LogicalExpression, Pair<String, String>>(model, tmpDataItem);
+		JointDataItemWrapper<Sentence, String[]> jointDataItem = new JointDataItemWrapper<Sentence, String[]>(
+				phrase, new TemporalDataItem(dataItem.getSample()));
 		
+	
+		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = 
+				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, dataItem);
 		
-		final IJointOutput<LogicalExpression, Pair<String, String>> jointParserOutput = jointParser.parse(tmpDataItem, jModel);
+		IParserOutput<LogicalExpression> jointOutput = jointParser.parse(jointDataItem, jointDataItemModel);
+
+		List<IParseResult<LogicalExpression>> parses = jointOutput.getBestParses();
+				
+		// there is more than one 
+		if (parses.size() > 0) {
+			IParseResult<LogicalExpression> parse = parses.get(0);
+			label = parse.getY();
+			output = oneParse(label, sameDocID, ref_time, type, val);
+			temporalISO = TemporalVisitor.of(label, ref_time, previous);			
 		
-		final List<IParseResult<LogicalExpression>> bestModelParses = 
-				pruneLogicWithLambdas(modelParserOutput.getBestParses());
-		
-		if (bestModelParses.size() == 1) {
-			LogicalExpression parse = bestModelParses.get(0).getY();
-			Pair<LogicalExpression, Integer> correctParse = oneParse(parse, sameDocID, ref_time, type, val);
-			label = correctParse.first();
-			temporalISO = TemporalVisitor.of(label, ref_time, previous);
-			output = correctParse.second();
-			
 		// TODO: Check every parse to make sure a correct one is included.
-		} else if (bestModelParses.size() > 1) {
-			output = 3;
+		//} else if (bestModelParses.size() > 1) {
+		//	output = 3;
 		} else { // zero parses
 			output = 4;
 		}
@@ -151,11 +150,25 @@ public class TemporalTesterSmall {
 	
 	// Case we have a single parse
 	// return a Pair<label, int>, where the int indicates if the label is correct.
-	private Pair<LogicalExpression, Integer> oneParse(LogicalExpression parse, boolean sameDocID, String ref_time, String type, String val){
-		LogicalExpression[] labels = getArrayOfLabels(parse, sameDocID);
+	// 0 == correct type and val
+	// 1 == correct type, not val
+	// 2 == incorrect type, correct val
+	// -1 == incorrect type and val
+	private int oneParse(LogicalExpression label, boolean sameDocID, String ref_time, String type, String val){
+		//LogicalExpression[] labels = getArrayOfLabels(parse, sameDocID);
 		
-		int n = findCorrectLabel(labels, ref_time, type, val);
-		// if the logic (label) executes with the correct type and value.
+		TemporalISO tmp = TemporalVisitor.of(label,  ref_time,  previous);
+		if (tmp.getType().equals(type) && tmp.getVal().equals(val))
+			return 0;
+		else if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
+			return 1;
+		else if (!tmp.getType().equals(type) &&tmp.getVal().equals(val))
+			return 2;
+		else 
+			return -1;
+		
+		/*
+		int n = findCorrectLabel(label, ref_time, type, val);
 		if (n >= 0 && n < labels.length)
 			return Pair.of(labels[n],0);
 		// if the label executes with the correct type, but not value.
@@ -168,7 +181,7 @@ public class TemporalTesterSmall {
 		else
 			if (n != -1)
 				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall. n = " + n);
-			return Pair.of(parse,  -1);
+			return Pair.of(parse,  -1);*/
 	}
 	
 	// returns an int n.
@@ -298,7 +311,7 @@ public class TemporalTesterSmall {
 
 	public static TemporalTesterSmall build(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
-			AbstractCKYParser<LogicalExpression> parser) {
+					TemporalJointParser parser) {
 		return new TemporalTesterSmall(test, parser);
 	}
 }

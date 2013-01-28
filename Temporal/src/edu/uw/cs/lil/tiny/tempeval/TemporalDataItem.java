@@ -4,19 +4,18 @@ import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
 
-public class TemporalDataItem implements IDataItem<Pair<Sentence, String[]>> {
+public class TemporalDataItem implements IDataItem<Pair<Sentence, String[]>>{
 
-	Pair<Sentence, String[]> s;
+	Pair<Sentence, String[]> sample;
 	
-	public TemporalDataItem(Pair<Sentence, String[]> s){
-		this.s = s;
+	public TemporalDataItem(Pair<Sentence, String[]> sample){
+		this.sample = sample;
 	}
-
+	
 	@Override
 	public Pair<Sentence, String[]> getSample() {
-		return s;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-
 
 }
