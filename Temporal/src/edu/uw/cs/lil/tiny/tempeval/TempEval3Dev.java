@@ -27,13 +27,12 @@ import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexemeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexicalTemplateFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.scorers.LexemeCooccurrenceScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
-//import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSetBuilder;
-//import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionCoordinationFeatureSet;
-//import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LogicalExpressionTypeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ExpLengthLexicalEntryScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ScalingScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.SkippingSensitiveLexicalEntryScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.UniformScorer;
+import edu.uw.cs.lil.tiny.parser.ccg.features.lambda.LogicalExpressionCoordinationFeatureSet;
+import edu.uw.cs.lil.tiny.parser.ccg.features.lambda.LogicalExpressionTypeFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
 //import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry.EntryOrigin;
@@ -221,10 +220,10 @@ public class TempEval3Dev {
 				final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
 				= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
 				// TODO: Ask about this. Why did this change? what is going on?
-						//.addParseFeatureSet(
-						//		new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
-						//.addParseFeatureSet(
-						//		new LogicalExpressionTypeFeatureSet<Sentence>())
+						.addParseFeatureSet(
+								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+						.addParseFeatureSet(
+								new LogicalExpressionTypeFeatureSet<Sentence>())
 						.addJointFeatureSet(new TemporalJointFeatureSet())
 						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
 						.addLexicalFeatureSet(templateFeats)
@@ -254,17 +253,9 @@ public class TempEval3Dev {
 
 		LOG.info("Using %d threads", Runtime.getRuntime().availableProcessors());
 
-		// Create the parser -- support empty rule
-		
-		// TODO: WHAT THE HECK IS THIS?! WHY DO IN NEED IT?
 		final Set<Syntax> syntaxSet = new HashSet<Syntax>();
-		syntaxSet.add(Syntax.S);
-		syntaxSet.add(Syntax.N);
 		syntaxSet.add(Syntax.NP);
-		syntaxSet.add(Syntax.PP);
-		syntaxSet.add(new ComplexSyntax(Syntax.S, Syntax.NP, Slash.BACKWARD));
 		
-		// TODO: What the heck is this? Why do I need it now?
 		final SimpleFullParseFilter<LogicalExpression> parseFilter = new SimpleFullParseFilter<LogicalExpression>(
 				syntaxSet);
 		
@@ -281,7 +272,6 @@ public class TempEval3Dev {
 						new CKYBinaryParsingRule<LogicalExpression>(
 								new BackwardSkippingRule<LogicalExpression>(
 										categoryServices)))
-				.addUnaryParseRule(new CKYUnaryParsingRule<LogicalExpression>(new SentenceCompilation(categoryServices), true))
 				.setMaxNumberOfCellsInSpan(100).build();
 
 		
@@ -294,7 +284,7 @@ public class TempEval3Dev {
 		
 		final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
 		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
-		1, train, jParser);
+		2, train, jParser);
 
 		learner.train(model);
 

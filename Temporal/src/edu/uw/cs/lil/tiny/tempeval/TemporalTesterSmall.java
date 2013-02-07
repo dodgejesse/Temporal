@@ -18,10 +18,10 @@ import edu.uw.cs.lil.tiny.parser.joint.model.*;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTesterSmall {
-	private final boolean ONLYPRINTINCORRECT = false;
+	private final boolean ONLYPRINTINCORRECT = true;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
-	private final boolean ONLYPRINTONEPHRASE = true;
+	private final boolean ONLYPRINTONEPHRASE = false;
 	private final String PHRASE = "a year earlier";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
