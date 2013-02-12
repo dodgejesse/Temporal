@@ -59,6 +59,7 @@ import edu.uw.cs.utils.log.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +69,7 @@ public class TempEval3Dev {
 
 	public static void main(String[] args) {
 		boolean testingDataset = false;
+		boolean crossVal = true;
 		
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
@@ -279,19 +281,70 @@ public class TempEval3Dev {
 		// Creating a joint parser.
 		final TemporalJointParser jParser = new TemporalJointParser(parser);
 		
-		final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
+		
+		if (crossVal){
+			// make a list
+			// use the constructor with TemporalSentenceDataset to make a new dataset. 
+			List<List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>> splitData = 
+					new LinkedList<List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>>();
+			Iterator<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> iter = train.iterator();
+			int sentenceCount = 1;
+			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> tmp = 
+					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+			
+			while (iter.hasNext()){
+				tmp.add(iter.next());
+				if (sentenceCount % Math.round(train.size() / 10.0)== 0){
+					splitData.add(tmp);
+					tmp = new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+					System.out.println();
+					System.out.println("sentenceCount: " + sentenceCount);
+					System.out.println("Train size: " + train.size());
+					System.out.println("size / 10: " + Math.round(train.size() / 10.0));
+					
+				}
+				
+				sentenceCount++;
+			}
+			
+			// to make the training and testing corpora
+			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTrain = 
+					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTest = 
+					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+			for (int i = 0; i < splitData.size(); i++){
+				for (int j = 0; j < splitData.size(); j++){
+					if (i == j)
+						newTest.addAll(splitData.get(i));
+					else
+						newTrain.addAll(splitData.get(j));
+				}
+				final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
+				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
+						JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
+								2, train, jParser);
+
+				learner.train(model);
+				tester.test(model);
+			}
+			
+			// create testing dataset 
+			// create training dataset
+			// do the stuff below but with those datasets. 
+		} else {
+			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
  
 		
-		final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
-		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
-		2, train, jParser);
+			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
+					JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
+							2, train, jParser);
 
-		learner.train(model);
+			learner.train(model);
 
 		// Within this tester, I should go through each example and use the
 		// visitor on each logical expression!
-		tester.test(model);
-
+			tester.test(model);
+		}
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
 		//		.currentTimeMillis() - startTime / 1000.0D));
 	}
