@@ -259,14 +259,57 @@ public class POSTaggerTester {
       List<S> states = new ArrayList<S>();
       S currentState = trellis.getStartState();
       states.add(currentState);
+      S prevState;
+      double prevPi;
       while (!currentState.equals(trellis.getEndState())) {
         Counter<S> transitions = trellis.getForwardTransitions(currentState);
+        
         S nextState = transitions.argMax();
         states.add(nextState);
         currentState = nextState;
       }
       return states;
     }
+  }
+  
+  static class ViterbiDecoder implements TrellisDecoder<State> {
+	    public List<State> getBestPath(Trellis<State> trellis) {
+	        List<State> states = new ArrayList<State>();
+	        State currentState = trellis.getStartState();
+	        states.add(currentState);
+	        while (!currentState.equals(trellis.getEndState())) {
+	          Counter<State> firstTransitions = trellis.getForwardTransitions(currentState);
+	          double bestLogProb = Double.NEGATIVE_INFINITY;
+	          State bestNext = null;
+	          for (State n : firstTransitions.keySet())
+	        	  bestNext = n;
+	          for (State next : firstTransitions.keySet()){
+	        	  Counter<State> secondTransitions = trellis.getForwardTransitions(next);
+	        	  // grab arg max
+	        	  // find prob of arg max
+	        	  // if higher than bestLogProb
+	        	  // 	update BestLogProb and bestNext
+	        	  
+	        	  for (State nextNext : secondTransitions.keySet()){
+	        		  double tmpLogProb = secondTransitions.getCount(nextNext) + firstTransitions.getCount(next);
+	        		  if (tmpLogProb > bestLogProb){
+	        			  bestLogProb = tmpLogProb;
+	        			  bestNext = next;
+	        		  }
+	        	  }
+	          }
+	          if (bestNext == null){
+	        	  System.out.println(currentState.position);
+	        	  System.out.println(trellis.endState.position);
+	        	  System.out.println(firstTransitions.keySet());
+	        	  System.out.println("Problem! We have bestNext as null.");
+	          }
+	          //State nextState = transitions.argMax();
+	          states.add(bestNext);
+	          currentState = bestNext;
+	        }
+	        return states;
+	      }
   }
 
   static class POSTagger {
@@ -512,13 +555,18 @@ public class POSTaggerTester {
     	if (seenWord){
     		double pWordGivenTag = tagCounter.getCount(tag) / uniTags.getCount(tag);
     		return pWordGivenTag * pTagGivenPrevPrev;
-    	} else{
+    	} else {
     		String s = "";
     		for (int i = 0; i < suffixList.length; i++){
     			if (word.endsWith(suffixList[i])){
     				s = suffixList[i];
     				break;
     			}
+    		}
+    		
+    		if (s.equals("")) {
+        		double pWordGivenTag = tagCounter.getCount(tag) / uniTags.getCount(tag);
+        		return pWordGivenTag * pTagGivenPrevPrev;
     		}
     		
     		double pTag = suffix.getCount(s) / suffix.totalCount();
@@ -728,9 +776,9 @@ public class POSTaggerTester {
 
     // Construct tagger components
     // TODO : improve on the MostFrequentTagScorer
-    LocalTrigramScorer localTrigramScorer = new MostFrequentTagScorer(true);
+    LocalTrigramScorer localTrigramScorer = new MostFrequentTagScorer(false);
     // TODO : improve on the GreedyDecoder
-    TrellisDecoder<State> trellisDecoder = new GreedyDecoder<State>();
+    TrellisDecoder<State> trellisDecoder = new ViterbiDecoder();
 
     // Train tagger
     POSTagger posTagger = new POSTagger(localTrigramScorer, trellisDecoder);
@@ -738,6 +786,6 @@ public class POSTaggerTester {
     posTagger.validate(validationTaggedSentences);
 
     // Test tagger
-    evaluateTagger(posTagger, testTaggedSentences, trainingVocabulary, verbose);
+    evaluateTagger(posTagger, validationTaggedSentences, trainingVocabulary, verbose);
   }
 }
