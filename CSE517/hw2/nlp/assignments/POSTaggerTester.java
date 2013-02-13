@@ -469,6 +469,15 @@ public class POSTaggerTester {
     CounterMap<String, String> wordsToTags = new CounterMap<String, String>();
     Counter<String> unknownWordTags = new Counter<String>();
     Set<String> seenTagTrigrams = new HashSet<String>();
+    
+    // my additions
+    Counter<String> triTags = new Counter<String>();
+    Counter<String> biTags = new Counter<String>();
+    Counter<String> uniTags = new Counter<String>();
+    Counter<String> suffix = new Counter<String>();
+    CounterMap<String, String> suffixToTags = new CounterMap<String, String>();
+    String[] suffixList;
+    // end my additions
 
     public int getHistorySize() {
       return 2;
@@ -477,18 +486,45 @@ public class POSTaggerTester {
     public Counter<String> getLogScoreCounter(LocalTrigramContext localTrigramContext) {
       int position = localTrigramContext.getPosition();
       String word = localTrigramContext.getWords().get(position);
+      boolean seenWord = false;
       Counter<String> tagCounter = unknownWordTags;
       if (wordsToTags.keySet().contains(word)) {
         tagCounter = wordsToTags.getCounter(word);
+        seenWord = true;
       }
       Set<String> allowedFollowingTags = allowedFollowingTags(tagCounter.keySet(), localTrigramContext.getPreviousPreviousTag(), localTrigramContext.getPreviousTag());
       Counter<String> logScoreCounter = new Counter<String>();
       for (String tag : tagCounter.keySet()) {
-        double logScore = Math.log(tagCounter.getCount(tag));
+    	double HMMProb = getHMMProb(tagCounter, tag, localTrigramContext, seenWord, word);
+    	double logScore = Math.log(HMMProb);
+        //double logScore = Math.log(tagCounter.getCount(tag));
         if (!restrictTrigrams || allowedFollowingTags.isEmpty() || allowedFollowingTags.contains(tag))
           logScoreCounter.setCount(tag, logScore);
       }
       return logScoreCounter;
+    }
+    
+    private double getHMMProb(Counter<String> tagCounter, String tag, LocalTrigramContext ltc, boolean seenWord, String word){
+    	String bi = ltc.getPreviousPreviousTag() + " " + ltc.getPreviousTag() ;
+    	String tri = bi + " " + tag;
+    	
+    	double pTagGivenPrevPrev = triTags.getCount(tri) / biTags.getCount(bi);
+    	if (seenWord){
+    		double pWordGivenTag = tagCounter.getCount(tag) / uniTags.getCount(tag);
+    		return pWordGivenTag * pTagGivenPrevPrev;
+    	} else{
+    		String s = "";
+    		for (int i = 0; i < suffixList.length; i++){
+    			if (word.endsWith(suffixList[i])){
+    				s = suffixList[i];
+    				break;
+    			}
+    		}
+    		
+    		double pTag = suffix.getCount(s) / suffix.totalCount();
+    		double pTagGivenWord = (suffixToTags.getCount(s, tag) / suffix.getCount(s)) / pTag;
+    		return pTagGivenWord * pTagGivenPrevPrev;
+    	}
     }
 
     private Set<String> allowedFollowingTags(Set<String> tags, String previousPreviousTag, String previousTag) {
@@ -516,10 +552,26 @@ public class POSTaggerTester {
           unknownWordTags.incrementCount(tag, 1.0);
         }
         wordsToTags.incrementCount(word, tag, 1.0);
-        seenTagTrigrams.add(makeTrigramString(labeledLocalTrigramContext.getPreviousPreviousTag(), labeledLocalTrigramContext.getPreviousTag(), labeledLocalTrigramContext.getCurrentTag()));
+        String triString = makeTrigramString(labeledLocalTrigramContext.getPreviousPreviousTag(), labeledLocalTrigramContext.getPreviousTag(), labeledLocalTrigramContext.getCurrentTag());
+        seenTagTrigrams.add(triString);
+        triTags.incrementCount(triString, 1.0);
+        biTags.incrementCount(labeledLocalTrigramContext.getPreviousTag() + " " + labeledLocalTrigramContext.getCurrentTag(), 1.0);
+        uniTags.incrementCount(labeledLocalTrigramContext.getCurrentTag(), 1.0);
+        // add to suffix tree
+        addToSuffix(word, tag);
+        
       }
       wordsToTags = Counters.conditionalNormalize(wordsToTags);
       unknownWordTags = Counters.normalize(unknownWordTags);
+    }
+    
+    private void addToSuffix(String word, String tag){
+    	for (int i = 0; i < suffixList.length; i++){
+    		if (word.endsWith(suffixList[i])){
+    			suffixToTags.incrementCount(suffixList[i], tag, 1.0);
+    			suffix.incrementCount(suffixList[i], 1.0);
+    		}
+    	}
     }
 
     public void validate(List<LabeledLocalTrigramContext> labeledLocalTrigramContexts) {
@@ -528,6 +580,14 @@ public class POSTaggerTester {
 
     public MostFrequentTagScorer(boolean restrictTrigrams) {
       this.restrictTrigrams = restrictTrigrams;
+      String[] s = {"acy", "ance", "ary", "able", "ible", "ain", "age", "ation", "ate", "ant", "ent", "ane", "ancy", "cial", 
+    		  "cious", "dom", "eer",  "ence", "ent", "eous", "est", "ery", "ful", "fy", "hood", "ical", "ice",
+    		  "ien", "ience",  "ile", "ine", "ion", "ious", "ish", "ism", "ist", "ity", "ize", "less", "most", "ness", "or", "ose", "ory",
+    		  "scious", "ship", "sion", "sor", "tail", "tain", "tor", "tude", "er", "ture", "ty", "an", "ic", "cy", "er", "il", "al", "ous", "en"};
+      for (int i = 0; i < s.length; i++){
+    	  suffix.incrementCount(s[i], 0);
+      }
+      suffixList = s;
     }
   }
 
@@ -668,7 +728,7 @@ public class POSTaggerTester {
 
     // Construct tagger components
     // TODO : improve on the MostFrequentTagScorer
-    LocalTrigramScorer localTrigramScorer = new MostFrequentTagScorer(false);
+    LocalTrigramScorer localTrigramScorer = new MostFrequentTagScorer(true);
     // TODO : improve on the GreedyDecoder
     TrellisDecoder<State> trellisDecoder = new GreedyDecoder<State>();
 
