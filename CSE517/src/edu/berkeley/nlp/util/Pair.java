@@ -3,7 +3,7 @@ package edu.berkeley.nlp.util;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
+//import com.sun.org.apache.bcel.internal.classfile.Code;
 
 
 /**

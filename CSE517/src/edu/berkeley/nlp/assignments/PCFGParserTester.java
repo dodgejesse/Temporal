@@ -22,35 +22,238 @@ public class PCFGParserTester {
 	static interface Parser {
 		Tree<String> getBestParse(List<String> sentence);
 	}
+	
+	static class NodeInfo{
+		final double prob;
+		final int lefti;
+		final int leftj;
+		final UnaryRule leftRule;
+		final int righti;
+		final int rightj;
+		final UnaryRule rightRule;
+		
+		public NodeInfo(double p){
+			this(p, -1, -1, null, -1, -1, null);
+		}
+		
+		public NodeInfo(double p, int li, int lj, UnaryRule lName, int ri, int rj, UnaryRule rName){
+			prob = p;
+			lefti = li;
+			leftj = lj;
+			leftRule = lName;
+			righti = ri;
+			rightj = rj;
+			rightRule = rName;
+		}
+		
+	}
 
 	static class MyParser implements Parser {
 		//CounterMap<List<String>, Tree<String>> knownParses;
 		CounterMap<Integer, String> spanToCategories;
 		Lexicon lexicon;
+		Grammar grammar;
+		UnaryClosure uc;
 
 		@Override
 		public Tree<String> getBestParse(List<String> sentence) {
-			// TODO Auto-generated method stub
-			return null;
+			List<List<Map<String, NodeInfo>>> score = new ArrayList<List<Map<String, NodeInfo>>>();
+			// initializing score
+			for (int i = 0; i < sentence.size(); i++){
+				score.add(new ArrayList<Map<String, NodeInfo>>());
+				for (int j = 0; j < sentence.size() + 1; j++){
+					score.get(i).add(new HashMap<String, NodeInfo>());
+				}
+				
+			}
+			// first pass over score and give a tagscore to each of the words.
+			for (int i = 0; i < score.size(); i++){
+				for (String tag : lexicon.getAllTags()){
+					double sc = lexicon.scoreTagging(sentence.get(i), tag);
+					if (sc > 0){
+						NodeInfo n = new NodeInfo(sc);
+						score.get(i).get(i + 1).put(tag, n);
+						
+						/*
+						// to add the unary rules
+						for (UnaryRule uRule : uc.getClosedUnaryRulesByChild(tag)){
+							double prob = uRule.getScore() * score.get(i).get(i+1).get(tag).prob;
+							if (!score.get(i).get(i+1).containsKey(uRule.parent) && prob != 0){
+								// multiplying the unary rule prob by the prob of the tag
+								score.get(i).get(i+1).put(uRule.getParent(), new NodeInfo(prob));
+
+							}
+						}
+						*/
+					}
+				}
+			}
+			
+			/*
+			// to test the number of possible tags in each 
+			for (int i = 0; i < score.size(); i++){
+				System.out.print(sentence.get(i) + ": ");
+				String best = "";
+				double bestP = -1;
+				for (String s : score.get(i).get(i+1).keySet()){
+					if (score.get(i).get(i+1).get(s).prob>bestP){
+						bestP = score.get(i).get(i+1).get(s).prob;
+						best = s;
+					}
+				}
+				System.out.println(best + " at " + bestP);
+				System.out.println("The list of tags using this as a parent:");
+				for (UnaryRule s : uc.getClosedUnaryRulesByParent(best)){
+					System.out.println(s.child);
+				}
+				System.out.println(score.get(i).get(i+1).keySet().size());
+			}
+			System.exit(0);
+			*/
+			
+			// fill in the rest of the table with scores
+			for (int diff = 2; diff < sentence.size() + 1; diff++){
+				for (int i = 0; i < sentence.size() - diff + 1; i++){
+					int j = i + diff;
+					System.out.println(i + " " + j);
+					for (int k = i + 1; k < j; k++){
+						// first loop over one child
+						// then the other child
+						// then find all possible trees that have those two children
+						if (i == 0 && j == 3){
+							System.out.println("The size of the left child's [" + i + "," + k + "] list of possible tags: " + score.get(i).get(k).keySet().size());
+							System.out.println("The size of the right child's [" + k + "," + j + "] list of possible tags: " + score.get(k).get(j).keySet().size());
+							//System.exit(0);
+							
+						}
+						for (String leftBase : score.get(i).get(k).keySet()){
+							// Getting the set of leftchild tags
+							List<UnaryRule> leftUnaryRuleList = uc.getClosedUnaryRulesByChild(leftBase);
+							for (UnaryRule lUnaryRule : leftUnaryRuleList){
+								String left = lUnaryRule.parent;
+								
+								List<BinaryRule> leftRules = grammar.getBinaryRulesByLeftChild(left);
+								
+								for (BinaryRule br : leftRules){
+									NodeInfo n = bestScoreB(br, i, j, k, score);
+									if (n.prob > 0)
+										score.get(i).get(j).put(br.parent, n);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return buildTree(score, sentence);
+		}
+		
+		private NodeInfo bestScoreB(BinaryRule br, int i, int j, int k, List<List<Map<String, NodeInfo>>> score){
+			//get best score of left
+			Pair<UnaryRule, Double> left = bestScoreU(br.getLeftChild(), i, k, score);
+			Pair<UnaryRule, Double> right = bestScoreU(br.getRightChild(), k, j, score);
+			double prob = br.getScore() * left.getSecond() * right.getSecond();
+			if (br.getScore() != 0 && left.getSecond() != 0 && right.getSecond() != 0 && prob == 0)
+				System.out.println("UNDERFLOW PROBLEM!");
+			NodeInfo n = new NodeInfo(prob, i, k, left.getFirst(), k, j, right.getFirst());
+			return n;
+		}
+		
+		private Pair<UnaryRule, Double> bestScoreU(String x, int i, int j, List<List<Map<String, NodeInfo>>> score){
+			// loop over rules with x as parent, y as child
+			// find highest scoring within [i,j]
+			double bestP = -1;
+			UnaryRule best = null;
+			for (UnaryRule ur : uc.getClosedUnaryRulesByParent(x)){
+				if (score.get(i).get(j).containsKey(ur.child) && score.get(i).get(j).get(ur.child).prob * ur.getScore() > bestP){
+					bestP = score.get(i).get(j).get(ur.child).prob * ur.getScore();
+					best = ur;
+				}
+			}
+			return Pair.makePair(best,  bestP);
+		}
+		
+		
+		
+		private Tree<String> buildTree(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
+			
+			System.out.println("Printing the labels at the top of the tree");
+			System.out.println("Left rule for top thing: " + score.get(0).get(sentence.size()).get("S").leftRule);
+			
+			
+			double maxP = -1;
+			String best = "";
+			for (String s : score.get(0).get(sentence.size()).keySet()){
+				if (score.get(0).get(sentence.size()).get(s).prob > maxP){
+					maxP = score.get(0).get(sentence.size()).get(s).prob;
+					best = s;
+				}
+			}
+			System.out.println("Best top node: " + best + " at " + maxP);
+			
+
+			for (int i = 0; i < score.size(); i++){
+				System.out.println("Word: " + sentence.get(i));
+				for (String s : score.get(i).get(i+1).keySet()){
+					System.out.print(" " + s + ":" + Math.round(10000.0*score.get(i).get(i+1).get(s).prob)/ 10000.0);
+				}
+				System.out.println();
+				System.out.println();
+			}
+			Tree<String> t = growTree(score, score.get(0).get(sentence.size()).get(best), best);
+			//Tree<String> unAnnotatedTree = TreeAnnotations.unAnnotateTree(t);
+			System.out.println(Trees.PennTreeRenderer.render(t));
+			System.exit(0);
+			
+			
+			return growTree(score, score.get(0).get(sentence.size()).get(best), best);
+
+		}
+		
+		private Tree<String> growTree(List<List<Map<String, NodeInfo>>> score, NodeInfo n, String tag){
+			if (n.lefti == -1){
+				return new Tree<String>(tag);
+			} else {
+				NodeInfo leftNode = score.get(n.lefti).get(n.leftj).get(n.leftRule.child);
+				NodeInfo rightNode = score.get(n.righti).get(n.rightj).get(n.rightRule.child);
+				Tree<String> left = growTree(score, leftNode, n.leftRule.child);
+				Tree<String> right = growTree(score, rightNode, n.rightRule.child);
+				List<Tree<String>> l = new ArrayList<Tree<String>>();
+				l.add(left);
+				l.add(right);
+				return new Tree<String>(tag, l);
+			}
+		}
+				
+		private String getBestTag(String word) {
+			double bestScore = Double.NEGATIVE_INFINITY;
+			String bestTag = null;
+			for (String tag : lexicon.getAllTags()) {
+				double score = lexicon.scoreTagging(word, tag);
+				if (bestTag == null || score > bestScore) {
+					bestScore = score;
+					bestTag = tag;
+				}
+			}
+			return bestTag;
 		}
 
 		public MyParser(List<Tree<String>> trainTrees) {
 
-			// printSomeTrees(trainTrees);
+			 printSomeTrees(trainTrees);
 
 			System.out.print("Annotating / binarizing training trees ... ");
 			List<Tree<String>> annotatedTrainTrees = annotateTrees(trainTrees);
 			System.out.println("done.");
 
 			System.out.print("Building grammar ... ");
-			Grammar grammar = new Grammar(annotatedTrainTrees);
+			grammar = new Grammar(annotatedTrainTrees);
 			System.out.println("done. (" + grammar.getStates().size()
 					+ " states)");
-			UnaryClosure uc = new UnaryClosure(grammar);
+			uc = new UnaryClosure(grammar);
 			//System.out.println(uc);
+			//testUnaryClosure();
 
-			System.out
-					.print("Discarding grammar and setting up a baseline parser ... ");
 			lexicon = new Lexicon(annotatedTrainTrees);
 			//knownParses = new CounterMap<List<String>, Tree<String>>();
 			spanToCategories = new CounterMap<Integer, String>();
@@ -58,8 +261,39 @@ public class PCFGParserTester {
 				List<String> tags = trainTree.getPreTerminalYield();
 				//knownParses.incrementCount(tags, trainTree, 1.0);
 				tallySpans(trainTree, 0);
+				
 			}
 			System.out.println("done.");
+			// printSpans();
+		}
+		
+		private void testUnaryClosure(){
+			for (UnaryRule ur : uc.getClosedUnaryRulesByChild("NP")){
+				System.out.println(ur);
+			}			
+			System.exit(0);
+		}
+		
+		private void printSpans(){
+			for (int i : spanToCategories.keySet()){
+				for (String s : spanToCategories.getCounter(i).keySet()){
+					System.out.println("span size " + i + " with category " + s + " : " + spanToCategories.getCount(i, s));
+				}
+			}
+		}
+		
+		private void printSomeTrees(List<Tree<String>> trainTrees) {
+			int counter = 0;
+			for (Tree<String> tree : trainTrees) {
+				System.out.println(Trees.PennTreeRenderer.render(tree));
+				System.out.println();
+				System.out.println(Trees.PennTreeRenderer
+						.render(TreeAnnotations.annotateTree(tree)));
+				System.out.println("\n\n\n");
+				if (counter == 10)
+					break;
+				counter++;
+			}
 		}
 
 		private List<Tree<String>> annotateTrees(List<Tree<String>> trees) {
@@ -185,8 +419,8 @@ public class PCFGParserTester {
 			System.out.println("done. (" + grammar.getStates().size()
 					+ " states)");
 			UnaryClosure uc = new UnaryClosure(grammar);
-			System.out.println(uc);
-
+			//System.out.println(uc);
+			
 			System.out
 					.print("Discarding grammar and setting up a baseline parser ... ");
 			lexicon = new Lexicon(annotatedTrainTrees);
@@ -198,20 +432,6 @@ public class PCFGParserTester {
 				tallySpans(trainTree, 0);
 			}
 			System.out.println("done.");
-		}
-
-		private void printSomeTrees(List<Tree<String>> trainTrees) {
-			int counter = 0;
-			for (Tree<String> tree : trainTrees) {
-				System.out.println(Trees.PennTreeRenderer.render(tree));
-				System.out.println();
-				System.out.println(Trees.PennTreeRenderer
-						.render(TreeAnnotations.annotateTree(tree)));
-				System.out.println("\n\n\n");
-				if (counter == 10)
-					break;
-				counter++;
-			}
 		}
 
 		private List<Tree<String>> annotateTrees(List<Tree<String>> trees) {
@@ -841,7 +1061,7 @@ public class PCFGParserTester {
 		System.out.println("Maximum length for training sentences: "
 				+ maxTrainLength);
 		if (argMap.containsKey("-maxTestLength")) {
-			maxTrainLength = Integer.parseInt(argMap.get("-maxTestLength"));
+			maxTestLength = Integer.parseInt(argMap.get("-maxTestLength"));
 		}
 		System.out.println("Maximum length for test sentences: "
 				+ maxTestLength);
@@ -867,9 +1087,17 @@ public class PCFGParserTester {
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
 		// TODO : Build a better parser!
-		Parser parser = new BaselineParser(trainTrees);
+		Parser parser = new MyParser(trainTrees);
 
-		// testParser(parser, testTrees, verbose);
+		List<String> test = new ArrayList<String>();
+		test.add("He");
+		test.add("ran");
+		test.add("to");
+		test.add("the");
+		test.add("door");
+		test.add(".");
+		parser.getBestParse(test);
+		//testParser(parser, testTrees, verbose);
 	}
 
 	private static void testParser(Parser parser, List<Tree<String>> testTrees,
