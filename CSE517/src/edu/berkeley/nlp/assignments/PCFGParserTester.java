@@ -24,26 +24,24 @@ public class PCFGParserTester {
 	}
 	
 	static class NodeInfo{
+		final String tag;
 		final double prob;
-		final int lefti;
-		final int leftj;
-		final UnaryRule leftRule;
-		final int righti;
-		final int rightj;
-		final UnaryRule rightRule;
+		final NodeInfo firstChild;
+		final NodeInfo secondChild;
 		
-		public NodeInfo(double p){
-			this(p, -1, -1, null, -1, -1, null);
+		public NodeInfo(String s, double p, NodeInfo n){
+			this(s, p, n, null);
 		}
 		
-		public NodeInfo(double p, int li, int lj, UnaryRule lName, int ri, int rj, UnaryRule rName){
+		public NodeInfo(String s, double p, NodeInfo left, NodeInfo right){
+			tag = s;
 			prob = p;
-			lefti = li;
-			leftj = lj;
-			leftRule = lName;
-			righti = ri;
-			rightj = rj;
-			rightRule = rName;
+			firstChild = left;
+			secondChild = right;
+		}
+		
+		public boolean isUnary(){
+			return secondChild == null;
 		}
 		
 	}
@@ -69,24 +67,18 @@ public class PCFGParserTester {
 			// first pass over score and give a tagscore to each of the words.
 			for (int i = 0; i < score.size(); i++){
 				for (String tag : lexicon.getAllTags()){
+					NodeInfo word = new NodeInfo(sentence.get(i), 1, null);
 					double sc = lexicon.scoreTagging(sentence.get(i), tag);
 					if (sc > 0){
-						NodeInfo n = new NodeInfo(sc);
+						NodeInfo n = new NodeInfo(tag, sc, word);
 						score.get(i).get(i + 1).put(tag, n);
 						
-						/*
-						// to add the unary rules
-						for (UnaryRule uRule : uc.getClosedUnaryRulesByChild(tag)){
-							double prob = uRule.getScore() * score.get(i).get(i+1).get(tag).prob;
-							if (!score.get(i).get(i+1).containsKey(uRule.parent) && prob != 0){
-								// multiplying the unary rule prob by the prob of the tag
-								score.get(i).get(i+1).put(uRule.getParent(), new NodeInfo(prob));
-
-							}
-						}
-						*/
+						
+						
 					}
 				}
+				
+				addUnaryRules(i, i+1, score);
 			}
 			
 			/*
@@ -126,21 +118,21 @@ public class PCFGParserTester {
 							//System.exit(0);
 							
 						}
-						for (String leftBase : score.get(i).get(k).keySet()){
+						// to add the binary rules
+						for (String left : score.get(i).get(k).keySet()){
 							// Getting the set of leftchild tags
-							List<UnaryRule> leftUnaryRuleList = uc.getClosedUnaryRulesByChild(leftBase);
-							for (UnaryRule lUnaryRule : leftUnaryRuleList){
-								String left = lUnaryRule.parent;
-								
-								List<BinaryRule> leftRules = grammar.getBinaryRulesByLeftChild(left);
-								
-								for (BinaryRule br : leftRules){
-									NodeInfo n = bestScoreB(br, i, j, k, score);
-									if (n.prob > 0)
-										score.get(i).get(j).put(br.parent, n);
-								}
+							//List<UnaryRule> leftUnaryRuleList = uc.getClosedUnaryRulesByChild(leftBase);
+							
+							List<BinaryRule> leftRules = grammar.getBinaryRulesByLeftChild(left);
+							
+							for (BinaryRule br : leftRules){
+								NodeInfo n = bestScoreB(br, i, j, k, score);
+								if (n.prob > 0)
+									score.get(i).get(j).put(br.parent, n);
 							}
 						}
+						// to add the unary rules
+						addUnaryRules(i,j, score);
 					}
 				}
 			}
@@ -148,7 +140,33 @@ public class PCFGParserTester {
 			return buildTree(score, sentence);
 		}
 		
+		private void addUnaryRules(int i, int j, List<List<Map<String, NodeInfo>>> score){
+			Map<String, NodeInfo> newTags = new HashMap<String, NodeInfo>();
+			for (String tag : score.get(i).get(j).keySet()){
+				// to add the unary rules
+				for (UnaryRule uRule : uc.getClosedUnaryRulesByChild(tag)){
+					double prob = uRule.getScore() * score.get(i).get(j).get(tag).prob;
+					if ((score.get(i).get(j).containsKey(uRule.parent) && 
+							score.get(i).get(j).get(uRule.parent).prob < prob) ||
+							(!score.get(i).get(j).containsKey(uRule.parent) &&
+							prob != 0 	)){
+						// multiplying the unary rule prob by the prob of the tag
+						NodeInfo cur = new NodeInfo(uRule.getParent(), prob, score.get(i).get(j).get(tag));
+						newTags.put(uRule.getParent(), cur);
+
+					}
+				}
+			}
+			score.get(i).get(j).putAll(newTags);
+		}
+		
 		private NodeInfo bestScoreB(BinaryRule br, int i, int j, int k, List<List<Map<String, NodeInfo>>> score){
+			if (!score.get(i).get(k).containsKey(br.leftChild) || !score.get(k).get(j).containsKey(br.rightChild))
+				return new NodeInfo("", 0, null);
+			double prob = br.score * score.get(i).get(k).get(br.leftChild).prob * score.get(k).get(j).get(br.rightChild).prob;
+			return new NodeInfo(br.parent, prob, score.get(i).get(k).get(br.leftChild), score.get(k).get(j).get(br.rightChild));
+			
+			/*
 			//get best score of left
 			Pair<UnaryRule, Double> left = bestScoreU(br.getLeftChild(), i, k, score);
 			Pair<UnaryRule, Double> right = bestScoreU(br.getRightChild(), k, j, score);
@@ -157,6 +175,7 @@ public class PCFGParserTester {
 				System.out.println("UNDERFLOW PROBLEM!");
 			NodeInfo n = new NodeInfo(prob, i, k, left.getFirst(), k, j, right.getFirst());
 			return n;
+			*/
 		}
 		
 		private Pair<UnaryRule, Double> bestScoreU(String x, int i, int j, List<List<Map<String, NodeInfo>>> score){
@@ -178,7 +197,7 @@ public class PCFGParserTester {
 		private Tree<String> buildTree(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
 			
 			System.out.println("Printing the labels at the top of the tree");
-			System.out.println("Left rule for top thing: " + score.get(0).get(sentence.size()).get("S").leftRule);
+			System.out.println("Left rule for top thing: " + score.get(0).get(sentence.size()).get("S").firstChild.tag);
 			
 			
 			double maxP = -1;
@@ -200,28 +219,26 @@ public class PCFGParserTester {
 				System.out.println();
 				System.out.println();
 			}
-			Tree<String> t = growTree(score, score.get(0).get(sentence.size()).get(best), best);
+			Tree<String> t = growTree(score.get(0).get(sentence.size()).get(best));
 			//Tree<String> unAnnotatedTree = TreeAnnotations.unAnnotateTree(t);
 			System.out.println(Trees.PennTreeRenderer.render(t));
 			System.exit(0);
 			
 			
-			return growTree(score, score.get(0).get(sentence.size()).get(best), best);
+			return growTree(score.get(0).get(sentence.size()).get(best));
 
 		}
 		
-		private Tree<String> growTree(List<List<Map<String, NodeInfo>>> score, NodeInfo n, String tag){
-			if (n.lefti == -1){
-				return new Tree<String>(tag);
+		private Tree<String> growTree(NodeInfo n){
+			if (n.firstChild == null){
+				return new Tree<String>(n.tag);
 			} else {
-				NodeInfo leftNode = score.get(n.lefti).get(n.leftj).get(n.leftRule.child);
-				NodeInfo rightNode = score.get(n.righti).get(n.rightj).get(n.rightRule.child);
-				Tree<String> left = growTree(score, leftNode, n.leftRule.child);
-				Tree<String> right = growTree(score, rightNode, n.rightRule.child);
 				List<Tree<String>> l = new ArrayList<Tree<String>>();
-				l.add(left);
-				l.add(right);
-				return new Tree<String>(tag, l);
+				l.add(growTree(n.firstChild));
+				if (!n.isUnary())
+					l.add(growTree(n.secondChild));
+					
+				return new Tree<String>(n.tag, l);
 			}
 		}
 				
@@ -1090,11 +1107,9 @@ public class PCFGParserTester {
 		Parser parser = new MyParser(trainTrees);
 
 		List<String> test = new ArrayList<String>();
-		test.add("He");
-		test.add("ran");
-		test.add("to");
-		test.add("the");
-		test.add("door");
+		test.add("The");
+		test.add("cat");
+		test.add("sat");
 		test.add(".");
 		parser.getBestParse(test);
 		//testParser(parser, testTrees, verbose);
