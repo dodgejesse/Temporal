@@ -62,7 +62,6 @@ public class PCFGParserTester {
 				for (int j = 0; j < sentence.size() + 1; j++){
 					score.get(i).add(new HashMap<String, NodeInfo>());
 				}
-				
 			}
 			// first pass over score and give a tagscore to each of the words.
 			for (int i = 0; i < score.size(); i++){
@@ -72,12 +71,8 @@ public class PCFGParserTester {
 					if (sc > 0){
 						NodeInfo n = new NodeInfo(tag, sc, word);
 						score.get(i).get(i + 1).put(tag, n);
-						
-						
-						
 					}
 				}
-				
 				addUnaryRules(i, i+1, score);
 			}
 			
@@ -107,17 +102,30 @@ public class PCFGParserTester {
 			for (int diff = 2; diff < sentence.size() + 1; diff++){
 				for (int i = 0; i < sentence.size() - diff + 1; i++){
 					int j = i + diff;
-					System.out.println(i + " " + j);
+					for (BinaryRule bRule : grammar.getBinaryRules()){
+						for (int k = i + 1; k < j; k++){
+							NodeInfo n = bestScoreB(bRule, i, j, k, score);
+							if (n.prob > 0){
+								score.get(i).get(j).put(bRule.parent, n);
+							}
+						}
+					}
+					addUnaryRules(i,j, score);
+					
+					
+					
+					/*
+					//System.out.println(i + " " + j);
 					for (int k = i + 1; k < j; k++){
 						// first loop over one child
 						// then the other child
 						// then find all possible trees that have those two children
-						if (i == 0 && j == 3){
-							System.out.println("The size of the left child's [" + i + "," + k + "] list of possible tags: " + score.get(i).get(k).keySet().size());
-							System.out.println("The size of the right child's [" + k + "," + j + "] list of possible tags: " + score.get(k).get(j).keySet().size());
+						//if (i == 0 && j == 3){
+						//	System.out.println("The size of the left child's [" + i + "," + k + "] list of possible tags: " + score.get(i).get(k).keySet().size());
+						//	System.out.println("The size of the right child's [" + k + "," + j + "] list of possible tags: " + score.get(k).get(j).keySet().size());
 							//System.exit(0);
 							
-						}
+						//}
 						// to add the binary rules
 						for (String left : score.get(i).get(k).keySet()){
 							// Getting the set of leftchild tags
@@ -134,6 +142,7 @@ public class PCFGParserTester {
 						// to add the unary rules
 						addUnaryRules(i,j, score);
 					}
+					*/
 				}
 			}
 
@@ -145,12 +154,12 @@ public class PCFGParserTester {
 			for (String tag : score.get(i).get(j).keySet()){
 				// to add the unary rules
 				for (UnaryRule uRule : uc.getClosedUnaryRulesByChild(tag)){
+					// multiplying the unary rule prob by the prob of the tag
 					double prob = uRule.getScore() * score.get(i).get(j).get(tag).prob;
 					if ((score.get(i).get(j).containsKey(uRule.parent) && 
 							score.get(i).get(j).get(uRule.parent).prob < prob) ||
 							(!score.get(i).get(j).containsKey(uRule.parent) &&
 							prob != 0 	)){
-						// multiplying the unary rule prob by the prob of the tag
 						NodeInfo cur = new NodeInfo(uRule.getParent(), prob, score.get(i).get(j).get(tag));
 						newTags.put(uRule.getParent(), cur);
 
@@ -178,27 +187,11 @@ public class PCFGParserTester {
 			*/
 		}
 		
-		private Pair<UnaryRule, Double> bestScoreU(String x, int i, int j, List<List<Map<String, NodeInfo>>> score){
-			// loop over rules with x as parent, y as child
-			// find highest scoring within [i,j]
-			double bestP = -1;
-			UnaryRule best = null;
-			for (UnaryRule ur : uc.getClosedUnaryRulesByParent(x)){
-				if (score.get(i).get(j).containsKey(ur.child) && score.get(i).get(j).get(ur.child).prob * ur.getScore() > bestP){
-					bestP = score.get(i).get(j).get(ur.child).prob * ur.getScore();
-					best = ur;
-				}
-			}
-			return Pair.makePair(best,  bestP);
-		}
-		
-		
-		
 		private Tree<String> buildTree(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
-			
+			/*
 			System.out.println("Printing the labels at the top of the tree");
 			System.out.println("Left rule for top thing: " + score.get(0).get(sentence.size()).get("S").firstChild.tag);
-			
+			*/
 			
 			double maxP = -1;
 			String best = "";
@@ -211,21 +204,32 @@ public class PCFGParserTester {
 			System.out.println("Best top node: " + best + " at " + maxP);
 			
 
+			/*
 			for (int i = 0; i < score.size(); i++){
 				System.out.println("Word: " + sentence.get(i));
 				for (String s : score.get(i).get(i+1).keySet()){
-					System.out.print(" " + s + ":" + Math.round(10000.0*score.get(i).get(i+1).get(s).prob)/ 10000.0);
+					double prob = Math.round(10000.0*score.get(i).get(i+1).get(s).prob)/ 10000.0;
+					if (prob > 0)
+						System.out.print(" " + s + ":" + prob);
 				}
 				System.out.println();
 				System.out.println();
 			}
-			Tree<String> t = growTree(score.get(0).get(sentence.size()).get(best));
-			//Tree<String> unAnnotatedTree = TreeAnnotations.unAnnotateTree(t);
+			*/
+			
+			Tree<String> t = growTree(score.get(0).get(sentence.size()).get("S"));
+			List<Tree<String>> tmpList = new ArrayList<Tree<String>>();
+			tmpList.add(t);
+			Tree<String> withRoot = new Tree<String>("ROOT", tmpList);
+			Tree<String> ut = TreeAnnotations.unAnnotateTree(withRoot);
 			System.out.println(Trees.PennTreeRenderer.render(t));
-			System.exit(0);
+			System.out.println();
+			System.out.println();
+			System.out.println(ut);
+			//System.exit(0);
 			
 			
-			return growTree(score.get(0).get(sentence.size()).get(best));
+			return ut;
 
 		}
 		
