@@ -29,6 +29,10 @@ public class PCFGParserTester {
 		final NodeInfo firstChild;
 		final NodeInfo secondChild;
 		
+		public NodeInfo(String s){
+			this(s, 1, null);
+		}
+		
 		public NodeInfo(String s, double p, NodeInfo n){
 			this(s, p, n, null);
 		}
@@ -53,6 +57,99 @@ public class PCFGParserTester {
 		Grammar grammar;
 		UnaryClosure uc;
 
+		
+		public Tree<String> getBestParseTwo(List<String> sentence){
+			List<List<Map<String, NodeInfo>>> score = new ArrayList<List<Map<String, NodeInfo>>>();
+			// initialize my chart
+			for (int i = 0; i < sentence.size(); i++){
+				score.add(new ArrayList<Map<String, NodeInfo>>());
+				for (int j = 0; j < sentence.size()+1; j++){
+					score.get(i).add(new HashMap<String, NodeInfo>());
+				}
+			}
+			// add the word tags
+			for (int i = 0; i < sentence.size(); i++){
+				for (String tag : lexicon.getAllTags()){
+					if (lexicon.scoreTagging(sentence.get(i), tag) > 0){
+						NodeInfo wordNode = new NodeInfo(sentence.get(i));
+						double prob = lexicon.scoreTagging(sentence.get(i), tag);
+						NodeInfo tagNode = new NodeInfo(tag, prob, wordNode);
+						score.get(i).get(i+1).put(tag, tagNode);
+					}
+				}
+				addUnaryRulesTwo(score, i, i+1);
+			}
+			// fill out the chart
+			
+			for (int diff = 2; diff < sentence.size() + 1; diff++){
+				for (int i = 0; i < sentence.size() - diff + 1; i++){
+					int j = i + diff;
+					for (BinaryRule br : grammar.getBinaryRules()){
+						for (int k = i + 1; k <= j - 1; k++){
+							// add binary rules
+							// left: i,k. right: k,j.
+							if (score.get(i).get(k).containsKey(br.getLeftChild()) && score.get(k).get(j).containsKey(br.rightChild)){
+								if (!score.get(i).get(j).containsKey(br.parent)){
+									NodeInfo n = new NodeInfo(br.parent, br.getScore(), score.get(i).get(k).get(br.leftChild),
+											score.get(k).get(j).get(br.rightChild));
+									score.get(i).get(j).put(br.parent, n);
+								} else if (score.get(i).get(j).get(br.parent).prob 
+										< br.score * score.get(i).get(k).get(br.getLeftChild()).prob
+										* score.get(k).get(j).get(br.getRightChild()).prob){
+									NodeInfo n = new NodeInfo(br.parent, br.getScore(), score.get(i).get(k).get(br.leftChild),
+											score.get(k).get(j).get(br.rightChild));
+									score.get(i).get(j).put(br.parent, n);
+								}
+							}
+							// add unary rules
+							
+						}
+					}
+				}
+			}
+			return buildTree(score, sentence);
+		}
+		
+		public void addUnaryRulesTwo(List<List<Map<String, NodeInfo>>> score, int i, int j){
+			Map<String, NodeInfo> tmpMap = new HashMap<String, NodeInfo>();
+			for (String tag : score.get(i).get(j).keySet()){
+				for (UnaryRule ur : uc.getClosedUnaryRulesByChild(tag)){
+					if ((!score.get(i).get(j).containsKey(ur.parent) && ur.getScore() > 0) ||
+							(score.get(i).get(j).containsKey(ur.parent) && 
+							ur.getScore() > score.get(i).get(j).get(ur.parent).prob)){
+						NodeInfo n = new NodeInfo(ur.parent, ur.getScore(), score.get(i).get(j).get(tag));
+						tmpMap.put(ur.parent, n);
+					}
+				}
+			}
+			score.get(i).get(j).putAll(tmpMap);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		@Override
 		public Tree<String> getBestParse(List<String> sentence) {
 			List<List<Map<String, NodeInfo>>> score = new ArrayList<List<Map<String, NodeInfo>>>();
@@ -1094,8 +1191,7 @@ public class PCFGParserTester {
 		}
 
 		System.out.print("Loading training trees (sections 2-21) ... ");
-		List<Tree<String>> trainTrees = readTrees(basePath, 200, 2199,
-				maxTrainLength);
+		List<Tree<String>> trainTrees = readTrees(basePath, 200, 2199,maxTrainLength);
 		System.out.println("done. (" + trainTrees.size() + " trees)");
 		List<Tree<String>> testTrees = null;
 		if (testMode.equalsIgnoreCase("validate")) {
@@ -1108,15 +1204,16 @@ public class PCFGParserTester {
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
 		// TODO : Build a better parser!
-		Parser parser = new MyParser(trainTrees);
+		MyParser parser = new MyParser(trainTrees);
 
 		List<String> test = new ArrayList<String>();
 		test.add("The");
 		test.add("cat");
 		test.add("sat");
 		test.add(".");
-		parser.getBestParse(test);
-		//testParser(parser, testTrees, verbose);
+
+		//parser.getBestParseTwo(test);
+		testParser(parser, testTrees, verbose);
 	}
 
 	private static void testParser(Parser parser, List<Tree<String>> testTrees,
