@@ -1,0 +1,15 @@
+output from bestParseTwo with sentence "The dog sleeps"
+(ROOT (S (NP (DT The) (NP (NN dog)) (CD sleeps))))
+
+
+output from bestParseTwo with sentence "The dog sleeps."
+(ROOT (S (NP (DT The) (NN dog)) (ADVP (RB sleeps) (. .))))
+
+
+output from bestParse with sentence "the dog sleeps"
+(ROOT (S (NP (DT The) (NP (NN dog)) (CD sleeps))))
+
+
+output from bestParse with sentence "The dog sleeps."
+(ROOT (S (NP (DT The) (NN dog)) (ADVP (RB sleeps) (. .))))
+

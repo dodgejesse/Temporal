@@ -3,10 +3,15 @@ package edu.berkeley.nlp.assignments;
 import edu.berkeley.nlp.io.PennTreebankReader;
 import edu.berkeley.nlp.ling.Tree;
 import edu.berkeley.nlp.ling.Trees;
+import edu.berkeley.nlp.ling.Trees.PennTreeRenderer;
 import edu.berkeley.nlp.parser.EnglishPennTreebankParseEvaluator;
 import edu.berkeley.nlp.util.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
+import java.util.PriorityQueue;
 
 /**
  * Harness for PCFG Parser project.
@@ -23,7 +28,7 @@ public class PCFGParserTester {
 		Tree<String> getBestParse(List<String> sentence);
 	}
 	
-	static class NodeInfo{
+	static class NodeInfo implements Comparable<NodeInfo>{
 		final String tag;
 		final double prob;
 		final NodeInfo firstChild;
@@ -47,6 +52,15 @@ public class PCFGParserTester {
 		public boolean isUnary(){
 			return secondChild == null;
 		}
+
+		public int compareTo(NodeInfo other) {
+			if (other.prob < prob)
+				return -1;
+			else if (other.prob > prob)
+				return 1;
+			else
+				return 0;
+		}
 		
 	}
 
@@ -56,9 +70,13 @@ public class PCFGParserTester {
 		Lexicon lexicon;
 		Grammar grammar;
 		UnaryClosure uc;
+		PrintWriter output;
+		boolean secondOrderVert;
+		boolean auxVerbSplit;
+		boolean conjSplit;
 
-		
 		public Tree<String> getBestParseTwo(List<String> sentence){
+			//testingStuff(sentence);
 			List<List<Map<String, NodeInfo>>> score = new ArrayList<List<Map<String, NodeInfo>>>();
 			// initialize my chart
 			for (int i = 0; i < sentence.size(); i++){
@@ -69,63 +87,106 @@ public class PCFGParserTester {
 			}
 			// add the word tags
 			for (int i = 0; i < sentence.size(); i++){
+				NodeInfo wordNode = new NodeInfo(sentence.get(i));
 				for (String tag : lexicon.getAllTags()){
 					if (lexicon.scoreTagging(sentence.get(i), tag) > 0){
-						NodeInfo wordNode = new NodeInfo(sentence.get(i));
 						double prob = lexicon.scoreTagging(sentence.get(i), tag);
 						NodeInfo tagNode = new NodeInfo(tag, prob, wordNode);
 						score.get(i).get(i+1).put(tag, tagNode);
+						//if (prob >= .000001)
+						//	System.out.println(sentence.get(i) + " : " + tag + " : " + prob);
 					}
 				}
+			}
+			for (int i = 0; i < sentence.size(); i++){
+				String best = getSingleHighestScoring(score.get(i).get(i+1));
+				System.out.println(sentence.get(i) + " : " + best + " : " + score.get(i).get(i+1).get(best).prob);
+			}
+			for (int i = 0; i < sentence.size(); i++){
 				addUnaryRulesTwo(score, i, i+1);
+			}
+			for (int i = 0; i < sentence.size(); i++){
+				String best = getSingleHighestScoring(score.get(i).get(i+1));
+				System.out.println(sentence.get(i) + " : " + best + " : " + score.get(i).get(i+1).get(best).prob);
 			}
 			// fill out the chart
 			
 			for (int diff = 2; diff < sentence.size() + 1; diff++){
 				for (int i = 0; i < sentence.size() - diff + 1; i++){
 					int j = i + diff;
-					for (BinaryRule br : grammar.getBinaryRules()){
-						for (int k = i + 1; k <= j - 1; k++){
-							// add binary rules
-							// left: i,k. right: k,j.
-							if (score.get(i).get(k).containsKey(br.getLeftChild()) && score.get(k).get(j).containsKey(br.rightChild)){
-								if (!score.get(i).get(j).containsKey(br.parent)){
-									NodeInfo n = new NodeInfo(br.parent, br.getScore(), score.get(i).get(k).get(br.leftChild),
-											score.get(k).get(j).get(br.rightChild));
-									score.get(i).get(j).put(br.parent, n);
-								} else if (score.get(i).get(j).get(br.parent).prob 
-										< br.score * score.get(i).get(k).get(br.getLeftChild()).prob
-										* score.get(k).get(j).get(br.getRightChild()).prob){
-									NodeInfo n = new NodeInfo(br.parent, br.getScore(), score.get(i).get(k).get(br.leftChild),
-											score.get(k).get(j).get(br.rightChild));
-									score.get(i).get(j).put(br.parent, n);
-								}
-							}
-							// add unary rules
-							
+					addBinaryRules(score, i, j);
+					addUnaryRulesTwo(score, i, j);
+				}
+			}
+			return buildTree(score, sentence);
+		}
+		
+		public void addBinaryRules(List<List<Map<String, NodeInfo>>> score, int i, int j){
+			Map<String, NodeInfo> tmpMap = new HashMap<String, NodeInfo>();
+			for (BinaryRule br : grammar.getBinaryRules()){
+				for (int k = i + 1; k <= j - 1; k++){
+					// add binary rules
+					// left: i,k. right: k,j.
+					if (score.get(i).get(k).containsKey(br.getLeftChild()) && score.get(k).get(j).containsKey(br.getRightChild())){
+						double newProb = br.getScore() * score.get(i).get(k).get(br.getLeftChild()).prob 
+								* score.get(k).get(j).get(br.getRightChild()).prob;
+						if ((!score.get(i).get(j).containsKey(br.parent) && newProb > 0)
+								|| score.get(i).get(j).get(br.parent).prob < newProb){
+							NodeInfo n = new NodeInfo(br.parent, newProb, score.get(i).get(k).get(br.leftChild),
+									score.get(k).get(j).get(br.rightChild));
+							tmpMap.put(br.parent, n);
 						}
 					}
 				}
 			}
-			return buildTree(score, sentence);
+			addRulesToChart(score, tmpMap, i, j);
 		}
 		
 		public void addUnaryRulesTwo(List<List<Map<String, NodeInfo>>> score, int i, int j){
 			Map<String, NodeInfo> tmpMap = new HashMap<String, NodeInfo>();
 			for (String tag : score.get(i).get(j).keySet()){
 				for (UnaryRule ur : uc.getClosedUnaryRulesByChild(tag)){
-					if ((!score.get(i).get(j).containsKey(ur.parent) && ur.getScore() > 0) ||
-							(score.get(i).get(j).containsKey(ur.parent) && 
-							ur.getScore() > score.get(i).get(j).get(ur.parent).prob)){
-						NodeInfo n = new NodeInfo(ur.parent, ur.getScore(), score.get(i).get(j).get(tag));
+					double newProb = ur.getScore() * score.get(i).get(j).get(ur.getChild()).prob;
+					if ((!score.get(i).get(j).containsKey(ur.parent) && newProb > 0) ||
+							newProb > score.get(i).get(j).get(ur.parent).prob){
+						NodeInfo n = buildUnaryPath(ur, newProb, score, i, j);
 						tmpMap.put(ur.parent, n);
 					}
 				}
 			}
-			score.get(i).get(j).putAll(tmpMap);
+			addRulesToChart(score, tmpMap, i, j);
 		}
 		
+		// to put the new items into the chart
+		private void addRulesToChart(List<List<Map<String, NodeInfo>>> score, Map<String, NodeInfo> tmpMap, int i, int j){
+			for (String s : tmpMap.keySet()){
+				if (!score.get(i).get(j).containsKey(s) || score.get(i).get(j).get(s).prob > tmpMap.get(s).prob)
+					score.get(i).get(j).put(s, tmpMap.get(s));
+			}
+		}
 		
+		private NodeInfo buildUnaryPath(UnaryRule ur, double newProb, List<List<Map<String, NodeInfo>>> score, int i, int j){
+			// need loop to go over path. 
+			// instantiate current to be the end of the list
+			List<String> path = uc.getPath(ur);
+			NodeInfo current = score.get(i).get(j).get(ur.getChild());
+
+			for (int k = path.size() - 2; k >= 0; k--){
+				NodeInfo n = new NodeInfo(path.get(k), newProb, current);
+				current = n;
+			}
+			return current;
+		}
+		
+		private void testingStuff(List<String> sentence){
+			String word = "sleeps";
+			System.out.println("Word: " + word);
+			for (String tag : lexicon.getAllTags()){
+				if (tag.startsWith("V"))
+					System.out.println(tag + " : " + lexicon.scoreTagging(word, tag));
+			}
+			System.exit(1);
+		}
 		
 		
 		
@@ -202,47 +263,18 @@ public class PCFGParserTester {
 					for (BinaryRule bRule : grammar.getBinaryRules()){
 						for (int k = i + 1; k < j; k++){
 							NodeInfo n = bestScoreB(bRule, i, j, k, score);
+							// check to make sure the head of bRule isn't already in the node.
 							if (n.prob > 0){
-								score.get(i).get(j).put(bRule.parent, n);
+								if (!score.get(i).get(j).containsKey(bRule.parent) 
+										|| score.get(i).get(j).get(bRule.parent).prob < n.prob){
+									score.get(i).get(j).put(bRule.parent, n);
+								}
 							}
 						}
 					}
 					addUnaryRules(i,j, score);
-					
-					
-					
-					/*
-					//System.out.println(i + " " + j);
-					for (int k = i + 1; k < j; k++){
-						// first loop over one child
-						// then the other child
-						// then find all possible trees that have those two children
-						//if (i == 0 && j == 3){
-						//	System.out.println("The size of the left child's [" + i + "," + k + "] list of possible tags: " + score.get(i).get(k).keySet().size());
-						//	System.out.println("The size of the right child's [" + k + "," + j + "] list of possible tags: " + score.get(k).get(j).keySet().size());
-							//System.exit(0);
-							
-						//}
-						// to add the binary rules
-						for (String left : score.get(i).get(k).keySet()){
-							// Getting the set of leftchild tags
-							//List<UnaryRule> leftUnaryRuleList = uc.getClosedUnaryRulesByChild(leftBase);
-							
-							List<BinaryRule> leftRules = grammar.getBinaryRulesByLeftChild(left);
-							
-							for (BinaryRule br : leftRules){
-								NodeInfo n = bestScoreB(br, i, j, k, score);
-								if (n.prob > 0)
-									score.get(i).get(j).put(br.parent, n);
-							}
-						}
-						// to add the unary rules
-						addUnaryRules(i,j, score);
-					}
-					*/
 				}
 			}
-
 			return buildTree(score, sentence);
 		}
 		
@@ -259,7 +291,6 @@ public class PCFGParserTester {
 							prob != 0 	)){
 						NodeInfo cur = new NodeInfo(uRule.getParent(), prob, score.get(i).get(j).get(tag));
 						newTags.put(uRule.getParent(), cur);
-
 					}
 				}
 			}
@@ -271,17 +302,6 @@ public class PCFGParserTester {
 				return new NodeInfo("", 0, null);
 			double prob = br.score * score.get(i).get(k).get(br.leftChild).prob * score.get(k).get(j).get(br.rightChild).prob;
 			return new NodeInfo(br.parent, prob, score.get(i).get(k).get(br.leftChild), score.get(k).get(j).get(br.rightChild));
-			
-			/*
-			//get best score of left
-			Pair<UnaryRule, Double> left = bestScoreU(br.getLeftChild(), i, k, score);
-			Pair<UnaryRule, Double> right = bestScoreU(br.getRightChild(), k, j, score);
-			double prob = br.getScore() * left.getSecond() * right.getSecond();
-			if (br.getScore() != 0 && left.getSecond() != 0 && right.getSecond() != 0 && prob == 0)
-				System.out.println("UNDERFLOW PROBLEM!");
-			NodeInfo n = new NodeInfo(prob, i, k, left.getFirst(), k, j, right.getFirst());
-			return n;
-			*/
 		}
 		
 		private Tree<String> buildTree(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
@@ -289,45 +309,106 @@ public class PCFGParserTester {
 			System.out.println("Printing the labels at the top of the tree");
 			System.out.println("Left rule for top thing: " + score.get(0).get(sentence.size()).get("S").firstChild.tag);
 			*/
+			boolean getSingleTop = true;
+			Tree<String> ut = null;
 			
-			double maxP = -1;
-			String best = "";
-			for (String s : score.get(0).get(sentence.size()).keySet()){
-				if (score.get(0).get(sentence.size()).get(s).prob > maxP){
-					maxP = score.get(0).get(sentence.size()).get(s).prob;
-					best = s;
+			if (getSingleTop){
+				String best = getSingleHighestScoring(score.get(0).get(sentence.size()));
+				ut = getTreeFromString(score, best, sentence);
+			} else{
+				List<String> highest = getHighestScoring(score, sentence);
+	
+				//System.out.println("Number of possibilities in top node: " + score.get(0).get(sentence.size()).keySet().size());
+				for (String best : highest){
+					double bestP = score.get(0).get(sentence.size()).get(best).prob;
+					//System.out.println("Tag at head of tree: " + best + " at " + bestP);
+					ut = getTreeFromString(score, best, sentence);
+					//System.out.println(Trees.PennTreeRenderer.render(t));
+					output.println(ut);
+					//System.out.println();
+					//System.out.println();
+					//System.exit(0);
 				}
+				output.close();
 			}
-			System.out.println("Best top node: " + best + " at " + maxP);
-			
-
-			/*
-			for (int i = 0; i < score.size(); i++){
-				System.out.println("Word: " + sentence.get(i));
-				for (String s : score.get(i).get(i+1).keySet()){
-					double prob = Math.round(10000.0*score.get(i).get(i+1).get(s).prob)/ 10000.0;
-					if (prob > 0)
-						System.out.print(" " + s + ":" + prob);
-				}
-				System.out.println();
-				System.out.println();
-			}
-			*/
-			
-			Tree<String> t = growTree(score.get(0).get(sentence.size()).get("S"));
+			return ut;
+		}
+		
+		private Tree<String> getTreeFromString(List<List<Map<String, NodeInfo>>> score, String best, List<String> sentence){
+			Tree<String> t = growTree(score.get(0).get(sentence.size()).get(best));
 			List<Tree<String>> tmpList = new ArrayList<Tree<String>>();
 			tmpList.add(t);
 			Tree<String> withRoot = new Tree<String>("ROOT", tmpList);
-			Tree<String> ut = TreeAnnotations.unAnnotateTree(withRoot);
-			System.out.println(Trees.PennTreeRenderer.render(t));
-			System.out.println();
-			System.out.println();
-			System.out.println(ut);
-			//System.exit(0);
-			
-			
-			return ut;
-
+			Tree<String> unannotated = TreeAnnotations.unAnnotateTree(withRoot);
+			// undoing the vertical second-order markov assumption
+			if (secondOrderVert)
+				removeVertAnnotations(unannotated);
+			// undoing the auxiliary verb splitting
+			if (auxVerbSplit)
+				removeAuxVerbSplit(unannotated);
+			// undoing the specific annotation of "and" and "but".
+			if (conjSplit)
+				removeConjSplit(unannotated);
+			return unannotated;
+		}
+		
+		// to remove the "-BUTAND" annotation from the tags of "and" and "but".
+		private void removeConjSplit(Tree<String> t){
+			if (t.isPreTerminal()){
+				String l = t.getLabel();
+				if (l.endsWith("-BUTAND"))
+					t.setLabel(l.substring(0, l.indexOf("-BUTAND")));
+			}
+			for (Tree<String> child : t.getChildren()){
+				removeConjSplit(child);
+			}
+		}
+		
+		// to remove the "-AUX" suffix  from the tags of auxiliary verbs
+		private void removeAuxVerbSplit(Tree<String> t){
+			if (t.isPreTerminal()){
+				if (t.getLabel().endsWith("-AUX"))
+					t.setLabel(t.getLabel().substring(0, t.getLabel().indexOf("-AUX")));
+			}
+			for (Tree<String> child : t.getChildren()){
+				removeAuxVerbSplit(child);
+			}
+		}
+		
+		// to remove the vertical second-order markov annotations
+		private void removeVertAnnotations(Tree<String> t){
+			if (t.isLeaf())
+				return;
+			// removing the annotation
+			t.setLabel(t.getLabel().substring(0,t.getLabel().indexOf('^')));
+			// pass children
+			for (Tree<String> child : t.getChildren()){
+				removeVertAnnotations(child);
+			}
+		}
+		
+		private String getSingleHighestScoring(Map<String, NodeInfo> map){
+			double topProb = -1;
+			String topString = "";
+			for (String s : map.keySet()){
+				if (map.get(s).prob > topProb) {
+					topProb = map.get(s).prob;
+					topString = s;
+				}
+			}
+			return topString;
+		}
+		
+		// TODO: make sure this grabs the top scoring parse tree
+		private List<String> getHighestScoring(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
+			List<String> l = new ArrayList<String>();
+			Queue<NodeInfo> ordered = new PriorityQueue<NodeInfo>();
+			int size = score.get(0).get(sentence.size()).keySet().size();
+			ordered.addAll(score.get(0).get(sentence.size()).values());
+			for (int i = 0; i < size; i++){
+				l.add(ordered.remove().tag);
+			}
+			return l;
 		}
 		
 		private Tree<String> growTree(NodeInfo n){
@@ -356,10 +437,30 @@ public class PCFGParserTester {
 			return bestTag;
 		}
 
-		public MyParser(List<Tree<String>> trainTrees) {
+		public MyParser(List<Tree<String>> trainTrees, boolean verticalSecondOrder, 
+				boolean auxVerbsSplit, boolean conjunctionSplit) throws FileNotFoundException {
+			conjSplit = conjunctionSplit;
+			secondOrderVert = verticalSecondOrder;
+			auxVerbSplit = auxVerbsSplit;
+			output = new PrintWriter(new File("scratch.txt"));
+			//printSomeTrees(trainTrees);
 
-			 printSomeTrees(trainTrees);
-
+			if (conjSplit){
+				System.out.print("Adding additional tag for conjunctions ... ");
+				trainTrees = splitConjunctions(trainTrees);
+				System.out.println("done.");
+			}
+			if (auxVerbSplit){
+				System.out.print("Adding additional tag for auxiliary verbs ... ");
+				trainTrees = splitAuxVerbs(trainTrees);
+				System.out.println("done.");
+			}
+			if (secondOrderVert){
+				System.out.print("Adding second order vertical markov assumption ... ");
+				trainTrees = addVerticalAnnotations(trainTrees);
+				System.out.println("done.");
+			}
+			
 			System.out.print("Annotating / binarizing training trees ... ");
 			List<Tree<String>> annotatedTrainTrees = annotateTrees(trainTrees);
 			System.out.println("done.");
@@ -375,14 +476,103 @@ public class PCFGParserTester {
 			lexicon = new Lexicon(annotatedTrainTrees);
 			//knownParses = new CounterMap<List<String>, Tree<String>>();
 			spanToCategories = new CounterMap<Integer, String>();
-			for (Tree<String> trainTree : annotatedTrainTrees) {
-				List<String> tags = trainTree.getPreTerminalYield();
+			//for (Tree<String> trainTree : annotatedTrainTrees) {
+			//	List<String> tags = trainTree.getPreTerminalYield();
 				//knownParses.incrementCount(tags, trainTree, 1.0);
-				tallySpans(trainTree, 0);
+			//	tallySpans(trainTree, 0);
 				
-			}
+			//}
 			System.out.println("done.");
 			// printSpans();
+			
+			/*
+			spanToCategories = new CounterMap<Integer, String>();
+			for (Tree<String> trainTree : annotatedTrainTrees) {
+				List<String> tags = trainTree.getPreTerminalYield();
+				knownParses.incrementCount(tags, trainTree, 1.0);
+				tallySpans(trainTree, 0);
+			}
+			System.out.println("done.");
+			 */
+		}
+		
+		// To separate "&" and "but" from other conjunctions
+		private List<Tree<String>> splitConjunctions(List<Tree<String>> trainTrees){
+			List<Tree<String>> splitTrainTrees = new ArrayList<Tree<String>>();
+			for (Tree<String> t : trainTrees){
+				splitTrainTrees.add(singleTreeSplitConj(t));
+			}
+			return splitTrainTrees;
+		}
+		
+		private Tree<String> singleTreeSplitConj(Tree<String> t){
+			if (t.isPreTerminal()){
+				String l = t.getChildren().get(0).getLabel();
+				if (l.equals("but") || l.equals("and"))
+					t.setLabel(t.getLabel() + "-BUTAND");
+				return t;
+			}
+			List<Tree<String>> newTree = new ArrayList<Tree<String>>();
+			for (Tree<String> child : t.getChildren()){
+				newTree.add(singleTreeSplitConj(child));
+			}
+			return new Tree<String>(t.getLabel(), newTree);
+		}
+		
+		// To append "-AUX" to the tags of auxiliary verbs.
+		private List<Tree<String>> splitAuxVerbs(List<Tree<String>> trainTrees){
+			List<Tree<String>> splitTrainTrees = new ArrayList<Tree<String>>();
+			String[] auxVs = {"be", "am", "are", "is", "was", "were", "being", "can", "could", "do", "did", "does",
+					"doing", "have", "had", "has", "having", "may", "might", "must", "shall", "should", "will", "would"};
+			Set<String> auxVerbs = new HashSet<String>(Arrays.asList(auxVs));
+			for (Tree<String> t : trainTrees){
+				//System.out.println(Trees.PennTreeRenderer
+				//		.render(t));
+				Tree<String> curTree = singleTreeSplitAuxVerbs(t, auxVerbs);
+				//System.out.println(Trees.PennTreeRenderer.render(curTree));
+				splitTrainTrees.add(curTree);
+			}
+			return splitTrainTrees;
+		}
+		
+		// Recursing over the tree. Helper for splitAuxVerbs
+		private Tree<String> singleTreeSplitAuxVerbs(Tree<String> t, Set<String> auxVerbs){
+			if (t.isPreTerminal()){
+				if (auxVerbs.contains(t.getChildren().get(0).getLabel()))
+					t.setLabel(t.getLabel() + "-AUX");
+				return t;
+			}
+			List<Tree<String>> newTree = new ArrayList<Tree<String>>();
+			for (Tree<String> child : t.getChildren()){
+				newTree.add(singleTreeSplitAuxVerbs(child, auxVerbs));
+			}
+			return new Tree<String>(t.getLabel(), newTree);
+			
+		}
+		
+		// To add the second order vertical markov assumption.
+		private List<Tree<String>> addVerticalAnnotations(List<Tree<String>> trainTrees){
+			List<Tree<String>> vertTrainTrees = new ArrayList<Tree<String>>();
+			for (Tree<String> t : trainTrees){
+				//System.out.println(Trees.PennTreeRenderer
+				//		.render(t));
+				//System.out.println(Trees.PennTreeRenderer.render(singleTreeVertAnnotations(t, "ROOT", 2)));
+				vertTrainTrees.add(singleTreeVertAnnotations(t, "ROOT", 2));
+				//System.exit(0);
+			}
+			return vertTrainTrees;
+		}
+		
+		// To recurse over the tree. A helper for addVerticalAnnotations.
+		private Tree<String> singleTreeVertAnnotations(Tree<String> t, String parentLabel, int sizeOfVertMarkov){
+			if (t.isPreTerminal()){
+				return t;
+			}
+			List<Tree<String>> newTree = new ArrayList<Tree<String>>();
+			for (Tree<String> child : t.getChildren()){
+				newTree.add(singleTreeVertAnnotations(child, t.getLabel(), sizeOfVertMarkov));
+			}
+			return new Tree<String>(t.getLabel() + "^" + parentLabel, newTree);
 		}
 		
 		private void testUnaryClosure(){
@@ -415,6 +605,9 @@ public class PCFGParserTester {
 		}
 
 		private List<Tree<String>> annotateTrees(List<Tree<String>> trees) {
+			// try traversing the tree, and adding a second-order vertical markov assumption. 
+			// this is before the 'annotation', or the horizontal infinite-order binarization occurs.
+			// don't forget remove the vertical annotations when parsing.
 			List<Tree<String>> annotatedTrees = new ArrayList<Tree<String>>();
 			for (Tree<String> tree : trees) {
 				annotatedTrees.add(TreeAnnotations.annotateTree(tree));
@@ -1150,7 +1343,7 @@ public class PCFGParserTester {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		// Parse command line flags and arguments
 		Map<String, String> argMap = CommandLineUtils
 				.simpleCommandLineParser(args);
@@ -1160,7 +1353,7 @@ public class PCFGParserTester {
 		boolean verbose = true;
 		String testMode = "validate";
 		int maxTrainLength = 1000;
-		int maxTestLength = 40;
+		int maxTestLength = 20;
 
 		// Update defaults using command line specifications
 		if (argMap.containsKey("-path")) {
@@ -1204,16 +1397,28 @@ public class PCFGParserTester {
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
 		// TODO : Build a better parser!
-		MyParser parser = new MyParser(trainTrees);
+		// 
+		boolean verticalSecondOrder = false;
+		boolean auxVerbsSplit = false;
+		boolean conjunctionSplit = false;
+
+		MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit);
 
 		List<String> test = new ArrayList<String>();
 		test.add("The");
 		test.add("cat");
 		test.add("sat");
+		test.add("and");
+		test.add("would");
+		test.add("read");
+		test.add("a");
+		test.add("book");
 		test.add(".");
 
-		//parser.getBestParseTwo(test);
-		testParser(parser, testTrees, verbose);
+		System.out.println(PennTreeRenderer.render(parser.getBestParseTwo(test)));
+		System.out.println(PennTreeRenderer.render(parser.getBestParse(test)));
+		
+		//testParser(parser, testTrees, verbose);
 	}
 
 	private static void testParser(Parser parser, List<Tree<String>> testTrees,
@@ -1222,7 +1427,9 @@ public class PCFGParserTester {
 				Collections.singleton("ROOT"),
 				new HashSet<String>(Arrays.asList(new String[] { "''", "``",
 						".", ":", "," })));
+		int counter = 0;
 		for (Tree<String> testTree : testTrees) {
+			System.out.println("Trees left: " + (testTrees.size() - counter));
 			List<String> testSentence = testTree.getYield();
 			Tree<String> guessedTree = parser.getBestParse(testSentence);
 			if (verbose) {
@@ -1232,6 +1439,7 @@ public class PCFGParserTester {
 						+ Trees.PennTreeRenderer.render(testTree));
 			}
 			eval.evaluate(guessedTree, testTree);
+			counter++;
 		}
 		eval.display(true);
 	}
