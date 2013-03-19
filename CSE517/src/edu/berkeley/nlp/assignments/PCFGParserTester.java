@@ -61,7 +61,6 @@ public class PCFGParserTester {
 			else
 				return 0;
 		}
-		
 	}
 
 	static class MyParser implements Parser {
@@ -74,7 +73,133 @@ public class PCFGParserTester {
 		boolean secondOrderVert;
 		boolean auxVerbSplit;
 		boolean conjSplit;
+		
+		//@Override
+		public Tree<String> getBestParseThree(List<String> sentence){
+			// int -> int -> string -> NodeInfo
+			Map<Integer, Map<Integer, Map<String, NodeInfo>>> chart = new HashMap<Integer, Map<Integer, Map<String, NodeInfo>>>();
+			// first go through the words and list their tags with probabilities
+			for (int i = 0; i < sentence.size(); i++){
+				checkChart(chart, i, i+1);
+				for (String tag : lexicon.getAllTags()){
+					//make nodeInfo object for word
+					NodeInfo word = new NodeInfo(sentence.get(i));
+					NodeInfo wordTag = new NodeInfo(tag, lexicon.scoreTagging(sentence.get(i), tag), word);
+					chart.get(i).get(i+1).put(tag, wordTag);
+				}
+				addUnaryRuleThree(chart, i, i+1);
+			}
+			// next fill out the chart
+			for (int diff = 2; diff <= sentence.size(); diff++){
+				for (int i = 0; i <= sentence.size() - diff; i++){
+					int j = i + diff;
+					//if (i == 0 && j == sentence.size())
+					//	System.out.println("Filling in the top of the chart.");
+					
+					checkChart(chart, i, j);
+					for (int k = i + 1; k < j; k++){
+						for (String leftChild : chart.get(i).get(k).keySet()){
+							for (BinaryRule br : grammar.getBinaryRulesByLeftChild(leftChild)){
+								
+								//System.out.println(br.getLeftChild());
+							//	if (chart.get(k).get(j).containsKey(br.getRightChild())){
+									//System.out.println("Made it here!");
+									if (chart.get(i).get(k).containsKey(br.getLeftChild()) && chart.get(k).get(j).containsKey(br.getRightChild())){
+										addBinaryRuleThree(chart, i, j, k, br);
+									}
+								//}
+							}
+						}
+					}
+					addUnaryRuleThree(chart, i, j);
+				}
+			}
+			
+			/*
+			int diff = 1;
+			for (int i = 0; i <= sentence.size() - diff; i++){
+				String best = getSingleHighestScoring(chart.get(i).get(i + diff));
+				System.out.println(chart.get(i).get(i+diff).get(best).firstChild.tag + " : " + best + " : " + chart.get(i).get(i+diff).get(best).prob);
+			}
+			*/
+			
+			//System.out.println(chart.get(0).get(sentence.size()).keySet().size());
+			String best = getSingleHighestScoring(chart.get(0).get(sentence.size()));
+			System.out.println("Prob of RBS -> cat: " + lexicon.scoreTagging("cat", "RBS"));
+			System.out.println("Prob of highest scoring tree: " + chart.get(0).get(sentence.size()).get(best).prob);
+			Tree<String> t = growTreeHelper(chart.get(0).get(sentence.size()).get(best));
+			return buildTree(t);
+			
+		}
+		
+		private void addUnaryRuleThree(Map<Integer, Map<Integer, Map<String, NodeInfo>>> chart, int i, int j){
+			Map<String, NodeInfo> tmpMap = new HashMap<String, NodeInfo>();
+			// loop over the unary rules with i,j as it's child.
+			for (String childTag : chart.get(i).get(j).keySet()){
+				for (UnaryRule ur : uc.getClosedUnaryRulesByChild(childTag)){
+					// if the head of the rule isn't in the chart yet at i,j, or if the prob is lower than this prob, creating the backing path,
+					// then add it to the chart.
+					if (!chart.get(i).get(j).containsKey(ur.getParent()) 
+							|| chart.get(i).get(j).get(ur.getParent()).prob < chart.get(i).get(j).get(ur.getChild()).prob * ur.getScore()){
+						NodeInfo parent = createBackingPath(chart, i, j, ur);
+						tmpMap.put(ur.getParent(), parent);
+					}
+				}
+			}
+			for (String s : tmpMap.keySet()){
+				if (!chart.get(i).get(j).containsKey(s) 
+					|| (chart.get(i).get(j).get(s).prob < tmpMap.get(s).prob)) {
+					chart.get(i).get(j).put(s, tmpMap.get(s));
+				}
+			}
 
+		}
+		
+		private NodeInfo createBackingPath(Map<Integer, Map<Integer, Map<String, NodeInfo>>> chart, int i, int j, UnaryRule ur){
+			// grab the bottom node
+			NodeInfo child = chart.get(i).get(j).get(ur.getChild());
+			double prob = child.prob * ur.getScore();
+			List<String> path = uc.getPath(ur);
+
+			for (int k = path.size() - 2; k >= 0; k--){
+				NodeInfo n = new NodeInfo(path.get(k), prob, child);
+				child= n;
+			}
+			return child;
+		}
+		
+		private void addBinaryRuleThree(Map<Integer, Map<Integer, Map<String, NodeInfo>>> chart, int i, int j, int k, BinaryRule br){
+			double prob = br.score * chart.get(i).get(k).get(br.getLeftChild()).prob
+					* chart.get(k).get(j).get(br.getRightChild()).prob;
+			if ((!chart.get(i).get(j).containsKey(br.getParent()) 
+					|| (chart.get(i).get(j).get(br.getParent()).prob < prob))
+					&& prob > 0){
+				NodeInfo n = new NodeInfo(br.getParent(), prob, chart.get(i).get(k).get(br.getLeftChild()), 
+						chart.get(k).get(j).get(br.getRightChild()));
+				chart.get(i).get(j).put(br.getParent(), n);
+			}
+		}
+		
+		private void checkChart(Map<Integer, Map<Integer, Map<String, NodeInfo>>> chart, int i, int j){
+			if (!chart.containsKey(i))
+				chart.put(i, new HashMap<Integer, Map<String, NodeInfo>>());
+			if (!chart.get(i).containsKey(j))
+				chart.get(i).put(j, new HashMap<String, NodeInfo>());
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//@Override
 		public Tree<String> getBestParseTwo(List<String> sentence){
 			//testingStuff(sentence);
 			List<List<Map<String, NodeInfo>>> score = new ArrayList<List<Map<String, NodeInfo>>>();
@@ -97,7 +222,12 @@ public class PCFGParserTester {
 						//	System.out.println(sentence.get(i) + " : " + tag + " : " + prob);
 					}
 				}
+				//addUnaryRulesTwo(score, i, i+1);
 			}
+			
+			
+			// to test that the preterminals are making sense
+			
 			for (int i = 0; i < sentence.size(); i++){
 				String best = getSingleHighestScoring(score.get(i).get(i+1));
 				System.out.println(sentence.get(i) + " : " + best + " : " + score.get(i).get(i+1).get(best).prob);
@@ -109,6 +239,8 @@ public class PCFGParserTester {
 				String best = getSingleHighestScoring(score.get(i).get(i+1));
 				System.out.println(sentence.get(i) + " : " + best + " : " + score.get(i).get(i+1).get(best).prob);
 			}
+			
+			
 			// fill out the chart
 			
 			for (int diff = 2; diff < sentence.size() + 1; diff++){
@@ -123,18 +255,20 @@ public class PCFGParserTester {
 		
 		public void addBinaryRules(List<List<Map<String, NodeInfo>>> score, int i, int j){
 			Map<String, NodeInfo> tmpMap = new HashMap<String, NodeInfo>();
-			for (BinaryRule br : grammar.getBinaryRules()){
-				for (int k = i + 1; k <= j - 1; k++){
-					// add binary rules
-					// left: i,k. right: k,j.
-					if (score.get(i).get(k).containsKey(br.getLeftChild()) && score.get(k).get(j).containsKey(br.getRightChild())){
-						double newProb = br.getScore() * score.get(i).get(k).get(br.getLeftChild()).prob 
-								* score.get(k).get(j).get(br.getRightChild()).prob;
-						if ((!score.get(i).get(j).containsKey(br.parent) && newProb > 0)
-								|| score.get(i).get(j).get(br.parent).prob < newProb){
-							NodeInfo n = new NodeInfo(br.parent, newProb, score.get(i).get(k).get(br.leftChild),
-									score.get(k).get(j).get(br.rightChild));
-							tmpMap.put(br.parent, n);
+			for (int k = i + 1; k <= j - 1; k++){
+				for (String leftChild : score.get(i).get(k).keySet()){
+					for (BinaryRule br : grammar.getBinaryRulesByLeftChild(leftChild)){
+						// add binary rules
+						// left: i,k. right: k,j.
+						if (score.get(i).get(k).containsKey(br.getLeftChild()) && score.get(k).get(j).containsKey(br.getRightChild())){
+							double newProb = br.getScore() * score.get(i).get(k).get(br.getLeftChild()).prob 
+									* score.get(k).get(j).get(br.getRightChild()).prob;
+							if ((!score.get(i).get(j).containsKey(br.parent) && newProb > 0)
+									|| score.get(i).get(j).get(br.parent).prob < newProb){
+								NodeInfo n = new NodeInfo(br.parent, newProb, score.get(i).get(k).get(br.leftChild),
+										score.get(k).get(j).get(br.rightChild));
+								tmpMap.put(br.parent, n);
+							}
 						}
 					}
 				}
@@ -208,8 +342,8 @@ public class PCFGParserTester {
 		
 		
 		
-		
-		
+		// TODO: go over this method, and make a new addNodeToChart method, that takes a chart, i, j, node, and checks 
+		// to make sure new prob is higher than the old prob, or that the tag isn't in that node.
 		
 		@Override
 		public Tree<String> getBestParse(List<String> sentence) {
@@ -224,7 +358,7 @@ public class PCFGParserTester {
 			// first pass over score and give a tagscore to each of the words.
 			for (int i = 0; i < score.size(); i++){
 				for (String tag : lexicon.getAllTags()){
-					NodeInfo word = new NodeInfo(sentence.get(i), 1, null);
+					NodeInfo word = new NodeInfo(sentence.get(i));
 					double sc = lexicon.scoreTagging(sentence.get(i), tag);
 					if (sc > 0){
 						NodeInfo n = new NodeInfo(tag, sc, word);
@@ -314,7 +448,9 @@ public class PCFGParserTester {
 			
 			if (getSingleTop){
 				String best = getSingleHighestScoring(score.get(0).get(sentence.size()));
-				ut = getTreeFromString(score, best, sentence);
+				// to get the tree from the top scoring tag
+				Tree<String> t = growTreeHelper(score.get(0).get(sentence.size()).get(best));
+				ut = buildTree(t);
 			} else{
 				List<String> highest = getHighestScoring(score, sentence);
 	
@@ -322,7 +458,8 @@ public class PCFGParserTester {
 				for (String best : highest){
 					double bestP = score.get(0).get(sentence.size()).get(best).prob;
 					//System.out.println("Tag at head of tree: " + best + " at " + bestP);
-					ut = getTreeFromString(score, best, sentence);
+					Tree<String> t = growTreeHelper(score.get(0).get(sentence.size()).get(best));
+					ut = buildTree(t);
 					//System.out.println(Trees.PennTreeRenderer.render(t));
 					output.println(ut);
 					//System.out.println();
@@ -334,8 +471,7 @@ public class PCFGParserTester {
 			return ut;
 		}
 		
-		private Tree<String> getTreeFromString(List<List<Map<String, NodeInfo>>> score, String best, List<String> sentence){
-			Tree<String> t = growTree(score.get(0).get(sentence.size()).get(best));
+		private Tree<String> buildTree(Tree<String> t){
 			List<Tree<String>> tmpList = new ArrayList<Tree<String>>();
 			tmpList.add(t);
 			Tree<String> withRoot = new Tree<String>("ROOT", tmpList);
@@ -399,7 +535,6 @@ public class PCFGParserTester {
 			return topString;
 		}
 		
-		// TODO: make sure this grabs the top scoring parse tree
 		private List<String> getHighestScoring(List<List<Map<String, NodeInfo>>> score, List<String> sentence){
 			List<String> l = new ArrayList<String>();
 			Queue<NodeInfo> ordered = new PriorityQueue<NodeInfo>();
@@ -411,14 +546,14 @@ public class PCFGParserTester {
 			return l;
 		}
 		
-		private Tree<String> growTree(NodeInfo n){
+		private Tree<String> growTreeHelper(NodeInfo n){
 			if (n.firstChild == null){
 				return new Tree<String>(n.tag);
 			} else {
 				List<Tree<String>> l = new ArrayList<Tree<String>>();
-				l.add(growTree(n.firstChild));
+				l.add(growTreeHelper(n.firstChild));
 				if (!n.isUnary())
-					l.add(growTree(n.secondChild));
+					l.add(growTreeHelper(n.secondChild));
 					
 				return new Tree<String>(n.tag, l);
 			}
@@ -474,13 +609,16 @@ public class PCFGParserTester {
 			//testUnaryClosure();
 
 			lexicon = new Lexicon(annotatedTrainTrees);
+			System.out.println("The score for \"cat\" -> NN : " + lexicon.scoreTagging("cat", "NN"));
+			System.out.println("The score for \"cat\" -> . : " + lexicon.scoreTagging("cat", "."));
+			System.out.println("The score for \"eat\" -> UH : " + lexicon.scoreTagging("eat", "UH"));
+			System.out.println("The score for \"eat\" -> VB : " + lexicon.scoreTagging("eat", "VB"));
 			//knownParses = new CounterMap<List<String>, Tree<String>>();
 			spanToCategories = new CounterMap<Integer, String>();
 			//for (Tree<String> trainTree : annotatedTrainTrees) {
 			//	List<String> tags = trainTree.getPreTerminalYield();
 				//knownParses.incrementCount(tags, trainTree, 1.0);
 			//	tallySpans(trainTree, 0);
-				
 			//}
 			System.out.println("done.");
 			// printSpans();
@@ -1382,6 +1520,8 @@ public class PCFGParserTester {
 		if (argMap.containsKey("-quiet")) {
 			verbose = false;
 		}
+		File f = new File(basePath);
+		System.out.println("File path: " + f.getAbsolutePath());
 
 		System.out.print("Loading training trees (sections 2-21) ... ");
 		List<Tree<String>> trainTrees = readTrees(basePath, 200, 2199,maxTrainLength);
@@ -1389,14 +1529,13 @@ public class PCFGParserTester {
 		List<Tree<String>> testTrees = null;
 		if (testMode.equalsIgnoreCase("validate")) {
 			System.out.print("Loading validation trees (section 22) ... ");
-			testTrees = readTrees(basePath, 2200, 2299, maxTestLength);
+			testTrees = readTrees(basePath, 2200, 2200, maxTestLength);
 		} else {
 			System.out.print("Loading test trees (section 23) ... ");
 			testTrees = readTrees(basePath, 2300, 2319, maxTestLength);
 		}
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
-		// TODO : Build a better parser!
 		// 
 		boolean verticalSecondOrder = false;
 		boolean auxVerbsSplit = false;
@@ -1408,16 +1547,16 @@ public class PCFGParserTester {
 		test.add("The");
 		test.add("cat");
 		test.add("sat");
-		test.add("and");
-		test.add("would");
-		test.add("read");
-		test.add("a");
-		test.add("book");
+		//test.add("and");
+		//test.add("would");
+		//test.add("read");
+		//test.add("a");
+		//test.add("book");
 		test.add(".");
 
-		System.out.println(PennTreeRenderer.render(parser.getBestParseTwo(test)));
+		//System.out.println(PennTreeRenderer.render(parser.getBestParseOne(test)));
+		//System.out.println(PennTreeRenderer.render(parser.getBestParseTwo(test)));
 		System.out.println(PennTreeRenderer.render(parser.getBestParse(test)));
-		
 		//testParser(parser, testTrees, verbose);
 	}
 
