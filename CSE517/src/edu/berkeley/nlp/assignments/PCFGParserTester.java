@@ -1744,7 +1744,7 @@ public class PCFGParserTester {
 		List<Tree<String>> testTrees = null;
 		if (testMode.equalsIgnoreCase("validate")) {
 			System.out.print("Loading validation trees (section 22) ... ");
-			testTrees = readTrees(basePath, 2200, 2200, maxTestLength);
+			testTrees = readTrees(basePath, 2200, 2299, maxTestLength);
 		} else {
 			System.out.print("Loading test trees (section 23) ... ");
 			testTrees = readTrees(basePath, 2300, 2319, maxTestLength);
@@ -1761,25 +1761,39 @@ public class PCFGParserTester {
 		boolean[] all = {true, true, true, true};
 		boolean[][] params = {base, vertMarkov, auxVerbs, conjunction, horizMarkov, 
 				vertAndHoriz, all};
+		boolean[][] test = {base, vertAndHoriz, all};
 		
 		// to keep the proper order:
 		boolean verticalSecondOrder = true;
 		boolean auxVerbsSplit = false;
 		boolean conjunctionSplit = false;
 		boolean secondOrderHoriz = true;
-
-		PrintWriter out = new PrintWriter(new File("outputForHW.txt"));
-		for (int i = 0; i < 7; i++){
-			verticalSecondOrder = params[i][0];
-			auxVerbsSplit = params[i][1];
-			conjunctionSplit = params[i][2];
-			secondOrderHoriz = params[i][3];
-			MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
-			testParser(parser, testTrees, verbose, out);
+		PrintWriter out = new PrintWriter(new File("outputValidationForHW.txt"));
+		try {
+			for (int i = 0; i < 7; i++){
+				verticalSecondOrder = params[i][0];
+				auxVerbsSplit = params[i][1];
+				conjunctionSplit = params[i][2];
+				secondOrderHoriz = params[i][3];
+				MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
+				testParser(parser, testTrees, verbose, out);
+				out.flush();
+			}
+			out.close();
+			// to test!
+			out = new PrintWriter(new File("outputTestForHW.txt"));
+			testTrees = readTrees(basePath, 2300, 2319, maxTestLength);
+			
+			for (int i = 0; i < 3; i++){
+				MyParser parser = new MyParser(trainTrees, test[i][0], test[i][1], test[i][2], test[i][3]);
+				testParser(parser, testTrees, verbose, out);
+			}
+			out.close();
+		} finally {
+			out.close();
 		}
-		out.close();
-		
-		List<String> test = new ArrayList<String>();
+			
+		//List<String> testSent = new ArrayList<String>();
 		//test.add("The");
 		//test.add("cat");
 		//test.add("sat");
