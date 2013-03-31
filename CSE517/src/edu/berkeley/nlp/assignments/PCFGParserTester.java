@@ -925,9 +925,9 @@ public class PCFGParserTester {
 				System.out.println(Trees.PennTreeRenderer.render(tree));
 				System.out.println();
 				System.out.println(Trees.PennTreeRenderer
-						.render(TreeAnnotations.annotateTree(tree)));
+						.render(TreeAnnotations.annotateTree(tree, secOrderHoriz)));
 				System.out.println("\n\n\n");
-				if (counter == 10)
+				if (counter == 5)
 					break;
 				counter++;
 			}
@@ -939,7 +939,7 @@ public class PCFGParserTester {
 			// don't forget remove the vertical annotations when parsing.
 			List<Tree<String>> annotatedTrees = new ArrayList<Tree<String>>();
 			for (Tree<String> tree : trees) {
-				annotatedTrees.add(TreeAnnotations.annotateTree(tree));
+				annotatedTrees.add(TreeAnnotations.annotateTree(tree, secOrderHoriz));
 			}
 			return annotatedTrees;
 		}
@@ -1051,7 +1051,7 @@ public class PCFGParserTester {
 			// printSomeTrees(trainTrees);
 
 			System.out.print("Annotating / binarizing training trees ... ");
-			List<Tree<String>> annotatedTrainTrees = annotateTrees(trainTrees);
+			List<Tree<String>> annotatedTrainTrees = annotateTrees(trainTrees, false);
 			System.out.println("done.");
 
 			System.out.print("Building grammar ... ");
@@ -1074,10 +1074,10 @@ public class PCFGParserTester {
 			System.out.println("done.");
 		}
 
-		private List<Tree<String>> annotateTrees(List<Tree<String>> trees) {
+		private List<Tree<String>> annotateTrees(List<Tree<String>> trees, boolean SOH) {
 			List<Tree<String>> annotatedTrees = new ArrayList<Tree<String>>();
 			for (Tree<String> tree : trees) {
-				annotatedTrees.add(TreeAnnotations.annotateTree(tree));
+				annotatedTrees.add(TreeAnnotations.annotateTree(tree, SOH));
 			}
 			return annotatedTrees;
 		}
@@ -1102,15 +1102,36 @@ public class PCFGParserTester {
 	 * parser's use, and debinarizing and unannotating them for scoring.
 	 */
 	static class TreeAnnotations {
-		static boolean secondOrderHoriz;
+		static boolean exit = false;
 		public static Tree<String> annotateTree(Tree<String> unAnnotatedTree, boolean SOH) {
 			// Currently, the only annotation done is a lossless binarization
 			// TODO : change the annotation from a lossless binarization to a
 			// finite-order markov process (try at least 1st and 2nd order)
 			// TODO : mark nodes with the label of their parent nodes, giving a
 			// second order vertical markov process
-			secondOrderHoriz = SOH;
-			return binarizeTree(unAnnotatedTree);
+			Tree<String> tree = binarizeTree(unAnnotatedTree);
+			if (SOH)
+				tree = makeSecondOrderMarkov(tree);
+			return tree;
+		}
+		
+		private static Tree<String> makeSecondOrderMarkov(Tree<String> t){
+			if (t.isPreTerminal())
+				return t;
+			List<Tree<String>> newTree = new ArrayList<Tree<String>>();
+			for (Tree<String> child : t.getChildren()){
+				newTree.add(makeSecondOrderMarkov(child));
+			}
+			return new Tree<String>(makeSecondOrder(t.getLabel()), newTree);
+		}
+
+		private static String makeSecondOrder(String l){
+			String[] s = l.split("_");
+			if (s.length > 2){
+				exit = true;
+				return (s[0] + "..." + s[s.length-2] + "_" + s[s.length-1]);
+			}
+			return l;
 		}
 
 		private static Tree<String> binarizeTree(Tree<String> tree) {
@@ -1126,14 +1147,8 @@ public class PCFGParserTester {
 			// a sequence of binary and unary trees.
 			String intermediateLabel = "@" + label + "->";
 			Tree<String> intermediateTree = binarizeTreeHelper(tree, 0,
-					intermediateLabel);
-			if (secondOrderHoriz)
-				makeSecondOrder(intermediateTree);
+					intermediateLabel);			
 			return new Tree<String>(label, intermediateTree.getChildren());
-		}
-		
-		private static void makeSecondOrder(Tree<String> iTree){
-			
 		}
 
 		private static Tree<String> binarizeTreeHelper(Tree<String> tree,
@@ -1143,6 +1158,7 @@ public class PCFGParserTester {
 			List<Tree<String>> children = new ArrayList<Tree<String>>();
 			children.add(binarizeTree(leftTree));
 			if (numChildrenGenerated < tree.getChildren().size() - 1) {
+
 				Tree<String> rightTree = binarizeTreeHelper(tree,
 						numChildrenGenerated + 1, intermediateLabel + "_"
 								+ leftTree.getLabel());
@@ -1735,10 +1751,10 @@ public class PCFGParserTester {
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
 		// 
-		boolean verticalSecondOrder = false;
+		boolean verticalSecondOrder = true;
 		boolean auxVerbsSplit = false;
 		boolean conjunctionSplit = false;
-		boolean secondOrderHoriz = false;
+		boolean secondOrderHoriz = true;
 
 		MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
 
