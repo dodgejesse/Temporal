@@ -9,6 +9,7 @@ import edu.berkeley.nlp.util.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.PriorityQueue;
@@ -1750,14 +1751,34 @@ public class PCFGParserTester {
 		}
 		System.out.println("done. (" + testTrees.size() + " trees)");
 
-		// 
+		// to be loop over these sets of parameters
+		boolean[] base = {false, false, false, false};
+		boolean[] vertMarkov= {true, false, false, false};
+		boolean[] auxVerbs = {false, true, false, false};
+		boolean[] conjunction = {false, false, true, false};
+		boolean[] horizMarkov = {false, false, false, true};
+		boolean[] vertAndHoriz = {true, false, false, true};
+		boolean[] all = {true, true, true, true};
+		boolean[][] params = {base, vertMarkov, auxVerbs, conjunction, horizMarkov, 
+				vertAndHoriz, all};
+		
+		// to keep the proper order:
 		boolean verticalSecondOrder = true;
 		boolean auxVerbsSplit = false;
 		boolean conjunctionSplit = false;
 		boolean secondOrderHoriz = true;
 
-		MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
-
+		PrintWriter out = new PrintWriter(new File("outputForHW.txt"));
+		for (int i = 0; i < 7; i++){
+			verticalSecondOrder = params[i][0];
+			auxVerbsSplit = params[i][1];
+			conjunctionSplit = params[i][2];
+			secondOrderHoriz = params[i][3];
+			MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
+			testParser(parser, testTrees, verbose, out);
+		}
+		out.close();
+		
 		List<String> test = new ArrayList<String>();
 		//test.add("The");
 		//test.add("cat");
@@ -1772,11 +1793,10 @@ public class PCFGParserTester {
 		//System.out.println(PennTreeRenderer.render(parser.getBestParseOne(test)));
 		//System.out.println(PennTreeRenderer.render(parser.getBestParseTwo(test)));
 		//System.out.println(PennTreeRenderer.render(parser.getBestParse(test)));
-		testParser(parser, testTrees, verbose);
 	}
 
 	private static void testParser(Parser parser, List<Tree<String>> testTrees,
-			boolean verbose) {
+			boolean verbose, PrintWriter out) {
 		EnglishPennTreebankParseEvaluator.LabeledConstituentEval<String> eval = new EnglishPennTreebankParseEvaluator.LabeledConstituentEval<String>(
 				Collections.singleton("ROOT"),
 				new HashSet<String>(Arrays.asList(new String[] { "''", "``",
@@ -1795,7 +1815,7 @@ public class PCFGParserTester {
 			eval.evaluate(guessedTree, testTree);
 			counter++;
 		}
-		eval.display(true);
+		eval.display(true, out);
 	}
 
 	private static List<Tree<String>> readTrees(String basePath, int low,
