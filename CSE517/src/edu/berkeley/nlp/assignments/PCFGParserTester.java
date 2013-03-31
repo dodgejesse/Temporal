@@ -63,27 +63,36 @@ public class PCFGParserTester {
 		}
 		
 		public boolean equals(Object other){
+			if (other == null)
+				return false;
 			boolean result = other instanceof NodeInfo;
 			if (result){
 				NodeInfo o = (NodeInfo) other;
 				if (this.prob != o.prob
-						|| (!testSameChildrenName(this.firstChild.tag, o.firstChild.tag))
-						|| (!testSameChildrenName(this.secondChild.tag, o.secondChild.tag)))
+						|| (!testSameChildrenName(this.firstChild, o.firstChild))
+						|| (!testSameChildrenName(this.secondChild, o.secondChild)))
 					result = false;
 			}
 			return result;
 		}
 		
-		private boolean testSameChildrenName(String f, String s){
+		private boolean testSameChildrenName(NodeInfo f, NodeInfo s){
 			if (f == null && s == null)
 				return true;
 			if ((f == null && s != null) || f != null && s == null)
 				return false;
-			return !f.equals(s);
+			return f.tag.equals(s.tag);
 		}
 		
 		public int hashCode(){
 			return tag.hashCode();
+		}
+		
+		public String toString(){
+			String s = "tag: " + tag + "\tProb: " + prob;
+			String first = firstChild == null ? "null" : firstChild.tag;
+			String second = secondChild == null ? "null" : secondChild.tag;
+			return s + "\tleftChild: " + first + "\trightChild: " + second;
 		}
 	}
 
@@ -97,6 +106,8 @@ public class PCFGParserTester {
 		boolean secondOrderVert;
 		boolean auxVerbSplit;
 		boolean conjSplit;
+		boolean secOrderHoriz;
+
 		
 		//@Override
 		public Tree<String> getBestParseThree(List<String> sentence){
@@ -319,8 +330,30 @@ public class PCFGParserTester {
 		// to put the new items into the chart
 		private void addRulesToChart(List<List<Map<String, NodeInfo>>> score, Map<String, NodeInfo> tmpMap, int i, int j){
 			for (String s : tmpMap.keySet()){
+				// stupid testing
+				/*
+				if (s.equals("@NP^PP->_NP^NP_PP^NP_PP^NP") && i == 12 && j == 14) {
+					System.out.println("Now adding a rule from tmpMap to chart");
+					System.out.println("Rule to be added:");
+					System.out.println(tmpMap.get(s));
+					System.out.println("The test to get it into score from the tmpMap: " + 
+							(!score.get(i).get(j).containsKey(s) || score.get(i).get(j).get(s).prob < tmpMap.get(s).prob));
+					if (score.get(i).get(j).containsKey("@NP^PP->_NP^NP_PP^NP_PP^NP")){
+						System.out.println("The node before adding from tmpMap:\n" + score.get(i).get(j).get(s));
+					} else {
+						System.out.println("This doesn't exist in score yet. WTF.");
+					}
+				}
+				*/
 				if (!score.get(i).get(j).containsKey(s) || score.get(i).get(j).get(s).prob < tmpMap.get(s).prob)
 					score.get(i).get(j).put(s, tmpMap.get(s));
+				// stupid testing
+				/*
+				if (s.equals("@NP^PP->_NP^NP_PP^NP_PP^NP") && i == 12 && j == 14) {
+					System.out.println("After trying to add the new tag to score, the node in score:");
+					System.out.println(score.get(i).get(j).get(s));
+				}
+				*/
 			}
 		}
 		
@@ -435,26 +468,27 @@ public class PCFGParserTester {
 										|| score.get(i).get(j).get(bRule.parent).prob < n.prob){
 									tmpMap.put(bRule.parent, n);
 									score.get(i).get(j).put(bRule.parent, n);
-									
 								}
-							}
+							}								
+							
 						}
 					}
-					System.out.println("Size of testScore[i,j]: " + testScore.get(i).get(j).size());
-					System.out.println("Is @NP->_NP_CONJP in tmpMap? " 
-							+ tmpMap.containsKey("@NP->_NP_CONJP"));
-					System.out.println("It's probability: " + tmpMap.get("@NP->_NP_CONJP").prob);
-					System.out.println("The size of tmpMap and the current node in score: (Note: should be same.) " +
+					if (tmpMap.size() != score.get(i).get(j).size()){
+						System.out.println("The size of tmpMap and the current node in score: (Note: should be same.) " +
 							"tmpMap: " + tmpMap.size() + "    score: " + score.get(i).get(j).size());
+					}
+					
 					addRulesToChart(testScore, tmpMap, i, j);
-					System.out.println("The size of testScore after adding rules: " + testScore.get(i).get(j).size());
-					System.out.println("Is @NP->_NP_CONJP in testScore after adding tmpMap? " 
-							+ testScore.get(i).get(j).containsKey("@NP->_NP_CONJP"));
+					
+					
+					if (tmpMap.size() != testScore.get(i).get(j).size()){
+						System.out.println("The size of tmpMap and testScore after adding rules: (Note: should be same.) " +
+								"tmpMap:" + tmpMap.size() + "    testScore: " + testScore.get(i).get(j).size());
+					}
 					addUnaryRules(i,j, score);
 					addUnaryRules(i,j, testScore);
 					
 					testMethodsForAddingToChart(score, testScore, i, j);
-					
 				}
 			}
 			return buildTree(score, sentence);
@@ -462,20 +496,40 @@ public class PCFGParserTester {
 		
 		private void testMethodsForAddingToChart(List<List<Map<String, NodeInfo>>> score,
 				List<List<Map<String, NodeInfo>>> testScore, int i, int j){
+			
+			if (score.get(i).get(j).size() != testScore.get(i).get(j).size()){
+				System.out.println("Size of current node in score: " + score.get(i).get(j).size());
+				System.out.println("Size of current node in testScore: " + testScore.get(i).get(j).size());
+			}
+			
 			testHaveSameValues(score, testScore, i, j);
-			System.out.println("Size of current node in score: " + score.get(i).get(j).size());
-			System.out.println("Size of current node in testScore: " + testScore.get(i).get(j).size());
 
 			Queue<NodeInfo> q = findDiffForTestScore(score, testScore, i, j);
-			System.out.println("A list of tags in score but not in testScore: ");
-			for (int k = 0; k < 10; k++){
-				System.out.println(q.remove().tag);
+			
+			if (q.size() > 0){
+				System.out.println();
+				System.out.println("Size of symmetric difference for ["+i+","+j+"]:" + q.size());
+				System.out.println();
 			}
+			for (int k = 0; k < Math.min(10, q.size()); k++){
+				NodeInfo curNode = q.remove();
+				System.out.println(curNode.tag  + " : in score? " + 
+						score.get(i).get(j).containsKey(curNode.tag) + " : in testScore? " +
+						testScore.get(i).get(j).containsKey(curNode.tag));
+				System.out.println("Equals object in score: " + 
+						curNode.equals(score.get(i).get(j).get(curNode.tag)));
+				System.out.println("Equals object in testScore: " + 
+						curNode.equals(testScore.get(i).get(j).get(curNode.tag)));
+				
+				System.out.println("current:  " + curNode);
+				System.out.println("in score: " + score.get(i).get(j).get(curNode.tag));
+				System.out.println("in test:  " + testScore.get(i).get(j).get(curNode.tag));
 
-			
-			System.exit(0);
-			
-			
+				System.out.println();
+			}
+			if (q.size() > 0){
+				System.exit(0);
+			}
 		}
 		
 		// search through one score, and if the other has a matching key, and 
@@ -493,7 +547,6 @@ public class PCFGParserTester {
 			tmp.retainAll(testScoreNodeInfos);
 			symmetricDiff.removeAll(tmp);
 			
-			System.out.println("Size of symmetric diff: " + symmetricDiff.size());
 			return new PriorityQueue<NodeInfo>(symmetricDiff);
 		}
 		
@@ -522,13 +575,45 @@ public class PCFGParserTester {
 				for (UnaryRule uRule : uc.getClosedUnaryRulesByChild(tag)){
 					// multiplying the unary rule prob by the prob of the tag
 					double prob = uRule.getScore() * score.get(i).get(j).get(tag).prob;
-					if ((score.get(i).get(j).containsKey(uRule.parent) && 
-							score.get(i).get(j).get(uRule.parent).prob < prob) ||
-							(!score.get(i).get(j).containsKey(uRule.parent) &&
-							prob != 0 	)){
+					if ((newTags.containsKey(uRule.parent) && 
+							newTags.get(uRule.parent).prob < prob) ||
+							(!newTags.containsKey(uRule.parent) &&
+							prob != 0)){
+						
 						NodeInfo cur = new NodeInfo(uRule.getParent(), prob, score.get(i).get(j).get(tag));
+						/*
+						if (uRule.parent.equals("@NP^PP->_NP^NP_PP^NP_PP^NP") &&
+								(uRule.child.equals("ADVP^NP")) && i == 12 && j == 14){
+							System.out.println("Adding child==ADVP^NP to the newTags when we shouldn't.");
+							System.out.println("The old node:");
+							System.out.println(newTags.get(tag));
+							System.out.println("The new tag:");
+							System.out.println(cur);
+							System.out.println("Breakdown of the boolean test:");
+							System.out.println("score.get(i).get(j).containsKey(uRule.parent)" + 
+									score.get(i).get(j).containsKey(uRule.parent));
+							System.out.println("score.get(i).get(j).get(uRule.parent).prob < prob" +
+									(score.get(i).get(j).get(uRule.parent).prob < prob));
+							System.out.println();
+						}
+						*/
 						newTags.put(uRule.getParent(), cur);
+
 					}
+					// stupid testing
+					/*
+					if (uRule.parent.equals("@NP^PP->_NP^NP_PP^NP_PP^NP") &&
+							(uRule.child.equals("NP^NP") || uRule.child.equals("ADVP^NP")) && i == 12 && j == 14){
+						System.out.println();
+						System.out.println("New rule: ");
+						System.out.println(uRule);
+						System.out.println("Rule with this parent in score: " + score.get(i).get(j).containsKey(uRule.parent));
+						System.out.println("Probability of the new unary rule: " + prob);
+						System.out.println("The current node in newTags: ");
+						System.out.println(newTags.get(uRule.parent));
+						System.out.println();
+					}
+					*/
 				}
 			}
 			addRulesToChart(score, newTags, i, j);
@@ -555,7 +640,7 @@ public class PCFGParserTester {
 				// to get the tree from the top scoring tag
 				Tree<String> t = growTreeHelper(score.get(0).get(sentence.size()).get(best));
 				ut = buildTree(t);
-			} else{
+			} else {
 				List<String> highest = getHighestScoring(score, sentence);
 	
 				//System.out.println("Number of possibilities in top node: " + score.get(0).get(sentence.size()).keySet().size());
@@ -620,7 +705,8 @@ public class PCFGParserTester {
 			if (t.isLeaf())
 				return;
 			// removing the annotation
-			t.setLabel(t.getLabel().substring(0,t.getLabel().indexOf('^')));
+			if (t.getLabel().indexOf('^') > -1)
+				t.setLabel(t.getLabel().substring(0,t.getLabel().indexOf('^')));
 			// pass children
 			for (Tree<String> child : t.getChildren()){
 				removeVertAnnotations(child);
@@ -677,10 +763,11 @@ public class PCFGParserTester {
 		}
 
 		public MyParser(List<Tree<String>> trainTrees, boolean verticalSecondOrder, 
-				boolean auxVerbsSplit, boolean conjunctionSplit) throws FileNotFoundException {
+				boolean auxVerbsSplit, boolean conjunctionSplit, boolean secondOrderHoriz) throws FileNotFoundException {
 			conjSplit = conjunctionSplit;
 			secondOrderVert = verticalSecondOrder;
 			auxVerbSplit = auxVerbsSplit;
+			secOrderHoriz = secondOrderHoriz;
 			output = new PrintWriter(new File("scratch.txt"));
 			//printSomeTrees(trainTrees);
 
@@ -1015,12 +1102,14 @@ public class PCFGParserTester {
 	 * parser's use, and debinarizing and unannotating them for scoring.
 	 */
 	static class TreeAnnotations {
-		public static Tree<String> annotateTree(Tree<String> unAnnotatedTree) {
+		static boolean secondOrderHoriz;
+		public static Tree<String> annotateTree(Tree<String> unAnnotatedTree, boolean SOH) {
 			// Currently, the only annotation done is a lossless binarization
 			// TODO : change the annotation from a lossless binarization to a
 			// finite-order markov process (try at least 1st and 2nd order)
 			// TODO : mark nodes with the label of their parent nodes, giving a
 			// second order vertical markov process
+			secondOrderHoriz = SOH;
 			return binarizeTree(unAnnotatedTree);
 		}
 
@@ -1038,7 +1127,13 @@ public class PCFGParserTester {
 			String intermediateLabel = "@" + label + "->";
 			Tree<String> intermediateTree = binarizeTreeHelper(tree, 0,
 					intermediateLabel);
+			if (secondOrderHoriz)
+				makeSecondOrder(intermediateTree);
 			return new Tree<String>(label, intermediateTree.getChildren());
+		}
+		
+		private static void makeSecondOrder(Tree<String> iTree){
+			
 		}
 
 		private static Tree<String> binarizeTreeHelper(Tree<String> tree,
@@ -1527,7 +1622,6 @@ public class PCFGParserTester {
 			System.out.println("SIZE: " + closureMap.keySet().size());
 
 			return closureMap;
-
 		}
 
 		private static List<String> extractPath(UnaryRule unaryRule,
@@ -1644,19 +1738,20 @@ public class PCFGParserTester {
 		boolean verticalSecondOrder = false;
 		boolean auxVerbsSplit = false;
 		boolean conjunctionSplit = false;
+		boolean secondOrderHoriz = false;
 
-		MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit);
+		MyParser parser = new MyParser(trainTrees, verticalSecondOrder, auxVerbsSplit, conjunctionSplit, secondOrderHoriz);
 
 		List<String> test = new ArrayList<String>();
-		test.add("The");
-		test.add("cat");
-		test.add("sat");
+		//test.add("The");
+		//test.add("cat");
+		//test.add("sat");
 		//test.add("and");
 		//test.add("would");
 		//test.add("read");
 		//test.add("a");
 		//test.add("book");
-		test.add(".");
+		//test.add(".");
 
 		//System.out.println(PennTreeRenderer.render(parser.getBestParseOne(test)));
 		//System.out.println(PennTreeRenderer.render(parser.getBestParseTwo(test)));
