@@ -57,7 +57,9 @@ import edu.uw.cs.utils.log.Logger;
 import edu.uw.cs.utils.log.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -67,7 +69,7 @@ import java.util.Set;
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		boolean testingDataset = false;
 		boolean crossVal = true;
 		
@@ -115,10 +117,12 @@ public class TempEval3Dev {
 		else
 			dataLoc = "tempeval3.timebank.txt";
 			//dataLoc = "tempeval.dataset.corrected.txt";
-		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> train = TemporalSentenceDataset
+		// these train and test should be of type
+		// IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> 
+		TemporalSentenceDataset train = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
-		IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test = TemporalSentenceDataset
+		TemporalSentenceDataset test = TemporalSentenceDataset
 				.read(new File(datasetDir + dataLoc),
 						new StubStringFilter(), true);
 		LOG.info("Train Size: " + train.size());
@@ -283,50 +287,83 @@ public class TempEval3Dev {
 		
 		
 		if (crossVal){
+			double numberOfPartitions = 10;
 			// make a list
 			// use the constructor with TemporalSentenceDataset to make a new dataset. 
-			List<List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>> splitData = 
-					new LinkedList<List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>>();
-			Iterator<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> iter = train.iterator();
+			System.out.println("Splitting the data...");
+			List<List<TemporalSentence>> splitData = 
+					new LinkedList<List<TemporalSentence>>();
+			Iterator<TemporalSentence> iter = train.iterator();
 			int sentenceCount = 1;
-			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> tmp = 
-					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+			List<TemporalSentence> tmp = 
+					new LinkedList<TemporalSentence>();
 			
 			while (iter.hasNext()){
 				tmp.add(iter.next());
-				if (sentenceCount % Math.round(train.size() / 10.0)== 0){
+				if (sentenceCount % Math.round(train.size() / numberOfPartitions)== 0){
 					splitData.add(tmp);
-					tmp = new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+					tmp = new LinkedList<TemporalSentence>();
 					System.out.println();
 					System.out.println("sentenceCount: " + sentenceCount);
 					System.out.println("Train size: " + train.size());
 					System.out.println("size / 10: " + Math.round(train.size() / 10.0));
 					
 				}
-				
+
 				sentenceCount++;
 			}
+			System.out.println(" done.");
+			OutputData[] outList = new OutputData[splitData.size()];
 			
-			// to make the training and testing corpora
-			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTrain = 
-					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
-			List<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTest = 
-					new LinkedList<ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>>();
+			// to make the threads
+			TemporalThread[] threads = new TemporalThread[splitData.size()];
+			
 			for (int i = 0; i < splitData.size(); i++){
+				// to make the training and testing corpora
+				List<TemporalSentence> newTrainList = new LinkedList<TemporalSentence>();
+				List<TemporalSentence> newTestList = new LinkedList<TemporalSentence>();
 				for (int j = 0; j < splitData.size(); j++){
 					if (i == j)
-						newTest.addAll(splitData.get(i));
+						newTestList.addAll(splitData.get(i));
 					else
-						newTrain.addAll(splitData.get(j));
+						newTrainList.addAll(splitData.get(j));
 				}
-				final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
-				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
-						JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
-								2, train, jParser);
+				// to make them into IDataCollection items:
+				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTest = 
+						new TemporalSentenceDataset(newTestList);
+				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTrain = 
+						new TemporalSentenceDataset(newTrainList);
+				
+				
+				final TemporalTesterSmall tester = TemporalTesterSmall.build(newTest, jParser);
+				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner =
+						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
+								2, newTrain, jParser);
 
-				learner.train(model);
-				tester.test(model);
+
+				OutputData outputData = new OutputData();
+				
+				threads[i] = new TemporalThread(learner, tester, i, outputData, model);
+				threads[i].start();
+				//learner.train(model);
+				//tester.test(model, out, o);
+				//System.out.println("Successfully made it through " + (i + 1) + " iterations");
+				outList[i] = (outputData);
+				//System.
+				//System.exit(0);
 			}
+			for (int i = 0; i < threads.length; i++){
+				try{
+					threads[i].join();
+				} catch (InterruptedException e){
+					e.printStackTrace();
+					System.err.println("Some problems getting the threads to join again!");
+				}
+			}
+			PrintStream out = new PrintStream(new File("output/totals.txt"));
+			OutputData averaged = OutputData.average(outList);
+			out.println(averaged);
+			out.close();
 			
 			// create testing dataset 
 			// create training dataset
@@ -343,7 +380,8 @@ public class TempEval3Dev {
 
 		// Within this tester, I should go through each example and use the
 		// visitor on each logical expression!
-			tester.test(model);
+			OutputData o = new OutputData();
+			tester.test(model, System.out,o);
 		}
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
 		//		.currentTimeMillis() - startTime / 1000.0D));

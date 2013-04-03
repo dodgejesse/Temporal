@@ -1,5 +1,6 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
+import java.io.PrintStream;
 import java.util.*;
 
 import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
@@ -28,6 +29,9 @@ public class TemporalTesterSmall {
 	private final TemporalJointParser jointParser;
 	private final LogicalExpressionCategoryServices categoryServices;
 	private TemporalISO previous;
+	private PrintStream out;
+	OutputData outputData;
+
 
 	private TemporalTesterSmall(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
@@ -38,7 +42,10 @@ public class TemporalTesterSmall {
 		categoryServices = new LogicalExpressionCategoryServices();
 	}
 
-	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
+	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, 
+			PrintStream out, OutputData outData) {
+		this.out = out;
+		outputData = outData;
 		test(test, model);
 	}
 
@@ -75,17 +82,9 @@ public class TemporalTesterSmall {
 			else// if (c == 4)
 				notParsed++;
 		}
-		System.out.println();
-		System.out.println();
-		System.out.println("Total phrases: " + counter);
-		System.out.println("Number correctly parsed and executed, with correct type and val: " + correct
-						+ ", which is " + (double) correct * 100 / counter + " percent");
-		System.out.println("Number parsed with correct val, but not type: " + correctVal + ", which is "  + (double) correctVal * 100 / counter + " percent.");
-		System.out.println("Number parsed with correct type, but not val: " + correctType + ", which is "  + (double) correctType * 100 / counter + " percent.");
-		System.out.println("Number parsed, but with incorrect type and val: "
-						+ incorrect + ", which his " + (double) incorrect * 100 / counter + " percent");
-		System.out.println("Number with too many parses: " + tooManyParses);
-		System.out.println("Number with no parses: " + notParsed);
+		int[] tmpOutput = {counter, correct, correctVal, correctType, incorrect, tooManyParses, notParsed};
+		outputData.setCounters(tmpOutput);
+		out.println(outputData.toString());
 	}
 
 	private int test(ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> dataItem,
@@ -225,32 +224,32 @@ public class TemporalTesterSmall {
 				|| (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
 			if (correct >= -1 && correct <= 2) {
 				if ((ONLYPRINTINCORRECT && (correct == -1)) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
-					System.out.println();
-					System.out.println("Phrase:        " + phrase);
-					System.out.println("Logic:         " + label);
-					System.out.println("ref_time:      " + ref_time);
-					System.out.println("Gold type:     " + type);
-					System.out.println("gold val:      " + val);
-					System.out.println("Guess type:    " + output.getType());
-					System.out.println("Guess val:     " + output.getVal());
-					System.out.println("Correct type?  " + (correct == 0 || correct == 2));
-					System.out.println("Correct val?   " + (correct == 0 || correct == 1));					
+					out.println();
+					out.println("Phrase:        " + phrase);
+					out.println("Logic:         " + label);
+					out.println("ref_time:      " + ref_time);
+					out.println("Gold type:     " + type);
+					out.println("gold val:      " + val);
+					out.println("Guess type:    " + output.getType());
+					out.println("Guess val:     " + output.getVal());
+					out.println("Correct type?  " + (correct == 0 || correct == 2));
+					out.println("Correct val?   " + (correct == 0 || correct == 1));					
 				}
 			} else if (correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTNOPARSES) {
-				System.out.println();
-				System.out.println("Phrase:        " + phrase);
-				System.out.println("ref_time:      " + ref_time);
-				System.out.println("Gold type:     " + type);
-				System.out.println("gold val:      " + val);
-				System.out.println("Too many parses! Will implement"
+				out.println();
+				out.println("Phrase:        " + phrase);
+				out.println("ref_time:      " + ref_time);
+				out.println("Gold type:     " + type);
+				out.println("gold val:      " + val);
+				out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
-				System.out.println();
-				System.out.println("Phrase:        " + phrase);
-				System.out.println("ref_time:      " + ref_time);
-				System.out.println("Gold type:     " + type);
-				System.out.println("gold val:      " + val);
-				System.out.println("No parses! Will implement something"
+				out.println();
+				out.println("Phrase:        " + phrase);
+				out.println("ref_time:      " + ref_time);
+				out.println("Gold type:     " + type);
+				out.println("gold val:      " + val);
+				out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 			}
 		}

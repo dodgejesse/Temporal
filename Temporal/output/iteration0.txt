@@ -1,0 +1,40 @@
+
+Phrase:        the past three months
+Logic:         past_ref:r
+ref_time:      1998-01-08
+Gold type:     DURATION
+gold val:      P3M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        monday
+Logic:         monday:s
+ref_time:      1998-02-13
+Gold type:     SET
+gold val:      XXXX-WXX-1TNI
+Guess type:    DATE
+Guess val:     XXXX-WXX-1
+Correct type?  false
+Correct val?   false
+
+Phrase:        recent years
+Logic:         past_ref:r
+ref_time:      1998-02-13
+Gold type:     DURATION
+gold val:      PXY
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 58, which is 46.774193548387096 percent
+Number parsed with correct val, but not type: 39, which is 31.451612903225808 percent.
+Number parsed with correct type, but not val: 0, which is 0.0 percent.
+Number parsed, but with incorrect type and val: 3, which his 2.4193548387096775 percent
+Number with too many parses: 0
+Number with no parses: 24

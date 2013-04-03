@@ -1,0 +1,90 @@
+
+Phrase:        the day
+Logic:         day:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-10-12
+Guess type:    DURATION
+Guess val:     P1D
+Correct type?  false
+Correct val?   false
+
+Phrase:        the week
+Logic:         week:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-WXX
+Guess type:    DURATION
+Guess val:     P1W
+Correct type?  false
+Correct val?   false
+
+Phrase:        the week
+Logic:         week:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-WXX
+Guess type:    DURATION
+Guess val:     P1W
+Correct type?  false
+Correct val?   false
+
+Phrase:        the week
+Logic:         week:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-WXX
+Guess type:    DURATION
+Guess val:     P1W
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past five days
+Logic:         past_ref:r
+ref_time:      1989-10-30
+Gold type:     DURATION
+gold val:      P5D
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        recent weeks
+Logic:         past_ref:r
+ref_time:      1989-10-30
+Gold type:     DURATION
+gold val:      PXW
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        the quarter
+Logic:         quarter:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-Q2
+Guess type:    DURATION
+Guess val:     P1Q
+Correct type?  false
+Correct val?   false
+
+Phrase:        the quarter
+Logic:         quarter:d
+ref_time:      1989-10-30
+Gold type:     DATE
+gold val:      1989-Q3
+Guess type:    DURATION
+Guess val:     P1Q
+Correct type?  false
+Correct val?   false
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 61, which is 49.193548387096776 percent
+Number parsed with correct val, but not type: 41, which is 33.064516129032256 percent.
+Number parsed with correct type, but not val: 0, which is 0.0 percent.
+Number parsed, but with incorrect type and val: 8, which his 6.451612903225806 percent
+Number with too many parses: 0
+Number with no parses: 14

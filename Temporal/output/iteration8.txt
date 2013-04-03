@@ -1,0 +1,160 @@
+
+Phrase:        the past 20 years
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P20Y
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        coming weeks
+Logic:         future_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      PXW
+Guess type:    DATE
+Guess val:     FUTURE_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        the quarter
+Logic:         quarter:d
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1989-Q3
+Guess type:    DURATION
+Guess val:     P1Q
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q1
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-Q3
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988-QX
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        the quarter
+Logic:         quarter:d
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1989-Q1
+Guess type:    DURATION
+Guess val:     P1Q
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1989-10-26
+Gold type:     DATE
+gold val:      1988
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past 20 months
+Logic:         past_ref:r
+ref_time:      1989-10-26
+Gold type:     DURATION
+gold val:      P20M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 55, which is 44.354838709677416 percent
+Number parsed with correct val, but not type: 40, which is 32.25806451612903 percent.
+Number parsed with correct type, but not val: 1, which is 0.8064516129032258 percent.
+Number parsed, but with incorrect type and val: 15, which his 12.096774193548388 percent
+Number with too many parses: 0
+Number with no parses: 13

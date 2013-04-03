@@ -1,0 +1,70 @@
+
+Phrase:        the past two months
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P2M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past two months
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P2M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past two months
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P2M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        week
+Logic:         week:d
+ref_time:      1989-10-27
+Gold type:     DATE
+gold val:      1989-WXX
+Guess type:    DURATION
+Guess val:     P1W
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past two months
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P2M
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+Phrase:        the past two quarters
+Logic:         past_ref:r
+ref_time:      1989-10-27
+Gold type:     DURATION
+gold val:      P2Q
+Guess type:    DATE
+Guess val:     PAST_REF
+Correct type?  false
+Correct val?   false
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 57, which is 45.96774193548387 percent
+Number parsed with correct val, but not type: 44, which is 35.483870967741936 percent.
+Number parsed with correct type, but not val: 1, which is 0.8064516129032258 percent.
+Number parsed, but with incorrect type and val: 6, which his 4.838709677419355 percent
+Number with too many parses: 0
+Number with no parses: 16

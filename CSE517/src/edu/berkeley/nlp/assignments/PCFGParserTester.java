@@ -1780,6 +1780,7 @@ public class PCFGParserTester {
 				out.flush();
 			}
 			out.close();
+			
 			// to test!
 			out = new PrintWriter(new File("outputTestForHW.txt"));
 			testTrees = readTrees(basePath, 2300, 2319, maxTestLength);

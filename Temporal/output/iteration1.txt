@@ -1,0 +1,40 @@
+
+Phrase:        the fourth quarter
+Logic:         (nth:<d,<n,s>> quarter:d 4o:n)
+ref_time:      1998-01-26
+Gold type:     DURATION
+gold val:      1997-Q4
+Guess type:    DATE
+Guess val:     XXXX-Q4
+Correct type?  false
+Correct val?   false
+
+Phrase:        the day
+Logic:         day:d
+ref_time:      1998-02-13
+Gold type:     DATE
+gold val:      1998-02-13
+Guess type:    DURATION
+Guess val:     P1D
+Correct type?  false
+Correct val?   false
+
+Phrase:        a year earlier
+Logic:         (*:<d,<n,d>> year:d -1:n)
+ref_time:      1998-02-06
+Gold type:     DATE
+gold val:      1997
+Guess type:    DURATION
+Guess val:     P1Y
+Correct type?  false
+Correct val?   false
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 53, which is 42.74193548387097 percent
+Number parsed with correct val, but not type: 43, which is 34.67741935483871 percent.
+Number parsed with correct type, but not val: 1, which is 0.8064516129032258 percent.
+Number parsed, but with incorrect type and val: 3, which his 2.4193548387096775 percent
+Number with too many parses: 0
+Number with no parses: 24
