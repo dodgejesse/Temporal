@@ -33,6 +33,8 @@ String[], LogicalExpression, LogicalExpression>{
 	
 	private IHashVectorImmutable setFeats(String logicToString, IHashVector feats) {
 		
+		
+		// these features take the most common of the 4 contextually dependent 
 		if (logicToString.startsWith("(previous:<")){
 			feats.set(FEATURE_TAG + "(previous:<", 1);
 		} else if (logicToString.startsWith("(this:<")){
