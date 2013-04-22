@@ -1,0 +1,13 @@
+data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
+Leading the gains for Du Pont in the latest quarter was its industrial products segment, where profit soared to $155 million from $99 million a year earlier.
+the latest quarter
+1989-10-26
+DATE
+1989-Q3
+
+data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
+Leading the gains for Du Pont in the latest quarter was its industrial products segment, where profit soared to $155 million from $99 million a year earlier.
+a year earlier
+1989-10-26
+DATE
+1988-Q3

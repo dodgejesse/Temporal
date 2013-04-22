@@ -1,6 +1,7 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
+
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
 
@@ -13,20 +14,26 @@ import edu.uw.cs.utils.composites.Pair;
  */
 
 public class TemporalSentence implements
-		ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> {
+		ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>{
+	/**
+	 * 
+	 */
 	private final String docID;
 	private final String sentence;
+	private final String charNum;
 	private final Sentence phrase;
 	private final String refDate;
 	private final String type;
 	private final String val;
 	private final String prevDocID;
+	private final String dependencyParse;
 
 	
 	// This previous isn't actually being used! Could take it out. Will need to change temporalSentenceDataset.
-	public TemporalSentence(String d, String s, Sentence p, String r, String t, String v, TemporalSentence prev) {
+	public TemporalSentence(String d, String s, String c, Sentence p, String r, String t, String v, TemporalSentence prev, String dp) {
 		docID = d;
 		sentence = s;
+		charNum = c;
 		phrase = p;
 		refDate = r;
 		type = t;
@@ -35,15 +42,19 @@ public class TemporalSentence implements
 			prevDocID = prev.getSample().second()[0];
 		else
 			prevDocID = "";
-		//this.predCounts = GetPredicateCounts.of(semantics);
-
-		//final Iterator<Entry<LogicalConstant, Counter>> iterator = this.predCounts.entrySet().iterator();
-		//while (iterator.hasNext()) {
-		//	LogicalConstant pred = iterator.next().getKey();
-		//	if ((LogicLanguageServices.isArrayIndexPredicate(pred))
-		//			|| (LogicLanguageServices.isArraySubPredicate(pred)))
-		//		iterator.remove();
-		//}
+		dependencyParse = dp;
+	}
+	
+	public TemporalSentence( Sentence p, String d, String s, String c, String r, String t, String v, String prev, String dp){
+		docID = d;
+		sentence = s;
+		charNum = c;
+		phrase = p;
+		refDate = r;
+		type = t;
+		val = v;
+		prevDocID = prev;
+		dependencyParse = dp;
 	}
 
 	public Pair<String, String> getLabel() {
@@ -67,7 +78,7 @@ public class TemporalSentence implements
 	}
 
 	public Pair<Sentence, String[]> getSample() {
-		String[] s = {docID, sentence, refDate, prevDocID};
+		String[] s = {docID, sentence, refDate, prevDocID, charNum, dependencyParse};
 		return Pair.of(phrase, s);
 	}
 
@@ -93,7 +104,7 @@ public class TemporalSentence implements
 	}
 
 	public String toString() {
-		return docID + "\n" + sentence + "\n" + phrase.toString() + "\n" + refDate + "\n" + type + "\n" + val;
+		return docID + "\n" + sentence + "\n" + charNum + "\n" + phrase.toString() + "\n" + refDate + "\n" + type + "\n" + val;
 	}
 
 	@Override

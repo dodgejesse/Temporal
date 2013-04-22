@@ -1,6 +1,5 @@
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 On the other hand, it's turning out to be another very bad financial week for Asia.
-69
 week
 1998-01-08
 DURATION
@@ -8,7 +7,6 @@ P1W
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 In the last twenty four hours, the value of the Indonesian stock market has fallen by twelve percent.
-3
 the last twenty four hours
 1998-01-08
 DURATION
@@ -16,7 +14,6 @@ P1D
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 In Singapore, stocks hit a five year low.
-27
 five year
 1998-01-08
 DURATION
@@ -24,7 +21,6 @@ P5Y
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 In the Philippines, a four year low.
-22
 four year
 1998-01-08
 DURATION
@@ -32,7 +28,6 @@ P4Y
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 Now with new construction under way, three of his buyers have backed out.
-0
 now
 1998-01-08
 DATE
@@ -40,7 +35,6 @@ PRESENT_REF
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 She estimates her properties, worth a hundred thirty million dollars in October, are worth only half that now.
-72
 october
 1998-01-08
 DATE
@@ -48,7 +42,6 @@ DATE
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 She estimates her properties, worth a hundred thirty million dollars in October, are worth only half that now.
-106
 now
 1998-01-08
 DATE
@@ -56,7 +49,6 @@ PRESENT_REF
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 But in the past three months, stocks have plunged, interest rates have soared and the downturn all across Asia means that people are not spending here.
-7
 the past three months
 1998-01-08
 DURATION
@@ -64,7 +56,6 @@ P3M
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 And at the big brokerage houses, after ten years of boom, they're talking about layoffs.
-39
 ten years
 1998-01-08
 DURATION
@@ -72,7 +63,6 @@ P10Y
 
 data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
 I think that the mood is fairly gloomy, and I think it's not going to change for a couple of years.
-81
 a couple of years
 1998-01-08
 DURATION

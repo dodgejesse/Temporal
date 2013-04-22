@@ -60,6 +60,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -69,9 +70,30 @@ import java.util.Set;
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
-	public static void main(String[] args) throws FileNotFoundException {
-		boolean testingDataset = false;
-		boolean crossVal = true;
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		boolean readSerializedDatasets = true;
+		boolean serializeDatasets = false;
+		boolean testingDataset = false; // testing dataset takes precidenence over the other two
+		boolean timebank = true;  // when this is false, we use the aquaint data.
+		boolean crossVal = false;
+		
+		
+		
+		
+		// TestingSerializeable
+		List<TemporalSentence> l = new ArrayList<TemporalSentence>();
+		TestingSerializeable ts = new TestingSerializeable(l);
+		TestingSerializeable.save("ts.ser", ts);
+		System.out.println("Success!");
+		
+		TemporalSentenceDataset tsd = new TemporalSentenceDataset(new ArrayList<TemporalSentence>());
+		TemporalSentenceDataset.save("tmp.ser", tsd);
+		System.out.println("Double success");
+		
+		
+		
+		
+		
 		
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
@@ -108,23 +130,45 @@ public class TempEval3Dev {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
 		
 		// When running on testing dataset, testingDataset = true
 		String dataLoc;
 		if (testingDataset)
 			dataLoc = "tempeval3.testing.txt";
-		else
-			dataLoc = "tempeval3.timebank.txt";
+		else{
+			if (timebank)
+				dataLoc = "tempeval3.timebank.txt";
+			else
+				dataLoc = "tempeval3.aquaint.txt";
+			
+		}
+		
 			//dataLoc = "tempeval.dataset.corrected.txt";
 		// these train and test should be of type
 		// IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> 
-		TemporalSentenceDataset train = TemporalSentenceDataset
-				.read(new File(datasetDir + dataLoc),
-						new StubStringFilter(), true);
-		TemporalSentenceDataset test = TemporalSentenceDataset
-				.read(new File(datasetDir + dataLoc),
-						new StubStringFilter(), true);
+		TemporalSentenceDataset train = null;
+		TemporalSentenceDataset test = null;
+		// reading in the serialized datasets so we don't have to run the dependency parser again.
+		if (readSerializedDatasets){
+			train = TemporalSentenceDataset.readSerialized("trainingData.ser");
+			test = TemporalSentenceDataset.readSerialized("testingData.ser");
+		} else {
+			train = TemporalSentenceDataset
+					.read(new File(datasetDir + dataLoc),
+							new StubStringFilter(), true);
+			test = TemporalSentenceDataset
+					.read(new File(datasetDir + dataLoc),
+							new StubStringFilter(), true);
+		}
+		
+		if (serializeDatasets){
+			System.out.print("Serializing the training data... ");
+			TemporalSentenceDataset.save("trainingData.ser", train);
+			System.out.println("Done!");
+			System.out.print("Serializing the testing data... ");
+			TemporalSentenceDataset.save("testingData.ser", test);
+			System.out.println("Done!");
+		}
 		LOG.info("Train Size: " + train.size());
 		LOG.info("Test Size: " + test.size());
 
@@ -345,12 +389,7 @@ public class TempEval3Dev {
 				
 				threads[i] = new TemporalThread(learner, tester, i, outputData, model);
 				threads[i].start();
-				//learner.train(model);
-				//tester.test(model, out, o);
-				//System.out.println("Successfully made it through " + (i + 1) + " iterations");
 				outList[i] = (outputData);
-				//System.
-				//System.exit(0);
 			}
 			for (int i = 0; i < threads.length; i++){
 				try{
@@ -364,11 +403,7 @@ public class TempEval3Dev {
 			OutputData averaged = OutputData.average(outList);
 			out.println(averaged);
 			out.close();
-			
-			// create testing dataset 
-			// create training dataset
-			// do the stuff below but with those datasets. 
-		} else {
+					} else {
 			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
  
 		

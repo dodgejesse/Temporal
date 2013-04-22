@@ -7,18 +7,16 @@ import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.utils.string.IStringFilter;
 import edu.uw.cs.utils.composites.Pair;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TemporalSentenceDataset implements
-		IDataCollection<TemporalSentence> {
+		IDataCollection<TemporalSentence>{
 	private final List<TemporalSentence> data;
+	// needed to serialize
 
 	public TemporalSentenceDataset(List<TemporalSentence> data) {
 		this.data = Collections.unmodifiableList(data);
@@ -32,12 +30,16 @@ public class TemporalSentenceDataset implements
 			
 			String docID = null;
 			String sentence = null;
+			String charNum = null;
 			String phrase = null;
 			String refDate = null;
 			String type = null;
 			String val = null;
 			String line;
 			TemporalSentence prev = null;
+			DependencyParser dp = new DependencyParser();
+			System.out.println("Reading in the dataset, and running a dependency parser on each sentence... ");
+			int sentenceCounter = 0;
 			while ((line = in.readLine()) != null) {
 				if ((!line.startsWith("//")) && (!line.equals(""))) {
 					line = line.trim();
@@ -45,6 +47,8 @@ public class TemporalSentenceDataset implements
 						docID = textFilter.filter(line);
 					else if (sentence == null)
 						sentence = textFilter.filter(line);
+					else if (charNum == null)
+						charNum = textFilter.filter(line);
 					else if (phrase == null) {
 						// Case we don't have a phrase, so we are supposed to get one.
 						line = line.replace("-", " ");
@@ -56,23 +60,31 @@ public class TemporalSentenceDataset implements
 					} else if (val == null){
 						val = textFilter.filter(line);
 						TemporalSentence current;
+						String depParse = dp.getParse(sentence);
 						if (prev != null && prev.getSample().second()[0].equals(docID))
-							current = new TemporalSentence(docID, sentence, new Sentence(phrase), refDate, type, val, prev);
+							current = new TemporalSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, prev, depParse);
 						else
-							current = new TemporalSentence(docID, sentence, new Sentence(phrase), refDate, type, val, null);
+							current = new TemporalSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, null, depParse);
 						data.add(current);
 						
 						prev = current;
 						// To reset the variables to null. 
 						docID = null;
 						sentence = null;
+						charNum = null;
 						phrase = null;
 						refDate = null;
 						type = null;
 						val = null;
+						sentenceCounter++;
+						System.out.print(".");
+						if (sentenceCounter % 75 == 0)
+							System.out.println();
 					}
 				}
 			}
+			System.out.println();
+			System.out.println();
 			in.close();
 			return new TemporalSentenceDataset(data);
 		} catch (IOException e) {
@@ -86,5 +98,28 @@ public class TemporalSentenceDataset implements
 
 	public int size() {
 		return this.data.size();
+	}
+	
+	public static void save(String nameOfFile, TemporalSentenceDataset data) throws FileNotFoundException, IOException{
+		
+		OutputStream file = new FileOutputStream(nameOfFile);
+		OutputStream buffer = new BufferedOutputStream( file );
+		ObjectOutput output = new ObjectOutputStream( buffer );
+
+		output.writeObject(new SerializableTemporalDataset(data));
+		output.close();
+	}
+
+	public static TemporalSentenceDataset readSerialized(String nameOfFile) throws IOException, ClassNotFoundException {
+		InputStream file = new FileInputStream(nameOfFile);
+		InputStream buffer = new BufferedInputStream( file );
+		ObjectInput input = new ObjectInputStream ( buffer );
+		
+		
+		SerializableTemporalDataset std = (SerializableTemporalDataset) input.readObject();
+		input.close();
+		
+		return std.makeTemporalSentenceDataset();
+		
 	}
 }

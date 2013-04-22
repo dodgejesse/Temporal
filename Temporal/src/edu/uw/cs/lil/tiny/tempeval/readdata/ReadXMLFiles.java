@@ -35,7 +35,7 @@ public class ReadXMLFiles{
 		Map<String, Map<Integer, String[]>> info = new TreeMap<String, Map<Integer, String[]>>();
 		//readFiles(inputFiles[0], info);
 		//readFiles(inputFiles[1], info);
-		readFiles(inputFiles[0], info);
+		readFiles(inputFiles[1], info);
 		
 		printDataset(info);
 		//System.out.println("\n\n\n\n\nTesting AQUAINT");
@@ -53,6 +53,7 @@ public class ReadXMLFiles{
 						continue;
 					out.write(doc + "\n");
 					out.write(info.get(doc).get(tid)[1] + "\n");
+					out.write(info.get(doc).get(tid)[5] + "\n");
 					out.write(info.get(doc).get(tid)[2].toLowerCase() + "\n");
 					out.write(info.get(doc).get(0)[1] + "\n");
 					out.write(info.get(doc).get(tid)[3] + "\n");
@@ -98,6 +99,7 @@ public class ReadXMLFiles{
 		String thisLine;
 		br = new BufferedReader(new FileReader(f.getAbsoluteFile()));
 		int counter = 0;
+		System.out.println(f.getPath());
 		while ((thisLine = br.readLine()) != null) {
 			counter += (processLine(thisLine, oneDocData, counter));
 			//System.out.println(thisLine);
@@ -123,6 +125,7 @@ public class ReadXMLFiles{
 				String sent = l.replaceAll("\\<.*?\\>", "");
 				while(m.find()){
 					String[] strs = getTimex(m.group(0));
+					strs[5] = getCharNum(m.start(), l);
 					// To replace a place holder with the actual sentence
 					strs[1] = sent;
 					oneDocData.put(counter + numOnThisLine, strs);
@@ -131,6 +134,18 @@ public class ReadXMLFiles{
 			}
 		}
 		return numOnThisLine;
+	}
+	
+	// This method takes a String representing a line and a pointer to a character in that string.
+	// it returns the character number, represented as a String, of where the starting character is in
+	// the line without annotations. 
+	private static String getCharNum(int start, String l){
+		String sent = l.replaceAll("\\<.*?\\>", "");
+		String subSent = l.substring(start).replaceAll("\\<.*?\\>", "");
+		int charNum = sent.indexOf(subSent);
+		if (charNum == -1)
+			throw new IllegalArgumentException("Problem getting the character number of the starting point of the temporal phrase!");
+		return "" + charNum ;
 	}
 	
 	
@@ -151,7 +166,7 @@ public class ReadXMLFiles{
 		String val = extractInfo(l, "value=\".+?\"");
 		val = extractInfo(val, "\".+");
 				
-		String[] strs = {tid, "sentence", phrase, type, val};
+		String[] strs = {tid, "sentence", phrase, type, val, "charNum"};
 		
 		// A hack because my regex is ghetto.
 		for (int i = 0; i < strs.length; i++){
@@ -167,7 +182,7 @@ public class ReadXMLFiles{
 		String val = "";
 		if (m.find())
 			val = m.group();
-		if (val == "")
+		if (val.equals(""))
 			throw new IllegalArgumentException("Problem getting info from a Timex!");
 		val = val.substring(1, val.length());
 		return val;

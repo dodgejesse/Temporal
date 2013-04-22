@@ -79,18 +79,3 @@ public class SentenceSplitter {
 }
 
 
-
-/*		
-PrintWriter out = new PrintWriter(System.out);
-System.out.println("and here");
-
-pipeline.annotate(a);
-//pipeline.prettyPrint(a, );
-
-
-AbstractSequenceClassifier classifier = CRFClassifier.getClassifierNoExceptions(serializedClassifier);
-String s1 = "Good afternoon Rajat Raina, how are you today?";
-String s2 = "I go to school at Stanford University, which is located in California.";
-//System.out.println(classifier.testString(s1));
-//System.out.println(classifier.testStringInlineXML(s2));
-*/

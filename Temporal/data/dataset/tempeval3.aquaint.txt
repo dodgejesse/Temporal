@@ -1,0 +1,696 @@
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000401.0150.tml.ssplit
+Elian today is the symbol of our unity,'' Castro said to cheers.
+6
+today
+2000-04-01
+DATE
+2000-04-01
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000403.0057.tml.ssplit
+In another dramatic move, Castro announced that the chief of the Cuban Interests Section in Washington was willing to revoke the diplomatic immunity on his residence, where Cuba has proposed Gonzalez stay with Elian and the rest of his family during the federal appeal -- which could take as long as a month or two.
+300
+a month
+2000-04-03
+DURATION
+P1M
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000403.0057.tml.ssplit
+Elian has been at the center of an international tug-of-war since he was rescued off the coast of Florida in late November.
+109
+late november
+2000-04-03
+DATE
+1999-11
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000403.0057.tml.ssplit
+In its latest deadline, the U.S. Immigration and Naturalization Service has given the Miami relatives until 9 a.m. Tuesday to sign a paper promising to turn over the boy to immigration authorities if they lose their federal court appeal.
+108
+9 a.m. tuesday
+2000-04-03
+DATE
+2000-04-04T09:00
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000403.0057.tml.ssplit
+Before his Sunday night address, Castro played the affectionate grandfather to the 12 first-graders proposed to go on the trip, assuring them that their planned trip to Washington to retrieve their little friend was a very important mission.
+11
+sunday night
+2000-04-03
+DATE
+2000-04-02TNI
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000405.0276.tml.ssplit
+Castro's statement came less than an hour after Gregory Craig, attorney for Elian's father Juan Miguel Gonzalez, announced in Washington that the father would be traveling to the United States Thursday with his wife, their 6-month-old son, and with Fernando Remirez, chief of the Cuban Interests Section in Washington.
+193
+thursday
+2000-04-05
+DATE
+2000-04-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000417.0031.tml.ssplit
+He has spoken with Elian at least three times since he arrived in the United States on April 6, and he insisted his son wants to return to Cuba.
+87
+april 6
+2000-04-17
+DATE
+2000-04-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000417.0031.tml.ssplit
+We were betrayed by the government, by (President) Kennedy, and if they turned the child back over, it will be a second betrayal,'' said Josefa Gonzalez, who left Cuba in 1962 when she was 4.
+171
+1962
+2000-04-17
+DATE
+1962
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000417.0031.tml.ssplit
+Earlier Sunday, protesters prayed for divine help as Easter week began, waving palm fronds and posters of the Cuban boy and Jesus.
+8
+sunday
+2000-04-17
+DATE
+2000-04-16
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/APW20000417.0031.tml.ssplit
+Earlier Sunday, protesters prayed for divine help as Easter week began, waving palm fronds and posters of the Cuban boy and Jesus.
+53
+easter week
+2000-04-17
+DATE
+2000-W16
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0188.tml.ssplit
+The New York Times said in an editorial on Monday, Oct. 26:
+43
+monday, oct. 26
+1998-10-25
+DATE
+1998-10-26
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Additional details of the slaying emerged on Sunday.
+45
+sunday
+1998-10-25
+DATE
+1998-10-25
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Just over an hour later, he was declared dead at nearby Millard Fillmore Suburban Hospital.
+5
+over an hour
+1998-10-25
+DURATION
+PT1H
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+In his Sunday Mass at St. Patrick's Cathedral in New York, Cardinal John O'Connor called the murder wrong but he urged those angered by the slaying to be equally angered by abortions.
+7
+sunday
+1998-10-25
+DATE
+1998-10-25
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Many residents said abortion had gradually dwindled as a local issue since Operation Rescue, an anti-abortion group, started a series of largely unsuccessful ``Spring of Life'' demonstrations in 1992 intended to shut down abortion clinics and harass local doctors, including Slepian.
+195
+1992
+1998-10-25
+DATE
+1992-05-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Little of the vitriol that the issue aroused in the late 1980s and early 1990s remains, residents said, and many of the local religious leaders who led the 1992 protests have moved.
+57
+1980s
+1998-10-25
+DATE
+198X
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Little of the vitriol that the issue aroused in the late 1980s and early 1990s remains, residents said, and many of the local religious leaders who led the 1992 protests have moved.
+73
+1990s
+1998-10-25
+DATE
+199X
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981025.0216.tml.ssplit
+Little of the vitriol that the issue aroused in the late 1980s and early 1990s remains, residents said, and many of the local religious leaders who led the 1992 protests have moved.
+156
+1992
+1998-10-25
+DATE
+1992-10-02
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+Slepian was shot in the back on Friday night as he stood in his kitchen.
+32
+friday
+1998-10-26
+DATE
+1998-10-23
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+In a New York Times/CBS News poll completed on Saturday, 69 percent of those polled said they did not know D'Amato's position on abortion, and only 19 percent knew that he opposed abortion rights.
+47
+saturday
+1998-10-26
+DATE
+1998-10-24
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+Slepian's death was among the first topics raised in Saturday night's debate between the two men, and it was instantly followed by a question to D'Amato on whether he opposed first-trimester abortions for adult women.
+53
+saturday
+1998-10-26
+DATE
+1998-10-24
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+On Tuesday, the National Abortion and Reproductive Rights Action League plans to hold a news conference to screen a television advertisement _ made last week, before Slepian died _ featuring Emily Lyons, a nurse who was badly wounded earlier this year in the bombing of an abortion clinic in Alabama.
+3
+tuesday
+1998-10-26
+DATE
+1998-10-27
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+On Tuesday, the National Abortion and Reproductive Rights Action League plans to hold a news conference to screen a television advertisement _ made last week, before Slepian died _ featuring Emily Lyons, a nurse who was badly wounded earlier this year in the bombing of an abortion clinic in Alabama.
+148
+last week
+1998-10-26
+DATE
+1998-10-XX
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+On Tuesday, the National Abortion and Reproductive Rights Action League plans to hold a news conference to screen a television advertisement _ made last week, before Slepian died _ featuring Emily Lyons, a nurse who was badly wounded earlier this year in the bombing of an abortion clinic in Alabama.
+234
+earlier this year
+1998-10-26
+DATE
+1998-XX-XX
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+The advertisement, said Kelli Conlin, the executive director of the New York State affiliate of Naral, is intended to spotlight D'Amato's vote against the 1994 Freedom of Access to Clinic Entrances Act, which Schumer sponsored.
+155
+1994
+1998-10-26
+DATE
+1994
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+``Stopping clinic violence is going to be a major theme of our campaign from now to Election Day.''
+84
+election day
+1998-10-26
+DATE
+1998-11-03
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+In Sunday's debate against Vacco, Spitzer attacked him for failing to enforce a court order in 1992 against anti-abortion protesters who had blocked the entrance to a clinic.
+3
+sunday
+1998-10-26
+DATE
+1998-10-25
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+In Sunday's debate against Vacco, Spitzer attacked him for failing to enforce a court order in 1992 against anti-abortion protesters who had blocked the entrance to a clinic.
+95
+1992
+1998-10-26
+DATE
+1992
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+On Monday, Spitzer called for Vacco to revive that unit immediately, vowing that he would do so on his first day in office if elected.
+3
+monday
+1998-10-26
+DATE
+1998-10-26
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+On Monday, Spitzer called for Vacco to revive that unit immediately, vowing that he would do so on his first day in office if elected.
+103
+first day
+1998-10-26
+DATE
+1999-01-XX
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981026.0446.tml.ssplit
+``Trying to score political points from a homicide can have a backlash,'' said Maureen Connelly, a media consultant not working for any candidate in next week's election.
+149
+next week
+1998-10-26
+DATE
+1998-11-03
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+The antiabortion activist wanted for questioning in last month's shooting death of a doctor in a Buffalo suburb may have fled to Mexico, according to a newspaper report.
+52
+last month
+1998-11-20
+DATE
+1998-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+James Charles Kopp, 44, of Vermont, was seen in the car of a female associate crossing the US border days after a sniper killed Dr. Barnett Slepian in his kitchen, the Buffalo News reported Friday.
+101
+days
+1998-11-20
+DATE
+1998-10-XX
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+James Charles Kopp, 44, of Vermont, was seen in the car of a female associate crossing the US border days after a sniper killed Dr. Barnett Slepian in his kitchen, the Buffalo News reported Friday.
+190
+friday
+1998-11-20
+DATE
+1998-11-20
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+Kopp has been the subject of a manhunt following reports that he was spotted in a vehicle near the scene of the Oct. 23 slaying of Slepian, 52, an obstetrician who also performed abortions.
+112
+oct. 23
+1998-11-20
+DATE
+1998-10-23
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+Friday, an FBI official said authorities are pursuing more than 400 tips but have not pinned down Kopp's whereabouts.
+0
+friday
+1998-11-20
+DATE
+1998-11-20
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981120.0362.tml.ssplit
+A task force of US and Canadian officials is investigating the similarities between the attack on Slepian and four others on abortion providers in Canada and upstate New York in the past four years.
+187
+four years
+1998-11-20
+DURATION
+P4Y
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+The FBI has interviewed and released one of two men who were sought last week for questioning in connection with the sniper slaying of a doctor in the Buffalo, N.Y., area who performed abortions.
+68
+last week
+1998-11-21
+DATE
+1998-11
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+The two men, Ronald Stauber and Michael Gingrich, were named Thursday in a bulletin sent by the FBI office in Cleveland to police departments across the country.
+61
+thursday
+1998-11-21
+DATE
+1998-11-19
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+The men were not termed suspects, and FBI officials on Saturday played down the likelihood that either was involved in the Oct. 23 killing of the doctor, Barnett Slepian.
+55
+saturday
+1998-11-21
+DATE
+1998-11-21
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+The men were not termed suspects, and FBI officials on Saturday played down the likelihood that either was involved in the Oct. 23 killing of the doctor, Barnett Slepian.
+123
+oct. 23
+1998-11-21
+DATE
+1998-10-23
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+``We are doing dozens if not hundreds of interviews a day,'' said Paul Moskal, a spokesman for the FBI office in Buffalo.
+54
+day
+1998-11-21
+SET
+P1D
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+``I know of no information that would treat these two differently or would put them in any other category from the hundreds of leads we're investigating on a daily basis.''
+158
+daily
+1998-11-21
+SET
+P1D
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+In its Friday issue, The Hamilton (Ontario) Spectator quoted an officer in the Amherst, N.Y., Police Department as saying that the FBI.
+7
+friday
+1998-11-21
+DATE
+1998-11-20
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+Amherst police officials declined to comment Saturday.
+45
+saturday
+1998-11-21
+DATE
+1998-11-21
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+Slepian, 52, an obstetrician and gynecologist, was shot through the kitchen window of his home in Amherst shortly after he and his wife returned home from synagogue on the night of Friday, Oct. 23.
+181
+friday, oct. 23
+1998-11-21
+DATE
+1998-10-23
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19981121.0173.tml.ssplit
+Moskal said the two men apparently showed up at Slepian's house the day after his death.
+68
+day
+1998-11-21
+DATE
+1998-10-24
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990312.0271.tml.ssplit
+INDEPENDENCE, Mo. _ The North Atlantic Treaty Organization embraced three of its former rivals, the Czech Republic, Hungary and Poland on Friday, formally ending the Soviet domination of those nations that began after World War II and opening a new path for the military alliance.
+138
+friday
+1999-03-12
+DATE
+1999-03-12
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990312.0271.tml.ssplit
+Albright, who was born in Prague and fled just after the Communist takeover in 1948, made no secret of her joy at her homeland and its neighbors joining the alliance after a six year trans-Atlantic diplomatic process led by the Clinton administration.
+79
+1948
+1999-03-12
+DATE
+1948-XX
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990312.0271.tml.ssplit
+Albright, who was born in Prague and fled just after the Communist takeover in 1948, made no secret of her joy at her homeland and its neighbors joining the alliance after a six year trans-Atlantic diplomatic process led by the Clinton administration.
+174
+six year
+1999-03-12
+DURATION
+P6Y
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990419.0515.tml.ssplit
+With the finding of a buried rifle 11 days ago, the authorities in the Buffalo, N.Y., area say they have gathered enough evidence in the October slaying of Dr. Barnett Slepian to begin presenting a murder case to a state grand jury as early as next week.
+35
+11 days ago
+1999-04-19
+DATE
+1999-04-08
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990419.0515.tml.ssplit
+With the finding of a buried rifle 11 days ago, the authorities in the Buffalo, N.Y., area say they have gathered enough evidence in the October slaying of Dr. Barnett Slepian to begin presenting a murder case to a state grand jury as early as next week.
+137
+october
+1999-04-19
+DATE
+1998-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+Federal law enforcement officials said Wednesday that they had concluded that James Kopp, an impassioned and nomadic opponent of abortion, fired the shots that killed a Buffalo, N.Y., abortion-clinic doctor last October.
+39
+wednesday
+1999-05-05
+DATE
+1999-05-05
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+Federal law enforcement officials said Wednesday that they had concluded that James Kopp, an impassioned and nomadic opponent of abortion, fired the shots that killed a Buffalo, N.Y., abortion-clinic doctor last October.
+212
+october
+1999-05-05
+DATE
+1998-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+Based on physical evidence _ including a rifle found in April month buried near the doctor's house and a match between fibers found near the murder and others found in Kopp's car _ officials said they had decided to issue a warrant for his arrest in the killing of Dr. Barnett Slepian.
+56
+april
+1999-05-05
+DATE
+1999-04
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+There was no official confirmation of the decision to upgrade the warrant, but Denise O'Donnell, the U.S. attorney for the Western District of New York in Buffalo, has scheduled a news conference Thursday to announce a ``major development'' in the Slepian murder investigation.
+196
+thursday
+1999-05-05
+DATE
+1999-05-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+Slepian, a 52-year-old obstetrician and gynecologist who was the mainstay of Buffalo's only abortion clinic, was shot to death on the night of Oct. 23 as he stood in the kitchen of his home in suburban Amherst, N.Y. chatting with his wife and one of his four sons.
+143
+oct. 23
+1999-05-05
+DATE
+1998-10-23
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+But on April 8, investigators, wondering how the assailant could have emerged from the woods without fearing he would be seen carrying a rifle, searched the site of the shooting once more and unearthed a rifle buried one foot below ground 200 feet behind the Slepian home.
+7
+april 8
+1999-05-05
+DATE
+1999-04-08
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+Clark, the Erie district attorney, said afterwards that investigators think the doctor's killer buried the rifle in the days before the shooting, unearthed the weapon to fire the fatal shots, then hurriedly reburied it and fled.
+120
+days
+1999-05-05
+DATE
+1998-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+The 44-year-old Kopp, who in FBI photographs appears as gaunt and scruffily bearded and whose last known addresses were in Vermont and New Jersey, emerged as the focus of the investigation within two weeks of the slaying.
+196
+two weeks
+1999-05-05
+DURATION
+P2W
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+A jogger observed Kopp's car at 6 a.m.
+32
+6 a.m
+1999-05-05
+TIME
+1998-10-13T06:00
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT19990505.0443.tml.ssplit
+near Slepian's home 10 days before the murder, and, curious why a stranger would be parked there so early, wrote down the license plate number.
+20
+10 days
+1999-05-05
+DATE
+1998-10-13
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000106.0007.tml.ssplit
+The New York Times says in an editorial on Thursday, Jan. 6: &amp;QL;
+43
+thursday
+2000-01-06
+DATE
+2000-01-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000106.0007.tml.ssplit
+The New York Times says in an editorial on Thursday, Jan. 6: &amp;QL;
+53
+jan. 6
+2000-01-06
+DATE
+2000-01-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000406.0002.tml.ssplit
+The New York Times said in an editorial on Thursday, April 6:
+43
+thursday, april 6
+2000-04-06
+DATE
+2000-04-06
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000424.0319.tml.ssplit
+The Clinton administration's wisdom in returning Elian Gonzalez to his father was confirmed over the weekend decision of his Miami relatives and their Republican allies to further politicize what ought to be a straightforward child-custody case.
+97
+the weekend
+2000-04-24
+DATE
+2000-04-22
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000424.0319.tml.ssplit
+Ever since he first learned that Elian was in Florida last November, he has been persistent in seeking the boy's return.
+54
+last november
+2000-04-24
+DATE
+1999-11
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+Elian's father asked his Miami relatives to end their court battle after Thursday's ruling and allow him to finally return home with his son.
+73
+thursday
+2000-06-01
+DATE
+2000-06-01
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+Elian was rescued off the coast of Florida by two American fishermen last November after the boat he was in capsized.
+69
+last november
+2000-06-01
+DATE
+1999-11
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+Juan Miguel Gonzalez arrived in the United States April 2, and Reno ordered the Miami relatives to surrender the child to his father.
+50
+april 2
+2000-06-01
+DATE
+2000-04-02
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+The family refused, and federal agents took the child by force in a pre-dawn raid on the Miami relatives' home on April 22.
+114
+april 22
+2000-06-01
+DATE
+2000-04-22
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+The father and his son lived for a month on a large, private estate in Maryland, but have recently moved to an affluent neighborhood in Washington, D.C., to wait out the rest of their time in the United States.
+33
+a month
+2000-06-01
+DURATION
+P1M
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+If the family fails to file an appeal within 14 days, she said, the soonest Elian would be free to leave the country would be seven days later.
+45
+14 days
+2000-06-01
+DURATION
+P14D
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+However, Justice Department officials said the appellate court could decide to waive the extra seven-day period.
+95
+seven-day
+2000-06-01
+DURATION
+P7D
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+The government called the 14-day waiting period ``another concession to the `mafia' _ a disparaging term the government frequently uses to describe Miami's exile Cuban community.
+26
+14-day
+2000-06-01
+DURATION
+P14D
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/NYT20000601.0442.tml.ssplit
+Cuban exiles failed to overthrow Castro in 1961 when the communist leader repelled their invasion at the Bay of Pigs.
+43
+1961
+2000-06-01
+DATE
+1961
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980808.0031.tml.ssplit
+JOHANNESBURG, August 7 (Xinhua) --
+14
+august 7
+1998-08-08
+DATE
+1998-08-07
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980808.0049.tml.ssplit
+WASHINGTON, August 8 (Xinhua) --
+12
+august 8
+1998-08-08
+DATE
+1998-08-08
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980808.0060.tml.ssplit
+NICOSIA, August 8 (Xinhua) --
+9
+august 8
+1998-08-08
+DATE
+1998-08-08
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980808.0188.tml.ssplit
+HAVANA, August 7 (Xinhua) --
+8
+august 7
+1998-08-07
+DATE
+1998-08-07
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980809.0010.tml.ssplit
+TEHRAN, August 8 (Xinhua) --
+8
+august 8
+1998-08-08
+DATE
+1998-08-08
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19980821.0077.tml.ssplit
+NAIROBI, August 21 (Xinhua) --
+9
+august 21
+1998-08-21
+DATE
+1998-08-21
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19981203.0008.tml.ssplit
+BRUSSELS, December 2 (Xinhua) --
+10
+december 2
+1998-12-03
+DATE
+1998-12-02
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19990210.0079.tml.ssplit
+BRUSSELS, February 10 (Xinhua) --
+10
+february 10
+1999-02-10
+DATE
+1999-02-10
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19990227.0171.tml.ssplit
+WARSAW, February 26 (Xinhua) --
+8
+february 26
+1999-02-27
+DATE
+1999-02-26
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19990313.0031.tml.ssplit
+WASHINGTON, March 12 (Xinhua) --
+12
+march 12
+1999-03-13
+DATE
+1999-03-12
+
+data/TempEval3/TBAQ-cleaned/AQUAINT/XIE19990313.0173.tml.ssplit
+BUDAPEST, March 12 (Xinhua) --
+10
+march 12
+1999-03-13
+DATE
+1999-03-12
+
