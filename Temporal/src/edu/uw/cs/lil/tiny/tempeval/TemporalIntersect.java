@@ -13,6 +13,8 @@ public class TemporalIntersect extends TemporalPredicate
         "Trying to intersect less than two dates!");
     }
     Map<String, Set<Integer>> intersectedDate = new HashMap<String, Set<Integer>>();
+    System.out.println("First: \n " + first);
+    System.out.println("Second: \n " + second);
     addStuff((TemporalDate)this.first, intersectedDate);
     addStuff((TemporalDate)this.second, intersectedDate);
     return new TemporalDate(intersectedDate);

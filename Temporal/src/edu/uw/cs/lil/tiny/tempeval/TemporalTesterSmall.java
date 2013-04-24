@@ -23,7 +23,7 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
 	private final boolean ONLYPRINTONEPHRASE = false;
-	private final String PHRASE = "a year earlier";
+	private final String PHRASE = "last year";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;
@@ -107,6 +107,7 @@ public class TemporalTesterSmall {
 		boolean sameDocID = (previous == null || prevDocID.equals(docID));
 		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
 		String govVerbPOS = govVerbPOSWithMod.second();
+		String mod = govVerbPOSWithMod.first();
 		// TODO clean this up! I don't need the govenor verb here.
 		
 		//final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
@@ -136,7 +137,7 @@ public class TemporalTesterSmall {
 		} else { // zero parses
 			output = 4;
 		}
-		printing(label, type, val, temporalISO, phrase.toString(), ref_time, output, charNum, depParse, govVerbPOS, sentence);
+		printing(label, type, val, temporalISO, phrase.toString(), ref_time, output, charNum, depParse, govVerbPOS, sentence, mod);
 		this.previous = temporalISO;
 		return output;
 	}
@@ -169,22 +170,6 @@ public class TemporalTesterSmall {
 			return 2;
 		else 
 			return -1;
-		
-		/*
-		int n = findCorrectLabel(label, ref_time, type, val);
-		if (n >= 0 && n < labels.length)
-			return Pair.of(labels[n],0);
-		// if the label executes with the correct type, but not value.
-		else if (n >= labels.length && n < labels.length * 2)
-			return Pair.of(labels[n-labels.length],1);
-		// if the label executes with the incorrect type, but correct value.
-		else if (n >= labels.length*2 && n < labels.length *3)
-			return Pair.of(labels[n-labels.length*2],2);
-		// if n == -1
-		else
-			if (n != -1)
-				throw new IllegalArgumentException("Something is wrong with the logic in oneParse, within TepmoralTesterSmall. n = " + n);
-			return Pair.of(parse,  -1);*/
 	}
 	
 	// returns an int n.
@@ -222,12 +207,13 @@ public class TemporalTesterSmall {
 	// args: output is the output of the system
 	private void printing(LogicalExpression label, String type, String val,
 			TemporalISO output, String phrase, String ref_time,
-			int correct, String charNum, String depParse, String govVerbPOS, String sentence) {
+			int correct, String charNum, String depParse, String govVerbPOS, String sentence, String mod) {
 		//boolean c = (correct == 0);
 		if (!ONLYPRINTONEPHRASE
 				|| (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
 			if (correct >= -1 && correct <= 2) {
-				if ((ONLYPRINTINCORRECT && (correct == -1)) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
+				if ((ONLYPRINTINCORRECT && (correct == -1)) 
+						|| !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
 					out.println();
 					out.println("Phrase:        " + phrase);
 					out.println("Logic:         " + label);
@@ -239,10 +225,11 @@ public class TemporalTesterSmall {
 					out.println("Correct type?  " + (correct == 0 || correct == 2));
 					out.println("Correct val?   " + (correct == 0 || correct == 1));
 					//out.println("Character Number: " + charNum);
-					//out.println("Govener Vebr POS: " + govVerbPOS);
-					//out.println("Sentence: " + sentence);
-					//out.println("Dependncy Parse: ");
-					//out.println(depParse);
+					out.println("Governor verb POS: " + govVerbPOS);
+					out.println("Mod: " + mod.equals("MD"));
+//					out.println("Sentence: " + sentence);
+//					out.println("Dependncy Parse: ");
+//					out.println(depParse);
 				}
 			} else if (correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTNOPARSES) {
 				out.println();
@@ -253,7 +240,8 @@ public class TemporalTesterSmall {
 				out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 //				out.println("Character Number: " + charNum);
-//				out.println("Govener Vebr POS: " + govVerbPOS);
+//				out.println("Governor verb POS: " + govVerbPOS);
+//				out.println("Mod: " + mod.equals("MD"));
 //				out.println("Dependncy Parse: ");
 //				out.println(depParse);
 			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
@@ -265,7 +253,8 @@ public class TemporalTesterSmall {
 				out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 //				out.println("Character Number: " + charNum);
-//				out.println("Govener Vebr POS: " + govVerbPOS);
+//				out.println("Governor verb POS: " + govVerbPOS);
+//				out.println("Mod: " + mod.equals("MD"));
 //				out.println("Dependncy Parse: ");
 //				out.println(depParse);
 			}

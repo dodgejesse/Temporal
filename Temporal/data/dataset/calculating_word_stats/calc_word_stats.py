@@ -1,6 +1,6 @@
 import string
 
-f = open("tempeval.dataset.txt")
+f = open("dataset.txt")
 linecounter = 0
 phrases = {}
 words = {}
@@ -18,6 +18,6 @@ for line in f:
                 words[word] = words[word] + 1
             else:
                 words[word] = 1
-#for pair in sorted(words.items(), key=lambda item: item[1]):
-for pair in sorted(phrases.items(), key=lambda item: item[1]):
+for pair in sorted(words.items(), key=lambda item: item[1]):
+#for pair in sorted(phrases.items(), key=lambda item: item[1]):
     print pair

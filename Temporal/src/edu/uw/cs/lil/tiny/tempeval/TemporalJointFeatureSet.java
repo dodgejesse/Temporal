@@ -33,24 +33,44 @@ String[], LogicalExpression, LogicalExpression>{
 	
 	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, String[]>> dataItem) {
 		String logicToString = logic.toString();
-		//feats.set(FEATURE_TAG + "_logicType_" + logic.getType().getName().toString(), 1);
-
+		//feats.set(FEATURE_TAG + "_logicType_" + logic.getType().getName().toString(), 1);}
 		// String gov = dp.getGovVerbTag(dataItem.getSample().second());
 		Pair<String, String>  govVerbTag = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
+		String mod = govVerbTag.first();
+		String govVerbPOS = govVerbTag.second();
+		
+		String tempRefPhrase = isTempRefPhrase(dataItem.getSample().first());
+
+		String verb = "";
+		if (logic.getType().getName().toString().equals("s")){
+			verb = "_" + mod + "_" + govVerbPOS;
+		}		
+		
+		String additionalFeatures = tempRefPhrase + verb;
 		//feats.set(FEATURE_TAG + "_govVerbTag_" + govVerbTag,1);
 		// these features take the most common of the 4 contextually dependent 
 		if (logicToString.startsWith("(previous:<")){
-			feats.set(FEATURE_TAG + "_previous", 1);
+			feats.set(FEATURE_TAG + "_previous" + additionalFeatures, 1);
 		} else if (logicToString.startsWith("(this:<")){
-			feats.set(FEATURE_TAG + "_this", 1);
+			feats.set(FEATURE_TAG + "_this" + additionalFeatures, 1);
 		} else if (logicToString.startsWith("(next:<")){
-			feats.set(FEATURE_TAG + "_next", 1);
+			feats.set(FEATURE_TAG + "_next" + additionalFeatures, 1);
 		} else if (logicToString.startsWith("(temporal_ref:<")){
-			feats.set(FEATURE_TAG + "_temporal_ref", 1);
+			feats.set(FEATURE_TAG + "_temporal_ref" + additionalFeatures, 1);
 		} else {
-			feats.set(FEATURE_TAG + "_none", 1);
+			feats.set(FEATURE_TAG + "_none" + additionalFeatures, 1);
 		}
 		return feats;
+	}
+	
+	private String isTempRefPhrase(Sentence phrase){
+		String p = phrase.getString();
+		if (p.equals("a year earlier")
+				|| p.equals("a year ago")
+				|| p.equals("year earlier"))
+			return "_tmpRef";
+		
+		return "";
 	}
 
 	@Override

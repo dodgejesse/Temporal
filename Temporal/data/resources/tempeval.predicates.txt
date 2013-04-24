@@ -13,4 +13,7 @@ this:<d,<r,s>>
 previous:<s,<r,s>>
 previous:<d,<r,s>>
 
+temproal_ref:<d,s>
+temporal_ref:<s,s>
+
 )

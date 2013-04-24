@@ -91,6 +91,8 @@ public class TemporalPrevious extends TemporalPredicate {
 		return TemporalJoda.convertLocalDateToISO(date);
 	}
 	
+	// TODO something here isn't working as expected. See phrase 
+	// "the last twenty four hours"
 	private TemporalISO dayAndNotMonth(){
 		Map<String, Set<Integer>> tmpMap = second.getFullMapping();
 		tmpMap.put("day", first.getVal("day"));

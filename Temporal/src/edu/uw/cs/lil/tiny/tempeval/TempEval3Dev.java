@@ -71,25 +71,11 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = true;
+		boolean readSerializedDatasets = false;
 		boolean serializeDatasets = false;
-		boolean testingDataset = false; // testing dataset takes precidenence over the other two
+		boolean testingDataset = true; // testing dataset takes precidenence over the other two
 		boolean timebank = true;  // when this is false, we use the aquaint data.
 		boolean crossVal = false;
-		
-		
-		
-		
-		// TestingSerializeable
-		List<TemporalSentence> l = new ArrayList<TemporalSentence>();
-		TestingSerializeable ts = new TestingSerializeable(l);
-		TestingSerializeable.save("ts.ser", ts);
-		System.out.println("Success!");
-		
-		TemporalSentenceDataset tsd = new TemporalSentenceDataset(new ArrayList<TemporalSentence>());
-		TemporalSentenceDataset.save("tmp.ser", tsd);
-		System.out.println("Double success");
-		
 		
 		
 		
@@ -150,8 +136,8 @@ public class TempEval3Dev {
 		TemporalSentenceDataset test = null;
 		// reading in the serialized datasets so we don't have to run the dependency parser again.
 		if (readSerializedDatasets){
-			train = TemporalSentenceDataset.readSerialized("trainingData.ser");
-			test = TemporalSentenceDataset.readSerialized("testingData.ser");
+			train = TemporalSentenceDataset.readSerialized("data/serialized_data/trainingData.ser");
+			test = TemporalSentenceDataset.readSerialized("data/serialized_data/testingData.ser");
 		} else {
 			train = TemporalSentenceDataset
 					.read(new File(datasetDir + dataLoc),
@@ -163,10 +149,10 @@ public class TempEval3Dev {
 		
 		if (serializeDatasets){
 			System.out.print("Serializing the training data... ");
-			TemporalSentenceDataset.save("trainingData.ser", train);
+			TemporalSentenceDataset.save("data/serialized_data/trainingData.ser", train);
 			System.out.println("Done!");
 			System.out.print("Serializing the testing data... ");
-			TemporalSentenceDataset.save("testingData.ser", test);
+			TemporalSentenceDataset.save("data/serialized_data/testingData.ser", test);
 			System.out.println("Done!");
 		}
 		LOG.info("Train Size: " + train.size());

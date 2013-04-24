@@ -157,6 +157,8 @@ public class TemporalJointParser extends
 		return parse(dataItem, model, allowWordSkipping, tempLexicon, -1);
 	}
 
+	// this is where the parsing happens. 
+	// Takes a dataItem and a model, and 
 	@Override
 	public IJointOutput<LogicalExpression, Pair<String, String>> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,

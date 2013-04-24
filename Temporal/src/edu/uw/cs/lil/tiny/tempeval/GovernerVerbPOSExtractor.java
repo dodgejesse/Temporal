@@ -11,7 +11,7 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class GovernerVerbPOSExtractor {
 	// @Param: a String[] that contains world knowledge about a given pharse, including the sentence, the dependency parse,
-	// 		   and the character number that the phrase starts on. 
+	// 		   and the character number that the phrase starts on.
 	public static Pair<String, String> getGovVerbTag(String[] dataItem) {
 		String depParse = dataItem[5];
 		int charNum = Integer.parseInt(dataItem[4]);
@@ -46,6 +46,11 @@ public class GovernerVerbPOSExtractor {
 	}
 	
 	private static String findMod(String[] depParseArray, int tokenNum){
+		for (int i = 0; i < depParseArray.length; i++){
+			if (getDep(depParseArray[i]) == tokenNum && getPOS(depParseArray[i]).equals("MD")){
+				return "MD";
+			}
+		}
 		return "";
 	}
 	

@@ -135,6 +135,7 @@ week :- NP : week:d
 weeks :- NP : weeks:d
 day :- NP : day:d
 days :- NP : days:d
+twenty four hours :- NP : (*:<d,<n,d>> day:d 1:n)
 
 spring :- NP : spring:s
 summer :- NP : summer:s
@@ -160,7 +161,9 @@ earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 
 // For using temporal refernce
 //earlier :- NP\NP : (lambda $0:d (*:<d,<n,d>> $0 -1:n))
-a year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+a year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+a year ago :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 
 // these are numbers, to be multiplied by durations
 three :- NP : 3:n
