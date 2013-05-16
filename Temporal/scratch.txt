@@ -1,10 +1,3 @@
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0736.tml.ssplit
-Additionally, the bank is increasing its loan-loss reserves for the third quarter by $8.5 million before taxes.
-64
-the third quarter
-1989-10-27
-DATE
-1989-Q3
 
 data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0736.tml.ssplit
 In the year-earlier third quarter, Poughkeepsie Savings had net income of $2.8 million, or 77 cents a share.

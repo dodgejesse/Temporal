@@ -3,6 +3,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
+import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.utils.composites.Pair;
 
 
@@ -14,7 +15,7 @@ import edu.uw.cs.utils.composites.Pair;
  */
 
 public class TemporalSentence implements
-		ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>{
+		ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>{
 	/**
 	 * 
 	 */
@@ -57,8 +58,8 @@ public class TemporalSentence implements
 		dependencyParse = dp;
 	}
 
-	public Pair<String, String> getLabel() {
-		return Pair.of(type, val);
+	public TemporalResult getLabel() {
+		return new TemporalResult(null, type, val);
 	}
 
 	public String getRefDate() {
@@ -108,17 +109,17 @@ public class TemporalSentence implements
 	}
 
 	@Override
-	public boolean isCorrect(Pair<String, String> l) {
-		return l.first().equals(type) && l.second().equals(val);
+	public boolean isCorrect(TemporalResult other) {
+		return other.type.equals(type) && other.val.equals(val);
 	}
 
 	@Override
-	public double calculateLoss(Pair<String, String> label) {
+	public double calculateLoss(TemporalResult label) {
 		return 0;
 	}
 
 	@Override
-	public boolean prune(Pair<String, String> y) {
+	public boolean prune(TemporalResult y) {
 		throw new IllegalArgumentException("Cannot prune a TemporalSentence becuase it doesn't contain logic.");
 	}
 }

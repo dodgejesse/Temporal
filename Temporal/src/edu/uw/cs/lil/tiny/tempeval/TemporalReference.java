@@ -14,8 +14,16 @@ public class TemporalReference extends TemporalPredicate{
 	
 	public TemporalISO perform(){
 		if (previous == null || first.isSet("present_ref") || first.isSet("past_ref")
-				|| first.isSet("future_ref") || !(first instanceof TemporalDuration) || notSameFields())
+				|| first.isSet("future_ref") || !(first instanceof TemporalDuration) || notSameFields()){
+//			System.out.println();
+//			System.out.println("first");
+//			System.out.println(first);
+//			System.out.println();
+//			System.out.println("second");
+//			System.out.println(second);
+//			System.out.println();
 			return first;
+		}
 
 		
 		// TODO: Test here if first is a fully specified calendar date. If so, return it.
@@ -31,8 +39,16 @@ public class TemporalReference extends TemporalPredicate{
 				tmpMap.get(s).remove(prevValue);
 				tmpMap.get(s).add(firstValue + prevValue);
 			}
-			
 		}
+		
+//		System.out.println("TemporalRefenece time!");
+//		System.out.println("First argument: " );
+//		System.out.println(first);
+//		System.out.println("Second argument: " );
+//		System.out.println(second);
+//		System.out.println();
+//		System.out.println("The output from this call: ");
+//		System.out.println(new TemporalDate(tmpMap));
 		return new TemporalDate(tmpMap);
 	}
 	

@@ -2,6 +2,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
@@ -43,7 +44,7 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalJointParser extends
 		AbstractParser<Sentence, LogicalExpression>
 		implements
-		IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>> {
+		IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> {
 
 	private AbstractCKYParser<LogicalExpression> baseParser;
 	private final LogicalExpressionCategoryServices categoryServices;
@@ -135,14 +136,14 @@ public class TemporalJointParser extends
 	}
 
 	@Override
-	public IJointOutput<LogicalExpression, Pair<String, String>> parse(
+	public IJointOutput<LogicalExpression, TemporalResult> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model) {
 		return parse(dataItem, model, false);
 	}
 
 	@Override
-	public IJointOutput<LogicalExpression, Pair<String, String>> parse(
+	public IJointOutput<LogicalExpression, TemporalResult> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping) {
@@ -150,7 +151,7 @@ public class TemporalJointParser extends
 	}
 
 	@Override
-	public IJointOutput<LogicalExpression, Pair<String, String>> parse(
+	public IJointOutput<LogicalExpression, TemporalResult> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon) {
@@ -160,7 +161,7 @@ public class TemporalJointParser extends
 	// this is where the parsing happens. 
 	// Takes a dataItem and a model, and 
 	@Override
-	public IJointOutput<LogicalExpression, Pair<String, String>> parse(
+	public IJointOutput<LogicalExpression, TemporalResult> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon,
@@ -175,12 +176,20 @@ public class TemporalJointParser extends
 		final List<IParseResult<LogicalExpression>> CKYModelParses = pruneLogicWithLambdas(CKYParserOutput
 				.getBestParses());
 
-		List<IJointParse<LogicalExpression, Pair<String, String>>> allExecutedParses = new ArrayList<IJointParse<LogicalExpression, Pair<String, String>>>();
+		List<IJointParse<LogicalExpression, TemporalResult>> allExecutedParses = 
+				new ArrayList<IJointParse<LogicalExpression, TemporalResult>>();
+		
 		long startTime = System.currentTimeMillis();
 
+		// to store the temporalISOs, so i can choose the highest scoring one to keep in prevISO
+		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
+		
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
 			LogicalExpression[] labels = getArrayOfLabels(l.getY(), sameDocID);
 			for (int i = 0; i < labels.length; i++) {
+
+				
+				//boolean sameDocID = (prevISO == null || prevDocID.equals(docID));
 
 				// execute the logical form to get a final Pair<String, String>.
 				// score the logical form.
@@ -188,24 +197,42 @@ public class TemporalJointParser extends
 				// Pair<String, String> and the score.
 				// use that wrapper to create
 				String ref_time = dataItem.getSample().second()[2];
+				if (!sameDocID)
+					prevISO = null;
 				TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time,
 						prevISO);
-				SingleExecResultWrapper<LogicalExpression, Pair<String, String>> wrapper = new SingleExecResultWrapper<LogicalExpression, Pair<String, String>>(
-						labels[i], model, Pair.of(tmp.getType(), tmp.getVal()));
+				
+				
+				// TODO THIS IS JUST FOR TESTING.
+				//labels[i] = null;
+				
+				TemporalResult tr = new TemporalResult(labels[i], tmp.getType(), tmp.getVal());
+				SingleExecResultWrapper<LogicalExpression, TemporalResult> wrapper = 
+						new SingleExecResultWrapper<LogicalExpression, TemporalResult>(
+						labels[i], model, tr);
+				
+				
 
-				IJointParse<LogicalExpression, Pair<String, String>> jp = new JointParse<LogicalExpression, Pair<String, String>>(
+				// instead of passing in "l", I need to pass in an IParseResult<LogicalExpression> made out of label[i].
+				IJointParse<LogicalExpression, TemporalResult> jp = new JointParse<LogicalExpression, TemporalResult>(
 						l, wrapper);
+				
+				
+				ISOsByScore.put(jp.getScore(), tmp);
 				allExecutedParses.add(jp);
 			}
-
 		}
 
-		long parsingTime = System.currentTimeMillis() - startTime;
-		JointOutput<LogicalExpression, Pair<String, String>> out = new JointOutput<LogicalExpression, Pair<String, String>>(
-				CKYParserOutput, allExecutedParses, parsingTime);
 		
+		if (ISOsByScore.size() > 0)
+			prevISO = ISOsByScore.lastEntry().getValue();
+		else 
+			prevISO = null;
+		
+		long parsingTime = System.currentTimeMillis() - startTime;
+		JointOutput<LogicalExpression, TemporalResult> out = new JointOutput<LogicalExpression, TemporalResult>(
+				CKYParserOutput, allExecutedParses, parsingTime);
 		return out;
-
 	}
 
 }

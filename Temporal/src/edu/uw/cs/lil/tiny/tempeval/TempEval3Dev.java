@@ -71,12 +71,12 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = false;
+		boolean readSerializedDatasets = true;
 		boolean serializeDatasets = false;
-		boolean testingDataset = true; // testing dataset takes precidenence over the other two
-		boolean timebank = true;  // when this is false, we use the aquaint data.
-		boolean crossVal = false;
-		
+		boolean testingDataset = false; // testing dataset takes precidenence over the other two
+		boolean timebank = false;  // when this is false, we use the aquaint data.
+		boolean crossVal = true;
+		int numIterations = 2;
 		
 		
 		
@@ -253,22 +253,6 @@ public class TempEval3Dev {
 				
 				// Create the entire feature collection
 				// Adjusted to move away from a factored lexicon
-				final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
-				= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
-				// TODO: Ask about this. Why did this change? what is going on?
-						.addParseFeatureSet(
-								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
-						.addParseFeatureSet(
-								new LogicalExpressionTypeFeatureSet<Sentence>())
-						.addJointFeatureSet(new TemporalJointFeatureSet())
-						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
-						.addLexicalFeatureSet(templateFeats)
-						.setLexicon(new Lexicon<LogicalExpression>()).build();
-				
-		// Initialize lexical features. This is not "natural" for every lexical
-		// feature set, only for this one, so it's done here and not on all
-		// lexical feature sets.
-		model.addFixedLexicalEntries(fixed.toCollection());
 
 		// Parsing rules
 		final RuleSetBuilder<LogicalExpression> ruleSetBuilder = new RuleSetBuilder<LogicalExpression>();
@@ -359,16 +343,32 @@ public class TempEval3Dev {
 						newTrainList.addAll(splitData.get(j));
 				}
 				// to make them into IDataCollection items:
-				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTest = 
+				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> newTest = 
 						new TemporalSentenceDataset(newTestList);
-				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> newTrain = 
+				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> newTrain = 
 						new TemporalSentenceDataset(newTrainList);
 				
 				
 				final TemporalTesterSmall tester = TemporalTesterSmall.build(newTest, jParser);
 				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner =
-						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
+						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
 								2, newTrain, jParser);
+
+				
+				final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
+				= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
+						.addParseFeatureSet(
+								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+						.addParseFeatureSet(
+								new LogicalExpressionTypeFeatureSet<Sentence>())
+						.addJointFeatureSet(new TemporalJointFeatureSet())
+						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
+						.addLexicalFeatureSet(templateFeats)
+						.setLexicon(new Lexicon<LogicalExpression>()).build();
+				// Initialize lexical features. This is not "natural" for every lexical
+				// feature set, only for this one, so it's done here and not on all
+				// lexical feature sets.
+				model.addFixedLexicalEntries(fixed.toCollection());
 
 
 				OutputData outputData = new OutputData();
@@ -389,13 +389,28 @@ public class TempEval3Dev {
 			OutputData averaged = OutputData.average(outList);
 			out.println(averaged);
 			out.close();
-					} else {
+		} else {
+			final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
+			= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
+					.addParseFeatureSet(
+							new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+					.addParseFeatureSet(
+							new LogicalExpressionTypeFeatureSet<Sentence>())
+					.addJointFeatureSet(new TemporalJointFeatureSet())
+					.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
+					.addLexicalFeatureSet(templateFeats)
+					.setLexicon(new Lexicon<LogicalExpression>()).build();
+			// Initialize lexical features. This is not "natural" for every lexical
+			// feature set, only for this one, so it's done here and not on all
+			// lexical feature sets.
+			model.addFixedLexicalEntries(fixed.toCollection());
+			
 			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
  
 		
 			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
-					JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, Pair<String, String>>(
-							2, train, jParser);
+					JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
+							numIterations, train, jParser);
 
 			learner.train(model);
 

@@ -54,6 +54,8 @@ public class GovernerVerbPOSExtractor {
 		return "";
 	}
 	
+	// @param: a single line from the dependency parse
+	// extracts the POS of a given line.
 	private static String getPOS(String s){
 		String partOfLineEndingWithPOS = regexResult(s, "^[0-9]+\t[^\t]+\t_\t[^\t]+");
 		String POS = regexResult(partOfLineEndingWithPOS, "_\t[^\t]+$");
@@ -61,6 +63,8 @@ public class GovernerVerbPOSExtractor {
 		return result;
 	}
 	
+	// @param: a single line from the dependency parse
+	// extracts the dependency arc (number) from a given line.
 	private static int getDep(String s){
 		String partOfLineEndingWithDepNum = regexResult(s, "^[0-9]+\t[^\t]+\t_\t[^\t]+\t[^\t]+\t_\t[0-9]+");
 		String depNum = regexResult(partOfLineEndingWithDepNum, "[0-9]+$");
@@ -80,6 +84,8 @@ public class GovernerVerbPOSExtractor {
 		return val;
 	}
 
+	// @params: the character number of the first character of the starting word of the phrase I'm interseted in, and a string representing the sentence
+	// @result: returns the token number (after being tokenized by the stanford parser) of the word that the given charNum points to. 
 	private static int getTokenNumFromCharNum(int charNum, String sentence) {
 	    PTBTokenizer<CoreLabel> ptbt = new PTBTokenizer<CoreLabel>(new StringReader(sentence),
 	              new CoreLabelTokenFactory(), "");
@@ -94,6 +100,7 @@ public class GovernerVerbPOSExtractor {
 	    return tokenCounter;
 	}
 	
+	// helper method for getTokenNumFromCharNum
 	private static String getCharOffsetEndAnnotationNum(String s){
 		String charOffset = regexResult(s, "CharacterOffsetEndAnnotation=[0-9]+");
 		return regexResult(charOffset, "[0-9]+");

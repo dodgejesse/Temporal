@@ -122,6 +122,12 @@ second :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s
 third :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 3o:n))))
 fourth :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 4o:n))))
 
+// For phrases such as "the year earlier third quarter"
+first :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 1o:n))))
+second :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 2o:n))))
+third :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 3o:n))))
+fourth :- NP\NP/NP : (lambda $0:d (lambda $1:r (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 4o:n))))
+
 // Durations
 year :- NP : year:d
 years :- NP : years:d
@@ -161,9 +167,14 @@ earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 
 // For using temporal refernce
 //earlier :- NP\NP : (lambda $0:d (*:<d,<n,d>> $0 -1:n))
-a year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
-a year ago :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
-year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+//a year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+//a year ago :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+//year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
+// Without temporal_ref in the lexicon:
+a year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+a year ago :- NP : (*:<d,<n,d>> year:d -1:n)
+year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+
 
 // these are numbers, to be multiplied by durations
 three :- NP : 3:n

@@ -15,6 +15,7 @@ import edu.uw.cs.lil.tiny.parser.IParserOutput;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.lil.tiny.parser.joint.IJointOutput;
+import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.model.*;
 import edu.uw.cs.utils.composites.Pair;
 
@@ -23,18 +24,17 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
 	private final boolean ONLYPRINTONEPHRASE = false;
-	private final String PHRASE = "last year";
-	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test;
+	private final String PHRASE = " period";
+	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;
 	private final LogicalExpressionCategoryServices categoryServices;
-	private TemporalISO previous;
 	private PrintStream out;
 	OutputData outputData;
 
 
 	private TemporalTesterSmall(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test,
 					TemporalJointParser jointParser) {
 		this.test = test;
 		this.jointParser = jointParser;
@@ -50,7 +50,7 @@ public class TemporalTesterSmall {
 	}
 
 	private void test(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> testData,
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> testData,
 			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		// The number of phrases in total.
 		int counter = 0;
@@ -66,17 +66,21 @@ public class TemporalTesterSmall {
 		int tooManyParses = 0;
 		// Not parsed.
 		int notParsed = 0;
-		for (final ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> item : testData) {
+		for (final ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> item : testData) {
 			counter++;
 			int c = test(item, model, counter);
+			// 0 == correct type and val
+			// 1 == correct type, not val
+			// 2 == incorrect type, correct val
+			// -1 == incorrect type and val
 			if (c == -1)
 				incorrect++;
 			else if (c == 0)
 				correct++;
 			else if (c == 1)
-				correctVal++;
-			else if (c == 2)
 				correctType++;
+			else if (c == 2)
+				correctVal++;
 			else if (c == 3)
 				tooManyParses++;
 			else// if (c == 4)
@@ -87,11 +91,11 @@ public class TemporalTesterSmall {
 		out.println(outputData.toString());
 	}
 
-	private int test(ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>> dataItem,
+	private int test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
 			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, int counter) {
 		int output;
-		LogicalExpression label = null;
-		TemporalISO temporalISO = null;
+		LogicalExpression guessLabel = null;
+		String guessType = "", guessVal = "";
 				
 		// To extract all of the information from the mention.
 		// The key to know how to unpack this is in TemporalSentence.java.
@@ -100,11 +104,10 @@ public class TemporalTesterSmall {
 		String sentence = dataItem.getSample().second()[1];
 		String ref_time = dataItem.getSample().second()[2];
 		String prevDocID = dataItem.getSample().second()[3];
-		String type = dataItem.getLabel().first();
-		String val = dataItem.getLabel().second();
+		String goldType = dataItem.getLabel().type;
+		String goldVal = dataItem.getLabel().val;
 		String charNum = dataItem.getSample().second()[4];
 		String depParse = dataItem.getSample().second()[5];
-		boolean sameDocID = (previous == null || prevDocID.equals(docID));
 		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
 		String govVerbPOS = govVerbPOSWithMod.second();
 		String mod = govVerbPOSWithMod.first();
@@ -112,24 +115,30 @@ public class TemporalTesterSmall {
 		
 		//final IParserOutput<LogicalExpression> modelParserOutput = parser.parse(phrase, model.createDataItemModel(phrase));
 		
-		//to make the dataItem for the jointParser:
-		JointDataItemWrapper<Sentence, String[]> jointDataItem = new JointDataItemWrapper<Sentence, String[]>(
-				phrase, new TemporalDataItem(dataItem.getSample()));
-		
-	
+
 		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = 
 				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, dataItem);
+		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(dataItem, jointDataItemModel);
+		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
 		
-		IParserOutput<LogicalExpression> jointOutput = jointParser.parse(jointDataItem, jointDataItemModel);
-
-		List<IParseResult<LogicalExpression>> parses = jointOutput.getBestParses();
-				
 		// there is more than one 
-		if (parses.size() > 0) {
-			IParseResult<LogicalExpression> parse = parses.get(0);
-			label = parse.getY();
-			output = oneParse(label, sameDocID, ref_time, type, val);
-			temporalISO = TemporalVisitor.of(label, ref_time, previous);			
+		if (bestParses.size() > 0) {
+			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
+			
+			guessType = topParse.getResult().second().type;
+			guessVal = topParse.getResult().second().val;
+			guessLabel = topParse.getResult().second().e;
+			
+			
+			
+//			System.out.println("\n\n\n\n");
+//			System.out.println("IN TEMPORAL TESTER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//			System.out.println("The number of parses: " + bestParses.size());
+//			System.out.println("The number of parses from my parser: " + bestParses.size());
+//			System.out.println("\n\n\n\n");
+			
+			output = oneParse(goldType, goldVal, guessType, guessVal);
+			
 		
 		// TODO: Check every parse to make sure a correct one is included.
 		//} else if (bestModelParses.size() > 1) {
@@ -137,8 +146,7 @@ public class TemporalTesterSmall {
 		} else { // zero parses
 			output = 4;
 		}
-		printing(label, type, val, temporalISO, phrase.toString(), ref_time, output, charNum, depParse, govVerbPOS, sentence, mod);
-		this.previous = temporalISO;
+		printing(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output, charNum, depParse, govVerbPOS, sentence, mod);
 		return output;
 	}
 	
@@ -158,55 +166,55 @@ public class TemporalTesterSmall {
 	// 1 == correct type, not val
 	// 2 == incorrect type, correct val
 	// -1 == incorrect type and val
-	private int oneParse(LogicalExpression label, boolean sameDocID, String ref_time, String type, String val){
+	private int oneParse(String goldType, String goldVal, String guessType, String guessVal){
 		//LogicalExpression[] labels = getArrayOfLabels(parse, sameDocID);
 		
-		TemporalISO tmp = TemporalVisitor.of(label,  ref_time,  previous);
-		if (tmp.getType().equals(type) && tmp.getVal().equals(val))
+		
+		if (goldType.equals(guessType) && goldVal.equals(guessVal))
 			return 0;
-		else if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
+		else if (goldType.equals(guessType) && !goldVal.equals(guessVal))
 			return 1;
-		else if (!tmp.getType().equals(type) &&tmp.getVal().equals(val))
+		else if (!goldType.equals(guessType) && goldVal.equals(guessVal))
 			return 2;
 		else 
 			return -1;
 	}
 	
-	// returns an int n.
-	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String type, String val){
-		int returnNum = -1;
-		// To test that the logic executes, and has the correct type and value.
-		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time, previous);
-			if (tmp.getType().equals(type) && tmp.getVal().equals(val))
-				returnNum = i;
-		}
-		// if both type and value are correct for at least one of the labels, return.
-		if (returnNum > 0)
-			return returnNum;
-		// To test that the logic to an ISO that has the correct value, but not the correct type.
-		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
-			if (!tmp.getType().equals(type) && tmp.getVal().equals(val))
-				returnNum = i + labels.length;
-		}
-		// if value is correct, but type is not, return.
-		if (returnNum > 0)
-			return returnNum;
-		// To test that the logic to an ISO that has the correct type, but not the correct value.		
-		for (int i = 0; i < labels.length; i++){
-			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
-			if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
-				returnNum = i + labels.length * 2;
-		}
-		// if type is correct, but value is not, return. 
-		// Also returns -1 if nothing matches. 
-		return returnNum;
-	}
+//	// returns an int n.
+//	private int findCorrectLabel(LogicalExpression[] labels, String ref_time, String type, String val){
+//		int returnNum = -1;
+//		// To test that the logic executes, and has the correct type and value.
+//		for (int i = 0; i < labels.length; i++){
+//			TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time, previous);
+//			if (tmp.getType().equals(type) && tmp.getVal().equals(val))
+//				returnNum = i;
+//		}
+//		// if both type and value are correct for at least one of the labels, return.
+//		if (returnNum > 0)
+//			return returnNum;
+//		// To test that the logic to an ISO that has the correct value, but not the correct type.
+//		for (int i = 0; i < labels.length; i++){
+//			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
+//			if (!tmp.getType().equals(type) && tmp.getVal().equals(val))
+//				returnNum = i + labels.length;
+//		}
+//		// if value is correct, but type is not, return.
+//		if (returnNum > 0)
+//			return returnNum;
+//		// To test that the logic to an ISO that has the correct type, but not the correct value.		
+//		for (int i = 0; i < labels.length; i++){
+//			TemporalISO tmp = TemporalVisitor.of(labels[i],  ref_time, previous);
+//			if (tmp.getType().equals(type) && !tmp.getVal().equals(val))
+//				returnNum = i + labels.length * 2;
+//		}
+//		// if type is correct, but value is not, return. 
+//		// Also returns -1 if nothing matches. 
+//		return returnNum;
+//	}
 
 	// args: output is the output of the system
-	private void printing(LogicalExpression label, String type, String val,
-			TemporalISO output, String phrase, String ref_time,
+	private void printing(LogicalExpression label, String goldType, String goldVal,
+			String guessType, String guessVal, String phrase, String ref_time,
 			int correct, String charNum, String depParse, String govVerbPOS, String sentence, String mod) {
 		//boolean c = (correct == 0);
 		if (!ONLYPRINTONEPHRASE
@@ -218,12 +226,12 @@ public class TemporalTesterSmall {
 					out.println("Phrase:        " + phrase);
 					out.println("Logic:         " + label);
 					out.println("ref_time:      " + ref_time);
-					out.println("Gold type:     " + type);
-					out.println("gold val:      " + val);
-					out.println("Guess type:    " + output.getType());
-					out.println("Guess val:     " + output.getVal());
-					out.println("Correct type?  " + (correct == 0 || correct == 2));
-					out.println("Correct val?   " + (correct == 0 || correct == 1));
+					out.println("Gold type:     " + goldType);
+					out.println("gold val:      " + goldVal);
+					out.println("Guess type:    " + guessType);
+					out.println("Guess val:     " + guessVal);
+					out.println("Correct type?  " + (correct == 0 || correct == 1));
+					out.println("Correct val?   " + (correct == 0 || correct == 2));
 					//out.println("Character Number: " + charNum);
 					out.println("Governor verb POS: " + govVerbPOS);
 					out.println("Mod: " + mod.equals("MD"));
@@ -235,8 +243,8 @@ public class TemporalTesterSmall {
 				out.println();
 				out.println("Phrase:        " + phrase);
 				out.println("ref_time:      " + ref_time);
-				out.println("Gold type:     " + type);
-				out.println("gold val:      " + val);
+				out.println("Gold type:     " + goldType);
+				out.println("gold val:      " + goldVal);
 				out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 //				out.println("Character Number: " + charNum);
@@ -248,8 +256,8 @@ public class TemporalTesterSmall {
 				out.println();
 				out.println("Phrase:        " + phrase);
 				out.println("ref_time:      " + ref_time);
-				out.println("Gold type:     " + type);
-				out.println("gold val:      " + val);
+				out.println("Gold type:     " + goldType);
+				out.println("gold val:      " + goldVal);
 				out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 //				out.println("Character Number: " + charNum);
@@ -315,7 +323,7 @@ public class TemporalTesterSmall {
 	}
 
 	public static TemporalTesterSmall build(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> test,
+			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test,
 					TemporalJointParser parser) {
 		return new TemporalTesterSmall(test, parser);
 	}

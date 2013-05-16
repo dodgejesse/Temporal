@@ -2,9 +2,9 @@
 
 
 Total phrases: 1240
-Number correctly parsed and executed, with correct type and val: 562, which is 45.32258064516129 percent
-Number parsed with correct val, but not type: 393, which is 31.693548387096776 percent.
-Number parsed with correct type, but not val: 10, which is 0.8064516129032258 percent.
-Number parsed, but with incorrect type and val: 81, which his 6.532258064516129 percent
+Number correctly parsed and executed, with correct type and val: 703, which is 56.693548387096776 percent
+Number parsed with correct val, but not type: 9, which is 0.7258064516129032 percent.
+Number parsed with correct type, but not val: 298, which is 24.032258064516128 percent.
+Number parsed, but with incorrect type and val: 67, which his 5.403225806451613 percent
 Number with too many parses: 0
-Number with no parses: 194
+Number with no parses: 163

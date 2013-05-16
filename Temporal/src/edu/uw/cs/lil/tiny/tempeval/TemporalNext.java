@@ -232,21 +232,23 @@ public class TemporalNext extends TemporalPredicate {
 		LocalDate ref_time = TemporalJoda.convertISOToLocalDate(this.second);
 		if ((ref_time.isBefore(d1)) && (d1.isBefore(d2)))
 			return true;
-		if ((d1.isBefore(ref_time)) && (ref_time.isBefore(d2)))
+		else if ((d1.isBefore(ref_time) || d1.isEqual(ref_time)) && (ref_time.isBefore(d2)))
 			return false;
-		if (d2.isBefore(ref_time))
+		else if (d2.isBefore(ref_time))
 			throw new IllegalArgumentException(
 					"We have two dates that are before ref_time, when at least one should be after it.");
-		if (d2.isBefore(d1)) {
+		else if (d2.isBefore(d1)) {
 			throw new IllegalArgumentException(
 					"d2 is before d1, which shouldn't ever happen. In compareDates, TemporalNext");
 		}
-		throw new IllegalArgumentException(
+		else {
+			throw new IllegalArgumentException(
 				"Problem! Shouldn't be in this else clause. Could be because "
 						+ f
 						+ " and "
 						+ s
 						+ " are equal. Should test for this in predicate that calls this function.");
+		}
 	}
 
 	private Set<Integer> addOne(Set<Integer> oldIntSet){

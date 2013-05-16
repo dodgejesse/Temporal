@@ -2,10 +2,8 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.data.DatasetException;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
-import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.utils.string.IStringFilter;
-import edu.uw.cs.utils.composites.Pair;
 
 import java.io.*;
 import java.util.Collections;
