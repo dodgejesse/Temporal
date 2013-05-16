@@ -65,11 +65,14 @@ String[], LogicalExpression, LogicalExpression>{
 	
 	private String isTempRefPhrase(Sentence phrase){
 		String p = phrase.getString();
-		if (p.equals("a year earlier")
-				|| p.equals("a year ago")
-				|| p.equals("year earlier"))
-			return "_tmpRef";
-		
+		String[] tempPhrases = {"a year earlier", "a year ago", "year earlier", "the quarter a year ago","the latest quarter",
+				"the latest period", "that quarter", "that time", "that year", "the comparable year", "the following month", 
+				"the following year", };
+		for (int i = 0; i < tempPhrases.length; i++){
+			if (p.equals(tempPhrases[i]))
+				return ""; // return "_tmpRef";
+					
+		}
 		return "";
 	}
 
