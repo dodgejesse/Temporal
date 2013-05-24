@@ -24,7 +24,7 @@ public class TemporalTesterSmall {
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
 	private final boolean ONLYPRINTONEPHRASE = false;
-	private final String PHRASE = " period";
+	private final String PHRASE = "year earlier";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;
@@ -223,28 +223,28 @@ public class TemporalTesterSmall {
 				if ((ONLYPRINTINCORRECT && (correct == -1)) 
 						|| !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
 					out.println();
-					out.println("Phrase:        " + phrase);
-					out.println("Logic:         " + label);
-					out.println("ref_time:      " + ref_time);
-					out.println("Gold type:     " + goldType);
-					out.println("gold val:      " + goldVal);
-					out.println("Guess type:    " + guessType);
-					out.println("Guess val:     " + guessVal);
-					out.println("Correct type?  " + (correct == 0 || correct == 1));
-					out.println("Correct val?   " + (correct == 0 || correct == 2));
+					out.println("Phrase:            " + phrase);
+					out.println("Logic:             " + label);
+					out.println("ref_time:          " + ref_time);
+					out.println("Gold type:         " + goldType);
+					out.println("gold val:          " + goldVal);
+					out.println("Guess type:        " + guessType);
+					out.println("Guess val:         " + guessVal);
+					out.println("Correct type?      " + (correct == 0 || correct == 1));
+					out.println("Correct val?       " + (correct == 0 || correct == 2));
 					//out.println("Character Number: " + charNum);
 					out.println("Governor verb POS: " + govVerbPOS);
-					out.println("Mod: " + mod.equals("MD"));
+					out.println("Mod:               " + mod.equals("MD"));
 //					out.println("Sentence: " + sentence);
 //					out.println("Dependncy Parse: ");
 //					out.println(depParse);
 				}
 			} else if (correct == 3 && !ONLYPRINTINCORRECT && !ONLYPRINTNOPARSES) {
 				out.println();
-				out.println("Phrase:        " + phrase);
-				out.println("ref_time:      " + ref_time);
-				out.println("Gold type:     " + goldType);
-				out.println("gold val:      " + goldVal);
+				out.println("Phrase:            " + phrase);
+				out.println("ref_time:          " + ref_time);
+				out.println("Gold type:         " + goldType);
+				out.println("gold val:          " + goldVal);
 				out.println("Too many parses! Will implement"
 						+ " something here when we have learning.");
 //				out.println("Character Number: " + charNum);
@@ -254,10 +254,10 @@ public class TemporalTesterSmall {
 //				out.println(depParse);
 			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
 				out.println();
-				out.println("Phrase:        " + phrase);
-				out.println("ref_time:      " + ref_time);
-				out.println("Gold type:     " + goldType);
-				out.println("gold val:      " + goldVal);
+				out.println("Phrase:            " + phrase);
+				out.println("ref_time:          " + ref_time);
+				out.println("Gold type:         " + goldType);
+				out.println("gold val:          " + goldVal);
 				out.println("No parses! Will implement something"
 						+ " to throw out words and try again.");
 //				out.println("Character Number: " + charNum);

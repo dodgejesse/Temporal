@@ -71,11 +71,11 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = true;
+		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
 		boolean testingDataset = false; // testing dataset takes precidenence over the other two
 		boolean timebank = false;  // when this is false, we use the aquaint data.
-		boolean crossVal = true;
+		boolean crossVal = false;
 		int numIterations = 1;
 		
 		
@@ -296,8 +296,6 @@ public class TempEval3Dev {
 
 		
 		
-		// Creating a joint parser.
-		final TemporalJointParser jParser = new TemporalJointParser(parser);
 		
 		
 		if (crossVal){
@@ -348,7 +346,9 @@ public class TempEval3Dev {
 				IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> newTrain = 
 						new TemporalSentenceDataset(newTrainList);
 				
-				
+				// Creating a joint parser.
+				final TemporalJointParser jParser = new TemporalJointParser(parser);
+
 				final TemporalTesterSmall tester = TemporalTesterSmall.build(newTest, jParser);
 				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner =
 						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
@@ -375,7 +375,7 @@ public class TempEval3Dev {
 				
 				threads[i] = new TemporalThread(learner, tester, i, outputData, model);
 				threads[i].start();
-				outList[i] = (outputData);
+				outList[i] = outputData;
 			}
 			for (int i = 0; i < threads.length; i++){
 				try{
@@ -390,6 +390,9 @@ public class TempEval3Dev {
 			out.println(averaged);
 			out.close();
 		} else {
+			// Creating a joint parser.
+			final TemporalJointParser jParser = new TemporalJointParser(parser);
+
 			final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
 			= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
 					.addParseFeatureSet(
