@@ -44,7 +44,7 @@ String[], LogicalExpression, LogicalExpression>{
 		String verb = "";
 		if (logic.getType().getName().toString().equals("s")){
 			verb = "_" + mod + "_" + govVerbPOS;
-		}		
+		}
 		
 		String additionalFeatures = tempRefPhrase + verb;
 		//feats.set(FEATURE_TAG + "_govVerbTag_" + govVerbTag,1);
@@ -65,12 +65,14 @@ String[], LogicalExpression, LogicalExpression>{
 	
 	private String isTempRefPhrase(Sentence phrase){
 		String p = phrase.getString();
-		String[] tempPhrases = {"a year earlier", "a year ago", "year earlier", "the quarter a year ago","the latest quarter",
+		String[] tempPhrases = {"a year earlier", 
+				"a year ago", "year earlier", "the quarter a year ago","the latest quarter",
 				"the latest period", "that quarter", "that time", "that year", "the comparable year", "the following month", 
-				"the following year", };
+				"the following year"
+				};
 		for (int i = 0; i < tempPhrases.length; i++){
 			if (p.equals(tempPhrases[i]))
-				return ""; // return "_tmpRef";
+				return "_tmpRef"; // return "_tmpRef";
 					
 		}
 		return "";

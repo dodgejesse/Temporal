@@ -1,18 +1,18 @@
 
 Phrase:            week
-Logic:             week:d
+Logic:             (next:<d,<r,s>> week:d ref_time:r)
 ref_time:          1998-01-08
 Gold type:         DURATION
 gold val:          P1W
-Guess type:        DURATION
-Guess val:         P1W
-Correct type?      true
-Correct val?       true
+Guess type:        DATE
+Guess val:         1998-W03
+Correct type?      false
+Correct val?       false
 Governor verb POS: VB
 Mod:               false
 
 Phrase:            the last twenty four hours
-Logic:             (this:<s,<r,s>> (previous:<d,<r,s>> (*:<d,<n,d>> day:d 1:n) ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> (*:<d,<n,d>> day:d 1:n) ref_time:r)
 ref_time:          1998-01-08
 Gold type:         DURATION
 gold val:          P1D
@@ -24,7 +24,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            five year
-Logic:             (next:<d,<r,s>> (*:<d,<n,d>> year:d 5:n) ref_time:r)
+Logic:             (*:<d,<n,d>> year:d 5:n)
 ref_time:          1998-01-08
 Gold type:         DURATION
 gold val:          P5Y
@@ -48,7 +48,7 @@ Governor verb POS: noVerb
 Mod:               false
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1998-01-08
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -84,7 +84,7 @@ Governor verb POS: VBP
 Mod:               false
 
 Phrase:            the past three months
-Logic:             (this:<s,<r,s>> past_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> past_ref:r ref_time:r)
 ref_time:          1998-01-08
 Gold type:         DURATION
 gold val:          P3M
@@ -108,7 +108,7 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            a couple of years
-Logic:             (*:<d,<n,d>> years:d 2:n)
+Logic:             (next:<d,<r,s>> (*:<d,<n,d>> years:d 2:n) ref_time:r)
 ref_time:          1998-01-08
 Gold type:         DURATION
 gold val:          P2Y
@@ -120,7 +120,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1998-01-14
 Gold type:         DATE
 gold val:          1998-01-14
@@ -150,7 +150,7 @@ gold val:          1998-01-20TEV
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1998-03-04
 Gold type:         DATE
 gold val:          1998-03-04
@@ -174,7 +174,7 @@ Governor verb POS: VBN
 Mod:               true
 
 Phrase:            twenty years
-Logic:             (next:<d,<r,s>> (*:<d,<n,d>> years:d 20:n) ref_time:r)
+Logic:             (*:<d,<n,d>> years:d 20:n)
 ref_time:          1998-03-04
 Gold type:         DURATION
 gold val:          P20Y
@@ -186,7 +186,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1998-03-04
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -198,7 +198,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1998-03-04
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -210,7 +210,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -222,7 +222,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -246,7 +246,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -258,7 +258,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -276,7 +276,7 @@ gold val:          PXM
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -288,19 +288,19 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            friday
-Logic:             (previous:<s,<r,s>> friday:s ref_time:r)
+Logic:             (temporal_ref:<s,s> friday:s)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-10
 Guess type:        DATE
-Guess val:         1990-08-10
+Guess val:         XXXX-WXX-5
 Correct type?      true
-Correct val?       true
+Correct val?       false
 Governor verb POS: VBG
 Mod:               false
 
 Phrase:            august 1988
-Logic:             (previous:<s,<r,s>> (intersect:<s*,s> 1988:r august:s) ref_time:r)
+Logic:             (temporal_ref:<s,s> (intersect:<s*,s> 1988:r august:s))
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1988-08
@@ -324,7 +324,7 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            aug. 2
-Logic:             (this:<s,<r,s>> (intersect:<s*,s> august:s 2d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> august:s 2d:s) ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-02
@@ -354,7 +354,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -366,7 +366,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            today
-Logic:             (previous:<s,<r,s>> today:r ref_time:r)
+Logic:             (temporal_ref:<s,s> today:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -402,7 +402,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            now
-Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             present_ref:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -426,19 +426,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            tuesday
-Logic:             (previous:<s,<r,s>> tuesday:s ref_time:r)
+Logic:             (temporal_ref:<s,s> tuesday:s)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-07
 Guess type:        DATE
-Guess val:         1990-08-14
+Guess val:         XXXX-WXX-2
 Correct type?      true
 Correct val?       false
 Governor verb POS: VBG
 Mod:               false
 
 Phrase:            today
-Logic:             (next:<s,<r,s>> today:r ref_time:r)
+Logic:             today:r
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -474,19 +474,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            thursday
-Logic:             (next:<s,<r,s>> thursday:s ref_time:r)
+Logic:             (this:<s,<r,s>> thursday:s ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-09
 Guess type:        DATE
-Guess val:         1990-08-16
+Guess val:         1990-WXX-4
 Correct type?      true
 Correct val?       false
 Governor verb POS: VB
 Mod:               true
 
 Phrase:            today
-Logic:             (this:<s,<r,s>> today:r ref_time:r)
+Logic:             (previous:<s,<r,s>> today:r ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          1990-08-15
@@ -564,7 +564,7 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            now
-Logic:             present_ref:r
+Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -576,12 +576,12 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            weeks
-Logic:             (this:<d,<r,s>> weeks:d ref_time:r)
+Logic:             (previous:<d,<r,s>> weeks:d ref_time:r)
 ref_time:          1990-08-15
 Gold type:         DURATION
 gold val:          PXW
 Guess type:        DATE
-Guess val:         1990-W33
+Guess val:         1990-W32
 Correct type?      false
 Correct val?       false
 Governor verb POS: VBN
@@ -630,7 +630,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1990-08-16
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -642,7 +642,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            aug. 2
-Logic:             (this:<s,<r,s>> (intersect:<s*,s> august:s 2d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> august:s 2d:s) ref_time:r)
 ref_time:          1990-08-16
 Gold type:         DATE
 gold val:          1990-08-02
@@ -654,12 +654,12 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            thursday
-Logic:             (this:<s,<r,s>> thursday:s ref_time:r)
+Logic:             (previous:<s,<r,s>> thursday:s ref_time:r)
 ref_time:          1990-08-16
 Gold type:         DATE
 gold val:          1990-08-16
 Guess type:        DATE
-Guess val:         1990-WXX-4
+Guess val:         1990-08-09
 Correct type?      true
 Correct val?       false
 Governor verb POS: VBN
@@ -684,7 +684,7 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            now
-Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             present_ref:r
 ref_time:          1990-08-16
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -714,14 +714,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            wednesday
-Logic:             (this:<s,<r,s>> wednesday:s ref_time:r)
+Logic:             (previous:<s,<r,s>> wednesday:s ref_time:r)
 ref_time:          1990-08-16
 Gold type:         DATE
 gold val:          1990-08-15
 Guess type:        DATE
-Guess val:         1990-WXX-3
+Guess val:         1990-08-15
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBN
 Mod:               false
 
@@ -798,19 +798,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            friday
-Logic:             (previous:<s,<r,s>> friday:s ref_time:r)
+Logic:             (next:<s,<r,s>> friday:s ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1998-02-13
 Guess type:        DATE
-Guess val:         1998-02-06
+Guess val:         1998-02-13
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VB
 Mod:               false
 
 Phrase:            2000
-Logic:             2000:r
+Logic:             (next:<s,<r,s>> 2000:r ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          2000
@@ -822,7 +822,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            several years ago
-Logic:             (previous:<s,<r,s>> past_ref:r ref_time:r)
+Logic:             (temporal_ref:<s,s> past_ref:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          PAST_REF
@@ -834,7 +834,7 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            this year
-Logic:             (previous:<s,<r,s>> (this:<d,<r,s>> year:d ref_time:r) ref_time:r)
+Logic:             (temporal_ref:<s,s> (this:<d,<r,s>> year:d ref_time:r))
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1998
@@ -846,14 +846,14 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            1901
-Logic:             (this:<s,<r,s>> 1901:r ref_time:r)
+Logic:             (previous:<s,<r,s>> 1901:r ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1901
 Guess type:        DATE
-Guess val:         1901-02
+Guess val:         1901
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBN
 Mod:               false
 
@@ -870,7 +870,7 @@ gold val:          P100Y
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            1996
-Logic:             (next:<s,<r,s>> 1996:r ref_time:r)
+Logic:             1996:r
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1996
@@ -882,7 +882,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            august
-Logic:             (next:<s,<r,s>> august:s ref_time:r)
+Logic:             (this:<s,<r,s>> august:s ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1998-08
@@ -930,12 +930,12 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            monday
-Logic:             (next:<s,<r,s>> monday:s ref_time:r)
+Logic:             (this:<s,<r,s>> monday:s ref_time:r)
 ref_time:          1998-02-13
 Gold type:         SET
 gold val:          XXXX-WXX-1TNI
 Guess type:        DATE
-Guess val:         1998-02-16
+Guess val:         1998-WXX-1
 Correct type?      false
 Correct val?       false
 Governor verb POS: VB
@@ -948,7 +948,7 @@ gold val:          XXXX-WXX-2TNI
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            march 30
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> march:s 30d:s) ref_time:r)
+Logic:             (this:<s,<r,s>> (intersect:<s*,s> march:s 30d:s) ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1998-03-30
@@ -966,7 +966,7 @@ gold val:          XXXX-WXX-4
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            august 6
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> august:s 6d:s) ref_time:r)
+Logic:             (this:<s,<r,s>> (intersect:<s*,s> august:s 6d:s) ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DATE
 gold val:          1998-08-06
@@ -1014,7 +1014,7 @@ gold val:          1998-02-12T12:00
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            recent years
-Logic:             (this:<s,<r,s>> past_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> past_ref:r ref_time:r)
 ref_time:          1998-02-13
 Gold type:         DURATION
 gold val:          PXY
@@ -1044,7 +1044,7 @@ gold val:          P2Y
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            the next two weeks
-Logic:             (previous:<s,<r,s>> (next:<d,<r,s>> (*:<d,<n,d>> weeks:d 2:n) ref_time:r) ref_time:r)
+Logic:             (next:<d,<r,s>> (*:<d,<n,d>> weeks:d 2:n) ref_time:r)
 ref_time:          1998-02-19
 Gold type:         DURATION
 gold val:          P2W
@@ -1056,7 +1056,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            march 1996
-Logic:             (this:<s,<r,s>> (intersect:<s*,s> march:s 1996:r) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> march:s 1996:r) ref_time:r)
 ref_time:          1998-02-19
 Gold type:         DATE
 gold val:          1996-03
@@ -1122,7 +1122,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            last year
-Logic:             (previous:<d,<r,s>> year:d ref_time:r)
+Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> year:d ref_time:r) ref_time:r)
 ref_time:          1998-02-19
 Gold type:         DATE
 gold val:          1997
@@ -1134,7 +1134,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            now
-Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             present_ref:r
 ref_time:          1998-02-19
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -1146,19 +1146,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            a week
-Logic:             (this:<d,<r,s>> week:d ref_time:r)
+Logic:             (previous:<d,<r,s>> week:d ref_time:r)
 ref_time:          1998-02-19
 Gold type:         DURATION
 gold val:          P1W
 Guess type:        DATE
-Guess val:         1998-W08
+Guess val:         1998-W07
 Correct type?      false
 Correct val?       false
 Governor verb POS: VBN
 Mod:               false
 
 Phrase:            the late 1970s
-Logic:             (next:<s,<r,s>> 197:r ref_time:r)
+Logic:             197:r
 ref_time:          1998-02-19
 Gold type:         DATE
 gold val:          197
@@ -1170,7 +1170,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            mid 1996
-Logic:             1996:r
+Logic:             (next:<s,<r,s>> 1996:r ref_time:r)
 ref_time:          1998-02-19
 Gold type:         DATE
 gold val:          1996
@@ -1206,14 +1206,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            friday
-Logic:             (previous:<s,<r,s>> friday:s ref_time:r)
+Logic:             (next:<s,<r,s>> friday:s ref_time:r)
 ref_time:          1998-02-27
 Gold type:         DATE
 gold val:          1998-02-27
 Guess type:        DATE
-Guess val:         1998-02-20
+Guess val:         1998-02-27
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VB
 Mod:               false
 
@@ -1242,7 +1242,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            1988
-Logic:             (previous:<s,<r,s>> 1988:r ref_time:r)
+Logic:             (temporal_ref:<s,s> 1988:r)
 ref_time:          1998-02-27
 Gold type:         DATE
 gold val:          1988
@@ -1254,7 +1254,7 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            1995
-Logic:             (next:<s,<r,s>> 1995:r ref_time:r)
+Logic:             1995:r
 ref_time:          1998-02-27
 Gold type:         DATE
 gold val:          1995
@@ -1266,14 +1266,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            1971
-Logic:             (this:<s,<r,s>> 1971:r ref_time:r)
+Logic:             (previous:<s,<r,s>> 1971:r ref_time:r)
 ref_time:          1998-02-27
 Gold type:         DATE
 gold val:          1971
 Guess type:        DATE
-Guess val:         1971-02
+Guess val:         1971
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBN
 Mod:               false
 
@@ -1308,7 +1308,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            november 1995
-Logic:             (previous:<s,<r,s>> (intersect:<s*,s> november:s 1995:r) ref_time:r)
+Logic:             (temporal_ref:<s,s> (intersect:<s*,s> november:s 1995:r))
 ref_time:          1998-02-27
 Gold type:         DATE
 gold val:          1995-11
@@ -1352,9 +1352,9 @@ No parses! Will implement something to throw out words and try again.
 
 
 Total phrases: 124
-Number correctly parsed and executed, with correct type and val: 75, which is 60.483870967741936 percent
+Number correctly parsed and executed, with correct type and val: 78, which is 62.903225806451616 percent
 Number parsed with correct val, but not type: 0, which is 0.0 percent.
-Number parsed with correct type, but not val: 20, which is 16.129032258064516 percent.
-Number parsed, but with incorrect type and val: 6, which his 4.838709677419355 percent
+Number parsed with correct type, but not val: 16, which is 12.903225806451612 percent.
+Number parsed, but with incorrect type and val: 7, which his 5.645161290322581 percent
 Number with too many parses: 0
 Number with no parses: 23

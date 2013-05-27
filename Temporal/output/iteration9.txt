@@ -42,7 +42,7 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            recently
-Logic:             (previous:<s,<r,s>> past_ref:r ref_time:r)
+Logic:             past_ref:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          PAST_REF
@@ -90,7 +90,7 @@ Governor verb POS: VBN
 Mod:               true
 
 Phrase:            1990
-Logic:             (next:<s,<r,s>> 1990:r ref_time:r)
+Logic:             1990:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1990
@@ -114,7 +114,7 @@ Governor verb POS: VB
 Mod:               true
 
 Phrase:            this month
-Logic:             (next:<s,<r,s>> (this:<d,<r,s>> month:d ref_time:r) ref_time:r)
+Logic:             (previous:<s,<r,s>> (this:<d,<r,s>> month:d ref_time:r) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-10
@@ -126,7 +126,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            a later date
-Logic:             (next:<s,<r,s>> future_ref:r ref_time:r)
+Logic:             future_ref:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          FUTURE_REF
@@ -174,7 +174,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            the 1988 third quarter
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> 1988:r (nth:<d,<n,s>> quarter:d 3o:n)) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> 1988:r (nth:<d,<n,s>> quarter:d 3o:n)) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-Q3
@@ -186,14 +186,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -252,26 +252,26 @@ gold val:          1988-Q3
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            a year ago
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-Q3
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
-Correct val?       false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -288,13 +288,13 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            a year ago
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-10-26
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
 Correct val?       false
 Governor verb POS: VBD
 Mod:               false
@@ -312,14 +312,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            june 1
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> june:s 1d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> june:s 1d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1990-06-01
 Guess type:        DATE
-Guess val:         1990-06-01
+Guess val:         1989-06-01
 Correct type?      true
-Correct val?       true
+Correct val?       false
 Governor verb POS: VBD
 Mod:               false
 
@@ -348,14 +348,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -378,14 +378,14 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            fiscal second quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 2o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 2o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q2
 Guess type:        DATE
-Guess val:         1990-Q2
+Guess val:         1989-Q2
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -426,7 +426,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            the latest period
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> quarter:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> quarter:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q2
@@ -516,7 +516,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            last month
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> month:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> month:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-09
@@ -528,19 +528,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            the fiscal first quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 1o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 1o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q1
 Guess type:        DATE
-Guess val:         1990-Q1
+Guess val:         1989-Q1
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            last spring
-Logic:             (next:<s,<r,s>> (previous:<s,<r,s>> spring:s ref_time:r) ref_time:r)
+Logic:             (previous:<s,<r,s>> spring:s ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-SP
@@ -576,14 +576,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            a year earlier
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-09-30
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
-Correct val?       false
+Guess type:        DATE
+Guess val:         1988-09-30
+Correct type?      true
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -624,37 +624,37 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            a year earlier
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-Q3
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
-Correct val?       false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            year earlier
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-Q3
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
+Guess type:        DATE
+Guess val:         1987-Q3
+Correct type?      true
 Correct val?       false
 Governor verb POS: VBD
 Mod:               false
@@ -684,14 +684,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            the third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -702,7 +702,7 @@ gold val:          1988-Q3
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            the latest quarter
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> quarter:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> quarter:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-QX
@@ -714,13 +714,13 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            a year earlier
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-QX
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
 Correct val?       false
 Governor verb POS: VBD
 Mod:               false
@@ -774,14 +774,14 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            june 30
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> june:s 30d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> june:s 30d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-06-30
 Guess type:        DATE
-Guess val:         1990-06-30
+Guess val:         1989-06-30
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -798,7 +798,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            now
-Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             present_ref:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -810,7 +810,7 @@ Governor verb POS: VB
 Mod:               true
 
 Phrase:            five years
-Logic:             (next:<d,<r,s>> (*:<d,<n,d>> years:d 5:n) ref_time:r)
+Logic:             (*:<d,<n,d>> years:d 5:n)
 ref_time:          1989-10-26
 Gold type:         DURATION
 gold val:          P5Y
@@ -846,14 +846,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            oct. 9
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> october:s 9d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> october:s 9d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-10-09
 Guess type:        DATE
-Guess val:         1990-10-09
+Guess val:         1989-10-09
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -864,14 +864,14 @@ gold val:          1989
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            sept. 30
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> september:s 30d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> september:s 30d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-09-30
 Guess type:        DATE
-Guess val:         1990-09-30
+Guess val:         1989-09-30
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -888,19 +888,19 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            summer
-Logic:             (next:<s,<r,s>> summer:s ref_time:r)
+Logic:             (previous:<s,<r,s>> summer:s ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-SU
 Guess type:        DATE
-Guess val:         1990-SU
+Guess val:         1988-SU
 Correct type?      true
 Correct val?       false
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            now
-Logic:             (next:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             present_ref:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -924,14 +924,14 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -948,7 +948,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            the last half of 1989
-Logic:             (next:<s,<r,s>> 1989:r ref_time:r)
+Logic:             1989:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-H2
@@ -960,7 +960,7 @@ Governor verb POS: VB
 Mod:               true
 
 Phrase:            1990
-Logic:             (next:<s,<r,s>> 1990:r ref_time:r)
+Logic:             1990:r
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1990
@@ -1050,19 +1050,19 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            last year
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> year:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> year:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988
@@ -1074,14 +1074,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1098,14 +1098,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1122,7 +1122,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            the latest period
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> quarter:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> quarter:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-QX
@@ -1176,14 +1176,14 @@ Governor verb POS: VB
 Mod:               true
 
 Phrase:            sept. 30
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> september:s 30d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> september:s 30d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-09-30
 Guess type:        DATE
-Guess val:         1990-09-30
+Guess val:         1989-09-30
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1230,7 +1230,7 @@ gold val:          1984
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            last year
-Logic:             (next:<s,<r,s>> (previous:<d,<r,s>> year:d ref_time:r) ref_time:r)
+Logic:             (previous:<d,<r,s>> year:d ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988
@@ -1242,14 +1242,14 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1272,14 +1272,14 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            a year ago
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988-Q3
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
-Correct val?       false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1320,13 +1320,13 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            a year ago
-Logic:             (*:<d,<n,d>> year:d -1:n)
+Logic:             (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1988
-Guess type:        DURATION
-Guess val:         P1Y
-Correct type?      false
+Guess type:        DATE
+Guess val:         1988-Q3
+Correct type?      true
 Correct val?       false
 Governor verb POS: VBD
 Mod:               false
@@ -1356,14 +1356,14 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            third quarter
-Logic:             (next:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
+Logic:             (previous:<s,<r,s>> (nth:<d,<n,s>> quarter:d 3o:n) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-Q3
 Guess type:        DATE
-Guess val:         1990-Q3
+Guess val:         1989-Q3
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBD
 Mod:               false
 
@@ -1386,35 +1386,35 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            dec. 15
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> december:s 15d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> december:s 15d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-12-15
 Guess type:        DATE
-Guess val:         1989-12-15
+Guess val:         1988-12-15
 Correct type?      true
-Correct val?       true
+Correct val?       false
 Governor verb POS: VBD
 Mod:               false
 
 Phrase:            nov. 17
-Logic:             (next:<s,<r,s>> (intersect:<s*,s> november:s 17d:s) ref_time:r)
+Logic:             (previous:<s,<r,s>> (intersect:<s*,s> november:s 17d:s) ref_time:r)
 ref_time:          1989-10-26
 Gold type:         DATE
 gold val:          1989-11-17
 Guess type:        DATE
-Guess val:         1989-11-17
+Guess val:         1988-11-17
 Correct type?      true
-Correct val?       true
+Correct val?       false
 Governor verb POS: VBD
 Mod:               false
 
 
 
 Total phrases: 124
-Number correctly parsed and executed, with correct type and val: 58, which is 46.774193548387096 percent
+Number correctly parsed and executed, with correct type and val: 76, which is 61.29032258064516 percent
 Number parsed with correct val, but not type: 1, which is 0.8064516129032258 percent.
-Number parsed with correct type, but not val: 34, which is 27.419354838709676 percent.
-Number parsed, but with incorrect type and val: 18, which his 14.516129032258064 percent
+Number parsed with correct type, but not val: 24, which is 19.35483870967742 percent.
+Number parsed, but with incorrect type and val: 10, which his 8.064516129032258 percent
 Number with too many parses: 0
 Number with no parses: 13

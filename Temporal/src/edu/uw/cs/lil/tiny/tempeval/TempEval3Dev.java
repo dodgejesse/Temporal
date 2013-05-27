@@ -75,7 +75,7 @@ public class TempEval3Dev {
 		boolean serializeDatasets = false;
 		boolean testingDataset = false; // testing dataset takes precidenence over the other two
 		boolean timebank = false;  // when this is false, we use the aquaint data.
-		boolean crossVal = false;
+		boolean crossVal = true;
 		int numIterations = 1;
 		
 		
