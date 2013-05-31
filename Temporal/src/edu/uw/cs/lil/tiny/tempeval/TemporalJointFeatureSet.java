@@ -39,14 +39,18 @@ String[], LogicalExpression, LogicalExpression>{
 		String mod = govVerbTag.first();
 		String govVerbPOS = govVerbTag.second();
 		
-		String tempRefPhrase = isTempRefPhrase(dataItem.getSample().first());
+		String tempRefPhrase = ;
 
 		String verb = "";
 		if (logic.getType().getName().toString().equals("s")){
 			verb = "_" + mod + "_" + govVerbPOS;
 		}
-		
-		String additionalFeatures = tempRefPhrase + verb;
+		// "_tmpRef"
+		String additionalFeatures;
+		if (isTempRefPhrase(dataItem.getSample().first())){
+			additionalFeatures = "_tempRef";
+		}
+		additionalFeatures = tempRefPhrase + verb;
 		//feats.set(FEATURE_TAG + "_govVerbTag_" + govVerbTag,1);
 		// these features take the most common of the 4 contextually dependent 
 		if (logicToString.startsWith("(previous:<")){
@@ -63,7 +67,7 @@ String[], LogicalExpression, LogicalExpression>{
 		return feats;
 	}
 	
-	private String isTempRefPhrase(Sentence phrase){
+	private boolean isTempRefPhrase(Sentence phrase){
 		String p = phrase.getString();
 		String[] tempPhrases = {"a year earlier", 
 				"a year ago", "year earlier", "the quarter a year ago","the latest quarter",
@@ -72,10 +76,10 @@ String[], LogicalExpression, LogicalExpression>{
 				};
 		for (int i = 0; i < tempPhrases.length; i++){
 			if (p.equals(tempPhrases[i]))
-				return "_tmpRef"; // return "_tmpRef";
+				return true; // return "_tmpRef";
 					
 		}
-		return "";
+		return false;
 	}
 
 	@Override
