@@ -1,0 +1,108 @@
+     - Abstract (your paper in two paragraphs)
+     
+     1. Introduction (brief and to the point -- its important to 
+       leave the details for later so that the reader understands the
+       high-level objectives.)
+       1.1 Synoptic
+         * Logging is popular, but manually inspecting logs is
+           challenging and tedious. It is hard to spot useful information:
+           logs contain lots of extraneous
+           information, logs are spread across multiple files, some errors
+           cannot be spotted without multiple executions which need to be
+           examined side by side, etc. As the scale of systems grow,
+           these problems are exasperated.
+         * Illustrate simple example with shopping cart or similar snippet.
+
+         * So we made Synoptic, a tool that provides a visual summary of logs by
+           modeling invariants mined from the logs as FSMs. Describe what
+           the Synoptic invariants are and briefly mention how regular
+           expressions are used for parsing.
+            - Step 1: mine invariants
+            - Step 2: satisfy invariants 
+            - Step 3: try to find the smallest model
+
+       1.2 Formal Languages Perspective 
+         * InvariMint a REVOLUTIONARY means of generating log summaries simply
+           by intersecting a log's mined invariants
+         * Contributions
+           - What exactly should we take away from your work? How can
+           others build on it? What do you think is the lasting impact?
+          
+     2. Motivation (Synoptic limitations)
+        * Difficult to add new invariants: assumptions about the 3 original
+          invariants are built into multiple places of the implementation.
+          Even while adding one new invariant might not be that challenging,
+          there are infinite kinds of invariants that a user MIGHT be
+          interested in and these would each have to be added in a manual
+          work-intensive process
+        * Difficult to understand all details of process. Example: getting
+          users to wrap their heads around state-based rather than edge
+          events.
+        * Non deterministic. Users expect programs to give the same behavior
+          on the same input, but Synoptic has elements of randomness that
+          violate this property. This is confusing, and can be an issue for
+          users wanting to recreate an earlier model.
+        * Non optimal. We'd like to show users the smallest possible model,
+          but we aren't guaranteed to get this with Synoptic. Would like to
+          know that we can always give users an optimal final model.
+
+     3. Formalizing the approach
+        - Overview of language intersection
+        - NIFby/CIFby invariants for analogous initial model (mention that
+          this is exactly the same as Synoptic's initial model)
+        - Parse and generate DFAs per invariant 
+        - Intersect all DFAs for final model
+          * DFA intersection algorithm
+        - Minimize along the way to keep models small!
+          * Hopcroft's minimization algorithm
+
+     4. But does it work?
+        * Addresses limitations of Synoptic
+          - Easy to add new invariants: give 2x Y then X example. 
+          - Easy for users (developers) to understand --> most familiar with FSM
+          - Also deterministic, optimal
+          - Language based approach provides new insights
+        * InvariMint specific
+          - Same Synoptic parsing and mining code
+          - dk brics dfa library
+        * How we will evaluate the approach
+          - Model equivalence
+          - And if not, what information do you get from one that you don't get from
+            the other
+          - What are the performance differences
+
+     5. Evaluation
+        * Comparing Synoptic and DFA models
+           - Differences in languages accepted, and under what conditions
+           - Synoptic language a subset of DFA language (DFA allows
+             everything allowed by Synoptic)
+           - Unwanted spurious edges in DFA model & how we removed them
+             (walking input trace)
+           - Wanted 'spurious' edges that removed by the above step and
+             why (conversion from Synoptic NFA to DFA)
+
+        * Synoptic model more nuanced and able to provide more trace specific
+          information - ie, can query the model for specific trace examples on
+          particular edges 
+
+        * Peformance results
+           - DFAmin probably more efficient: memory use, run time -> when not
+             revisiting the input traces for coarsening/refinement (false if we
+             decide to remove spurious edges)
+           - Thus DFAmin more scalable?
+           - Need to think more about what will happen for variety of inputs
+             and variables, ie initial graph size, length of logs, number and type of
+             invariants
+            
+            [IB: flesh this out -- what specific graphs do you want.
+            What are the axis on those graphs, and what curves do you expect to
+            see in those graphs?]
+
+           - DFA flattens input traces to just the set of valid invariants,
+             this improves performance but at the loss of Synoptic's state
+             information (ie relating concrete traces to paths in the model
+
+     6.  Limitations and Future work
+         * Would be nice if someone came up with an efficient way to translate
+           trace context to DFA models
+     7. Conclusion

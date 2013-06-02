@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Developers often struggle to understand their systems. In prior work
+we created Synoptic, a tool to help developers 
+by inferring a concise and accurate system model from execution logs.
+However, Synoptic has numerous limitations: (1) it is slow when run on
+large input logs, (2) it is non-deterministic and does not always generate
+optimal models, (3) it is difficult to extend, and (4) the Synoptic algorithm is complex and
+difficult for users to understand.
+
+To remedy the above limitations we developed InvariMint,
+which reformulates the core Synoptic process in terms of formal
+languages. InvariMint generates a DFA for each log invariant, intersects the 
+invariant DFAs, and minimizes the resulting model.
+This model inference approach is independent of the size of the log,
+deterministic, easy to extend, and uses standard techniques that are easy
+to understand. We have also found that the InvariMint approach generalizes
+to other algorithms used in model inference, such as the k-Tails algorithm.
+We think that InvariMint can act as a common denominator in model
+inference, using which researchers can easily compare a wide range of
+algorithms and which provides users with a simple process for deriving
+customized hybrid algorithms.

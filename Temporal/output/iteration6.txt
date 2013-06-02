@@ -228,7 +228,7 @@ Governor verb POS: VB
 Mod:               false
 
 Phrase:            current
-Logic:             present_ref:r
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -378,14 +378,14 @@ gold val:          1989-10-27TMO
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            day
-Logic:             day:d
+Logic:             (previous:<d,<r,s>> day:d ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DURATION
 gold val:          P1D
-Guess type:        DURATION
-Guess val:         P1D
-Correct type?      true
-Correct val?       true
+Guess type:        DATE
+Guess val:         1989-10-0-1
+Correct type?      false
+Correct val?       false
 Governor verb POS: VB
 Mod:               false
 
@@ -528,7 +528,7 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            now
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (previous:<s,<r,s>> present_ref:r ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -540,7 +540,7 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            current
-Logic:             (this:<s,<r,s>> present_ref:r ref_time:r)
+Logic:             (temporal_ref:<s,s> present_ref:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          PRESENT_REF
@@ -552,14 +552,14 @@ Governor verb POS: VBG
 Mod:               false
 
 Phrase:            1993
-Logic:             (this:<s,<r,s>> 1993:r ref_time:r)
+Logic:             (temporal_ref:<s,s> 1993:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          1993
 Guess type:        DATE
-Guess val:         1993-10
+Guess val:         1993
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBG
 Mod:               false
 
@@ -648,14 +648,14 @@ Governor verb POS: VB
 Mod:               true
 
 Phrase:            the next two years or so
-Logic:             (next:<d,<r,s>> (*:<d,<n,d>> years:d 2:n) ref_time:r)
+Logic:             (temporal_ref:<s,s> (next:<d,<r,s>> (*:<d,<n,d>> years:d 2:n) ref_time:r))
 ref_time:          1989-10-30
 Gold type:         DURATION
 gold val:          P2Y
-Guess type:        DURATION
-Guess val:         P2Y
-Correct type?      true
-Correct val?       true
+Guess type:        DATE
+Guess val:         1991-10
+Correct type?      false
+Correct val?       false
 Governor verb POS: VBN
 Mod:               true
 
@@ -720,7 +720,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            recently
-Logic:             (this:<s,<r,s>> past_ref:r ref_time:r)
+Logic:             (temporal_ref:<s,s> past_ref:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          PAST_REF
@@ -780,7 +780,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            the latest quarter
-Logic:             (previous:<d,<r,s>> quarter:d ref_time:r)
+Logic:             (this:<s,<r,s>> (previous:<d,<r,s>> quarter:d ref_time:r) ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          1989-Q3
@@ -810,14 +810,14 @@ gold val:          1999-10-15
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            thursday
-Logic:             (this:<s,<r,s>> thursday:s ref_time:r)
+Logic:             (previous:<s,<r,s>> thursday:s ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          1989-10-26
 Guess type:        DATE
-Guess val:         1989-WXX-4
+Guess val:         1989-10-26
 Correct type?      true
-Correct val?       false
+Correct val?       true
 Governor verb POS: VBG
 Mod:               false
 
@@ -936,7 +936,7 @@ Governor verb POS: VBZ
 Mod:               false
 
 Phrase:            as soon as possible
-Logic:             future_ref:r
+Logic:             (previous:<s,<r,s>> future_ref:r ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          FUTURE_REF
@@ -1032,7 +1032,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            1989
-Logic:             1989:r
+Logic:             (temporal_ref:<s,s> 1989:r)
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          1989
@@ -1230,7 +1230,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            this fall
-Logic:             (this:<s,<r,s>> fall:s ref_time:r)
+Logic:             (temporal_ref:<s,s> (this:<s,<r,s>> fall:s ref_time:r))
 ref_time:          1989-10-30
 Gold type:         DATE
 gold val:          1989-FA
@@ -1320,7 +1320,7 @@ gold val:          1988-08-10
 No parses! Will implement something to throw out words and try again.
 
 Phrase:            18 months
-Logic:             (*:<d,<n,d>> months:d 18:n)
+Logic:             (previous:<d,<r,s>> (*:<d,<n,d>> months:d 18:n) ref_time:r)
 ref_time:          1989-10-30
 Gold type:         DURATION
 gold val:          P18M
@@ -1356,7 +1356,7 @@ Governor verb POS: VBD
 Mod:               false
 
 Phrase:            late yesterday
-Logic:             yesterday:r
+Logic:             (previous:<s,<r,s>> yesterday:r ref_time:r)
 ref_time:          1989-10-27
 Gold type:         DATE
 gold val:          1989-10-26
@@ -1392,7 +1392,7 @@ Governor verb POS: VBN
 Mod:               false
 
 Phrase:            this year
-Logic:             (this:<d,<r,s>> year:d ref_time:r)
+Logic:             (previous:<s,<r,s>> (this:<d,<r,s>> year:d ref_time:r) ref_time:r)
 ref_time:          1989-10-27
 Gold type:         DATE
 gold val:          1989
@@ -1408,7 +1408,7 @@ Mod:               false
 Total phrases: 124
 Number correctly parsed and executed, with correct type and val: 56, which is 45.16129032258065 percent
 Number parsed with correct val, but not type: 0, which is 0.0 percent.
-Number parsed with correct type, but not val: 42, which is 33.87096774193548 percent.
-Number parsed, but with incorrect type and val: 12, which his 9.67741935483871 percent
+Number parsed with correct type, but not val: 40, which is 32.25806451612903 percent.
+Number parsed, but with incorrect type and val: 14, which his 11.290322580645162 percent
 Number with too many parses: 0
 Number with no parses: 14

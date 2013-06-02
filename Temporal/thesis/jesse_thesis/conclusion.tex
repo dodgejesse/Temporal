@@ -1,0 +1,29 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+\label{sec:conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Synoptic is a tool for turning complex executions logs into convenient summary models
+for analyzing systems. It infers these models by capturing key temporal
+properties of the input logs. InvariMint
+implements a new model inference engine for constructing similar models. The
+InvariMint technique uses a formal languages perspective to express log
+invariants which offers improvements over Synoptic's refinement and coarsening
+algorithms:
+
+(1) Turning logs into models offers an easy-to-create and easy-to-use
+way to analyze systems. By using familiar DFA operations to infer these models,
+the InvariMint process is easy for users to understand.
+
+(2) InvariMint is more scalable than Synoptic. The InvariMint model inference technique
+refers to the input traces once which makes the DFA intersection and minimization
+operations more efficient than refinement and coarsening.
+
+(3) Whereas Synoptic generates models non-deterministically, InvariMint is both
+deterministic and captures all possible behaviors allowed by Synoptic models.
+
+Additionally the formal language perspective is extensible: InvariMint makes it trivial to model
+any system behavior that can be expressed as a finite state machine. This
+generic approach allows InvariMint to be compatible with other inference
+techniques, and we believe that it is a unifying framework for generalizing,
+combining, and comparing those existing methods.

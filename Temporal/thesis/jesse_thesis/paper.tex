@@ -1,0 +1,320 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[letterpaper,twocolumn,10pt]{article}
+
+\setlength{\textheight}{9.0in}
+\setlength{\columnsep}{0.25in}
+\setlength{\textwidth}{6.50in}
+
+\setlength{\topmargin}{0.0in}
+\LARGE
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+%\usepackage{times}
+\usepackage{stfloats}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{amsthm}
+\usepackage{balance}
+\usepackage{url}
+\usepackage{relsize}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{footmisc}
+\usepackage{xspace}
+\usepackage{pslatex}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fmtcount}
+
+\usepackage{paralist}
+\usepackage[tight]{subfigure}
+\usepackage[compact]{titlesec}
+\usepackage{hyperref} % include this last
+
+\theoremstyle{plain}
+\newtheorem{theorem}{\bf{Theorem}}%[section]
+\newtheorem{procedure}{\bf{Procedure}}%[section]
+\newtheorem{lemma}[theorem]{\bf{Lemma}}
+\newtheorem{corollary}[theorem]{\bf{Corollary}}
+\newtheorem{proofl}[theorem]{\bf{Proof}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{\bf{Definition}}%[section]
+\newtheorem{observation}{\bf{Observation}}%[section] 
+\theoremstyle{remark}
+\newtheorem{example}{\bf{Example}}
+\newtheorem{notation}{\bf{Notation}}
+\newtheorem{fact}{\bf{Fact}}
+
+% To avoid bad hypens:
+\hyphenation{InvariMint}
+
+\newcommand{\MC}{\mathbb{C}}
+\newcommand{\MCI}{\mathbb{C}_{\infty}}
+\newcommand{\MR}{\mathbb{R}}
+\newcommand{\MZ}{\mathbb{Z}}
+\newcommand{\MN}{\mathbb{N}}
+\newcommand{\MS}{\mathbb{S}}
+
+\newcommand{\AP}{\leftarrow}
+\newcommand{\AFby}{\rightarrow}
+\newcommand{\NFby}{\not\rightarrow}
+
+%% Bring items closer together in list environments
+%% This doesn't work with an optional argument to the list environment.
+% Prevent infinite loops
+\let\Itemize =\itemize    
+\let\Enumerate =\enumerate
+\let\Description =\description
+% Zero the vertical spacing parameters
+\def\Nospacing{\itemsep=0pt\topsep=0pt\partopsep=0pt\parskip=0pt\parsep=0pt}
+% Redefine the environments in terms of the original values
+\renewenvironment{itemize}{\Itemize\Nospacing}{\endlist}
+\renewenvironment{enumerate}{\Enumerate\Nospacing}{\endlist}
+\renewenvironment{description}{\Description\Nospacing}{\endlist}
+
+
+% \|name| or \mathid{name} denotes identifiers and slots in formulas
+\def\|#1|{\mathid{#1}}
+\newcommand{\mathid}[1]{\ensuremath{\mathit{#1}}}
+% \<name> or \codeid{name} denotes computer code identifiers
+\def\<#1>{\codeid{#1}}
+\newcommand{\codeid}[1]{\ifmmode{\mbox{\ttfamily{#1}}}\else{\ttfamily #1}\fi}
+
+% At least 80% of every float page must be taken up by
+% floats; there will be no page with more than 20% white space.
+\def\topfraction{.8}
+\def\dbltopfraction{\topfraction}
+\def\floatpagefraction{\topfraction}     % default .5
+\def\dblfloatpagefraction{\topfraction}  % default .5
+\def\textfraction{.2}
+
+% Add line between figure and text
+\makeatletter
+\def\topfigrule{\kern3\p@ \hrule \kern -3.4\p@} % the \hrule is .4pt high
+\def\botfigrule{\kern-3\p@ \hrule \kern 2.6\p@} % the \hrule is .4pt high
+\def\dblfigrule{\kern3\p@ \hrule \kern -3.4\p@} % the \hrule is .4pt high
+\makeatother
+% Reduce space between figures and text
+\addtolength{\textfloatsep}{-.5\textfloatsep}
+\addtolength{\dbltextfloatsep}{-.5\dbltextfloatsep}
+% Optional
+\addtolength{\floatsep}{-.5\floatsep}
+\addtolength{\dblfloatsep}{-.5\dblfloatsep}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\intextsep 5pt plus 2pt minus 4pt      % Space between in-text figures and
+%%                                         % text.
+
+\textfloatsep 5pt plus 2pt minus 4pt   % Space between main text and floats
+%%                                         % at top or bottom of page.
+
+
+\dbltextfloatsep 5pt plus 2pt minus 4pt   % Space between main text and floats
+%%                                         % at top or bottom of page.
+
+\setlength{\abovecaptionskip}{1pt}
+\setlength{\belowcaptionskip}{1pt}
+
+%\def\ffsp{\def\baselinestretch{0.99}\large\normalsize}
+
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+\begin{oldthebibliography}{#1}%
+\setlength{\itemsep}{-.3ex}%
+}%
+{%
+\end{oldthebibliography}%
+}
+
+\def\topfraction{.9}
+\def\textfraction{.1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% Switches for determining document version
+
+\newcommand{\eat}[1]{}
+
+% Different font in captions
+\newcommand{\captionfonts}{\small}
+
+\makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{{\captionfonts #1: #2}}%
+  \ifdim \wd\@tempboxa >\hsize
+    {\captionfonts #1: #2\par}
+  \else
+    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\makeatother
+
+\newcommand{\smallcaption}[1]{%
+\vspace{-2mm}%
+\begin{small}\caption{#1}\end{small}%
+\vspace{-2.5mm}
+}
+
+\newcommand{\todo}[1]{\textbf{\textcolor{red}{[TODO: #1]}}}
+
+\newcommand{\etal}{et al.}
+\newcommand{\parahead}[1]{\textbf{\textit{#1}}}
+\newcommand{\heading}[1]{{\vspace{6pt}\noindent\bf{#1}\hspace{6pt}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Package configuration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\theoremstyle{definition}
+\newtheorem{condition}{Condition}[section]
+
+\lstdefinelanguage{cs}
+{
+  morekeywords={abstract,event,new,struct,as,explicit,null,switch
+        base,extern,this,bool,false,operator,throw,
+        break,finally,out,true,byte,fixed,override,try,
+        case,float,params,typeof,catch,for,private,uint,
+        char,foreach,protected,ulong,checked,goto,public,unchecked,
+        class,if,readonly,unsafe,const,implicit,ref,ushort,
+        continue,in,return,using,decimal,int,sbyte,virtual,
+        default,interface,sealed,volatile,delegate,internal,short,void,
+        do,is,sizeof,while,double,lock,stackalloc,
+        else,long,static,enum,namespace,string,
+        where, from, select, group,by, having, into, many,
+        last, every,
+        or, and, on, var, when,let, zip, combine,
+        minute,hour,day,week,year,calendar,count, Delay, Until, TakeUntil, Sample, Skip, Throttle},
+      sensitive=true,
+      morecomment=[l]{//},
+      morecomment=[s]{/*}{*/},
+      morestring=[b]",
+}
+
+\lstset{
+    language=cs,
+    tabsize=2,
+        basicstyle=\footnotesize,
+        %upquote=true,
+%        aboveskip={1.5\baselineskip},
+        columns=fullflexible, %fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+%      prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+%   frame=single,
+        showtabs=false,
+        showspaces=false,
+       identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},% \sffamily,
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+%        stringstyle=\color[rgb]{0.627,0.126,0.941},
+    numbers=left,
+    xleftmargin=17pt,
+%   tabsize=2
+    captionpos=b,
+    breakatwhitespace=true,     % sets if automatic breaks should only happen at whitespace
+}
+
+\hypersetup{
+   pdftitle = {InvariMint: Modeling Logged Behavior with Invariant DFAs},
+   pdfauthor = {Jenny Abrahamson},
+   bookmarks=true,         % show bookmarks bar?
+   unicode=false,          % non-Latin characters in AcrobatÕs bookmarks
+   pdftoolbar=true,        % show AcrobatÕs toolbar?
+   pdfmenubar=true,        % show AcrobatÕs menu?
+   pdffitwindow=false,     % window fit to page when opened
+   pdfstartview={FitH},    % fits the width of the page to the window
+   pdfnewwindow=true,      % links in new window
+   colorlinks=true,        % false: boxed links; true: colored links
+   linkcolor=black,          % color of internal links
+   citecolor=black,        % color of links to bibliography
+   filecolor=black,      % color of file links
+   urlcolor=black           % color of external links
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Metadata
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\date{\today} % no date
+
+%\conferenceinfo{SLAML 2011,} {October 23, 2011, Cascais, Portugal.} 
+%\CopyrightYear{2011} 
+%\crdata{978-1-4503-0443-6/11/09} 
+%\clubpenalty=10000 
+%\widowpenalty = 10000
+
+\title{InvariMint: Modeling Logged Behavior with Invariant DFAs}
+
+% 11 point font
+\newcommand{\headerfont}[1]{{\fontsize{12pt}{13.6pt}\selectfont #1}}
+
+\author{
+\headerfont{Jenny Abrahamson}\\\\
+\headerfont{Computer Science \& Engineering}\\
+\headerfont{University of Washington}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Front Matter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+% Turn off page numbers
+%\pagestyle{empty}
+\thispagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Content
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{abstract}
+\input{introduction}
+\input{motivation}
+\input{formalizing}
+\input{evaluation}
+\input{generalizing}
+\input{conclusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Matter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{
+\bibliographystyle{acm}
+\small
+\bibliography{paper}
+}
+
+%\begin{appendices}
+%\input{appendix}
+%\end{appendices}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

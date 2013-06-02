@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{BeschastnikhBSSE2011}
+{\sc Beschastnikh, I., Brun, Y., Schneider, S., Sloan, M., and Ernst, M.~D.}
+\newblock Leveraging existing instrumentation to automatically infer
+  invariant-constrained models.
+\newblock In {\em ESEC/FSE 2011: The 8th joint meeting of the European Software
+  Engineering Conference (ESEC) and the ACM SIGSOFT Symposium on the
+  Foundations of Software Engineering (FSE)\/} (Szeged, Hungary,
+  September~7--9, 2011), pp.~267--277.
+
+\bibitem{kTailsOrigin}
+{\sc Biermann, A.~W., and Feldman, J.~A.}
+\newblock {O}n the {S}ynthesis of {F}inite-{S}tate {M}achines from {S}amples of
+  {T}heir {B}ehavior.
+\newblock {\em IEEE Trans. Comput. 21}, 6 (1972), 592--597.
+
+\bibitem{dwyer_spec_patterns_1999}
+{\sc Dwyer, M.~B., Avrunin, G.~S., and Corbett, J.~C.}
+\newblock Patterns in {P}roperty {S}pecifications for {F}inite-{S}tate
+  {V}erification.
+\newblock In {\em Proceedings of the 21st international conference on Software
+  engineering\/} (New York, NY, USA, 1999), ICSE '99, ACM, pp.~411--420.
+
+\bibitem{hopcroft_minimization_tr1971}
+{\sc Hopcroft, J.~E.}
+\newblock An n log n algorithm for minimizing states in a finite automaton.
+\newblock Tech. rep., Stanford, CA, USA, 1971.
+
+\bibitem{ReverseTraceroute}
+{\sc Katz-Bassett, E., Madhyastha, H.~V., Adhikari, V.~K., Scott, C., Sherry,
+  J., van Wesep, P., Anderson, T., and Krishnamurthy, A.}
+\newblock {R}everse {T}raceroute.
+\newblock In {\em Proc. of NSDI\/} (2010).
+
+\bibitem{automaton}
+{\sc M\o{}ller, A.}
+\newblock dk.brics.automaton -- finite-state automata and regular expressions
+  for {Java}, 2010.
+\newblock \texttt{http://www.brics.dk/automaton/}.
+
+\end{thebibliography}

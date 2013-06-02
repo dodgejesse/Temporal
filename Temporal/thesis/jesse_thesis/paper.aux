@@ -1,0 +1,79 @@
+\relax 
+\ifx\hyper@anchor\@undefined
+\global \let \oldcontentsline\contentsline
+\gdef \contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global \let \oldnewlabel\newlabel
+\gdef \newlabel#1#2{\newlabelxx{#1}#2}
+\gdef \newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\let \contentsline\oldcontentsline
+\let \newlabel\oldnewlabel}
+\else
+\global \let \hyper@last\relax 
+\fi
+
+\citation{BeschastnikhBSSE2011}
+\citation{BeschastnikhBSSE2011}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\newlabel{sec:introduction}{{1}{1}{Introduction\relax }{section.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Apache log snippet from an online shopping cart session - can you find the bug?$^{\@decimal {1}}$}}{1}{figure.1}}
+\newlabel{fig:motivating-log}{{1}{1}{Apache log snippet from an online shopping cart session - can you find the bug?$^{\decimal {footnote}}$\relax }{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Synoptic}{1}{subsection.1.1}}
+\newlabel{sec:synoptic}{{1.1}{1}{Synoptic\relax }{subsection.1.1}{}}
+\citation{dwyer_spec_patterns_1999}
+\citation{BeschastnikhBSSE2011}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.1}Invariants}{2}{subsubsection.1.1.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.2}Model Inference}{2}{subsubsection.1.1.2}}
+\newlabel{synop_inference}{{1.1.2}{2}{Model Inference\relax }{subsubsection.1.1.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}A formal languages perspective}{2}{subsection.1.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The Synoptic process for the log snippets in Figure\nobreakspace  {}\ref  {fig:motivating-log}. The user-provided regular expressions, (a), tell Synoptic how to parse interesting events from the input log and how to divide the log into individual traces of execution. Here traces are distinguished by IP address and Synoptic models client behavior during the shopping cart session. Starting from a compact initial model and the set of invariants mined from the input logs, (b), Synoptic infers a model of the system by iteratively satisfying each unsatisfied invariant (e.g. valid-coupon Never Followed by valid-coupon). The final model, (c), accepts only traces satisfying \emph  {all} of the invariants.}}{2}{figure.2}}
+\newlabel{fig:synop_shop}{{2}{2}{The Synoptic process for the log snippets in Figure~\ref {fig:motivating-log}. The user-provided regular expressions, (a), tell Synoptic how to parse interesting events from the input log and how to divide the log into individual traces of execution. Here traces are distinguished by IP address and Synoptic models client behavior during the shopping cart session. Starting from a compact initial model and the set of invariants mined from the input logs, (b), Synoptic infers a model of the system by iteratively satisfying each unsatisfied invariant (e.g. valid-coupon Never Followed by valid-coupon). The final model, (c), accepts only traces satisfying \emph {all} of the invariants}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The regular expressions used to translate each invariant type into an invariant DFA. }}{3}{figure.3}}
+\newlabel{fig:invRegDfa}{{3}{3}{The regular expressions used to translate each invariant type into an invariant DFA. \relax }{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Motivation}{3}{section.2}}
+\newlabel{sec:motivation}{{2}{3}{Motivation\relax }{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Formalizing the technique}{3}{section.3}}
+\newlabel{sec:formalizing}{{3}{3}{Formalizing the technique\relax }{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Definitions}{3}{subsection.3.1}}
+\newlabel{sec:Definitions}{{3.1}{3}{Definitions\relax }{subsection.3.1}{}}
+\citation{hopcroft_minimization_tr1971}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Constructing the initial model}{4}{subsection.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces This diagram illustrates the relationships between languages accepted by various models of the input traces. $L(M_i)$ is the language of the initial model which includes all of the input traces and is constrained only by the $NIFby$ invariants. $L(I_1) \cap \ldots  \cap L(I_m)$ is the language of the intersected mined invariants. By design, $L(I_1)$ accepts all of the input traces. $L_{Synoptic}$ also accepts all of the input traces and is constrained by both the mined invariants and $M_i$. Since Synoptic is non-deterministic, $L_{Synoptic}$ may vary given the same inputs but always respects the above constraints. $L_{InvariMint}$ is precisely the intersection of $L(M_i)$ and $L(I_1) \cap \ldots  \cap L(I_m)$. }}{4}{figure.4}}
+\newlabel{fig:language-venn}{{4}{4}{This diagram illustrates the relationships between languages accepted by various models of the input traces. $L(M_i)$ is the language of the initial model which includes all of the input traces and is constrained only by the $NIFby$ invariants. $L(I_1) \cap \ldots \cap L(I_m)$ is the language of the intersected mined invariants. By design, $L(I_1)$ accepts all of the input traces. $L_{Synoptic}$ also accepts all of the input traces and is constrained by both the mined invariants and $M_i$. Since Synoptic is non-deterministic, $L_{Synoptic}$ may vary given the same inputs but always respects the above constraints. $L_{InvariMint}$ is precisely the intersection of $L(M_i)$ and $L(I_1) \cap \ldots \cap L(I_m)$. \relax }{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Constructing the final model}{4}{subsection.3.3}}
+\citation{automaton}
+\citation{ReverseTraceroute}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Implementation}{5}{subsection.3.4}}
+\newlabel{sec:implementation}{{3.4}{5}{Implementation\relax }{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation}{5}{section.4}}
+\newlabel{sec:evaluation}{{4}{5}{Evaluation\relax }{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Addressing Synoptic limitations}{5}{subsection.4.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Run time of Synoptic versus InvariMint as the size of the input log increased.}}{5}{figure.5}}
+\newlabel{fig:performanceLogLine}{{5}{5}{Run time of Synoptic versus InvariMint as the size of the input log increased}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Performance}{5}{subsection.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Model comparisons}{5}{subsection.4.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Union of Synoptic models}{5}{subsubsection.4.3.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Models a and b are possible final Synoptic models given the provided input traces. Next to each model is an example of a synthetic trace accepted by that model but not the other. The corresponding InvariMint model, c, accepts the union of synthetic traces accepted by both Synoptic models.}}{6}{figure.6}}
+\newlabel{fig:synthetic}{{6}{6}{Models a and b are possible final Synoptic models given the provided input traces. Next to each model is an example of a synthetic trace accepted by that model but not the other. The corresponding InvariMint model, c, accepts the union of synthetic traces accepted by both Synoptic models}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Spurious Edges}{7}{subsubsection.4.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces An abstract example of a spurious edge in an InvariMint model. The input traces and mined invariants are shown at left. Each edge in the Synoptic model (translated to an InvariMint-style DFA for easier comparison) corresponds directly to an event in some input trace. The InvariMint model is almost identical to the Synoptic model but includes an additional $z$ edge from $a$ to $TERMINAL$. This transition does not map to any event in the input logs so violates the edge-coverage property and is spurious. This spurious $z$ edge is allowed by InvariMint because elsewhere an event $z$ immediately followed an event $a$ and none of the other invariants restrict this particular instance of $z$.}}{7}{figure.7}}
+\newlabel{fig:spurious}{{7}{7}{An abstract example of a spurious edge in an InvariMint model. The input traces and mined invariants are shown at left. Each edge in the Synoptic model (translated to an InvariMint-style DFA for easier comparison) corresponds directly to an event in some input trace. The InvariMint model is almost identical to the Synoptic model but includes an additional $z$ edge from $a$ to $TERMINAL$. This transition does not map to any event in the input logs so violates the edge-coverage property and is spurious. This spurious $z$ edge is allowed by InvariMint because elsewhere an event $z$ immediately followed an event $a$ and none of the other invariants restrict this particular instance of $z$}{figure.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Removing spurious edges}{7}{subsubsection.4.3.3}}
+\citation{kTailsOrigin}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Generalizing the Technique}{8}{section.5}}
+\newlabel{sec:generalizing}{{5}{8}{Generalizing the Technique\relax }{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}kTails}{8}{subsection.5.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces A sample trace graph and its corresponding models using InvariMint for kTails for k = 0 and k = 1.}}{8}{figure.8}}
+\newlabel{fig:ktails}{{8}{8}{A sample trace graph and its corresponding models using InvariMint for kTails for k = 0 and k = 1}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Invariant DFAs for the tails in Figure\nobreakspace  {}\ref  {fig:ktails}a for $k = 1$.}}{8}{figure.9}}
+\newlabel{fig:tails}{{9}{8}{Invariant DFAs for the tails in Figure~\ref {fig:ktails}a for $k = 1$}{figure.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Representing kTails using InvariMint}{8}{subsection.5.2}}
+\bibstyle{acm}
+\bibdata{paper}
+\bibcite{BeschastnikhBSSE2011}{1}
+\bibcite{kTailsOrigin}{2}
+\bibcite{dwyer_spec_patterns_1999}{3}
+\bibcite{hopcroft_minimization_tr1971}{4}
+\bibcite{ReverseTraceroute}{5}
+\bibcite{automaton}{6}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}}
+\newlabel{sec:conclusion}{{6}{9}{Conclusion\relax }{section.6}{}}

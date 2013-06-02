@@ -2,7 +2,6 @@
 
 intersect:<s*,s>
 catleft:<d,<r,d>>
-before:<s,<r,s>>
 *:<d,<n,d>>
 
 nth:<d,<n,s>>
@@ -14,5 +13,6 @@ previous:<s,<r,s>>
 previous:<d,<r,s>>
 
 temproal_ref:<d,s>
+temporal_ref:<s,s>
 
 )
