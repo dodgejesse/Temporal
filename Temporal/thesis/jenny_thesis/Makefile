@@ -2,6 +2,8 @@
 # Make will silently continue if that file does not exist.
 -include Makefile.user
 
+alias pdflatex='pdftex'
+
 TARGET   = paper
 
 # To regenerate, run:  latex-process-inputs -makefilelist paper.tex

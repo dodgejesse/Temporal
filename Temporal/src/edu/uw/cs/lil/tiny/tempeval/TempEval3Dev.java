@@ -74,8 +74,8 @@ public class TempEval3Dev {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
 		boolean testingDataset = false; // testing dataset takes precidenence over the other two
-		boolean timebank = false;  // when this is false, we use the aquaint data.
-		boolean crossVal = true;
+		boolean timebank = true;  // when this is false, we use the aquaint data.
+		boolean crossVal = false;
 		int numIterations = 1;
 		
 		

@@ -9,8 +9,8 @@ TEXFILES = \
 paper.tex \
 abstract.tex \
 introduction.tex \
-previousWork.tex \
-representation.tex \
+motivation.tex \
+formalizing.tex \
 evaluation.tex \
 generalizing.tex \
 conclusion.tex

@@ -294,10 +294,10 @@
 \input{abstract}
 \input{introduction}
 \input{previousWork}
-\input{logicFormalism}
-\input{evaluation}
-\input{generalizing}
-\input{conclusion}
+\input{representation}
+\input{learning}
+\input{results}
+\input{futureWork}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End Matter

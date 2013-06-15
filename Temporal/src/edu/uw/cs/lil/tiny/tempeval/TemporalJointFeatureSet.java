@@ -69,9 +69,9 @@ String[], LogicalExpression, LogicalExpression>{
 	private boolean isTempRefPhrase(Sentence phrase){
 		String p = phrase.getString();
 		String[] tempPhrases = {"a year earlier", 
-//				"a year ago", "year earlier", "the quarter a year ago","the latest quarter",
-//				"the latest period", "that quarter", "that time", "that year", "the comparable year", "the following month", 
-//				"the following year"
+				"a year ago", "year earlier", "the quarter a year ago","the latest quarter",
+				"the latest period", "that quarter", "that time", "that year", "the comparable year", "the following month", 
+				"the following year"
 				};
 		for (int i = 0; i < tempPhrases.length; i++){
 			if (p.equals(tempPhrases[i]))
