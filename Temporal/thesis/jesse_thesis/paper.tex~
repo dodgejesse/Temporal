@@ -294,7 +294,7 @@
 \input{abstract}
 \input{introduction}
 \input{previousWork}
-\input{representation}
+\input{logicFormalism}
 \input{evaluation}
 \input{generalizing}
 \input{conclusion}

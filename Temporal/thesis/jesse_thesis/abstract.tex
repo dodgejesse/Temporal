@@ -1,37 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We present a semantic parsing approach for grounding temporal phrases. 
-Previous work, including current state of the art approaches, 
-primarily use pattern matching and regular expression-like
-rules for temporal expression resolution. However, the compositionality 
-of language suggests a more linguistically principled approach. 
+We present a semantic parsing approach for temporal expression resolution. 
+Previous work, including current state of the art approaches, primarily use pattern matching and regular expression-like rules for grounding temporal expressions. However, the compositionality of language suggests a more linguistically principled approach. 
 
-Using a hand-built lexicon and CCG parser, we construct a 
-logical representation of each temporal phrase, which is then executed
-to a standardized date and time representation. This approach builds 
-on previous successes using CCG for semantic parsing. Using a small featureset
-of linguistically motivated features and a perceptron for parse selection, we achieve 
-moderate accuracy on task A of TempEval3.
-
-
-Developers often struggle to understand their systems. In prior work
-we created Synoptic, a tool to help developers 
-by inferring a concise and accurate system model from execution logs.
-However, Synoptic has numerous limitations: (1) it is slow when run on
-large input logs, (2) it is non-deterministic and does not always generate
-optimal models, (3) it is difficult to extend, and (4) the Synoptic algorithm is complex and
-difficult for users to understand.
-
-To remedy the above limitations we developed InvariMint,
-which reformulates the core Synoptic process in terms of formal
-languages. InvariMint generates a DFA for each log invariant, intersects the 
-invariant DFAs, and minimizes the resulting model.
-This model inference approach is independent of the size of the log,
-deterministic, easy to extend, and uses standard techniques that are easy
-to understand. We have also found that the InvariMint approach generalizes
-to other algorithms used in model inference, such as the k-Tails algorithm.
-We think that InvariMint can act as a common denominator in model
-inference, using which researchers can easily compare a wide range of
-algorithms and which provides users with a simple process for deriving
-customized hybrid algorithms.
+In our system, using a hand-built lexicon and CCG parser, we first construct a 
+base CCG parse for each temporal phrase, then build a set of candidate
+context-dependent logical forms from each base parse. We learn to select one parse from this set using a perceptron and features based on the logic, the phrase itself, and, critically, the full context the in which the phrase appears. Finally, we execute this logical form to a standardized date and time representation. This approach builds on previous successes using CCG for semantic parsing, and using a small featureset of linguistically motivated features, we achieve moderate accuracy on task A of TempEval3.

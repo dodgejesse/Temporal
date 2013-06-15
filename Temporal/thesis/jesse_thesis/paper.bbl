@@ -1,5 +1,11 @@
 \begin{thebibliography}{1}
 
+\bibitem{ParsingTime}
+{\sc Angeli, G., Manning, C.~D., and Jurafsky, D.}
+\newblock Parsing time: Learning to interpret time expressions.
+\newblock In {\em North American Chapter of the Association for Computational
+  Linguistics (NAACL)\/} (2012).
+
 \bibitem{BeschastnikhBSSE2011}
 {\sc Beschastnikh, I., Brun, Y., Schneider, S., Sloan, M., and Ernst, M.~D.}
 \newblock Leveraging existing instrumentation to automatically infer

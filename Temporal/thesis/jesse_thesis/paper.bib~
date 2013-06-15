@@ -1,4 +1,4 @@
-@inproceedings{ParsingTime,
+@inproceedings{ParsingTime
  author = {Gabor Angeli and Christopher D. Manning and Daniel Jurafsky}, 
  title = {Parsing Time: Learning to Interpret Time Expressions},
  booktitle = {North American Chapter of the Association for Computational Linguistics (NAACL)},

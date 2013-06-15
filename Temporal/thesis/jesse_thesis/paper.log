@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.10.16)  30 MAY 2013 14:52
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.10.16)  15 JUN 2013 12:45
 entering extended mode
  %&-line parsing enabled.
 **paper.tex
@@ -717,114 +717,131 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 284.
  (./abstract.tex)
 (./introduction.tex
-Underfull \hbox (badness 2452) in paragraph at lines 12--2
-[]\OT1/ptm/m/n/10 (+20) To rem-edy the above lim-i-ta-tions we de-vel-oped
- []
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
-<fig/motivating-log.pdf, id=96, 1091.07625pt x 450.68375pt>
-File: fig/motivating-log.pdf Graphic file (type pdf)
-
-<use fig/motivating-log.pdf>
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 39.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+Missing character: There is no ‚ in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ô in font ptmr7t!
+Missing character: There is no ‚ in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ú in font ptmr7t!
+Missing character: There is no ‚ in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ù in font ptmr7t!
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 57.
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 64.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
-
-Underfull \vbox (badness 1540) has occurred while \output is active []
-
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
  [1{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
- <./fig/motivating-log.pdf>]
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 72.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 73.
-
-<fig/shopping_cart.pdf, id=123, 499.8675pt x 865.2325pt>
+]
+<fig/shopping_cart.pdf, id=111, 499.8675pt x 865.2325pt>
 File: fig/shopping_cart.pdf Graphic file (type pdf)
 
 <use fig/shopping_cart.pdf>
-Underfull \hbox (badness 1931) in paragraph at lines 153--164
+
+LaTeX Warning: Reference `fig:motivating-log' on page 2 undefined on input line
+ 124.
+
+
+LaTeX Warning: Reference `fig:motivating-log' on page 2 undefined on input line
+ 124.
+
+
+Underfull \hbox (badness 1931) in paragraph at lines 145--156
 []\OT1/ptm/m/n/10 (+20) To eval-u-ate this tech-nique, we built InvariMint.
  []
 
-[2 <./fig/shopping_cart.pdf>]) (./motivation.tex
-<fig/invRegexDfa.pdf, id=166, 605.26125pt x 589.20125pt>
-File: fig/invRegexDfa.pdf Graphic file (type pdf)
+) (./previousWork.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<use fig/invRegexDfa.pdf>) (./formalizing.tex [3 <./fig/invRegexDfa.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 133--135
+ [2 <./fig/shopping_cart.pdf>]) (./representation.tex
 
- []
+LaTeX Warning: Reference `fig:invRegDfa' on page 3 undefined on input line 36.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 136--138
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 121--123
 
  []
 
-<fig/language-venn.pdf, id=195, 545.03625pt x 221.82875pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--126
+
+ []
+
+<fig/language-venn.pdf, id=167, 545.03625pt x 221.82875pt>
 File: fig/language-venn.pdf Graphic file (type pdf)
 
-<use fig/language-venn.pdf> [4 <./fig/language-venn.pdf>]) (./evaluation.tex
-<fig/performanceLogLines.pdf, id=265, 1012.78375pt x 677.53125pt>
+<use fig/language-venn.pdf>
+
+LaTeX Warning: Reference `sec:Definitions' on page 4 undefined on input line 18
+9.
+
+) (./evaluation.tex
+
+LaTeX Warning: Reference `sec:motivation' on page 4 undefined on input line 7.
+
+[4 <./fig/language-venn.pdf>]
+<fig/performanceLogLines.pdf, id=234, 1012.78375pt x 677.53125pt>
 File: fig/performanceLogLines.pdf Graphic file (type pdf)
 
 <use fig/performanceLogLines.pdf>
-<fig/union.pdf, id=266, 919.435pt x 808.01875pt>
+<fig/union.pdf, id=235, 919.435pt x 808.01875pt>
 File: fig/union.pdf Graphic file (type pdf)
  <use fig/union.pdf> [5 <./fig/performanceLogLines.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [6 <./fig/union.pdf>] <fig/spurious.pdf, id=311, 633.36626pt x 694.595pt>
-File: fig/spurious.pdf Graphic file (type pdf)
 
-<use fig/spurious.pdf> [7 <./fig/spurious.pdf>]) (./generalizing.tex
-<fig/ktails.pdf, id=357, 580.911pt x 359.7753pt>
+<fig/spurious.pdf, id=258, 633.36626pt x 694.595pt>
+File: fig/spurious.pdf Graphic file (type pdf)
+ <use fig/spurious.pdf>
+[6 <./fig/union.pdf>]) (./generalizing.tex [7 <./fig/spurious.pdf>]
+<fig/ktails.pdf, id=326, 580.911pt x 359.7753pt>
 File: fig/ktails.pdf Graphic file (type pdf)
  <use fig/ktails.pdf>
-<fig/tails.pdf, id=358, 328.26622pt x 229.15622pt>
+<fig/tails.pdf, id=327, 328.26622pt x 229.15622pt>
 File: fig/tails.pdf Graphic file (type pdf)
- <use fig/tails.pdf> [8 <./fig/ktails.pdf> <./fig/tails.pdf>]) (./conclusion.te
-x
+ <use fig/tails.pdf>)
+(./conclusion.tex
 Underfull \hbox (badness 10000) in paragraph at lines 22--24
 []\OT1/ptm/m/n/10 (+20) (3) Whereas Syn-op-tic gen-er-ates mod-els non-
  []
 
-) (./paper.bbl
-Underfull \vbox (badness 4060) has occurred while \output is active []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 37--41
+) [8 <./fig/ktails.pdf> <./fig/tails.pdf>] (./paper.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 43--47
 []\OT1/ptm/m/sc/9 (+20) M^^\ller, A.  \OT1/ptm/m/n/9 (+20) dk.brics.automaton -
 - finite-state
  []
 
 
-Underfull \hbox (badness 6188) in paragraph at lines 37--41
+Underfull \hbox (badness 6188) in paragraph at lines 43--47
 \OT1/ptm/m/n/9 (+20) au-tomata and reg-u-lar ex-pres-sions for Java, 2010.
  []
 
-) [9] (./paper.aux)
+) [9
+
+] (./paper.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.3pt have occurred.
 
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 11064 strings out of 256216
- 167837 string characters out of 1917083
- 279434 words of memory out of 1500000
- 13811 multiletter control sequences out of 10000+200000
- 68752 words of font info for 210 fonts, out of 1200000 for 2000
+ 11038 strings out of 256216
+ 167469 string characters out of 1917083
+ 280254 words of memory out of 1500000
+ 13796 multiletter control sequences out of 10000+200000
+ 64096 words of font info for 199 fonts, out of 1200000 for 2000
  646 hyphenation exceptions out of 8191
- 46i,9n,72p,840b,382s stack positions out of 5000i,500n,6000p,200000b,15000s
+ 46i,9n,72p,857b,423s stack positions out of 5000i,500n,6000p,200000b,15000s
 {/usr/share/texmf/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/b
 luesky/cm/cmmi10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi7.pfb></usr/s
 hare/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/blues
@@ -833,9 +850,9 @@ texmf/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf/fonts/type1/urw/symb
 ol/usyr.pfb></usr/share/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texm
 f/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on paper.pdf (9 pages, 772741 bytes).
+Output written on paper.pdf (9 pages, 562333 bytes).
 PDF statistics:
- 562 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 131072)
- 49390 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 530 PDF objects out of 1000 (max. 8388607)
+ 52 named destinations out of 1000 (max. 131072)
+ 42212 words of extra memory for PDF output out of 42996 (max. 10000000)
 

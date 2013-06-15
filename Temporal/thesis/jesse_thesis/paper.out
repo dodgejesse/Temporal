@@ -1,11 +1,11 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}
-\BOOKMARK [2][-]{subsection.1.1}{Synoptic}{section.1}
-\BOOKMARK [3][-]{subsubsection.1.1.1}{Invariants}{subsection.1.1}
+\BOOKMARK [2][-]{subsection.1.1}{synoptic}{section.1}
+\BOOKMARK [3][-]{subsubsection.1.1.1}{Invariantssss}{subsection.1.1}
 \BOOKMARK [3][-]{subsubsection.1.1.2}{Model Inference}{subsection.1.1}
 \BOOKMARK [2][-]{subsection.1.2}{A formal languages perspective}{section.1}
-\BOOKMARK [1][-]{section.2}{Motivation}{}
-\BOOKMARK [1][-]{section.3}{Formalizing the technique}{}
-\BOOKMARK [2][-]{subsection.3.1}{Definitions}{section.3}
+\BOOKMARK [1][-]{section.2}{previousWork}{}
+\BOOKMARK [1][-]{section.3}{Representation}{}
+\BOOKMARK [2][-]{subsection.3.1}{Types within CCG}{section.3}
 \BOOKMARK [2][-]{subsection.3.2}{Constructing the initial model}{section.3}
 \BOOKMARK [2][-]{subsection.3.3}{Constructing the final model}{section.3}
 \BOOKMARK [2][-]{subsection.3.4}{Implementation}{section.3}
