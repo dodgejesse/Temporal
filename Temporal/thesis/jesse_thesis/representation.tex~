@@ -10,6 +10,8 @@ In this section, we first define our type system, then discuss our lexicon, then
 \subsection{Types within CCG}
 \label{sec:CCGtypes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We define five 
+
 \begin{definition}[Range]
 A range is a period between two times. For example, \emph{June 13th, 2013}, \emph{today}, and \emph{1987} all ground to ranges.
 \end{definition}
@@ -33,34 +35,39 @@ There are a number of functional types, all of arity less than or equal to two. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Lexicon}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We use standard CCG combination rules and a hand-built lexicon to build our base parses. This approach builds upon the assumption that language is compositional in nature. 
+A CCG is defined by a lexicon and set of combinators. In this work, we use standard forward and backward application with a hand-built lexicon to build our base parses. 
 
 \begin{figure}[t!]
    \center
-   {\includegraphics[width=0.95\columnwidth]{fig/language-venn.pdf}}
-   \caption{This diagram illustrates the relationships between languages
-    accepted by various models of the input traces. $L(M_i)$ is the language of
-    the initial model which includes all of the input traces and is constrained
-    only by the $NIFby$ invariants.
-    $L(I_1) \cap \ldots \cap L(I_m)$ is the language of the intersected mined
-    invariants. By design, $L(I_1)$ accepts all of the input traces.
-    $L_{Synoptic}$ also accepts all of the input traces and is constrained by
-    both the mined invariants and $M_i$. 
-    Since Synoptic is non-deterministic, $L_{Synoptic}$ may vary given the same
-    inputs but always respects the above constraints.
-    $L_{InvariMint}$ is precisely the intersection of $L(M_i)$ and $L(I_1) \cap
-    \ldots \cap L(I_m)$.
+   {\includegraphics[width=0.95\columnwidth]{fig/lexiconExample.pdf}}
+   \caption{Above we can see three example parses. Each of these parses represents a base parse for the given temporal phrase. We can see how the base parse is built from the individual categories drawn from the lexicon. In the first example, we are parsing the phrase \emph{third quarter}. The entries in the lexicon that are being used in this parse are $\lambda x.nth(x,3)$ and $quarter$, which correspond to \emph{third} and \emph{quarter}, respectively. These combine to create the base parse for the first phrase, $nth(quarter,3)$. 
+The second example is very similar to the frist. However, the third example first does forward composition (combining $\lambda x*(x,1)$ with $year$) then does backward composition (combining $\lambda x.*(x,-1)$ with $*(year,1)$). 
+The first context-independent parse, $nth(quarter,3)$ represents the sequence of all third quarters, which needs additional logic to be correctly ground to a single third quarter. The second parse, $*(weeks, 5)$, can be fully ground to a duration of five weeks without needing an additional context step. The third parse, $*(*(year,1),-1)$, can't actually be ground to a date at all without additional contextual information. 
    } 
    \label{fig:language-venn}
 \end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Constructing the final model}
+\subsection{Pasing Using CCG}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+First, for each temporal phrase in our dataset, we use a CKY parser to get a set of CCG logical forms. These are built only from the phrase itself, and don't take any additional information into account. Some ranges can be fully ground without looking at the context in which they appear, such as \emph{June 6th, 2013}. Similarly, durations such as \emph{five weeks} or \emph{a year} don't need to look at surrounding context to be executed to a final form. However, the majority of phrases do require some context to ground fully. Phrases such as \emph{Friday} are parsed to logic that represents sequences, in this case the sequence of all Fridays. To ground phrases such as those to a single range, we need to look at context. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Building Context-Dependent Parse}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+From each context-independent logical form we get from the base CCG parser, we use a deterministic process to build a set of five context-dependent logical forms. These represent the five possible groundings of each of our base parses. For fully-sepcified ranges and for durations, we don't actually need to change the logical form, so the frist of the the context-dependent logical forms is an unchanged version of the context-independent logical form. Sequences often represent an infinite number of ranges, such as $nth(quarter,3)$. We can ground these sequences to one of three ranges, either the range before the document was published, the range after the document was published, or the range during which the document was published. Finally, for a class of temporal phrases that refer to a previously uttered temporal phrase, such as \emph{a year earlier}, we build a logical form that grounds the current phrase based on the previous one. An example is shown in the figure above.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Implementation}
-\label{sec:implementation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
 
