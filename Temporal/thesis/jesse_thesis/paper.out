@@ -1,22 +1,14 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}
-\BOOKMARK [2][-]{subsection.1.1}{synoptic}{section.1}
-\BOOKMARK [3][-]{subsubsection.1.1.1}{Invariantssss}{subsection.1.1}
-\BOOKMARK [3][-]{subsubsection.1.1.2}{Model Inference}{subsection.1.1}
-\BOOKMARK [2][-]{subsection.1.2}{A formal languages perspective}{section.1}
-\BOOKMARK [1][-]{section.2}{previousWork}{}
-\BOOKMARK [1][-]{section.3}{Representation}{}
-\BOOKMARK [2][-]{subsection.3.1}{Types within CCG}{section.3}
-\BOOKMARK [2][-]{subsection.3.2}{Constructing the initial model}{section.3}
-\BOOKMARK [2][-]{subsection.3.3}{Constructing the final model}{section.3}
-\BOOKMARK [2][-]{subsection.3.4}{Implementation}{section.3}
-\BOOKMARK [1][-]{section.4}{Evaluation}{}
-\BOOKMARK [2][-]{subsection.4.1}{Addressing Synoptic limitations}{section.4}
-\BOOKMARK [2][-]{subsection.4.2}{Performance}{section.4}
-\BOOKMARK [2][-]{subsection.4.3}{Model comparisons}{section.4}
-\BOOKMARK [3][-]{subsubsection.4.3.1}{Union of Synoptic models}{subsection.4.3}
-\BOOKMARK [3][-]{subsubsection.4.3.2}{Spurious Edges}{subsection.4.3}
-\BOOKMARK [3][-]{subsubsection.4.3.3}{Removing spurious edges}{subsection.4.3}
-\BOOKMARK [1][-]{section.5}{Generalizing the Technique}{}
-\BOOKMARK [2][-]{subsection.5.1}{kTails}{section.5}
-\BOOKMARK [2][-]{subsection.5.2}{Representing kTails using InvariMint}{section.5}
-\BOOKMARK [1][-]{section.6}{Conclusion}{}
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Outline}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Previous Work}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{TempEval}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Representation}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Types within CCG}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Lexicon}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Pasing Using CCG}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{Building Context-Dependent Parse}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.5}{Execution}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Learning}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Features}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Results}{}% 13
+\BOOKMARK [1][-]{section.6}{FutureWork}{}% 14

@@ -71,9 +71,10 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
-		boolean serializeDatasets = false;
+		boolean readSerializedDatasets = false; // this takes precedence over booleans testingDataset, timebank, and crossVal.
+		boolean serializeDatasets = true;
 		boolean testingDataset = false; // testing dataset takes precidenence over the other two
+		boolean oldDataset = true;
 		boolean timebank = true;  // when this is false, we use the aquaint data.
 		boolean crossVal = false;
 		int numIterations = 1;
@@ -124,6 +125,8 @@ public class TempEval3Dev {
 		else{
 			if (timebank)
 				dataLoc = "tempeval3.timebank.txt";
+			else if (oldDataset)
+				dataLoc = "tempeval3.old.txt";
 			else
 				dataLoc = "tempeval3.aquaint.txt";
 			

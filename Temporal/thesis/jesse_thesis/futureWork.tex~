@@ -3,9 +3,6 @@
 \label{sec:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In the near future, there is still work to be done on a number of aspects of our system. The current lexicon only covers about 90\% of the dataset, meaning about 10\% of the phrases don't have any parses. If a given phrase does parse, however, our systems still has trouble selecting the correct context-dependent logical form. This can be seen by the discrepancy between our training and testing accuracies. The low testing accuracy is because the model we learn doesn't generalize well. Examining the errors will shed light on how we can adjust our feature set to better learn a model of our data.
-
 Within this dataset, each of the temporal phrases are annotated with gold mentions. This system uses these mentions, but in the future learning to detect these phrases will be vital. As we have a hand-built lexicon, we can use that lexicon for both detection and parsing by trying to parse phrases within documents. 
-
 Work in this area is a good first-step towards computational understanding, but expanding our reasoning about times to include reasoning about the events occuring at those times would be very beneficial. This would be a step toward building systems that can better perform question answering, information extraction, and summarization.
-
 While the vast majority of natural lanuage research has been done on English text, temporal phrases appear in every language. Even in the TempEval tasks, there are datasets for six languages that have annotated temporal phrases. Expanding the system to work in a number of languages would only require rewriting the lexicon, but will be left to future projects.

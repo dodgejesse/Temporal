@@ -42,7 +42,7 @@ We use a small set of linguistically motivated features for this work. We have a
 
 \begin{figure}[t!]
    \center
-   {\includegraphics[width=0.85\columnwidth]{fig/featureExample.png}}
+   {\includegraphics[width=0.5\columnwidth]{fig/featureExample.png}}
    \caption{
    When grounding the phrase \emph{third quarter} in the example sentences above, we compute features based on the tense of the verb that governs \emph{third quarter}. These features help us select between the three context-dependent logical forms shown above. 
    } 
