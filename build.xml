@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="compile">
+  <presetdef name="javac">
+    <javac includeantruntime="false" />
+  </presetdef>
+  <property name="build.dir" value="bin" />
+  <property name="src.dir" value="src" />
+  <property name="lib.dir" value="lib" />
+  <target description="Creates temporary directories" name="init">
+    <mkdir dir="${build.dir}/classes" />
+  </target>
+  <target depends="init" description="Removes temporary directories" name="clean">
+    <delete dir="${build.dir}" />
+  </target>
+  <target name="compile" depends="init">
+    <javac debug="true" deprecation="true"
+	   destdir="${build.dir}/classes" srcdir="${src.dir}"
+	   verbose="true" />
+  </target>
+  <target depends="compile" description="Build the jar files" name="jar">
+    <mkdir dir="${build.dir}/jar"/>
+    <jar destfile="${build.dir}/jar/TempEval3Dev.jar" basedir="${build.dir}/classes">
+      <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+      <manifest>
+        <attribute name="Main-Class" value="edu.uw.cs.lil.tiny.tempeval.TempEval3Dev"/>
+      </manifest>
+    </jar>
+  </target>
+  <target depends="jar" description="Run the evaluation" name="eval">
+    <java jar="${build.dir}/jar/TempEval3Dev.jar" fork="true"/>
+  </target>
+</project>
