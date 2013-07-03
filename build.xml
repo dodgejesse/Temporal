@@ -6,7 +6,8 @@
   <property name="build.dir" value="bin" />
   <property name="src.dir" value="src" />
   <property name="lib.dir" value="lib" />
-  
+  <property name="jar.file" value="TempEval3Dev.jar" />
+  <property name="main.class" value="edu.uw.cs.lil.tiny.tempeval.TempEval3Dev" />
   <path id="classpath">
     <fileset dir="${lib.dir}">
       <include name="*"/>
@@ -26,13 +27,24 @@
   </target>
   <target depends="compile" description="Build the jar files" name="jar">
     <mkdir dir="${build.dir}/jar"/>
-    <jar destfile="${build.dir}/jar/TempEval3Dev.jar" basedir="${build.dir}/classes">
+    <jar destfile="${build.dir}/jar/${jar.file}" basedir="${build.dir}/classes">
+      <fileset dir="${lib.dir}" includes="**/*.class" />
       <manifest>
-        <attribute name="Main-Class" value="edu.uw.cs.lil.tiny.tempeval.TempEval3Dev"/>
+        <attribute name="Main-Class" value="${main.class}" />
       </manifest>
     </jar>
   </target>
+
   <target depends="jar" description="Run the evaluation" name="eval">
-    <java jar="${build.dir}/jar/TempEval3Dev.jar" fork="true"/>
+    <java jar="${build.dir}/jar/${jar.file}" fork="true" />
+  </target>
+
+  <target name="run" depends="jar" description="Run the evaluation">
+    <java fork="true" classname="${main.class}">
+      <classpath>
+        <path refid="classpath" />
+        <path location="${build.dir}/jar/${jar.file}" />
+      </classpath>
+    </java>
   </target>
 </project>
