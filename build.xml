@@ -6,6 +6,13 @@
   <property name="build.dir" value="bin" />
   <property name="src.dir" value="src" />
   <property name="lib.dir" value="lib" />
+  
+  <path id="classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*"/>
+    </fileset>
+  </path>
+  
   <target description="Creates temporary directories" name="init">
     <mkdir dir="${build.dir}/classes" />
   </target>
@@ -13,14 +20,13 @@
     <delete dir="${build.dir}" />
   </target>
   <target name="compile" depends="init">
-    <javac debug="true" deprecation="true"
-	   destdir="${build.dir}/classes" srcdir="${src.dir}"
-	   verbose="true" />
+    <javac destdir="${build.dir}/classes" srcdir="${src.dir}" debug="true" verbose="true">
+      <classpath refid="classpath"/>
+    </javac>
   </target>
   <target depends="compile" description="Build the jar files" name="jar">
     <mkdir dir="${build.dir}/jar"/>
     <jar destfile="${build.dir}/jar/TempEval3Dev.jar" basedir="${build.dir}/classes">
-      <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
       <manifest>
         <attribute name="Main-Class" value="edu.uw.cs.lil.tiny.tempeval.TempEval3Dev"/>
       </manifest>
