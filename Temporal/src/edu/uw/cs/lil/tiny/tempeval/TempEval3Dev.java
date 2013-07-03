@@ -80,7 +80,7 @@ public class TempEval3Dev {
 		boolean testingDataset = true; // testing dataset takes precidenence over timebank
 		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
 		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
-		boolean crossVal = true;
+		boolean crossVal = false;
 		int numIterations = 1;
 		
 		
