@@ -1,73 +1,10 @@
 
-Phrase:            a minute and a half
-Sentence:          But a minute and a half later, a pilot from a nearby flight calls in.
-ref_time:          1998-01-14
-Gold type:         DURATION
-gold val:          PT1M30S
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            this evening
-Sentence:          At the end of the broadcast this evening, one more trip around Havana to see what it's been like since the last time.
-ref_time:          1998-01-20
-Gold type:         TIME
-gold val:          1998-01-20TEV
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            a fairly lengthy period
-Sentence:          ``We're there to stay for a fairly lengthy period.''
-ref_time:          1990-08-16
-Gold type:         DURATION
-gold val:          PXX
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            a day earlier
-Sentence:          A day earlier, scores of trucks, many with Iraqi license plates, streamed north out of Aqaba to Amman and onto the desert highway bound for Iraq.
-ref_time:          1990-08-16
-Gold type:         DURATION
-gold val:          P1D
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            tuesday nights
-Sentence:          In a joint statement with Tourism Minister Andrew Thomson, it said two new flights would leave Bombay on Monday and Tuesday nights from March 30, with the third departing each Thursday from August 6.
-ref_time:          1998-02-13
-Gold type:         SET
-gold val:          XXXX-WXX-2TNI
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            each thursday
-Sentence:          In a joint statement with Tourism Minister Andrew Thomson, it said two new flights would leave Bombay on Monday and Tuesday nights from March 30, with the third departing each Thursday from August 6.
-ref_time:          1998-02-13
-Gold type:         SET
-gold val:          XXXX-WXX-4
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            10 p.m. wednesday
-Sentence:          Hernandez was kidnapped from his small, neighborhood store in the town of Trujillo Alto at 10 p.m. Wednesday, police said.
-ref_time:          1998-02-13
-Gold type:         TIME
-gold val:          1998-02-11T22:00
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            noon thursday
-Sentence:          His kidnappers demanded a ransom of dlrs 1 million, but negotiations broke off at noon Thursday.
-ref_time:          1998-02-13
-Gold type:         TIME
-gold val:          1998-02-12T12:00
-No parses! Will implement something to throw out words and try again.
-
-Phrase:            2 1/2 years
-Sentence:          The panel also will look at the exodus of about 2 million Rwanda Hutus to neighboring countries where they lived in U.N.-run refugee camps for 2 1/2 years.
-ref_time:          1998-02-27
-Gold type:         DURATION
-gold val:          P2Y6M
-No parses! Will implement something to throw out words and try again.
 
 
-
-Total phrases: 124
-Number correctly parsed and executed, with correct type and val: 103, which is 83.06451612903226 percent
+Total phrases: 4
+Number correctly parsed and executed, with correct type and val: 2, which is 50.0 percent
 Number parsed with correct val, but not type: 0, which is 0.0 percent.
-Number parsed with correct type, but not val: 9, which is 7.258064516129032 percent.
-Number parsed, but with incorrect type and val: 3, which his 2.4193548387096775 percent
+Number parsed with correct type, but not val: 2, which is 50.0 percent.
+Number parsed, but with incorrect type and val: 0, which his 0.0 percent
 Number with too many parses: 0
-Number with no parses: 9
+Number with no parses: 0

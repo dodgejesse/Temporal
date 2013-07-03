@@ -12,6 +12,8 @@ public abstract class TemporalISO {
 	private final boolean convexSet;
 
 	public TemporalISO(Map<String, Set<Integer>> data) {
+		if (data.size() == 0)
+			throw new IllegalArgumentException("Trying to create a TemporalISO from an empty map!");
 		convexSet = false;
 		for (String field : data.keySet()){
 			if (!stringInFields(field))

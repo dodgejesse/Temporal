@@ -75,13 +75,13 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
-		boolean serializeDatasets = true;
-		boolean testingDataset = false; // testing dataset takes precidenence over timebank
+		boolean readSerializedDatasets = false; // this takes precedence over booleans testingDataset, timebank, and crossVal.
+		boolean serializeDatasets = false;
+		boolean testingDataset = true; // testing dataset takes precidenence over timebank
 		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
 		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
 		boolean crossVal = true;
-		int numIterations = 2;
+		int numIterations = 1;
 		
 		
 		
@@ -300,7 +300,7 @@ public class TempEval3Dev {
 		
 		// Crossvalidation starts here.
 		if (crossVal){
-			double numberOfPartitions = 10;
+			double numberOfPartitions = 3.0;
 			// make a list
 			// use the constructor with TemporalSentenceDataset to make a new dataset. 
 			System.out.println("Splitting the data...");
@@ -313,13 +313,14 @@ public class TempEval3Dev {
 			
 			while (iter.hasNext()){
 				tmp.add(iter.next());
+				// for testing:
 				if (sentenceCount % Math.round(train.size() / numberOfPartitions)== 0){
 					splitData.add(tmp);
 					tmp = new LinkedList<TemporalSentence>();
 					System.out.println();
 					System.out.println("sentenceCount: " + sentenceCount);
 					System.out.println("Train size: " + train.size());
-					System.out.println("size / 10: " + Math.round(train.size() / 10.0));
+					System.out.println("size / " + numberOfPartitions + ": " + Math.round(train.size() / numberOfPartitions));
 					
 				}
 
