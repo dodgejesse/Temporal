@@ -50,6 +50,7 @@ public class TemporalSentenceDataset implements
 					else if (phrase == null) {
 						// Case we don't have a phrase, so we are supposed to get one.
 						line = line.replace("-", " ");
+						line = line.replace(",","");
 						phrase = textFilter.filter(line);
 					} else if (refDate == null) {
 						refDate = textFilter.filter(line);

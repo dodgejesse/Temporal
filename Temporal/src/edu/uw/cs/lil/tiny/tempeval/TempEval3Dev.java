@@ -47,6 +47,10 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalContextFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalDayOfWeekFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalReferenceFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalTypeFeatureSet;
 import edu.uw.cs.lil.tiny.utils.concurrency.TinyExecutorService;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import edu.uw.cs.utils.composites.Pair;
@@ -72,11 +76,12 @@ public class TempEval3Dev {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
-		boolean serializeDatasets = false;
-		boolean testingDataset = false; // testing dataset takes precidenence over the other two
-		boolean timebank = true;  // when this is false, we use the aquaint data.
-		boolean crossVal = false;
-		int numIterations = 1;
+		boolean serializeDatasets = true;
+		boolean testingDataset = false; // testing dataset takes precidenence over timebank
+		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
+		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
+		boolean crossVal = true;
+		int numIterations = 2;
 		
 		
 		
@@ -122,11 +127,7 @@ public class TempEval3Dev {
 		if (testingDataset)
 			dataLoc = "tempeval3.testing.txt";
 		else{
-			if (timebank)
-				dataLoc = "tempeval3.timebank.txt";
-			else
-				dataLoc = "tempeval3.aquaint.txt";
-			
+			dataLoc = dataSetName;			
 		}
 		
 			//dataLoc = "tempeval.dataset.corrected.txt";
@@ -297,7 +298,7 @@ public class TempEval3Dev {
 		
 		
 		
-		
+		// Crossvalidation starts here.
 		if (crossVal){
 			double numberOfPartitions = 10;
 			// make a list
@@ -352,18 +353,21 @@ public class TempEval3Dev {
 				final TemporalTesterSmall tester = TemporalTesterSmall.build(newTest, jParser);
 				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner =
 						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
-								2, newTrain, jParser);
+								numIterations, newTrain, jParser);
 
 				
 				final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
 				= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
-						.addParseFeatureSet(
-								new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
-						.addParseFeatureSet(
-								new LogicalExpressionTypeFeatureSet<Sentence>())
-						.addJointFeatureSet(new TemporalJointFeatureSet())
+						//.addParseFeatureSet(
+						//		new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+						//.addParseFeatureSet(
+						//		new LogicalExpressionTypeFeatureSet<Sentence>())
+						.addJointFeatureSet(new TemporalContextFeatureSet())
+						.addJointFeatureSet(new TemporalReferenceFeatureSet())
+						.addJointFeatureSet(new TemporalTypeFeatureSet())
+						.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
 						.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
-						.addLexicalFeatureSet(templateFeats)
+						//.addLexicalFeatureSet(templateFeats)
 						.setLexicon(new Lexicon<LogicalExpression>()).build();
 				// Initialize lexical features. This is not "natural" for every lexical
 				// feature set, only for this one, so it's done here and not on all
@@ -389,19 +393,23 @@ public class TempEval3Dev {
 			OutputData averaged = OutputData.average(outList);
 			out.println(averaged);
 			out.close();
+		// Not crossval
 		} else {
 			// Creating a joint parser.
 			final TemporalJointParser jParser = new TemporalJointParser(parser);
 
 			final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
 			= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
-					.addParseFeatureSet(
-							new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
-					.addParseFeatureSet(
-							new LogicalExpressionTypeFeatureSet<Sentence>())
-					.addJointFeatureSet(new TemporalJointFeatureSet())
+					//.addParseFeatureSet(
+					//		new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+					//.addParseFeatureSet(
+					//		new LogicalExpressionTypeFeatureSet<Sentence>())
+					.addJointFeatureSet(new TemporalContextFeatureSet())
+					.addJointFeatureSet(new TemporalReferenceFeatureSet())
+					.addJointFeatureSet(new TemporalTypeFeatureSet())
+					.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
 					.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
-					.addLexicalFeatureSet(templateFeats)
+					//.addLexicalFeatureSet(templateFeats)
 					.setLexicon(new Lexicon<LogicalExpression>()).build();
 			// Initialize lexical features. This is not "natural" for every lexical
 			// feature set, only for this one, so it's done here and not on all
@@ -414,7 +422,7 @@ public class TempEval3Dev {
 			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
 					JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
 							numIterations, train, jParser);
-
+			
 			learner.train(model);
 
 		// Within this tester, I should go through each example and use the

@@ -10,9 +10,11 @@ public class TemporalMultiplication extends TemporalPredicate {
 		for (String key : first.getKeys()){
 			baseDuration = key;
 		}
-		
+		int newNum = temporalNum.getNum();
 		// Doesn't actually multiply! 
-		return new TemporalDuration(baseDuration, temporalNum.getNum());
+		if (TemporalISO.getValueFromDate(first, baseDuration) > 0)
+			newNum *= TemporalISO.getValueFromDate(first, baseDuration);
+		return new TemporalDuration(baseDuration, newNum);
 	}
 	
 	private void checkInput(){

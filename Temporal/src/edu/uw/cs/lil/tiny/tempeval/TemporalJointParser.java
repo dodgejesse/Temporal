@@ -22,6 +22,7 @@ import edu.uw.cs.lil.tiny.parser.joint.JointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.JointParse;
 import edu.uw.cs.lil.tiny.parser.joint.SingleExecResultWrapper;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
+import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 /**
@@ -98,12 +99,14 @@ public class TemporalJointParser extends
 				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
 		if (sameDocID)
 			functionsS[3] = categoryServices
-					.parseSemantics("(lambda $0:s (temporal_ref:<s,s> $0))");
+					.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
 		else
 			functionsS[3] = l;
 
+		
 		// Making the Predicates to apply to the logical expressions for
 		// DURATIONS
+		// Or reall, don't, because this only confuses the system.
 		functionsD[0] = categoryServices
 				.parseSemantics("(lambda $0:d (previous:<d,<r,s>> $0 ref_time:r))");
 		functionsD[1] = categoryServices
@@ -112,27 +115,36 @@ public class TemporalJointParser extends
 				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");
 		if (sameDocID)
 			functionsD[3] = categoryServices
-					.parseSemantics("(lambda $0:d (temproal_ref:<d,s> $0))");
+					.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
 		else
 			functionsD[3] = l;
+		
 
 		// Looping over the predicates, applying them each to the given logical
 		// expression
 		for (int i = 0; i < functionsS.length; i++) {
-			newLogicArray[i + 1] = categoryServices.doSemanticApplication(
-					functionsS[i], l);
-
-			if (newLogicArray[i + 1] == null) {
+			if (!logicStartsWithContextDependentPredicate(l)){
 				newLogicArray[i + 1] = categoryServices.doSemanticApplication(
-						functionsD[i], l);
+						functionsS[i], l);
 			}
-
+			//if (newLogicArray[i + 1] == null && i == 3) {
+			//	newLogicArray[i + 1] = categoryServices.doSemanticApplication(
+			//			functionsD[i], l);
+			//}
+	
 			if (newLogicArray[i + 1] == null)
 				newLogicArray[i + 1] = l;
+			
 		}
 		newLogicArray[0] = l;
 
 		return newLogicArray;
+	}
+	
+	private boolean logicStartsWithContextDependentPredicate(LogicalExpression l){
+		return (l.toString().startsWith("(previous:") || 
+				l.toString().startsWith("(this:") ||
+				l.toString().startsWith("(next:"));
 	}
 
 	@Override
@@ -167,12 +179,14 @@ public class TemporalJointParser extends
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon,
 			Integer beamSize) {
 
+		// is this phrase from the same document as the previous one?
 		boolean sameDocID = dataItem.getSample().second()[0].equals(dataItem
 				.getSample().second()[3]) && prevISO != null;
 
 		Sentence phrase = dataItem.getSample().first();
 		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(
 				phrase, model);
+		
 		final List<IParseResult<LogicalExpression>> CKYModelParses = pruneLogicWithLambdas(CKYParserOutput
 				.getBestParses());
 
@@ -185,6 +199,7 @@ public class TemporalJointParser extends
 		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
 		
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
+			
 			LogicalExpression[] labels = getArrayOfLabels(l.getY(), sameDocID);
 			for (int i = 0; i < labels.length; i++) {
 
@@ -206,17 +221,9 @@ public class TemporalJointParser extends
 				// TODO THIS IS JUST FOR TESTING.
 				//labels[i] = null;
 				
-				TemporalResult tr = new TemporalResult(labels[i], tmp.getType(), tmp.getVal());
-				SingleExecResultWrapper<LogicalExpression, TemporalResult> wrapper = 
-						new SingleExecResultWrapper<LogicalExpression, TemporalResult>(
-						labels[i], model, tr);
-				
-				
+				TemporalResult tr = new TemporalResult(labels[i], tmp.getType(), tmp.getVal(), l.getAllLexicalEntries(), model, l);
+				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
 
-				// instead of passing in "l", I need to pass in an IParseResult<LogicalExpression> made out of label[i].
-				IJointParse<LogicalExpression, TemporalResult> jp = new JointParse<LogicalExpression, TemporalResult>(
-						l, wrapper);
-				
 				
 				ISOsByScore.put(jp.getScore(), tmp);
 				allExecutedParses.add(jp);

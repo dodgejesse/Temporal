@@ -1,18 +1,50 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 
+import java.util.LinkedHashSet;
+
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
+import edu.uw.cs.lil.tiny.parser.IParseResult;
+import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
+import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
+import edu.uw.cs.lil.tiny.parser.joint.JointParse;
+import edu.uw.cs.lil.tiny.parser.joint.SingleExecResultWrapper;
+import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
 
 public class TemporalResult {
 	final LogicalExpression e;
 	final String type;
 	final String val;
+	final LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries;
+	private final IJointDataItemModel<LogicalExpression, LogicalExpression> model;
+	private final IParseResult<LogicalExpression> baseParse;
+	private IJointParse<LogicalExpression, TemporalResult> jp;
 	
 	
-	public TemporalResult(LogicalExpression e, String type, String val){
+	public TemporalResult(LogicalExpression e, String type, String val, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, 
+			IJointDataItemModel<LogicalExpression, LogicalExpression> model, IParseResult<LogicalExpression> baseParse){
 		this.e = e;
 		this.type = type;
 		this.val = val;
+		this.lexicalEntries = lexicalEntries;
+		this.model = model;
+		this.baseParse = baseParse;
+		jp = null;
+	}
+	
+	private void makeJointParse(){
+		SingleExecResultWrapper<LogicalExpression, TemporalResult> wrapper = 
+				new SingleExecResultWrapper<LogicalExpression, TemporalResult>(
+				e, model, this);
+		
+		jp = new JointParse<LogicalExpression, TemporalResult>(
+				baseParse, wrapper);
+	}
+	
+	public IJointParse<LogicalExpression, TemporalResult> getJointParse(){
+		if (jp == null)
+			makeJointParse();
+		return jp;
 	}
 	
 	/* 
@@ -34,6 +66,10 @@ public class TemporalResult {
     }
 	
 	public String toString(){
-		return "(" + e.toString() + ") => (" + type + "," + val + ")";
+		//jp.getAverageMaxFeatureVector();
+		//jp.getAverageMaxFeatureVector();
+		//jp.getAverageMaxFeatureVector();
+	
+		return "(" + e.toString() + ") => (" + type + "," + val + ")"; //+ model.getTheta().printValues(jp.getAverageMaxFeatureVector());
 	}
 }

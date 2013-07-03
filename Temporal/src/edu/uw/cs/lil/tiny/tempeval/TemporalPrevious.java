@@ -110,10 +110,20 @@ public class TemporalPrevious extends TemporalPredicate {
 	}
 
 	private TemporalISO convexYear() {
+		if (TemporalDate.getValueFromDate(first, "year") >= 0)
+			return first;
+		
+		int tmpRefYear = TemporalDate.getValueFromDate(second, "year");
+		int amountToSubtract = TemporalDate.getValueFromDate(first, "year");
+		return new TemporalDate("year", tmpRefYear + amountToSubtract);
+		
+		
+		/*
 		if (TemporalDate.getValueFromDate(first, "year")> 0)
 			return first;
 		int tmpYear = TemporalDate.getValueFromDate(second, "year");
 		return new TemporalDate("year", tmpYear - 1);
+		*/
 	}
 
 	private TemporalISO convexQuarter() {
@@ -137,6 +147,31 @@ public class TemporalPrevious extends TemporalPredicate {
 	}
 
 	private TemporalISO convexMonth() {
+		
+		if (TemporalDate.getValueFromDate(first, "month")> 0)
+			return first;
+		int numMonthsToSubtract = -TemporalDate.getValueFromDate(first, "month");
+		int year = TemporalDate.getValueFromDate(second, "year");
+		int month = TemporalDate.getValueFromDate(second, "month");
+		
+		for (int i = 0; i < numMonthsToSubtract; i++){
+			if (month == 1) {
+				month = 12;
+				year -= 1;
+			} else {
+				month -= 1;
+			}
+		}
+		Set<Integer> monthSet = new HashSet<Integer>();
+		monthSet.add(month);
+		Set<Integer> yearSet = new HashSet<Integer>();
+		yearSet.add(year);
+		Map<String, Set<Integer>> tmpMap = new HashMap<String, Set<Integer>>();
+		tmpMap.put("month", monthSet);
+		tmpMap.put("year", yearSet);
+		return new TemporalDate(tmpMap);
+		
+		/*
 		if (TemporalDate.getValueFromDate(first, "month")> 0)
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
@@ -154,6 +189,7 @@ public class TemporalPrevious extends TemporalPredicate {
 		tmpMap.put("month", tmpSetMonth);
 		tmpMap.put("year", tmpSetYear);
 		return new TemporalDate(tmpMap);
+		*/
 	}
 
 	private TemporalISO convexWeek() {
@@ -161,8 +197,11 @@ public class TemporalPrevious extends TemporalPredicate {
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
-		tmpLocalDate = tmpLocalDate.minusWeeks(1);
+		tmpLocalDate = tmpLocalDate.minusWeeks(-TemporalDate.getValueFromDate(first, "week"));
+		
+		
 		int weekNum = tmpLocalDate.getWeekOfWeekyear();
+		
 		Set<Integer> weekNums = new HashSet<Integer>();
 		weekNums.add(weekNum);
 		int yearNum = tmpLocalDate.getYear();
@@ -176,33 +215,19 @@ public class TemporalPrevious extends TemporalPredicate {
 	private TemporalISO convexDay(){
 		if (TemporalISO.getValueFromDate(first, "day") > 0)
 			return first;
+		
 		LocalDate refDate = TemporalJoda.convertISOToLocalDate(second);
-		refDate = refDate.minusDays(1);
+		refDate = refDate.minusDays(-TemporalDate.getValueFromDate(first, "day"));
 		return TemporalJoda.convertLocalDateToISO(refDate);
 	}
 
 	private TemporalISO findPrevious() {
 		TemporalISO prevDate;
 		if ((first.isSet("year") && !first.isConvexSet())
-				|| first.isSet("present_ref") || first.isSet("past_ref")
-				|| first.isSet("future_ref"))
+				|| first.isFullySpecified())
 			return first;
 		else {
-			if (first.isSet("quarter") && !first.isConvexSet()) {
-				prevDate = quarterIsSet();
-			} else if (first.isSet("season")){
-				prevDate = season();
-			} else if (first.isSet("month") && !first.isSet("day")
-					&& !first.isConvexSet()) {
-				prevDate = monthAndNotDay();
-			} else if (first.isSet("month") && first.isSet("day")) {
-				prevDate = monthAndDay();
-			} else if (first.isSet("weekday") && !first.isSet("month")
-					&& !first.isSet("day")) {
-				prevDate = weekdayAndNotMonthOrDay();
-			} else if (first.isSet("day") && !first.isSet("month")){
-				prevDate = dayAndNotMonth();
-			} else if (first instanceof TemporalDuration) {
+			if (first instanceof TemporalDuration) {
 				if (first.isSet("year")) {
 					prevDate = convexYear();
 				} else if (first.isSet("quarter")) {
@@ -219,6 +244,20 @@ public class TemporalPrevious extends TemporalPredicate {
 					throw new IllegalArgumentException(
 							"Haven't implemented 'prevous' for convex set " + first);
 				}
+			} else if (first.isSet("quarter") && !first.isConvexSet()) {
+				prevDate = quarterIsSet();
+			} else if (first.isSet("season")){
+				prevDate = season();
+			} else if (first.isSet("month") && !first.isSet("day")
+					&& !first.isConvexSet()) {
+				prevDate = monthAndNotDay();
+			} else if (first.isSet("month") && first.isSet("day")) {
+				prevDate = monthAndDay();
+			} else if (first.isSet("weekday") && !first.isSet("month")
+					&& !first.isSet("day")) {
+				prevDate = weekdayAndNotMonthOrDay();
+			} else if (first.isSet("day") && !first.isSet("month")){
+				prevDate = dayAndNotMonth();
 			} else
 				throw new IllegalArgumentException(
 						"Haven't implemented 'prevous' for " + first);

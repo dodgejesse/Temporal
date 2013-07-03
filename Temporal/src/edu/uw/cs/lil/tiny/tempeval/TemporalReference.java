@@ -13,8 +13,7 @@ public class TemporalReference extends TemporalPredicate{
 	
 	
 	public TemporalISO perform(){
-		if (previous == null || first.isSet("present_ref") || first.isSet("past_ref")
-				|| first.isSet("future_ref") || !(first instanceof TemporalDuration) || notSameFields()){
+		if (previous == null || first.isFullySpecified() || !(first instanceof TemporalDuration) || notSameFields()){
 //			System.out.println();
 //			System.out.println("first");
 //			System.out.println(first);
@@ -22,7 +21,8 @@ public class TemporalReference extends TemporalPredicate{
 //			System.out.println("second");
 //			System.out.println(second);
 //			System.out.println();
-			return first;
+			return new TemporalDate("year", 0);
+			//return first;
 		}
 
 		

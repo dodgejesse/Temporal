@@ -59,7 +59,7 @@ public class TemporalSentence implements
 	}
 
 	public TemporalResult getLabel() {
-		return new TemporalResult(null, type, val);
+		return new TemporalResult(null, type, val, null, null, null);
 	}
 
 	public String getRefDate() {
@@ -105,7 +105,20 @@ public class TemporalSentence implements
 	}
 
 	public String toString() {
-		return docID + "\n" + sentence + "\n" + charNum + "\n" + phrase.toString() + "\n" + refDate + "\n" + type + "\n" + val;
+		String s = "Phrase:            " + phrase.toString() + "\n";
+		s += "Sentence:          " + sentence + "\n";
+		s += "ref_time:          " + refDate + "\n";
+		s += "Gold type:         " + type + "\n";
+		s += "gold val:          " + val;
+		//out.println("Lexical Entries:   " + lexicalEntries);
+		//out.println("Logic:             " + label);
+		//out.println("Average max feats: " + theta.printValues(averageMaxFeatureVector));
+		//out.println("Guess type:        " + guessType);
+		//out.println("Guess val:         " + guessVal);
+		//out.println("Correct type?      " + (correct == 0 || correct == 1));
+		//out.println("Correct val?       " + (correct == 0 || correct == 2));
+		//out.println("Correct logics:    " + correctLogicalForms);
+		return s;
 	}
 
 	@Override

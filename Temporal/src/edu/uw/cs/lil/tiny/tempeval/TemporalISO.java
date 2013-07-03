@@ -97,7 +97,7 @@ public abstract class TemporalISO {
 	// field!
 	public static int getValueFromDate(TemporalISO d, String s) {
 		//int value = -2;
-		int value = 0;
+		int value = Integer.MAX_VALUE;
 		if (d.getVal(s).size() > 1) {
 			throw new IllegalArgumentException(
 					"There is more than one value for " + s
@@ -106,8 +106,9 @@ public abstract class TemporalISO {
 		for (int i : d.getVal(s)) {
 			value = i;
 		}
+		
 		// Not sure this is a necessary check. 
-		if (value == 0) {
+		if (value == Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(
 					"Problem getting value of " + s + " in getValueFromDate for ISO " + d + ", within TemporalISO");
 		}
@@ -117,4 +118,6 @@ public abstract class TemporalISO {
 	public abstract String getType();
 	
 	public abstract String getVal();
+	
+	public abstract boolean isFullySpecified();
 }

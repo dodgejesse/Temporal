@@ -18,8 +18,8 @@ public class TemporalNext extends TemporalPredicate {
 		if (!(first instanceof TemporalDuration)) {
 
 			if (this.first.getKeys().contains("year")
-					|| this.first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref")) {
-				nextDate = this.first;
+					|| this.first.isFullySpecified()) {
+				return first;
 			} else {
 				if ((this.first.getKeys().contains("month"))
 						&& (!this.first.getKeys().contains("day"))) {
@@ -80,7 +80,7 @@ public class TemporalNext extends TemporalPredicate {
 									.convertISOToLocalDate(this.second);
 							if (date.getDayOfWeek() == TemporalISO
 									.getValueFromDate(this.first, "weekday")) {
-								date.plusDays(1);
+								date = date.plusDays(1);
 							}
 							while (date.getDayOfWeek() != TemporalISO
 									.getValueFromDate(this.first, "weekday")) {

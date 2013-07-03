@@ -28,4 +28,12 @@ public class TemporalNumber extends TemporalISO {
 	public String getVal(){
 		return "" + this.getNum();
 	}
+
+	@Override
+	// this method shouldn't even be called.
+	public boolean isFullySpecified() {
+		return false;
+	}
+	
+	
 }

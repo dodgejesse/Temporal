@@ -2,6 +2,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
@@ -28,7 +29,23 @@ public class TemporalThread extends Thread {
 	}
 	
 	public void run(){
+		// redirecting system.out. Unfortunately, the learner uses a LOG, so this doesn't actually do anything. 
+		
+		/*PrintStream oldSystemOut = System.out;
+		PrintStream redirectToFile = null;
+		try {
+			redirectToFile = new PrintStream(new FileOutputStream("output/trainingIteration" + iteration + ".txt"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("Y'all got problems in TemporalThread when piping training to a file.");
+			e1.printStackTrace();
+			System.exit(0);
+		}
+		System.setOut(redirectToFile);
+		*/
 		learner.train(model);
+		//System.setOut(oldSystemOut);
+		
 		PrintStream out = null;
 		try {
 			out = new PrintStream(new File("output/iteration" + iteration + ".txt"));

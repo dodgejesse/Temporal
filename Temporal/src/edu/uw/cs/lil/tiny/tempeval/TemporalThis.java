@@ -11,16 +11,24 @@ public class TemporalThis extends TemporalPredicate {
 	}
 
 	private TemporalISO findThis() {
-		if (first.isSet("present_ref") || first.isSet("past_ref") || first.isSet("future_ref"))
+		if (first.isFullySpecified())
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		if (!(first instanceof TemporalDuration)) {
-			if (!tmpMap.containsKey("year")) {
+			if (tmpMap.containsKey("weekday") && 
+					(TemporalJoda.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
+				return second;
+			} else if (!tmpMap.containsKey("year")) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
 				tmpSet.add(TemporalISO.getValueFromDate(second, "year"));
 				tmpMap.put("year", tmpSet);
-			}
-			if (!(first.isSet("quarter") || first.isSet("month")
+			// case for things like (this:<s,<r,s>> 1901:r ref_time:r)
+			} else if (tmpMap.containsKey("year") && 
+					!(first.isSet("quarter") || first.isSet("month")
+					|| first.isSet("week") || first.isSet("weekday")
+					|| first.isSet("season")))
+				return first;
+			else if (!(first.isSet("quarter") || first.isSet("month")
 					|| first.isSet("week") || first.isSet("weekday")
 					|| first.isSet("season"))) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
@@ -34,15 +42,14 @@ public class TemporalThis extends TemporalPredicate {
 			else if (first.isSet("month")){
 				tmpMap.put("year", second.getVal("year"));
 				tmpMap.put("month", second.getVal("month"));
-			}
-			else if (first.isSet("week")){
+			} else if (first.isSet("week")){
 				LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
 				int weekNum = tmpLocalDate.getWeekOfWeekyear();
 				Set<Integer> weekNums = new HashSet<Integer>();
 				weekNums.add(weekNum);
 				tmpMap.put("week", weekNums);
 				tmpMap.put("year", second.getVal("year"));
-			} 
+			}
 		}
 
 		return new TemporalDate(tmpMap);

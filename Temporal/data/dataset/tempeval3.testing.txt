@@ -1,8 +1,31 @@
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0736.tml.ssplit
-Additionally, the bank is increasing its loan-loss reserves for the third quarter by $8.5 million before taxes.
-64
-the third quarter
-1989-10-27
+data/TempEval3/TBAQ-cleaned/TimeBank/AP900815-0044.tml.ssplit
+President Bush on Tuesday said the United States may extend its naval quarantine to Jordan's Red Sea port of Aqaba to shut off Iraq's last unhindered trade route.
+18
+tuesday
+1990-08-15
+DATE
+1990-08-14
+
+data/TempEval3/TBAQ-cleaned/TimeBank/AP900815-0044.tml.ssplit
+In another mediation effort, the Soviet Union said today it had sent an envoy to the Middle East on a series of stops to include Baghdad.
+51
+today
+1990-08-15
+DATE
+1990-08-15
+
+data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0124.tml.ssplit
+Separately, Citadel posted a third-quarter net loss of $2.3 million, or 68 cents a share, versus net income of $5.3 million, or $1.61 a share, a year earlier.
+29
+third-quarter
+1989-11-02
 DATE
 1989-Q3
 
+data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0124.tml.ssplit
+Separately, Citadel posted a third-quarter net loss of $2.3 million, or 68 cents a share, versus net income of $5.3 million, or $1.61 a share, a year earlier.
+143
+a year earlier
+1989-11-02
+DATE
+1988-Q3

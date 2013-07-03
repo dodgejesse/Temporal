@@ -13,8 +13,8 @@ public class SerializableTemporalSentence implements java.io.Serializable {
 	private final String phrase;
 	
 	public SerializableTemporalSentence(TemporalSentence ts){
-		type = ts.getLabel().first();
-		val = ts.getLabel().second();
+		type = ts.getLabel().type;
+		val = ts.getLabel().val;
 		worldInfo = ts.getSample().second();
 		phrase = ts.getSample().first().getString();
 	}

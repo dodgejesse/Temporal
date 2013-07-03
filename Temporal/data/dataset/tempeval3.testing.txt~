@@ -1,79 +1,15 @@
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0736.tml.ssplit
-Additionally, the bank is increasing its loan-loss reserves for the third quarter by $8.5 million before taxes.
-64
-the third quarter
-1989-10-27
+data/TempEval3/TBAQ-cleaned/TimeBank/AP900815-0044.tml.ssplit
+President Bush on Tuesday said the United States may extend its naval quarantine to Jordan's Red Sea port of Aqaba to shut off Iraq's last unhindered trade route.
+18
+tuesday
+1990-08-15
 DATE
-1989-Q3
+1990-08-14
 
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0736.tml.ssplit
-In the year-earlier third quarter, Poughkeepsie Savings had net income of $2.8 million, or 77 cents a share.
-3
-the year-earlier third quarter
-1989-10-27
+data/TempEval3/TBAQ-cleaned/TimeBank/AP900815-0044.tml.ssplit
+In another mediation effort, the Soviet Union said today it had sent an envoy to the Middle East on a series of stops to include Baghdad.
+51
+today
+1990-08-15
 DATE
-1988-Q3
-
-data/TempEval3/testingSentenceSplit/ABC19980108.1830.0711.tml.ssplit
-In the last twenty four hours, the value of the Indonesian stock market has fallen by twelve percent.
-3
-the last twenty four hours
-1998-01-08
-DURATION
-P1D
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
-reported that third-quarter profit grew a robust 19% from a year ago on the strength of the company's operations in various chemicals and fibers, and in petroleum.
-14
-third-quarter
-1989-10-26
-DATE
-1989-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
-reported that third-quarter profit grew a robust 19% from a year ago on the strength of the company's operations in various chemicals and fibers, and in petroleum.
-58
-a year ago
-1989-10-26
-DATE
-1988-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0904.tml.ssplit
-said that its net income rose 51% in the third quarter, bolstered by unusual gains from its investment in a disk-drive maker and reflecting continued growth in its European operations.
-37
-the third quarter
-1989-10-26
-DATE
-1989-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0904.tml.ssplit
-The computer maker said net jumped to $87 million, or $2.02 a share, from $58 million, or $1.40 a share, a year earlier.
-105
-a year earlier
-1989-10-26
-DATE
-1988-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
-A spokesman said herbicide use in some areas of the U.S. was delayed earlier in the year by heavy rains, thus increasing sales in the third quarter.
-130
-the third quarter
-1989-10-26
-DATE
-1989-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0918.tml.ssplit
-Two segments posted lower earnings for the quarter.
-39
-the quarter
-1989-10-26
-DATE
-1989-Q3
-
-data/TempEval3/TBAQ-cleaned/TimeBank/wsj_0584.tml.ssplit
-Over the weekend, McCaw continued to call for an auction of LIN.
-5
-the weekend
-1989-10-30
-DATE
-1989-W43-WE
+1990-08-15

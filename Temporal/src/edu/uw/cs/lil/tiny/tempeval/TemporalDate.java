@@ -163,4 +163,13 @@ public class TemporalDate extends TemporalISO{
 		throw new IllegalArgumentException("Key " + key + " is not set in TemporalDate, and yet is trying to be printed.");
 	}
 
+	@Override
+	public boolean isFullySpecified() {
+		return (this.isSet("year") && this.isSet("month") && this.isSet("day")) || 
+				(this.isSet("year") && this.isSet("quarter")) || 
+				this.isSet("present_ref") ||
+				this.isSet("past_ref") ||
+				this.isSet("future_ref");
+	}
+
 }

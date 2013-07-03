@@ -7,12 +7,15 @@ once :- NP : past_ref:r
 previously :- NP : past_ref:r
 past years :- NP : past_ref:r
 then current :- NP : past_ref:r
+the past :- NP : past_ref:r
+several years ago :- NP : past_ref:r
 past :- NP : past_ref:r
 past :- NP/NP : (lambda $0:d past_ref:r)
 last few :- NP/NP : (lambda $0:d past_ref:r)
 past several :- NP/NP : (lambda $0:d past_ref:r)
 recent :- NP/NP : (lambda $0:d past_ref:r)
-several years ago :- NP : past_ref:r
+the time :- NP : past_ref:r
+
 
 now :- NP : present_ref:r
 currently :- NP : present_ref:r
@@ -21,6 +24,7 @@ already :- NP : present_ref:r
 yet :- NP : present_ref:r
 these days :- NP : present_ref:r
 right now :- NP : present_ref:r
+this crucial moment :- NP : present_ref:r
 
 future :- NP : future_ref:r
 future :- NP/NP : (lambda $0:d future_ref:r)
@@ -129,6 +133,10 @@ third :- NP\NP/NP : (lambda $0:d (lambda $1:s (intersect:<s*,s> $1 (nth:<d,<n,s>
 fourth :- NP\NP/NP : (lambda $0:d (lambda $1:s (intersect:<s*,s> $1 (nth:<d,<n,s>> $0 4o:n))))
 
 // Durations
+decade :- NP : (*:<d,<n,d>> year:d 10:n)
+decades :- NP : (*:<d,<n,d>> year:d 10:n)
+century :- NP : (*:<d,<n,d>> year:d 100:n)
+centuries :- NP : (*:<d,<n,d>> year:d 100:n)
 year :- NP : year:d
 years :- NP : years:d
 several year :- NP : years:d
@@ -139,20 +147,29 @@ month :- NP : month:d
 months :- NP : months:d
 week :- NP : week:d
 weeks :- NP : weeks:d
+weeks or months :- NP : weeks:d
 day :- NP : day:d
 days :- NP : days:d
+hour :- NP : hour:d
+hours :- NP : hour:d
 twenty four hours :- NP : (*:<d,<n,d>> day:d 1:n)
+some time :- NP : months:d
 
 spring :- NP : spring:s
 summer :- NP : summer:s
 fall :- NP : fall:s
 autumn :- NP : fall:s
 winter :- NP : winter:s
-
+spring of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 spring:s))
+summer of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 summer:s))
+fall of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 fall:s))
+autumn of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 autumn:s))
+winter of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 winter:s))
 
 
 tomorrow :- NP : tomorrow:r
 today :- NP : today:r
+the day :- NP : today:r
 yesterday :- NP : yesterday:r
 
 next :- NP/NP : (lambda $0:d (next:<d,<r,s>> $0 ref_time:r))
@@ -174,6 +191,15 @@ earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 a year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
 a year ago :- NP : (*:<d,<n,d>> year:d -1:n)
 year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+year ago quarter :- NP : (*:<d,<n,d>> year:d -1:n)
+following :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 1:n)
+that year :- NP : year:d
+
+// this entry really screws things up, for some reason. 
+//year ago period :- NP : (*:<d,<n,d>> year:d -1:n)
+
+// for phrases like "three weeks ago"
+ago :- NP\NP : (lambda $0:d (previous:<d,<r,s>> (*:<d,<n,d>> $0 -1:n) ref_time:r))
 
 
 // these are numbers, to be multiplied by durations
@@ -195,8 +221,21 @@ eleven :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 11:n))
 twelve :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 12:n))
 thirteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 13:n))
 fourteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 14:n))
+fifteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 15:n))
+sixteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 16:n))
+seventeen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 17:n))
+eighteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 18:n))
+nineteen :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 19:n))
 twenty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 20:n))
+thirty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 30:n))
+forty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 40:n))
+fifty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 50:n))
 sixty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 60:n))
+seventy :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 70:n))
+eighty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 80:n))
+ninety :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 90:n))
+hundred :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 100:n))
+
 1 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 1:n))
 2 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
 3 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 3:n))
@@ -297,6 +336,105 @@ sixty :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 60:n))
 98 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 98:n))
 99 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 99:n))
 100 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 100:n))
+101 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 101:n))
+102 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 102:n))
+103 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 103:n))
+104 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 104:n))
+105 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 105:n))
+106 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 106:n))
+107 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 107:n))
+108 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 108:n))
+109 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 109:n))
+110 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 110:n))
+111 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 111:n))
+112 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 112:n))
+113 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 113:n))
+114 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 114:n))
+115 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 115:n))
+116 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 116:n))
+117 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 117:n))
+118 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 118:n))
+119 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 119:n))
+120 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 120:n))
+121 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 121:n))
+122 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 122:n))
+123 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 123:n))
+124 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 124:n))
+125 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 125:n))
+126 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 126:n))
+127 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 127:n))
+128 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 128:n))
+129 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 129:n))
+130 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 130:n))
+131 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 131:n))
+132 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 132:n))
+133 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 133:n))
+134 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 134:n))
+135 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 135:n))
+136 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 136:n))
+137 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 137:n))
+138 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 138:n))
+139 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 139:n))
+140 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 140:n))
+141 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 141:n))
+142 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 142:n))
+143 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 143:n))
+144 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 144:n))
+145 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 145:n))
+146 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 146:n))
+147 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 147:n))
+148 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 148:n))
+149 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 149:n))
+150 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 150:n))
+151 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 151:n))
+152 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 152:n))
+153 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 153:n))
+154 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 154:n))
+155 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 155:n))
+156 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 156:n))
+157 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 157:n))
+158 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 158:n))
+159 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 159:n))
+160 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 160:n))
+161 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 161:n))
+162 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 162:n))
+163 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 163:n))
+164 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 164:n))
+165 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 165:n))
+166 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 166:n))
+167 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 167:n))
+168 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 168:n))
+169 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 169:n))
+170 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 170:n))
+171 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 171:n))
+172 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 172:n))
+173 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 173:n))
+174 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 174:n))
+175 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 175:n))
+176 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 176:n))
+177 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 177:n))
+178 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 178:n))
+179 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 179:n))
+180 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 180:n))
+181 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 181:n))
+182 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 182:n))
+183 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 183:n))
+184 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 184:n))
+185 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 185:n))
+186 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 186:n))
+187 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 187:n))
+188 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 188:n))
+189 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 189:n))
+190 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 190:n))
+191 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 191:n))
+192 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 192:n))
+193 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 193:n))
+194 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 194:n))
+195 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 195:n))
+196 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 196:n))
+197 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 197:n))
+198 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 198:n))
+199 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 199:n))
 210 :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 210:n))
 a couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
 next couple of :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2:n))
@@ -461,6 +599,88 @@ two thousand :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 2000:n))
 2018 :- NP : 2018:r
 2019 :- NP : 2019:r
 
+nineteen twenty :- NP : 1920:r
+nineteen twenty one :- NP : 1921:r
+nineteen twenty two :- NP : 1922:r
+nineteen twenty three :- NP : 1923:r
+nineteen twenty four :- NP : 1924:r
+nineteen twenty five :- NP : 1925:r
+nineteen twenty six :- NP : 1926:r
+nineteen twenty seven :- NP : 1927:r
+nineteen twenty eight :- NP : 1928:r
+nineteen twenty nine :- NP : 1929:r
+nineteen thirty :- NP : 1930:r
+nineteen thirty one :- NP : 1931:r
+nineteen thirty two :- NP : 1932:r
+nineteen thirty three :- NP : 1933:r
+nineteen thirty four :- NP : 1934:r
+nineteen thirty five :- NP : 1935:r
+nineteen thirty six :- NP : 1936:r
+nineteen thirty seven :- NP : 1937:r
+nineteen thirty eight :- NP : 1938:r
+nineteen thirty nine :- NP : 1939:r
+nineteen fourty :- NP : 1940:r
+nineteen fourty one :- NP : 1941:r
+nineteen fourty two :- NP : 1942:r
+nineteen fourty three :- NP : 1943:r
+nineteen fourty four :- NP : 1944:r
+nineteen fourty five :- NP : 1945:r
+nineteen fourty six :- NP : 1946:r
+nineteen fourty seven :- NP : 1947:r
+nineteen fourty eight :- NP : 1948:r
+nineteen fourty nine :- NP : 1949:r
+nineteen fifty :- NP : 1950:r
+nineteen fifty one :- NP : 1951:r
+nineteen fifty two :- NP : 1952:r
+nineteen fifty three :- NP : 1953:r
+nineteen fifty four :- NP : 1954:r
+nineteen fifty five :- NP : 1955:r
+nineteen fifty six :- NP : 1956:r
+nineteen fifty seven :- NP : 1957:r
+nineteen fifty eight :- NP : 1958:r
+nineteen fifty nine :- NP : 1959:r
+nineteen sixty :- NP : 1960:r
+nineteen sixty one :- NP : 1961:r
+nineteen sixty two :- NP : 1962:r
+nineteen sixty three :- NP : 1963:r
+nineteen sixty four :- NP : 1964:r
+nineteen sixty five :- NP : 1965:r
+nineteen sixty six :- NP : 1966:r
+nineteen sixty seven :- NP : 1967:r
+nineteen sixty eight :- NP : 1968:r
+nineteen sixty nine :- NP : 1969:r
+nineteen seventy :- NP : 1970:r
+nineteen seventy one :- NP : 1971:r
+nineteen seventy two :- NP : 1972:r
+nineteen seventy three :- NP : 1973:r
+nineteen seventy four :- NP : 1974:r
+nineteen seventy five :- NP : 1975:r
+nineteen seventy six :- NP : 1976:r
+nineteen seventy seven :- NP : 1977:r
+nineteen seventy eight :- NP : 1978:r
+nineteen seventy nine :- NP : 1979:r
+nineteen eighty :- NP : 1980:r
+nineteen eighty one :- NP : 1981:r
+nineteen eighty two :- NP : 1982:r
+nineteen eighty three :- NP : 1983:r
+nineteen eighty four :- NP : 1984:r
+nineteen eighty five :- NP : 1985:r
+nineteen eighty six :- NP : 1986:r
+nineteen eighty seven :- NP : 1987:r
+nineteen eighty eight :- NP : 1988:r
+nineteen eighty nine :- NP : 1989:r
+nineteen ninety :- NP : 1990:r
+nineteen ninety one :- NP : 1991:r
+nineteen ninety two :- NP : 1992:r
+nineteen ninety three :- NP : 1993:r
+nineteen ninety four :- NP : 1994:r
+nineteen ninety five :- NP : 1995:r
+nineteen ninety six :- NP : 1996:r
+nineteen ninety seven :- NP : 1997:r
+nineteen ninety eight :- NP : 1998:r
+nineteen ninety nine :- NP : 1999:r
+
+
 nineties :- NP : 199:r
 20s :- NP : 192:r
 30s :- NP : 193:r
@@ -471,7 +691,26 @@ nineties :- NP : 199:r
 80s :- NP : 198:r
 90s :- NP : 199:r
 
+1st century :- NP : 0:r
+2nd century :- NP : 1:r
+3rd century :- NP : 2:r
+4th century :- NP : 3:r
+5th century :- NP : 4:r
+6th century :- NP : 5:r
+7th century :- NP : 6:r
+8th century :- NP : 7:r
+9th century :- NP : 8:r
+10th century :- NP : 9:r
+11th century :- NP : 10:r
+12th century :- NP : 11:r
+13th century :- NP : 12:r
+14th century :- NP : 13:r
+15th century :- NP : 14:r
+16th century :- NP : 15:r
+17th century :- NP : 16:r
+18th century :- NP : 17:r
 1800s :- NP : 18:r
+19th century :- NP : 19:r
 1810s :- NP : 181:r
 1820s :- NP : 182:r
 1830s :- NP : 183:r
@@ -482,6 +721,7 @@ nineties :- NP : 199:r
 1880s :- NP : 188:r
 1890s :- NP : 189:r
 1900s :- NP : 19:r
+20th century :- NP : 19:r
 1910s :- NP : 191:r
 1920s :- NP : 192:r
 1930s :- NP : 193:r
@@ -491,15 +731,14 @@ nineties :- NP : 199:r
 1970s :- NP : 197:r
 1980s :- NP : 198:r
 1990s :- NP : 199:r
-2000s :- NP : 200:r
+2000s :- NP : 20:r
+21st century :- NP : 20:r
 2010s :- NP : 201:r
 2020s :- NP : 202:r
 
 nineteen ninety-one :- NP : 1991:r
 nineteen ninety-six :- NP : 1996:r
 nineteen ninety-four :- NP : 1994:r
-
-
 
 1900 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 1900:r))
 1901 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 1901:r))
@@ -635,7 +874,14 @@ late :- NP/NP : (lambda $0:d $0)
 late :- NP/NP : (lambda $0:s $0)
 later :- NP/NP : (lambda $0:d $0)
 later :- NP/NP : (lambda $0:r $0)
+over :- NP/NP : (lambda $0:d $0)
+nearly :- NP/NP : (lambda $0:d $0)
+almost :- NP/NP : (lambda $0:d $0)
+
+first :- NP/NP : (lambda $0:d $0)
+
 at least :- NP/NP : (lambda $0:d $0)
+up to :- NP/NP : (lambda $0:d $0)
 past :- NP/NP : (lambda $0:d $0)
 past :- NP/NP : (lambda $0:s $0)
 ahead :- NP\NP : (lambda $0:d $0)
@@ -651,6 +897,8 @@ end of :- NP/NP : (lambda $0:d $0)
 end of :- NP/NP : (lambda $0:s $0)
 past few :- NP/NP : (lambda $0:d $0)
 last few :- NP/NP : (lambda $0:d $0)
+next few :- NP/NP : (lambda $0:d $0)
+few :- NP/NP : (lambda $0:d $0)
 or later :- NP\NP : (lambda $0:r $0)
 several :- NP/NP : (lambda $0:d $0)
 term :- NP\NP : (lambda $0:d $0)
@@ -658,7 +906,9 @@ within :- NP/NP : (lambda $0:d $0)
 and beyond :- NP\NP : (lambda $0:r $0)
 no more than :- NP/NP : (lambda $0:d $0)
 more than :- NP/NP : (lambda $0:d $0)
+less than :- NP/NP : (lambda $0:d $0)
 more :- NP/NP : (lambda $0:d $0)
+more :- NP/NP : (lambda $0:r $0)
 old :- NP\NP : (lambda $0:d $0)
 around :- NP/NP : (lambda $0:s $0)
 weeks and months :- NP\NP : (lambda $0:r $0)
@@ -679,3 +929,4 @@ fiscal :- NP/NP : (lambda $0:s $0)
 
 // Not sure if this guy is useful. Check in the data more throughly.
 a :- NP/NP : (lambda $0:d $0)
+an :- NP/NP : (lambda $0:d $0)

@@ -70,7 +70,7 @@ public class TemporalMap {
 			return new TemporalNth();
 		} else if (l.getName().equals("*:<d,<n,d>>")){
 			return new TemporalMultiplication();
-		} else if (l.getName().equals("temporal_ref:<s,s>") || l.getName().equals("temproal_ref:<d,s>")){
+		} else if (l.getName().equals("temporal_ref:<s,s>") || l.getName().equals("temporal_ref:<d,s>")){
 			return new TemporalReference(previous);
 		} else {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
@@ -112,6 +112,8 @@ public class TemporalMap {
 			return new TemporalDuration("day");
 		else if (l.getName().equals("days:d"))
 			return new TemporalDuration("day", true);
+		else if (l.getName().equals("hour:d"))
+			return new TemporalDuration("hour");
 		else
 			throw new IllegalArgumentException("Unimplemented stuff in TemporalMap's findDurationMap.");
 	}
