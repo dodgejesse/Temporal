@@ -238,8 +238,11 @@ public class TemporalPrevious extends TemporalPredicate {
 					prevDate = convexWeek();
 				} else if (first.isSet("day")){
 					prevDate = convexDay();
+				} else if (first.isSet("hour")){
+					// TODO: talk to people about this!!
+					return first;
 				} else{
-					System.out.println("Day: " + TemporalDate.getValueFromDate(first, "day"));
+					//System.out.println("Day: " + TemporalDate.getValueFromDate(first, "day"));
 				
 					throw new IllegalArgumentException(
 							"Haven't implemented 'prevous' for convex set " + first);

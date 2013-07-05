@@ -36,7 +36,7 @@ public class TemporalNth extends TemporalPredicate{
 		}
 		return false;
 	}
-	
+	// TODO: Fix problem here with hours!!
 	private TemporalISO getThird(){
 		if (first.isSet("quarter"))
 			return new TemporalDate("year");

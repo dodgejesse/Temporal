@@ -72,9 +72,9 @@ No parses! Will implement something to throw out words and try again.
 
 
 Total phrases: 124
-Number correctly parsed and executed, with correct type and val: 84, which is 67.74193548387096 percent
+Number correctly parsed and executed, with correct type and val: 90, which is 72.58064516129032 percent
 Number parsed with correct val, but not type: 3, which is 2.4193548387096775 percent.
-Number parsed with correct type, but not val: 20, which is 16.129032258064516 percent.
-Number parsed, but with incorrect type and val: 7, which his 5.645161290322581 percent
+Number parsed with correct type, but not val: 12, which is 9.67741935483871 percent.
+Number parsed, but with incorrect type and val: 9, which his 7.258064516129032 percent
 Number with too many parses: 0
 Number with no parses: 10
