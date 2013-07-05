@@ -89,20 +89,3 @@ ref_time:          1991-02-25
 Gold type:         TIME
 gold val:          1991-02-16TNI
 No parses! Will implement something to throw out words and try again.
-
-Phrase:            the first hours
-Sentence:          U.S. commanders said 5,500 Iraqi prisoners were taken in the first hours of the ground war, though some military officials later said the total may have climbed above 8,000.
-ref_time:          1991-02-25
-Gold type:         DURATION
-gold val:          PTXH
-No parses! Will implement something to throw out words and try again.
-
-
-
-Total phrases: 124
-Number correctly parsed and executed, with correct type and val: 93, which is 75.0 percent
-Number parsed with correct val, but not type: 2, which is 1.6129032258064515 percent.
-Number parsed with correct type, but not val: 9, which is 7.258064516129032 percent.
-Number parsed, but with incorrect type and val: 6, which his 4.838709677419355 percent
-Number with too many parses: 0
-Number with no parses: 14

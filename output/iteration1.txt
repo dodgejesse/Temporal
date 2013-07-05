@@ -1,0 +1,45 @@
+
+Phrase:            daily
+Sentence:          The official Iraqi News Agency, which gives the daily tally of inspections, did not mention Ritter by name, but said Friday that team no. 225 _ which Ritter heads _ made surprise visits to a number of sites and was assisted by aerial surveillance.
+ref_time:          1998-03-06
+Gold type:         SET
+gold val:          XXXX-XX-XX
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the past three summers
+Sentence:          Confrontations among Catholic protesters, Protestant marchers and the police have provoked widespread violence in Northern Ireland for the past three summers.
+ref_time:          1998-03-22
+Gold type:         SET
+gold val:          XXXX-SU
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            each july
+Sentence:          The crucible is Portadown, 30 miles (50 kms) southwest of Belfast, where Orangemen march each July from their rural church back downtown _ through the town's main Catholic area.
+ref_time:          1998-03-22
+Gold type:         SET
+gold val:          XXXX-07
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            later this afternoon
+Sentence:          He's expected to meet with Iraqi deputy prime minister Tariq Aziz later this afternoon.
+ref_time:          1998-02-22
+Gold type:         TIME
+gold val:          1998-02-22TAF
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            hourly
+Sentence:          Average hourly earnings of production and nonsupervisory employees rose 4 cents, to $12.51.
+ref_time:          1998-02-06
+Gold type:         SET
+gold val:          PT1H
+No parses! Will implement something to throw out words and try again.
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 99, which is 79.83870967741936 percent
+Number parsed with correct val, but not type: 1, which is 0.8064516129032258 percent.
+Number parsed with correct type, but not val: 14, which is 11.290322580645162 percent.
+Number parsed, but with incorrect type and val: 5, which his 4.032258064516129 percent
+Number with too many parses: 0
+Number with no parses: 5

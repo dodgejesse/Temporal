@@ -1,0 +1,59 @@
+
+Phrase:            two to three weeks
+Sentence:          Intel told analysts that the company will resume shipments of the chips within two to three weeks.
+ref_time:          1989-10-30
+Gold type:         DURATION
+gold val:          P2W
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the 1988 quarter
+Sentence:          Kirschner earned $376,000 on revenue of $14.5 million in the 1988 quarter.
+ref_time:          1989-10-30
+Gold type:         DATE
+gold val:          1988-Q3
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            overnight
+Sentence:          London shares were depressed initially by overnight losses in New York and by the drop in sterling after Mr. Lawson's resignation.
+ref_time:          1989-10-30
+Gold type:         TIME
+gold val:          1989-10-26TNI
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the previous friday
+Sentence:          The Financial Times 100-share index shed 47.3 points to close at 2082.1, down 4.5% from the previous Friday and 6.8% from Oct. 13, when Wall Street's plunge helped spark the current weakness in London.
+ref_time:          1989-10-30
+Gold type:         DATE
+gold val:          1989-10-20
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the morning
+Sentence:          Dealers placed heavy buy orders in the morning to start the first trading day for November transactions.
+ref_time:          1989-10-30
+Gold type:         TIME
+gold val:          1989-10-27TMO
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the weekend
+Sentence:          They said contributing to the downward drift was the fact that many professional traders had chosen to square positions ahead of the weekend.
+ref_time:          1989-10-30
+Gold type:         DATE
+gold val:          1989-W44-WE
+No parses! Will implement something to throw out words and try again.
+
+Phrase:            the next 12 to 18 months
+Sentence:          Mr. Vaux said the share issue is part of a strategy to strengthen Labatt's balance sheet in anticipation of acquisitions to be made during the next 12 to 18 months.
+ref_time:          1989-10-30
+Gold type:         DURATION
+gold val:          PXM
+No parses! Will implement something to throw out words and try again.
+
+
+
+Total phrases: 124
+Number correctly parsed and executed, with correct type and val: 107, which is 86.29032258064517 percent
+Number parsed with correct val, but not type: 0, which is 0.0 percent.
+Number parsed with correct type, but not val: 3, which is 2.4193548387096775 percent.
+Number parsed, but with incorrect type and val: 7, which his 5.645161290322581 percent
+Number with too many parses: 0
+Number with no parses: 7

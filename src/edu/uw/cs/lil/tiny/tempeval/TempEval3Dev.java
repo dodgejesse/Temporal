@@ -75,12 +75,12 @@ public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = false; // this takes precedence over booleans testingDataset, timebank, and crossVal.
+		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
-		boolean testingDataset = true; // testing dataset takes precidenence over timebank
+		boolean debugDataset = false; // testing dataset takes precidenence over timebank
 		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
 		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
-		boolean crossVal = false;
+		boolean crossVal = true;
 		int numIterations = 1;
 		
 		
@@ -124,8 +124,8 @@ public class TempEval3Dev {
 		
 		// When running on testing dataset, testingDataset = true
 		String dataLoc;
-		if (testingDataset)
-			dataLoc = "tempeval3.testing.txt";
+		if (debugDataset)
+			dataLoc = "tempeval3.debug.txt";
 		else{
 			dataLoc = dataSetName;			
 		}
@@ -300,7 +300,7 @@ public class TempEval3Dev {
 		
 		// Crossvalidation starts here.
 		if (crossVal){
-			double numberOfPartitions = 3.0;
+			double numberOfPartitions = 10;
 			// make a list
 			// use the constructor with TemporalSentenceDataset to make a new dataset. 
 			System.out.println("Splitting the data...");
@@ -380,8 +380,15 @@ public class TempEval3Dev {
 				
 				threads[i] = new TemporalThread(learner, tester, i, outputData, model);
 				threads[i].start();
+//				try{
+//					threads[i].join();
+//				} catch (InterruptedException e){
+//					e.printStackTrace();
+//					System.err.println("Problem getting the threads to join again!");
+//				}
 				outList[i] = outputData;
 			}
+
 			for (int i = 0; i < threads.length; i++){
 				try{
 					threads[i].join();
@@ -390,6 +397,7 @@ public class TempEval3Dev {
 					System.err.println("Some problems getting the threads to join again!");
 				}
 			}
+			
 			PrintStream out = new PrintStream(new File("output/totals.txt"));
 			OutputData averaged = OutputData.average(outList);
 			out.println(averaged);
