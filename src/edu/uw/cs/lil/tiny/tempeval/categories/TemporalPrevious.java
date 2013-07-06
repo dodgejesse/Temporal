@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.joda.time.LocalDate;
+
+import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
 
 public class TemporalPrevious extends TemporalPredicate {
 

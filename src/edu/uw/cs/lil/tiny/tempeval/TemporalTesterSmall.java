@@ -3,18 +3,13 @@ package edu.uw.cs.lil.tiny.tempeval;
 import java.io.PrintStream;
 import java.util.*;
 
-import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
-import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.mr.lambda.ccg.LogicalExpressionCategoryServices;
 import edu.uw.cs.lil.tiny.parser.IParseResult;
-import edu.uw.cs.lil.tiny.parser.IParserOutput;
-import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
-import edu.uw.cs.lil.tiny.parser.ccg.model.Model;
 import edu.uw.cs.lil.tiny.parser.joint.IJointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.model.*;

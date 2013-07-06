@@ -1,8 +1,10 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 import java.util.*;
 
 import org.joda.time.LocalDate;
+
+import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
 
 public class TemporalThis extends TemporalPredicate {
 	public TemporalISO perform() {

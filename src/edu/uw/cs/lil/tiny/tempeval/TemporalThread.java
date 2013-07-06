@@ -2,7 +2,6 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;

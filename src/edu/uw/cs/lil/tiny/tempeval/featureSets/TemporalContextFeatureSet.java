@@ -1,6 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval.featureSets;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,8 +8,6 @@ import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.GovernerVerbPOSExtractor;
-import edu.uw.cs.lil.tiny.tempeval.TemporalDate;
-import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
 import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVectorImmutable;

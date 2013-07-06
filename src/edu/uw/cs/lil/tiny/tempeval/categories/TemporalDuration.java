@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 public final class TemporalDuration extends TemporalISO {
 

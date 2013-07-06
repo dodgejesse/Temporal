@@ -1,18 +1,15 @@
 package edu.uw.cs.lil.tiny.tempeval.featureSets;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.TemporalDate;
-import edu.uw.cs.lil.tiny.tempeval.TemporalISO;
 import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalDate;
 import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVectorImmutable;

@@ -1,24 +1,13 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.objectbank.TokenizerFactory;
-import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.process.PTBTokenizer;
 import edu.stanford.nlp.trees.EnglishGrammaticalStructure;
 import edu.stanford.nlp.trees.GrammaticalStructure;
 import edu.stanford.nlp.trees.GrammaticalStructureFactory;
@@ -26,11 +15,6 @@ import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.SemanticHeadFinder;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
-import edu.stanford.nlp.trees.TreePrint;
-import edu.stanford.nlp.trees.semgraph.SemanticGraph;
-import edu.stanford.nlp.trees.semgraph.SemanticGraphCoreAnnotations.BasicDependenciesAnnotation;
-import edu.stanford.nlp.trees.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
-import edu.stanford.nlp.trees.semgraph.SemanticGraphCoreAnnotations.CollapsedDependenciesAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.Filters;
 

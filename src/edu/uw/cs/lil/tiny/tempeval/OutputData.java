@@ -1,7 +1,6 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class OutputData {
 	private int[] counters;
