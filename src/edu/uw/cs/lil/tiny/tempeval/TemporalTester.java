@@ -16,7 +16,7 @@ import edu.uw.cs.lil.tiny.parser.joint.model.*;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
-public class TemporalTesterSmall {
+public class TemporalTester {
 	private final boolean ONLYPRINTINCORRECT = false;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = true;
@@ -30,7 +30,7 @@ public class TemporalTesterSmall {
 	OutputData outputData;
 
 
-	private TemporalTesterSmall(
+	private TemporalTester(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test,
 					TemporalJointParser jointParser) {
 		this.test = test;
@@ -339,9 +339,9 @@ public class TemporalTesterSmall {
 		return newLogicArray;
 	}
 
-	public static TemporalTesterSmall build(
+	public static TemporalTester build(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test,
 					TemporalJointParser parser) {
-		return new TemporalTesterSmall(test, parser);
+		return new TemporalTester(test, parser);
 	}
 }

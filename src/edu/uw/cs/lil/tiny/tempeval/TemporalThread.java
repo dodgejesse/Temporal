@@ -11,14 +11,14 @@ import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 
 public class TemporalThread extends Thread {
 	final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner;
-	final TemporalTesterSmall tester;
+	final TemporalTester tester;
 	final int iteration;
 	final OutputData outputData;
 	final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
 	
 	public TemporalThread(
 			ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner, 
-			TemporalTesterSmall tester, int iteration, OutputData outputData, 
+			TemporalTester tester, int iteration, OutputData outputData, 
 			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model){
 		this.learner = learner;
 		this.tester = tester;

@@ -58,19 +58,19 @@ import java.util.Set;
 
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
-
+	private static String DEBUG_DATASET = "tempeval3.debug.txt";
+	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt"; 
+	private static String AQ_DATASET = "tempeval3.timebank.txt"; 
+	private static String TB_DATASET = "tempeval3.aquaint.txt";
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
-		boolean debugDataset = false; // testing dataset takes precidenence over timebank
-		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
-		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
+		String dataset = DEBUG_DATASET;
+		//String dataset = FULL_DATASET;
 		boolean crossVal = true;
 		int numIterations = 1;
-		
-		
-		
-		
+	
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
 		LogLevel.INFO.set();
@@ -81,7 +81,6 @@ public class TempEval3Dev {
 		String datasetDir = "./data/dataset/";
 		String resourcesDir = "./data/resources/";
 
-		
 		// Init the logical expression type system
 		// LogicLanguageServices.setInstance(new LogicLanguageServices(
 		//		new TypeRepository(
@@ -91,10 +90,8 @@ public class TempEval3Dev {
 				new TypeRepository(new File(resourcesDir + "tempeval.types.txt"))).setNumeralTypeName("i")
 				.setTypeComparator(new FlexibleTypeComparator()).build());
 
-		
 		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices();
 		
-
 		// Load the ontology
 		List<File> ontologyFiles = new LinkedList<File>();
 		ontologyFiles.add(new File(resourcesDir + "tempeval.predicates.txt"));
@@ -107,15 +104,7 @@ public class TempEval3Dev {
 			throw new RuntimeException(e);
 		}
 		
-		// When running on testing dataset, testingDataset = true
-		String dataLoc;
-		if (debugDataset)
-			dataLoc = "tempeval3.debug.txt";
-		else{
-			dataLoc = dataSetName;			
-		}
-		
-			//dataLoc = "tempeval.dataset.corrected.txt";
+		//dataLoc = "tempeval.dataset.corrected.txt";
 		// these train and test should be of type
 		// IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> 
 		TemporalSentenceDataset train = null;
@@ -126,10 +115,10 @@ public class TempEval3Dev {
 			test = TemporalSentenceDataset.readSerialized("data/serialized_data/testingData.ser");
 		} else {
 			train = TemporalSentenceDataset
-					.read(new File(datasetDir + dataLoc),
+					.read(new File(datasetDir + dataset),
 							new StubStringFilter(), true);
 			test = TemporalSentenceDataset
-					.read(new File(datasetDir + dataLoc),
+					.read(new File(datasetDir + dataset),
 							new StubStringFilter(), true);
 		}
 		
@@ -336,7 +325,7 @@ public class TempEval3Dev {
 				// Creating a joint parser.
 				final TemporalJointParser jParser = new TemporalJointParser(parser);
 
-				final TemporalTesterSmall tester = TemporalTesterSmall.build(newTest, jParser);
+				final TemporalTester tester = TemporalTester.build(newTest, jParser);
 				final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner =
 						new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
 								numIterations, newTrain, jParser);
@@ -410,7 +399,7 @@ public class TempEval3Dev {
 			// lexical feature sets.
 			model.addFixedLexicalEntries(fixed.toCollection());
 			
-			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
+			final TemporalTester tester = TemporalTester.build(test, jParser);
  
 		
 			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
