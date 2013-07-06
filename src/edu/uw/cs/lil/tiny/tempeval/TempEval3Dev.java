@@ -1,12 +1,8 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.ccg.categories.ICategoryServices;
 import edu.uw.cs.lil.tiny.ccg.categories.syntax.Syntax;
-import edu.uw.cs.lil.tiny.data.IDataCollection;
-import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
-import edu.uw.cs.lil.tiny.learn.ILearner;
 import edu.uw.cs.lil.tiny.mr.lambda.FlexibleTypeComparator;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicLanguageServices;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
@@ -33,14 +29,8 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
-import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalContextFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalDayOfWeekFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalReferenceFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalTypeFeatureSet;
 import edu.uw.cs.lil.tiny.utils.concurrency.TinyExecutorService;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
-import edu.uw.cs.utils.composites.Pair;
 import edu.uw.cs.utils.log.ILogger;
 import edu.uw.cs.utils.log.Log;
 import edu.uw.cs.utils.log.LogLevel;
@@ -63,6 +53,32 @@ public class TempEval3Dev {
 	private static String AQ_DATASET = "tempeval3.timebank.txt"; 
 	private static String TB_DATASET = "tempeval3.aquaint.txt";
 
+	public static List<List<TemporalSentence>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
+		// make a list
+		// use the constructor with TemporalSentenceDataset to make a new dataset. 
+		System.out.println("Splitting the data...");
+		List<List<TemporalSentence>> splitData = new LinkedList<List<TemporalSentence>>();
+		Iterator<TemporalSentence> iter = dataset.iterator();
+		int sentenceCount = 1;
+		List<TemporalSentence> tmp = new LinkedList<TemporalSentence>();
+
+		while (iter.hasNext()){
+			tmp.add(iter.next());
+			// for testing:
+			if (sentenceCount % Math.round(dataset.size() / numberOfPartitions)== 0){
+				splitData.add(tmp);
+				tmp = new LinkedList<TemporalSentence>();
+				System.out.println();
+				System.out.println("sentenceCount: " + sentenceCount);
+				System.out.println("Train size: " + dataset.size());
+				System.out.println("size / " + numberOfPartitions + ": " + Math.round(dataset.size() / numberOfPartitions));
+			}
+			sentenceCount++;
+		}
+		System.out.println(" done.");
+		return splitData;
+	}
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
@@ -274,33 +290,7 @@ public class TempEval3Dev {
 
 		// Crossvalidation starts here.
 		if (crossVal){
-			double numberOfPartitions = 10;
-			// make a list
-			// use the constructor with TemporalSentenceDataset to make a new dataset. 
-			System.out.println("Splitting the data...");
-			List<List<TemporalSentence>> splitData = 
-					new LinkedList<List<TemporalSentence>>();
-			Iterator<TemporalSentence> iter = train.iterator();
-			int sentenceCount = 1;
-			List<TemporalSentence> tmp = 
-					new LinkedList<TemporalSentence>();
-
-			while (iter.hasNext()){
-				tmp.add(iter.next());
-				// for testing:
-				if (sentenceCount % Math.round(train.size() / numberOfPartitions)== 0){
-					splitData.add(tmp);
-					tmp = new LinkedList<TemporalSentence>();
-					System.out.println();
-					System.out.println("sentenceCount: " + sentenceCount);
-					System.out.println("Train size: " + train.size());
-					System.out.println("size / " + numberOfPartitions + ": " + Math.round(train.size() / numberOfPartitions));
-
-				}
-
-				sentenceCount++;
-			}
-			System.out.println(" done.");
+			List<List<TemporalSentence>> splitData = getCVPartitions (train, 10);
 			OutputData[] outList = new OutputData[splitData.size()];
 
 			// to make the threads
@@ -320,11 +310,10 @@ public class TempEval3Dev {
 				TemporalSentenceDataset newTest = new TemporalSentenceDataset(newTestList);
 				TemporalSentenceDataset newTrain = new TemporalSentenceDataset(newTrainList);
 
-				OutputData outputData = new OutputData();
+				outList[i] = new OutputData();
 
-				threads[i] = new TemporalThread(newTrain, newTest, parser, fixed, lexPhi, i, perceptronIterations, outputData);
+				threads[i] = new TemporalThread(newTrain, newTest, parser, fixed, lexPhi, i, perceptronIterations, outList[i]);
 				threads[i].start();
-				outList[i] = outputData;
 			}
 
 			for (int i = 0; i < threads.length; i++){
