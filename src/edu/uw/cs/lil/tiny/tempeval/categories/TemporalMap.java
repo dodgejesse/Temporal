@@ -1,6 +1,7 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalConstant;
+import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
 
 import java.util.*;
 

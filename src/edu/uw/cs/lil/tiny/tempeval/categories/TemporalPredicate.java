@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 
 // The only predicates that take three arguments are:

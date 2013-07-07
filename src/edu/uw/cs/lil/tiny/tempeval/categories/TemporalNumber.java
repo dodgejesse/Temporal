@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval;
+package edu.uw.cs.lil.tiny.tempeval.categories;
 
 public class TemporalNumber extends TemporalISO {
 	boolean ordinal;

@@ -2,35 +2,68 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.learn.ILearner;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
+import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
+import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
+import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
+import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalContextFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalDayOfWeekFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalReferenceFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalTypeFeatureSet;
 
 public class TemporalThread extends Thread {
 	final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner;
-	final TemporalTesterSmall tester;
-	final int iteration;
+	final TemporalTester tester;
+	final int cvIteration;
 	final OutputData outputData;
 	final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
-	
-	public TemporalThread(
-			ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner, 
-			TemporalTesterSmall tester, int iteration, OutputData outputData, 
-			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model){
-		this.learner = learner;
-		this.tester = tester;
-		this.iteration = iteration;
+
+	public TemporalThread( TemporalSentenceDataset train,
+			TemporalSentenceDataset test,
+			AbstractCKYParser<LogicalExpression> parser,
+			ILexicon<LogicalExpression> fixed,
+			LexicalFeatureSet<Sentence, LogicalExpression> lexPhi,
+			int cvIteration, 
+			int perceptronIterations,
+			OutputData outputData){
+
+		this.cvIteration = cvIteration;
 		this.outputData = outputData;
-		this.model = model;
+
+		// Creating a joint parser.
+		final TemporalJointParser jParser = new TemporalJointParser(parser);
+
+		tester = TemporalTester.build(test, jParser);
+		learner = new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
+				perceptronIterations, train, jParser);
+		model = new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
+				//.addParseFeatureSet(
+				//		new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
+				//.addParseFeatureSet(
+				//		new LogicalExpressionTypeFeatureSet<Sentence>())
+				.addJointFeatureSet(new TemporalContextFeatureSet())
+				.addJointFeatureSet(new TemporalReferenceFeatureSet())
+				.addJointFeatureSet(new TemporalTypeFeatureSet())
+				.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
+				.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
+				//.addLexicalFeatureSet(templateFeats)
+				.setLexicon(new Lexicon<LogicalExpression>()).build();
+		// Initialize lexical features. This is not "natural" for every lexical
+		// feature set, only for this one, so it's done here and not on all
+		// lexical feature sets.
+		model.addFixedLexicalEntries(fixed.toCollection());
 	}
-	
+
 	public void run(){
 		// redirecting system.out. Unfortunately, the learner uses a LOG, so this doesn't actually do anything. 
-		
+
 		/*PrintStream oldSystemOut = System.out;
 		PrintStream redirectToFile = null;
 		try {
@@ -42,17 +75,22 @@ public class TemporalThread extends Thread {
 			System.exit(0);
 		}
 		System.setOut(redirectToFile);
-		*/
+		 */
 		learner.train(model);
 		//System.setOut(oldSystemOut);
-		
+
 		PrintStream out = null;
-		try {
-			out = new PrintStream(new File("output/iteration" + iteration + ".txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Y'all got problems in TemporalThread.");
-			System.exit(0);
+		if (cvIteration == -1) {
+			out = System.out;
+		}
+		else {
+			try {
+				out = new PrintStream(new File("output/iteration" + cvIteration + ".txt"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				System.out.println("Y'all got problems in TemporalThread.");
+				System.exit(0);
+			}
 		}
 		tester.test(model, out, outputData);
 	}
