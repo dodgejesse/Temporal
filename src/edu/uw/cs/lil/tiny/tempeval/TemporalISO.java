@@ -45,7 +45,7 @@ public abstract class TemporalISO {
 					+ " is not a valid key! Problem in TemporalISO.");
 		this.value = new HashMap<String, Set<Integer>>();
 		Set<Integer> newValueSet = new HashSet<Integer>();
-		newValueSet.add(Integer.valueOf(num));
+		newValueSet.add(num);
 		this.value.put(field, newValueSet);
 	}
 	

@@ -106,14 +106,7 @@ quarterly :- NP : (*:<d,<n,d>> month:d 3:n)
 // Ordinal numbers
 first :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 1o:n))
 second :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 2o:n))
-
-
 third :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 3o:n))
-//day :- NP : day:d
-//quarter :- NP : quarter:d
-
-//third quarter :- NP : (nth:<d,<n,s>> quarter:d 3o:n)
-
 fourth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 4o:n))
 fifth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 5o:n))
 sixth :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 6o:n))

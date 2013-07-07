@@ -77,11 +77,13 @@ public class TempEval3Dev {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
-		boolean debugDataset = false; // testing dataset takes precidenence over timebank
+		boolean debugDataset = true; // testing dataset takes precidenence over timebank
 		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
 		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
 		boolean crossVal = true;
 		int numIterations = 1;
+		double numberOfPartitions = 10;
+
 		
 		
 		
@@ -247,10 +249,10 @@ public class TempEval3Dev {
 				//		.build();
 				
 				// This was used for initializing the factored lexicon
-				final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
-						.setScale(0.1)
+				//final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
+				//		.setScale(0.1)
 						// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
-						.build();
+				//		.build();
 				
 				// Create the entire feature collection
 				// Adjusted to move away from a factored lexicon
@@ -269,8 +271,8 @@ public class TempEval3Dev {
 				categoryServices));
 
 		// Executor for multi-threading
-		final TinyExecutorService executor = new TinyExecutorService(Runtime
-				.getRuntime().availableProcessors());
+		//final TinyExecutorService executor = new TinyExecutorService(Runtime
+		//		.getRuntime().availableProcessors());
 
 		LOG.info("Using %d threads", Runtime.getRuntime().availableProcessors());
 
@@ -280,27 +282,12 @@ public class TempEval3Dev {
 		final SimpleFullParseFilter<LogicalExpression> parseFilter = new SimpleFullParseFilter<LogicalExpression>(
 				syntaxSet);
 		
-		final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
-				categoryServices, parseFilter)//, executor)
-				.addBinaryParseRule(
-						new CKYBinaryParsingRule<LogicalExpression>(
-								ruleSetBuilder.build()))
-				.addBinaryParseRule(
-						new CKYBinaryParsingRule<LogicalExpression>(
-								new ForwardSkippingRule<LogicalExpression>(
-										categoryServices)))
-				.addBinaryParseRule(
-						new CKYBinaryParsingRule<LogicalExpression>(
-								new BackwardSkippingRule<LogicalExpression>(
-										categoryServices)))
-				.setMaxNumberOfCellsInSpan(100).build();
 
 		
 		
 		
 		// Crossvalidation starts here.
 		if (crossVal){
-			double numberOfPartitions = 10;
 			// make a list
 			// use the constructor with TemporalSentenceDataset to make a new dataset. 
 			System.out.println("Splitting the data...");
@@ -333,6 +320,21 @@ public class TempEval3Dev {
 			TemporalThread[] threads = new TemporalThread[splitData.size()];
 			
 			for (int i = 0; i < splitData.size(); i++){
+				final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
+						categoryServices, parseFilter)//, executor)
+						.addBinaryParseRule(
+								new CKYBinaryParsingRule<LogicalExpression>(
+										ruleSetBuilder.build()))
+						.addBinaryParseRule(
+								new CKYBinaryParsingRule<LogicalExpression>(
+										new ForwardSkippingRule<LogicalExpression>(
+												categoryServices)))
+						.addBinaryParseRule(
+								new CKYBinaryParsingRule<LogicalExpression>(
+										new BackwardSkippingRule<LogicalExpression>(
+												categoryServices)))
+						.setMaxNumberOfCellsInSpan(100).build();
+
 				// to make the training and testing corpora
 				List<TemporalSentence> newTrainList = new LinkedList<TemporalSentence>();
 				List<TemporalSentence> newTestList = new LinkedList<TemporalSentence>();
@@ -404,6 +406,21 @@ public class TempEval3Dev {
 			out.close();
 		// Not crossval
 		} else {
+			final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
+					categoryServices, parseFilter)//, executor)
+					.addBinaryParseRule(
+							new CKYBinaryParsingRule<LogicalExpression>(
+									ruleSetBuilder.build()))
+					.addBinaryParseRule(
+							new CKYBinaryParsingRule<LogicalExpression>(
+									new ForwardSkippingRule<LogicalExpression>(
+											categoryServices)))
+					.addBinaryParseRule(
+							new CKYBinaryParsingRule<LogicalExpression>(
+									new BackwardSkippingRule<LogicalExpression>(
+											categoryServices)))
+					.setMaxNumberOfCellsInSpan(100).build();
+
 			// Creating a joint parser.
 			final TemporalJointParser jParser = new TemporalJointParser(parser);
 
@@ -425,7 +442,6 @@ public class TempEval3Dev {
 			// lexical feature sets.
 			model.addFixedLexicalEntries(fixed.toCollection());
 			
-			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
  
 		
 			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
@@ -434,9 +450,8 @@ public class TempEval3Dev {
 			
 			learner.train(model);
 
-		// Within this tester, I should go through each example and use the
-		// visitor on each logical expression!
-			OutputData o = new OutputData();
+			OutputData o = new OutputData();			
+			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
 			tester.test(model, System.out,o);
 		}
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System

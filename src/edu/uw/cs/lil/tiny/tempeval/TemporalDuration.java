@@ -39,6 +39,7 @@ public final class TemporalDuration extends TemporalISO {
 			s = addString("quarter", s, "Q");
 		} else if (super.isSet("hour")) {
 			s = addString("hour", s + "T", "H");
+		
 		} else
 			throw new IllegalArgumentException("Printing for durations is limited. You're trying to print something not implemented yet.");
 			//s = "Haven't implemented toString for durations other than years";

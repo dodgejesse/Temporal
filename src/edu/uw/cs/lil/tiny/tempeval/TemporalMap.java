@@ -114,6 +114,8 @@ public class TemporalMap {
 			return new TemporalDuration("day", true);
 		else if (l.getName().equals("hour:d"))
 			return new TemporalDuration("hour");
+		else if (l.getName().equals("hours:d"))
+			return new TemporalDuration("hour", true);
 		else
 			throw new IllegalArgumentException("Unimplemented stuff in TemporalMap's findDurationMap.");
 	}

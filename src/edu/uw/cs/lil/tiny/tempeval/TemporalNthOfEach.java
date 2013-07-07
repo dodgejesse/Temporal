@@ -8,6 +8,7 @@ public class TemporalNthOfEach extends TemporalPredicate{
 	// day of month
 	// weekday of week
 	// 
+	
 	public TemporalISO perform() {
 		if (!(first instanceof TemporalDuration))
 			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a TemporalDuration! (It really should  be.) ");
@@ -26,5 +27,6 @@ public class TemporalNthOfEach extends TemporalPredicate{
 		
 		throw new IllegalArgumentException("Constants passed to NthOfEach are not implemented yet! " + "Check TemporalNthOfEach for list of implemented constants.");
 	}
+	
 
 }

@@ -171,7 +171,6 @@ public class TemporalJointParser extends
 	}
 
 	// this is where the parsing happens. 
-	// Takes a dataItem and a model, and 
 	@Override
 	public IJointOutput<LogicalExpression, TemporalResult> parse(
 			IDataItem<Pair<Sentence, String[]>> dataItem,
@@ -214,6 +213,9 @@ public class TemporalJointParser extends
 				String ref_time = dataItem.getSample().second()[2];
 				if (!sameDocID)
 					prevISO = null;
+				System.out.println("Executing the phrase: " + phrase);
+				System.out.println("with logic: " + labels[i].toString());
+				System.out.println("and lexical entries: " + l.getAllLexicalEntries());
 				TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time,
 						prevISO);
 				
