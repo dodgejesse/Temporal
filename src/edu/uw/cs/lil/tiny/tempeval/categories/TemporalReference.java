@@ -3,6 +3,10 @@ package edu.uw.cs.lil.tiny.tempeval.categories;
 import java.util.Map;
 import java.util.Set;
 
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+
 public class TemporalReference extends TemporalPredicate{
 	
 	private TemporalISO previous;

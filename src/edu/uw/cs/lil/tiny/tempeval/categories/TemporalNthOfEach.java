@@ -1,5 +1,10 @@
 package edu.uw.cs.lil.tiny.tempeval.categories;
 
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
+
 public class TemporalNthOfEach extends TemporalPredicate{
 
 	// The only constants implemented here are:
@@ -8,6 +13,7 @@ public class TemporalNthOfEach extends TemporalPredicate{
 	// day of month
 	// weekday of week
 	// 
+	
 	public TemporalISO perform() {
 		if (!(first instanceof TemporalDuration))
 			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a TemporalDuration! (It really should  be.) ");
@@ -26,5 +32,6 @@ public class TemporalNthOfEach extends TemporalPredicate{
 		
 		throw new IllegalArgumentException("Constants passed to NthOfEach are not implemented yet! " + "Check TemporalNthOfEach for list of implemented constants.");
 	}
+	
 
 }

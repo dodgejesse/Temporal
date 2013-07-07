@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+
 public class TemporalIntersect extends TemporalPredicate
 {
   public TemporalDate perform()

@@ -1,9 +1,0 @@
-#!/usr/local/bin/python
-
-tens = ["twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"]
-ones = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-counter = 20
-for i in tens:
-    for j in ones:
-        print "nineteen %d %d :- NP : %d:r" %(i,j,counter)
-        counter = counter + 1

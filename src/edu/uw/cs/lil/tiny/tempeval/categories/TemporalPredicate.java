@@ -1,5 +1,8 @@
 package edu.uw.cs.lil.tiny.tempeval.categories;
 
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+
 
 // The only predicates that take three arguments are:
 // NthOfEach

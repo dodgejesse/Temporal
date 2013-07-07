@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval.categories;
+package edu.uw.cs.lil.tiny.tempeval.types;
 
 import java.util.*;
 

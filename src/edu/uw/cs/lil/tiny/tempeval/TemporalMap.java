@@ -1,7 +1,18 @@
-package edu.uw.cs.lil.tiny.tempeval.categories;
+package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalConstant;
-import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalIntersect;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalMultiplication;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalNext;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalNth;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalPredicate;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalPrevious;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalReference;
+import edu.uw.cs.lil.tiny.tempeval.categories.TemporalThis;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
 
 import java.util.*;
 
@@ -115,6 +126,8 @@ public class TemporalMap {
 			return new TemporalDuration("day", true);
 		else if (l.getName().equals("hour:d"))
 			return new TemporalDuration("hour");
+		else if (l.getName().equals("hours:d"))
+			return new TemporalDuration("hour", true);
 		else
 			throw new IllegalArgumentException("Unimplemented stuff in TemporalMap's findDurationMap.");
 	}

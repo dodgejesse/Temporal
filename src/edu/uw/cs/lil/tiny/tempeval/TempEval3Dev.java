@@ -49,8 +49,8 @@ import java.util.Set;
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 	private static String DEBUG_DATASET = "tempeval3.debug.txt";
-	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt"; 
-	private static String AQ_DATASET = "tempeval3.timebank.txt"; 
+	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt";
+	private static String AQ_DATASET = "tempeval3.timebank.txt";
 	private static String TB_DATASET = "tempeval3.aquaint.txt";
 
 	public static List<List<TemporalSentence>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
@@ -86,6 +86,8 @@ public class TempEval3Dev {
 		//String dataset = FULL_DATASET;
 		boolean crossVal = false;
 		int perceptronIterations = 1;
+		double numberOfPartitions = 10;
+
 
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
@@ -183,6 +185,8 @@ public class TempEval3Dev {
 				.addLexicalFeatureSet(lexPhi)
 				.setLexicon(new Lexicon<LogicalExpression>()).build();
 		 */
+		
+		
 
 		// Init the lexicon
 		// final Lexicon<LogicalExpression> fixed = new
@@ -237,10 +241,10 @@ public class TempEval3Dev {
 		//		.build();
 
 		// This was used for initializing the factored lexicon
-		final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
-		.setScale(0.1)
+		//final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
+		//.setScale(0.1)
 		// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
-		.build();
+		//.build();
 
 		// Create the entire feature collection
 		// Adjusted to move away from a factored lexicon
@@ -259,8 +263,8 @@ public class TempEval3Dev {
 				categoryServices));
 
 		// Executor for multi-threading
-		final TinyExecutorService executor = new TinyExecutorService(Runtime
-				.getRuntime().availableProcessors());
+		//final TinyExecutorService executor = new TinyExecutorService(Runtime
+		//		.getRuntime().availableProcessors());
 
 		LOG.info("Using %d threads", Runtime.getRuntime().availableProcessors());
 
@@ -269,6 +273,7 @@ public class TempEval3Dev {
 
 		final SimpleFullParseFilter<LogicalExpression> parseFilter = new SimpleFullParseFilter<LogicalExpression>(
 				syntaxSet);
+
 
 		final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
 				categoryServices, parseFilter)//, executor)
@@ -290,13 +295,14 @@ public class TempEval3Dev {
 
 		// Crossvalidation starts here.
 		if (crossVal){
-			List<List<TemporalSentence>> splitData = getCVPartitions (train, 10);
+			List<List<TemporalSentence>> splitData = getCVPartitions (train, numberOfPartitions);
 			OutputData[] outList = new OutputData[splitData.size()];
 
 			// to make the threads
 			TemporalThread[] threads = new TemporalThread[splitData.size()];
 
 			for (int i = 0; i < splitData.size(); i++){
+
 				// to make the training and testing corpora
 				List<TemporalSentence> newTrainList = new LinkedList<TemporalSentence>();
 				List<TemporalSentence> newTestList = new LinkedList<TemporalSentence>();

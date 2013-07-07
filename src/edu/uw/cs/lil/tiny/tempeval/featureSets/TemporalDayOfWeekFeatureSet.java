@@ -9,7 +9,7 @@ import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVectorImmutable;

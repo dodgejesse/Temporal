@@ -65,7 +65,7 @@ public class TemporalTester {
 		int notParsed = 0;
 		for (final ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> item : testData) {
 			counter++;
-			int c = test(item, model, counter);
+			int c = test(item, model);
 			// 0 == correct type and val
 			// 1 == correct type, not val
 			// 2 == incorrect type, correct val
@@ -89,7 +89,7 @@ public class TemporalTester {
 	}
 
 	private int test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
-			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, int counter) {
+			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		int output;
 		LogicalExpression guessLabel = null;
 		String guessType = "", guessVal = "", correctLogicalForms = "";

@@ -1,5 +1,9 @@
 package edu.uw.cs.lil.tiny.tempeval.categories;
 
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
+
 public class TemporalMultiplication extends TemporalPredicate {
 
 	public TemporalDuration perform() {

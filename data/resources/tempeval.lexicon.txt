@@ -151,7 +151,7 @@ weeks or months :- NP : weeks:d
 day :- NP : day:d
 days :- NP : days:d
 hour :- NP : hour:d
-hours :- NP : hour:d
+hours :- NP : hours:d
 twenty four hours :- NP : (*:<d,<n,d>> day:d 1:n)
 some time :- NP : months:d
 

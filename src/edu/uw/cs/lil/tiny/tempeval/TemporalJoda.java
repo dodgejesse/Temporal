@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.joda.time.LocalDate;
 
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalDate;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
+import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 
 public class TemporalJoda {
 	

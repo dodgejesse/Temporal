@@ -1,3 +1,11 @@
+data/TempEval3/TBAQ-cleaned/TimeBank/WSJ910225-0066.tml.ssplit
+U.S. commanders said 5,500 Iraqi prisoners were taken in the first hours of the ground war, though some military officials later said the total may have climbed above 8,000.
+57
+the first hours
+1991-02-25
+DURATION
+PTXH
+
 data/TempEval3/TBAQ-cleaned/TimeBank/ABC19980108.1830.0711.tml.ssplit
 In Singapore, stocks hit a five year low.
 27
