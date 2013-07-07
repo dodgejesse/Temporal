@@ -59,32 +59,20 @@ import java.util.Set;
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
 	private static String DEBUG_DATASET = "tempeval3.debug.txt";
-	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt"; 
-	private static String AQ_DATASET = "tempeval3.timebank.txt"; 
+	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt";
+	private static String AQ_DATASET = "tempeval3.timebank.txt";
 	private static String TB_DATASET = "tempeval3.aquaint.txt";
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 		boolean serializeDatasets = false;
-<<<<<<< HEAD
-		boolean debugDataset = true; // testing dataset takes precidenence over timebank
-		// options for dataSetName: "tempeval3.aquaintAndTimebank.txt", "tempeval3.aquaint.txt", "tempeval3.timebank.txt"
-		String dataSetName = "tempeval3.aquaintAndTimebank.txt";  
-		boolean crossVal = true;
-		int numIterations = 1;
-		double numberOfPartitions = 10;
-
-		
-		
-		
-		
-=======
 		String dataset = DEBUG_DATASET;
 		//String dataset = FULL_DATASET;
 		boolean crossVal = true;
 		int perceptronIterations = 1;
+		double numberOfPartitions = 10;
 
->>>>>>> be707b00117b636aeec77b3b7b7ab5ee982e14c1
+
 		Logger.DEFAULT_LOG = new Log(System.out);
 		Logger.setSkipPrefix(true);
 		LogLevel.INFO.set();
@@ -181,6 +169,8 @@ public class TempEval3Dev {
 				.addLexicalFeatureSet(lexPhi)
 				.setLexicon(new Lexicon<LogicalExpression>()).build();
 		 */
+		
+		
 
 		// Init the lexicon
 		// final Lexicon<LogicalExpression> fixed = new
@@ -208,42 +198,6 @@ public class TempEval3Dev {
 				.setInitialFixedScorer(
 						new ExpLengthLexicalEntryScorer<LogicalExpression>(
 								10.0, 1.1))
-<<<<<<< HEAD
-				.setInitialScorer(
-						new SkippingSensitiveLexicalEntryScorer<LogicalExpression>(
-								categoryServices,
-								-1.0,
-								new UniformScorer<LexicalEntry<LogicalExpression>>(
-										0.0)))
-				// .setInitialWeightScorer(gizaScores)
-				.build();
-				
-				// Create the lexeme feature set
-				//final LexemeCooccurrenceScorer gizaScores;
-				// final DecoderHelper<LogicalExpression> decoderHelper = new
-				// DecoderHelper<LogicalExpression>(
-				// categoryServices);
-				//try {
-				//	gizaScores = new LexemeCooccurrenceScorer(new File(resourcesDir
-				//			+ "/geo600.dev.giza_probs"));
-				//} catch (final IOException e) {
-				//	System.err.println(e);
-				//	throw new RuntimeException(e);
-				//}
-				//final LexemeFeatureSet lexemeFeats = new LexemeFeatureSet.Builder()
-				//		.setInitialFixedScorer(new UniformScorer<Lexeme>(0.0))
-				//		.setInitialScorer(new ScalingScorer<Lexeme>(10.0, gizaScores))
-				//		.build();
-				
-				// This was used for initializing the factored lexicon
-				//final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
-				//		.setScale(0.1)
-						// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
-				//		.build();
-				
-				// Create the entire feature collection
-				// Adjusted to move away from a factored lexicon
-=======
 								.setInitialScorer(
 										new SkippingSensitiveLexicalEntryScorer<LogicalExpression>(
 												categoryServices,
@@ -271,14 +225,13 @@ public class TempEval3Dev {
 		//		.build();
 
 		// This was used for initializing the factored lexicon
-		final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
-		.setScale(0.1)
+		//final LexicalTemplateFeatureSet templateFeats = new LexicalTemplateFeatureSet.Builder()
+		//.setScale(0.1)
 		// .setInitialWeightScorer(new LexicalSyntaxPenaltyScorer(-0.1))
-		.build();
+		//.build();
 
 		// Create the entire feature collection
 		// Adjusted to move away from a factored lexicon
->>>>>>> be707b00117b636aeec77b3b7b7ab5ee982e14c1
 
 		// Parsing rules
 		final RuleSetBuilder<LogicalExpression> ruleSetBuilder = new RuleSetBuilder<LogicalExpression>();
@@ -304,9 +257,7 @@ public class TempEval3Dev {
 
 		final SimpleFullParseFilter<LogicalExpression> parseFilter = new SimpleFullParseFilter<LogicalExpression>(
 				syntaxSet);
-<<<<<<< HEAD
-		
-=======
+
 
 		final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
 				categoryServices, parseFilter)//, executor)
@@ -325,7 +276,6 @@ public class TempEval3Dev {
 
 
 
->>>>>>> be707b00117b636aeec77b3b7b7ab5ee982e14c1
 
 		// Crossvalidation starts here.
 		if (crossVal){
@@ -361,20 +311,6 @@ public class TempEval3Dev {
 			TemporalThread[] threads = new TemporalThread[splitData.size()];
 
 			for (int i = 0; i < splitData.size(); i++){
-				final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
-						categoryServices, parseFilter)//, executor)
-						.addBinaryParseRule(
-								new CKYBinaryParsingRule<LogicalExpression>(
-										ruleSetBuilder.build()))
-						.addBinaryParseRule(
-								new CKYBinaryParsingRule<LogicalExpression>(
-										new ForwardSkippingRule<LogicalExpression>(
-												categoryServices)))
-						.addBinaryParseRule(
-								new CKYBinaryParsingRule<LogicalExpression>(
-										new BackwardSkippingRule<LogicalExpression>(
-												categoryServices)))
-						.setMaxNumberOfCellsInSpan(100).build();
 
 				// to make the training and testing corpora
 				List<TemporalSentence> newTrainList = new LinkedList<TemporalSentence>();
@@ -411,57 +347,7 @@ public class TempEval3Dev {
 			out.close();
 	    // Not crossval
 		} else {
-<<<<<<< HEAD
-			final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
-					categoryServices, parseFilter)//, executor)
-					.addBinaryParseRule(
-							new CKYBinaryParsingRule<LogicalExpression>(
-									ruleSetBuilder.build()))
-					.addBinaryParseRule(
-							new CKYBinaryParsingRule<LogicalExpression>(
-									new ForwardSkippingRule<LogicalExpression>(
-											categoryServices)))
-					.addBinaryParseRule(
-							new CKYBinaryParsingRule<LogicalExpression>(
-									new BackwardSkippingRule<LogicalExpression>(
-											categoryServices)))
-					.setMaxNumberOfCellsInSpan(100).build();
-
-			// Creating a joint parser.
-			final TemporalJointParser jParser = new TemporalJointParser(parser);
-
-			final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model
-			= new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
-					//.addParseFeatureSet(
-					//		new LogicalExpressionCoordinationFeatureSet<Sentence>(true, true, true))
-					//.addParseFeatureSet(
-					//		new LogicalExpressionTypeFeatureSet<Sentence>())
-					.addJointFeatureSet(new TemporalContextFeatureSet())
-					.addJointFeatureSet(new TemporalReferenceFeatureSet())
-					.addJointFeatureSet(new TemporalTypeFeatureSet())
-					.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
-					.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
-					//.addLexicalFeatureSet(templateFeats)
-					.setLexicon(new Lexicon<LogicalExpression>()).build();
-			// Initialize lexical features. This is not "natural" for every lexical
-			// feature set, only for this one, so it's done here and not on all
-			// lexical feature sets.
-			model.addFixedLexicalEntries(fixed.toCollection());
-			
- 
-		
-			final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner = new
-					JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
-							numIterations, train, jParser);
-			
-			learner.train(model);
-
-			OutputData o = new OutputData();			
-			final TemporalTesterSmall tester = TemporalTesterSmall.build(test, jParser);
-			tester.test(model, System.out,o);
-=======
 			new TemporalThread(train, test, parser, fixed, lexPhi, -1, perceptronIterations, new OutputData()).run();
->>>>>>> be707b00117b636aeec77b3b7b7ab5ee982e14c1
 		}
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
 		//		.currentTimeMillis() - startTime / 1000.0D));

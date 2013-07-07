@@ -85,7 +85,7 @@ public class TemporalThread extends Thread {
 		}
 		else {
 			try {
-				out = new PrintStream(new File("output/iteration" + cvIteration + ".txt"));
+				out = new PrintStream(new File("output/partition" + cvIteration + ".txt"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				System.out.println("Y'all got problems in TemporalThread.");
