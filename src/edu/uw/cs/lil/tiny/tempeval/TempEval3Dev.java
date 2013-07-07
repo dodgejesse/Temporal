@@ -84,7 +84,7 @@ public class TempEval3Dev {
 		boolean serializeDatasets = false;
 		String dataset = DEBUG_DATASET;
 		//String dataset = FULL_DATASET;
-		boolean crossVal = true;
+		boolean crossVal = false;
 		int perceptronIterations = 1;
 
 		Logger.DEFAULT_LOG = new Log(System.out);
