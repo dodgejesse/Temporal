@@ -13,14 +13,12 @@ import edu.uw.cs.lil.tiny.mr.language.type.TypeRepository;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.AbstractCKYParser;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.CKYBinaryParsingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.cky.single.CKYParser;
-import edu.uw.cs.lil.tiny.parser.ccg.factoredlex.features.LexicalTemplateFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.ExpLengthLexicalEntryScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.SkippingSensitiveLexicalEntryScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.features.basic.scorer.UniformScorer;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
-//import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry.EntryOrigin;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.RuleSetBuilder;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.BackwardApplication;
@@ -29,7 +27,6 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
-import edu.uw.cs.lil.tiny.utils.concurrency.TinyExecutorService;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import edu.uw.cs.utils.log.ILogger;
 import edu.uw.cs.utils.log.Log;
@@ -38,6 +35,7 @@ import edu.uw.cs.utils.log.Logger;
 import edu.uw.cs.utils.log.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashSet;
@@ -48,10 +46,28 @@ import java.util.Set;
 
 public class TempEval3Dev {
 	private static final ILogger LOG = LoggerFactory.create(TempEval3Dev.class);
-	private static String DEBUG_DATASET = "tempeval3.debug.txt";
-	private static String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt";
-	private static String AQ_DATASET = "tempeval3.timebank.txt";
-	private static String TB_DATASET = "tempeval3.aquaint.txt";
+
+	// Files
+	private static final String DEBUG_DATASET = "tempeval3.debug.txt";
+	private static final String FULL_DATASET = "tempeval3.aquaintAndTimebank.txt";
+	private static final String AQ_DATASET = "tempeval3.timebank.txt";
+	private static final String TB_DATASET = "tempeval3.aquaint.txt";
+	private static final String SERIALIZED_TRAINING = "trainingData.ser";
+	private static final String SERIALIZED_TESTING = "testingData.ser";
+	
+	// Directories
+	private static final String DATASET_DIR = "data/dataset/";
+	private static final String RESOURCES_DIR = "data/resources/";
+	private static final String SERIALIZED_DIR = "data/serialized_data/";
+
+	// Flags
+	private static final String DATASET = DEBUG_DATASET;
+	//private static final String DATASET = FULL_DATASET;
+	private static final boolean READ_SERIALIZED_DATASETS = false; // this takes precedence over booleans testingDataset, timebank, and crossVal.
+	private static final boolean SERIALIZE_DATASETS = false;
+	private static final boolean CROSS_VAL = false;
+	private static final int PERCEPTRON_ITERATIONS = 1;
+	private static final double CV_FOLDS = 10;
 
 	public static List<List<TemporalSentence>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
 		// make a list
@@ -78,79 +94,56 @@ public class TempEval3Dev {
 		System.out.println(" done.");
 		return splitData;
 	}
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		boolean readSerializedDatasets = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
-		boolean serializeDatasets = false;
-		String dataset = DEBUG_DATASET;
-		//String dataset = FULL_DATASET;
-		boolean crossVal = false;
-		int perceptronIterations = 1;
-		double numberOfPartitions = 10;
 
+	public static TemporalSentenceDataset getSerializedData(String datasetName) throws IOException, ClassNotFoundException {
+		return TemporalSentenceDataset.readSerialized(SERIALIZED_DIR + datasetName);
+	}
 
-		Logger.DEFAULT_LOG = new Log(System.out);
-		Logger.setSkipPrefix(true);
-		LogLevel.INFO.set();
-
-		//long startTime = System.currentTimeMillis();
-
-		// Relative path for data directories
-		String datasetDir = "./data/dataset/";
-		String resourcesDir = "./data/resources/";
-
-		// Init the logical expression type system
-		// LogicLanguageServices.setInstance(new LogicLanguageServices(
-		//		new TypeRepository(
-		//				new File(resourcesDir + "tempeval.types.txt")), "i"));
-
-		LogicLanguageServices.setInstance(new LogicLanguageServices.Builder(
-				new TypeRepository(new File(resourcesDir + "tempeval.types.txt"))).setNumeralTypeName("i")
-				.setTypeComparator(new FlexibleTypeComparator()).build());
-
-		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices();
-
-		// Load the ontology
-		List<File> ontologyFiles = new LinkedList<File>();
-		ontologyFiles.add(new File(resourcesDir + "tempeval.predicates.txt"));
-		ontologyFiles.add(new File(resourcesDir + "tempeval.constants.txt"));
-		try {
-			// Ontology is currently not used, so we are just reading it, not
-			// storing
-			new Ontology(ontologyFiles);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
+	public static TemporalSentenceDataset getData(String datasetName, String serializedName) throws FileNotFoundException, IOException {
 		//dataLoc = "tempeval.dataset.corrected.txt";
 		// these train and test should be of type
 		// IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> 
-		TemporalSentenceDataset train = null;
-		TemporalSentenceDataset test = null;
 		// reading in the serialized datasets so we don't have to run the dependency parser again.
-		if (readSerializedDatasets){
-			train = TemporalSentenceDataset.readSerialized("data/serialized_data/trainingData.ser");
-			test = TemporalSentenceDataset.readSerialized("data/serialized_data/testingData.ser");
-		} else {
-			train = TemporalSentenceDataset
-					.read(new File(datasetDir + dataset),
-							new StubStringFilter(), true);
-			test = TemporalSentenceDataset
-					.read(new File(datasetDir + dataset),
-							new StubStringFilter(), true);
-		}
 
-		if (serializeDatasets){
+		TemporalSentenceDataset dataset = TemporalSentenceDataset
+				.read(new File(DATASET_DIR + datasetName),
+						new StubStringFilter(), true);
+
+		if (SERIALIZE_DATASETS){
 			System.out.print("Serializing the training data... ");
-			TemporalSentenceDataset.save("data/serialized_data/trainingData.ser", train);
-			System.out.println("Done!");
-			System.out.print("Serializing the testing data... ");
-			TemporalSentenceDataset.save("data/serialized_data/testingData.ser", test);
+			TemporalSentenceDataset.save(SERIALIZED_DIR + serializedName, dataset);
 			System.out.println("Done!");
 		}
-		LOG.info("Train Size: " + train.size());
-		LOG.info("Test Size: " + test.size());
+		LOG.info(datasetName + " size: " + dataset.size());
+		return dataset;
+	}
 
+	public static ILexicon<LogicalExpression> getFixedLexicon(ICategoryServices<LogicalExpression> categoryServices) {
+		// Init the lexicon
+		// final Lexicon<LogicalExpression> fixed = new
+		// Lexicon<LogicalExpression>();
+		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
+		fixedInput.addEntriesFromFile(new File(RESOURCES_DIR
+				+ "tempeval.lexicon.txt"), new StubStringFilter(),
+				categoryServices, LexicalEntry.Origin.FIXED_DOMAIN);
+
+		final ILexicon<LogicalExpression> fixed = new Lexicon<LogicalExpression>();
+
+		// factor the fixed lexical entries
+		//for (final LexicalEntry<LogicalExpression> lex : fixedInput
+		//		.toCollection()) {
+		//	fixed.add(FactoredLexicon.factor(lex));
+		//}
+		//System.out.println(fixed);
+
+		// try two at factoring the fixed lexical entries:
+		for (final LexicalEntry<LogicalExpression> lex : fixedInput.toCollection()){
+			fixed.add(lex);
+		}
+		return fixed;
+	}
+
+	public static LexicalFeatureSet<Sentence, LogicalExpression> getLexPhi(ICategoryServices<LogicalExpression> categoryServices) {
 		// Below is the code from Geo880DevParameterEstimation. I am replacing this with code from Geo880Dev.
 		/*
 		// Init the lexicon
@@ -185,32 +178,7 @@ public class TempEval3Dev {
 				.addLexicalFeatureSet(lexPhi)
 				.setLexicon(new Lexicon<LogicalExpression>()).build();
 		 */
-		
-		
-
-		// Init the lexicon
-		// final Lexicon<LogicalExpression> fixed = new
-		// Lexicon<LogicalExpression>();
-		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
-		fixedInput.addEntriesFromFile(new File(resourcesDir
-				+ "tempeval.lexicon.txt"), new StubStringFilter(),
-				categoryServices, LexicalEntry.Origin.FIXED_DOMAIN);
-
-		final ILexicon<LogicalExpression> fixed = new Lexicon<LogicalExpression>();
-
-		// factor the fixed lexical entries
-		//for (final LexicalEntry<LogicalExpression> lex : fixedInput
-		//		.toCollection()) {
-		//	fixed.add(FactoredLexicon.factor(lex));
-		//}
-		//System.out.println(fixed);
-
-		// try two at factoring the fixed lexical entries:
-		for (final LexicalEntry<LogicalExpression> lex : fixedInput.toCollection()){
-			fixed.add(lex);
-		}
-
-		final LexicalFeatureSet<Sentence, LogicalExpression> lexPhi = new LexicalFeatureSet.Builder<Sentence,LogicalExpression>()
+		return new LexicalFeatureSet.Builder<Sentence,LogicalExpression>()
 				.setInitialFixedScorer(
 						new ExpLengthLexicalEntryScorer<LogicalExpression>(
 								10.0, 1.1))
@@ -222,7 +190,9 @@ public class TempEval3Dev {
 														0.0)))
 														// .setInitialWeightScorer(gizaScores)
 														.build();
-
+	}
+	
+	public static AbstractCKYParser<LogicalExpression> getParser (ICategoryServices<LogicalExpression> categoryServices) {
 		// Create the lexeme feature set
 		//final LexemeCooccurrenceScorer gizaScores;
 		// final DecoderHelper<LogicalExpression> decoderHelper = new
@@ -275,7 +245,7 @@ public class TempEval3Dev {
 				syntaxSet);
 
 
-		final AbstractCKYParser<LogicalExpression> parser = new CKYParser.Builder<LogicalExpression>(
+		return new CKYParser.Builder<LogicalExpression>(
 				categoryServices, parseFilter)//, executor)
 				.addBinaryParseRule(
 						new CKYBinaryParsingRule<LogicalExpression>(
@@ -290,12 +260,54 @@ public class TempEval3Dev {
 																				categoryServices)))
 																				.setMaxNumberOfCellsInSpan(100).build();
 
+		
+	}
 
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		Logger.DEFAULT_LOG = new Log(System.out);
+		Logger.setSkipPrefix(true);
+		LogLevel.INFO.set();
 
+		TemporalSentenceDataset train, test;
+		if (READ_SERIALIZED_DATASETS) {
+			train = getSerializedData(SERIALIZED_TRAINING);
+			test = getSerializedData(SERIALIZED_TESTING);
+		}
+		else {
+			train = getData(DATASET, SERIALIZED_TRAINING);
+			test = getData(DATASET, SERIALIZED_TESTING);
+		}
+		//long startTime = System.currentTimeMillis();
 
-		// Crossvalidation starts here.
-		if (crossVal){
-			List<List<TemporalSentence>> splitData = getCVPartitions (train, numberOfPartitions);
+		// Init the logical expression type system
+		// LogicLanguageServices.setInstance(new LogicLanguageServices(
+		//		new TypeRepository(
+		//				new File(resourcesDir + "tempeval.types.txt")), "i"));
+
+		LogicLanguageServices.setInstance(new LogicLanguageServices.Builder(
+				new TypeRepository(new File(RESOURCES_DIR + "tempeval.types.txt"))).setNumeralTypeName("i")
+				.setTypeComparator(new FlexibleTypeComparator()).build());
+
+		final ICategoryServices<LogicalExpression> categoryServices = new LogicalExpressionCategoryServices();
+
+		// Load the ontology
+		List<File> ontologyFiles = new LinkedList<File>();
+		ontologyFiles.add(new File(RESOURCES_DIR + "tempeval.predicates.txt"));
+		ontologyFiles.add(new File(RESOURCES_DIR + "tempeval.constants.txt"));
+		try {
+			// Ontology is currently not used, so we are just reading it, not
+			// storing
+			new Ontology(ontologyFiles);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		ILexicon<LogicalExpression> fixed = getFixedLexicon(categoryServices);
+		LexicalFeatureSet<Sentence, LogicalExpression> lexPhi = getLexPhi(categoryServices);
+		AbstractCKYParser<LogicalExpression> parser = getParser(categoryServices);
+
+		if (CROSS_VAL){
+			List<List<TemporalSentence>> splitData = getCVPartitions (train, CV_FOLDS);
 			OutputData[] outList = new OutputData[splitData.size()];
 
 			// to make the threads
@@ -318,7 +330,7 @@ public class TempEval3Dev {
 
 				outList[i] = new OutputData();
 
-				threads[i] = new TemporalThread(newTrain, newTest, parser, fixed, lexPhi, i, perceptronIterations, outList[i]);
+				threads[i] = new TemporalThread(newTrain, newTest, parser, fixed, lexPhi, i, PERCEPTRON_ITERATIONS, outList[i]);
 				threads[i].start();
 			}
 
@@ -335,9 +347,8 @@ public class TempEval3Dev {
 			OutputData averaged = OutputData.average(outList);
 			out.println(averaged);
 			out.close();
-	    // Not crossval
 		} else {
-			new TemporalThread(train, test, parser, fixed, lexPhi, -1, perceptronIterations, new OutputData()).run();
+			new TemporalThread(train, test, parser, fixed, lexPhi, -1, PERCEPTRON_ITERATIONS, new OutputData()).run();
 		}
 		//LOG.info("Total runtime %.4f seconds", Double.valueOf(System
 		//		.currentTimeMillis() - startTime / 1000.0D));
