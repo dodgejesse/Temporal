@@ -19,9 +19,9 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalTester {
 	private final boolean ONLYPRINTINCORRECT = false;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
-	private final boolean ONLYPRINTNOPARSES = true;
-	private final boolean ONLYPRINTONEPHRASE = false;
-	private final String PHRASE = "hours";
+	private final boolean ONLYPRINTNOPARSES = false;
+	private final boolean ONLYPRINTONEPHRASE = true;
+	private final String PHRASE = "evening";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;

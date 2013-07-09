@@ -3,6 +3,9 @@ package edu.uw.cs.lil.tiny.tempeval.types;
 import java.util.*;
 
 public class TemporalDate extends TemporalISO{
+	private final String[] timesOfDay = {"MO", "MI", "AF", "EV", "NI", "DT"};
+	private final String[] seasons = {"SP", "SU","FA","WI"};
+
 
 	public TemporalDate(Map<String, Set<Integer>> data) {
 		super(data);
@@ -44,6 +47,8 @@ public class TemporalDate extends TemporalISO{
 	public String toString(){
 		if (super.isConvexSet()){
 			return convexSetFormat();
+		} else if (super.isSet("timeOfDay")){
+			return timeOfDayFormat();
 		} else if (super.isSet("weekday") || super.isSet("week")){
 			return weekFormat();
 		} else if (super.isSet("quarter")){
@@ -135,6 +140,7 @@ public class TemporalDate extends TemporalISO{
 		return s;
 	}
 	
+	
 	private String seasonFormat(){
 		String s = "";
 		if (super.isSet("year")){
@@ -143,6 +149,8 @@ public class TemporalDate extends TemporalISO{
 			s = s + "XXXX";
 		}
 		int seasonNum = getIntValue("season");
+		s += "-" + seasons[seasonNum -1];
+		/*
 		if (seasonNum == 1)
 			s = s + "-SP";
 		else if (seasonNum == 2)
@@ -151,8 +159,14 @@ public class TemporalDate extends TemporalISO{
 			s = s + "-FA";
 		else if (seasonNum == 4)
 			s = s + "-WI";
+		*/
 		return s;
-		
+	}
+	
+	private String timeOfDayFormat(){
+		String s = dateFormat();
+		int timeOfDayNum = getIntValue("timeOfDay");
+		return s + "T" + timesOfDay[timeOfDayNum];
 	}
 	
 	private int getIntValue(String key){

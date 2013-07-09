@@ -20,7 +20,10 @@ public class TemporalThis extends TemporalPredicate {
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		if (!(first instanceof TemporalDuration)) {
-			if (tmpMap.containsKey("weekday") && 
+			// TODO: This timeOfDay doesn't work for some examples, e.g. "friday evening".
+			if (tmpMap.containsKey("timeOfDay")){
+				tmpMap.putAll(second.getFullMapping());
+			} else if (tmpMap.containsKey("weekday") && 
 					(TemporalJoda.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
 				return second;
 			} else if (!tmpMap.containsKey("year")) {

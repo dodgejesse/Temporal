@@ -111,6 +111,8 @@ public class TemporalNext extends TemporalPredicate {
 				nextDate = convexWeek();
 			} else if (first.isSet("day")){
 				nextDate = convexDay();
+			} else if (!first.isConvexSet()){
+				nextDate = first;
 			} else 
 				throw new IllegalArgumentException("Haven't implemented 'next' for convex set " + first);
 		}

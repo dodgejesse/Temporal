@@ -63,7 +63,7 @@ public class TempEval3Dev {
 	// Flags
 	private static final String DATASET = DEBUG_DATASET;
 	//private static final String DATASET = FULL_DATASET;
-	private static final boolean READ_SERIALIZED_DATASETS = false; // this takes precedence over booleans testingDataset, timebank, and crossVal.
+	private static final boolean READ_SERIALIZED_DATASETS = true; // this takes precedence over booleans testingDataset, timebank, and crossVal.
 	private static final boolean SERIALIZE_DATASETS = false;
 	private static final boolean CROSS_VAL = false;
 	private static final int PERCEPTRON_ITERATIONS = 1;

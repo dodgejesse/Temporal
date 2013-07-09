@@ -20,16 +20,19 @@ import org.joda.time.LocalDate;
 
 public class TemporalMap {
 		final Map<String, Integer> months;
+		final Map<String, Integer> timesOfDay;
 		final Map<String, Integer> weekdays;
 		final Map<String, Integer> seasons;
 		final String ref_time;
 		
 	public TemporalMap(String ref_time){
 		months = new HashMap<String, Integer>();
+		timesOfDay = new HashMap<String, Integer>();
 		weekdays = new HashMap<String, Integer>();
 		seasons = new HashMap<String, Integer>();
 		this.ref_time = ref_time;
 		makeMonths();
+		makeTimesOfDay();
 		makeWeekdays();
 		makeSeasons();
 	}
@@ -40,6 +43,15 @@ public class TemporalMap {
 		seasons.put("fall", 3);
 		seasons.put("autumn", 3);
 		seasons.put("winter", 4);
+	}
+	
+	private void makeTimesOfDay(){
+		timesOfDay.put("morning", 0);
+		timesOfDay.put("mid-day", 1);
+		timesOfDay.put("afternoon", 2);
+		timesOfDay.put("evening", 3);
+		timesOfDay.put("night", 4);
+		timesOfDay.put("daytime", 5);
 	}
 	
 	private void makeWeekdays(){
@@ -189,6 +201,8 @@ public class TemporalMap {
 			return findDayOfMonthMap(l);
 		} else if (months.containsKey(l.getName().substring(0, l.getName().length()-2))){
 			return findMonthMap(l);
+		} else if (timesOfDay.containsKey(l.getName().substring(0, l.getName().length()-2))){
+			return findTimesOfDayMap(l);
 		} else if (weekdays.containsKey(l.getName().substring(0, l.getName().length()-2))){
 			return findWeekdayMap(l);
 		} else if (seasons.containsKey(l.getName().substring(0, l.getName().length()-2))){
@@ -220,6 +234,11 @@ public class TemporalMap {
 	private TemporalISO findMonthMap(LogicalConstant l){
 		int num = months.get((l.getName().substring(0, l.getName().length()-2)));
 		return new TemporalDate("month", num);
+	}
+	
+	private TemporalISO findTimesOfDayMap(LogicalConstant l){
+		int num = timesOfDay.get((l.getName().substring(0, l.getName().length()-2)));
+		return new TemporalDate("timeOfDay", num);
 	}
 	
 	private TemporalISO findDayOfMonthMap(LogicalConstant l){

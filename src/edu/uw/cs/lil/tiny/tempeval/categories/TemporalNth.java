@@ -50,6 +50,9 @@ public class TemporalNth extends TemporalPredicate{
 			return new TemporalDate("day", secondNum.getNum());
 		else if (first.isSet("weekday") && third.isSet("week"))
 			return new TemporalDate("weekday", secondNum.getNum());
+		else if (first.isSet("hour") && third.isSet("day"))
+			return first;
+		
 		
 		
 		throw new IllegalArgumentException("Constants passed to NthOfEach are not implemented yet! " + "Check TemporalNthOfEach for list of implemented constants.");
@@ -74,6 +77,8 @@ public class TemporalNth extends TemporalPredicate{
 			return new TemporalDate("month");
 		else if (first.isSet("weekday"))
 			return new TemporalDate("week");
+		else if (first.isSet("hour"))
+			return new TemporalDate("day");
 		System.out.println("first: " + first);
 		System.out.println(first.isConvexSet());
 		throw new IllegalArgumentException("Problem with the first stored ISO in TemporalNth!");

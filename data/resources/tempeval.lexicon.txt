@@ -166,6 +166,8 @@ fall of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 fall:s))
 autumn of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 autumn:s))
 winter of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 winter:s))
 
+// Times of the day!
+evening :- NP : evening:s
 
 tomorrow :- NP : tomorrow:r
 today :- NP : today:r
