@@ -60,6 +60,10 @@ public class TemporalNext extends TemporalPredicate {
 					nextDate = season();
 				} else if (first.isSet("day") && !first.isSet("month") && !first.isSet("week") && !first.isSet("year")){
 					nextDate = dayAndNotMonth();
+				} else if (first.isSet("timeOfDay")&& first.isSet("weekday")){
+					nextDate = timeOfDayAndWeekday();
+				} else if (first.isSet("timeOfDay")) {
+					nextDate = timeOfDay();
 				} else {
 					if ((this.first.getKeys().contains("month"))
 							&& (this.first.getKeys().contains("day"))) {
@@ -78,25 +82,7 @@ public class TemporalNext extends TemporalPredicate {
 						else
 							nextDate = secondTmpDate;
 					} else {
-						if ((this.first.getKeys().contains("weekday"))
-								&& (!this.first.getKeys().contains("month"))
-								&& (!this.first.getKeys().contains("day"))) {
-							LocalDate date = TemporalJoda
-									.convertISOToLocalDate(this.second);
-							if (date.getDayOfWeek() == TemporalISO
-									.getValueFromDate(this.first, "weekday")) {
-								date = date.plusDays(1);
-							}
-							while (date.getDayOfWeek() != TemporalISO
-									.getValueFromDate(this.first, "weekday")) {
-								date = date.plusDays(1);
-							}
-							nextDate = TemporalJoda.convertLocalDateToISO(date);
-						} else {
-							throw new IllegalArgumentException(
-									"haven't implemented things other than"
-											+ " dates with months or days. Problem in TemporalNext's findNext()");
-						}
+						nextDate = weekdayNotMonth();
 					}
 				}
 			}
@@ -119,6 +105,43 @@ public class TemporalNext extends TemporalPredicate {
 		return nextDate;
 	}
 	
+	private TemporalISO weekdayNotMonth() {
+		if ((this.first.getKeys().contains("weekday"))
+				&& (!this.first.getKeys().contains("month"))
+				&& (!this.first.getKeys().contains("day"))) {
+			LocalDate date = TemporalJoda
+					.convertISOToLocalDate(this.second);
+			if (date.getDayOfWeek() == TemporalISO
+					.getValueFromDate(this.first, "weekday")) {
+				date = date.plusDays(1);
+			}
+			while (date.getDayOfWeek() != TemporalISO
+					.getValueFromDate(this.first, "weekday")) {
+				date = date.plusDays(1);
+			}
+			return TemporalJoda.convertLocalDateToISO(date);
+		} else {
+			throw new IllegalArgumentException(
+					"haven't implemented things other than"
+							+ " dates with months or days. Problem in TemporalNext's findNext()");
+		}
+	}
+
+	private TemporalISO timeOfDayAndWeekday() {
+		Map<String, Set<Integer>> tmpMap = weekdayNotMonth().getFullMapping();
+		tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
+		return new TemporalDate(tmpMap);
+	}
+	
+	private TemporalISO timeOfDay() {
+		LocalDate date = TemporalJoda.convertISOToLocalDate(second);
+		date = date.plusDays(1);
+		TemporalISO isoDate = TemporalJoda.convertLocalDateToISO(date);
+		Map<String, Set<Integer>> tmpMap = isoDate.getFullMapping();
+		tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
+		return new TemporalDate(tmpMap);
+	}
+
 	private TemporalISO season(){
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
 		tmpMap.put("year", addOne(second.getVal("year")));

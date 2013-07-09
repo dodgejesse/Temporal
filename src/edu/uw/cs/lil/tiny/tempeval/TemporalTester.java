@@ -21,7 +21,7 @@ public class TemporalTester {
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
 	private final boolean ONLYPRINTONEPHRASE = true;
-	private final String PHRASE = "afternoon";
+	private final String PHRASE = "evening";
 	private final IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> test;
 	//private final AbstractCKYParser<LogicalExpression> baseParser;
 	private final TemporalJointParser jointParser;

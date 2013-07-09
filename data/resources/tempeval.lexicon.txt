@@ -210,7 +210,6 @@ ago :- NP\NP : (lambda $0:d (previous:<d,<r,s>> (*:<d,<n,d>> $0 -1:n) ref_time:r
 
 
 // these are numbers, to be multiplied by durations
-three :- NP : 3:n
 
 // numbers, as in "one month".
 a :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 1:n))
