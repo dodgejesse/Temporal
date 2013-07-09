@@ -81,7 +81,7 @@ public class TempEval3Dev {
 		while (iter.hasNext()){
 			tmp.add(iter.next());
 			// for testing:
-			if (sentenceCount % Math.round(dataset.size() / numberOfPartitions)== 0){
+			if (sentenceCount % Math.round(dataset.size() / numberOfPartitions) == 0){
 				splitData.add(tmp);
 				tmp = new LinkedList<TemporalSentence>();
 				System.out.println();

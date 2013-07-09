@@ -10,15 +10,15 @@ public class TemporalDate extends TemporalISO{
 	public TemporalDate(Map<String, Set<Integer>> data) {
 		super(data);
 	}
-	
+
 	public TemporalDate(String s, int n){
 		super(s,n);
 	}
-	
+
 	public TemporalDate(String s){
 		super(s);
 	}
-	
+
 	public static TemporalDate readDocumentDate(String s){
 		Map<String, Set<Integer>> data = new HashMap<String, Set<Integer>>();
 		String[] dateInfo = s.split("-");
@@ -30,20 +30,23 @@ public class TemporalDate extends TemporalISO{
 		addToData("day",Integer.parseInt(dateInfo[2]), data);
 		return new TemporalDate(data);
 	}
-	
+
 	private static void addToData(String s, int n, Map<String, Set<Integer>> data){
 		data.put(s, new HashSet<Integer>());
 		data.get(s).add(n);
 	}
-	
+
 	public String getType(){
-		return "DATE";
+		if (getKeys().contains("timeOfDay"))
+			return "TIME";
+		else
+			return "DATE";
 	}
-	
+
 	public String getVal(){
 		return this.toString();
 	}
-	
+
 	public String toString(){
 		if (super.isConvexSet()){
 			return convexSetFormat();
@@ -65,7 +68,7 @@ public class TemporalDate extends TemporalISO{
 			return dateFormat();
 		}
 	}
-	
+
 	private String convexSetFormat(){
 		if (super.isSet("quarter"))
 			return "XXXX-QX";
@@ -78,11 +81,11 @@ public class TemporalDate extends TemporalISO{
 		else 
 			throw new IllegalArgumentException("printing of ISOs that are convex sets are not implemented for sets other than quarters, years and weeks.");
 	}
-	
+
 	private String quarterFormat(){
 		String s = "";
 		if (super.isSet("year"))
-				s = s + super.getValueFromDate(this, "year");
+			s = s + super.getValueFromDate(this, "year");
 		else 
 			s = s + "XXXX";
 		if (TemporalISO.getValueFromDate(this, "quarter") == 0)
@@ -93,7 +96,7 @@ public class TemporalDate extends TemporalISO{
 			return s + "-Q" + q;
 		}
 	}
-	
+
 	private String weekFormat(){
 		String s = "";
 		if (super.isSet("year"))
@@ -115,7 +118,7 @@ public class TemporalDate extends TemporalISO{
 			s = s + "-" + getIntValue("weekday");
 		return s;
 	}
-	
+
 	private String dateFormat(){
 		String s = "";
 		if (super.isSet("year")){
@@ -139,8 +142,8 @@ public class TemporalDate extends TemporalISO{
 		}
 		return s;
 	}
-	
-	
+
+
 	private String seasonFormat(){
 		String s = "";
 		if (super.isSet("year")){
@@ -159,16 +162,16 @@ public class TemporalDate extends TemporalISO{
 			s = s + "-FA";
 		else if (seasonNum == 4)
 			s = s + "-WI";
-		*/
+		 */
 		return s;
 	}
-	
+
 	private String timeOfDayFormat(){
 		String s = dateFormat();
 		int timeOfDayNum = getIntValue("timeOfDay");
 		return s + "T" + timesOfDay[timeOfDayNum];
 	}
-	
+
 	private int getIntValue(String key){
 		Set<Integer> tmpSet = super.getVal(key);
 		for (int i : tmpSet){

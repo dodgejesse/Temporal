@@ -167,7 +167,12 @@ autumn of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 autumn:s))
 winter of :- NP/NP : (lambda $0:s (intersect:<s*,s> $0 winter:s))
 
 // Times of the day!
+morning :- NP : morning:s
+mid-day :- NP : mid-day:s
+afternoon :- NP : afternoon:s
 evening :- NP : evening:s
+night :- NP : night:s
+daytime :- NP : daytime:s
 
 tomorrow :- NP : tomorrow:r
 today :- NP : today:r
