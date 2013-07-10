@@ -17,6 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class DataReader extends DefaultHandler {
+	final private static boolean DEBUG = false;
 	final private static String XML_DIR = "data/TempEval3/TBAQ-cleaned/TimeBank/";
 	private static String currentText;
 	private static String currentTimex;
@@ -28,35 +29,38 @@ public class DataReader extends DefaultHandler {
 	private static TemporalDocument currentDocument;
 
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-		List<TemporalDocument> docs = readDocuments(XML_DIR);
-		System.out.printf("%d documents read", docs.size());
+		List<NewTemporalSentence> dataset = readDocuments(XML_DIR);
+		System.out.printf("%d sentences read\n", dataset.size());
+		if (DEBUG)
+			for (NewTemporalSentence s : dataset)
+				System.out.println(s);
 	}
-	
-	public static List<TemporalDocument> readDocuments(String xmlDir) throws SAXException, IOException, ParserConfigurationException {
+
+	public static List<NewTemporalSentence> readDocuments(String xmlDir) throws SAXException, IOException, ParserConfigurationException {
 		SAXParserFactory spfac = SAXParserFactory.newInstance();
 		SAXParser sp = spfac.newSAXParser();
 
 		DataReader handler = new DataReader();
-		
-		LinkedList<TemporalDocument> documents = new LinkedList<TemporalDocument>();
-		
-		// Read in raw xml files
-		File folder = new File(xmlDir);
-		for(File f: folder.listFiles()) {
-			currentDocument = new TemporalDocument(xmlDir + f.getName());
-			sp.parse(currentDocument.getSource(), handler);
-			documents.add(currentDocument);
-		}
-		
-		// Only initialize pipeline for preprocessing once
+
+		List<NewTemporalSentence> dataset = new LinkedList<NewTemporalSentence>();
+
+		// Initialize pipeline for preprocessing
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		
-		for(TemporalDocument doc : documents)
-			doc.doPreprocessing(pipeline);
-		
-		return documents;
+
+		// Read in raw xml files
+		File folder = new File(xmlDir);
+		for(File f: folder.listFiles()) {
+			currentDocument = new TemporalDocument();
+			sp.parse(xmlDir + f.getName(), handler);
+			currentDocument.doPreprocessing(pipeline);
+			dataset.addAll(currentDocument.getSentences());
+			if (DEBUG)
+				break;
+		}
+
+		return dataset;
 	}
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -88,7 +92,7 @@ public class DataReader extends DefaultHandler {
 			currentDocID = "";
 		}
 	}
-	
+
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals("TIMEX3")) {
 			currentDocument.setTimexText(lastTimexID, currentTimex);

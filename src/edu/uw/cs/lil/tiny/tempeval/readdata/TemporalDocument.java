@@ -16,19 +16,14 @@ import edu.stanford.nlp.util.CoreMap;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDocument {
+	// Temporary class used before flattening all documents
 	private String docID;
-	private String src;
 	private String text; //raw text, do not use after preprocessing
 	private Map<Integer, Timex> timexes; // from tid to Timex. timexes[1] is reference time
-	private List<List<String>> tokens;
+	private List<NewTemporalSentence> sentences;
 
-	public TemporalDocument(String src) {
-		this.src = src;
+	public TemporalDocument() {
 		this.timexes = new LinkedHashMap<Integer, Timex>();
-	}
-
-	public String getSource() {
-		return src;
 	}
 
 	public void setText(String text) {
@@ -53,56 +48,46 @@ public class TemporalDocument {
 	}
 
 	public void setTimexText(int timexID, String text) {
-		timexes.get(timexID).text = text;
+		timexes.get(timexID).setText(text);
+	}
+	
+	public List<NewTemporalSentence> getSentences() {
+		return sentences;
 	}
 
 	public String toString() {
 		return text;
 	}
 
-	private class Timex {
-		public String type;
-		public String value;
-		public Timex anchor;
-		public int offset;
-
-		// Fill in afterwards
-		public String text;
-		public Pair<Integer, Integer> tokenIndex;
-
-		public Timex(String type, String value, Timex anchor, int offset) {
-			this.type = type;
-			this.value = value;
-			this.anchor = anchor;
-			this.offset = offset;
-		}
-	}
-
 	public void doPreprocessing(StanfordCoreNLP pipeline) {
 		Annotation a = new Annotation(text);
 		pipeline.annotate(a);
 
-		Map<Integer, Pair<Integer, Integer>> offsetToTokenIndex = new HashMap<Integer, Pair<Integer, Integer>>();
-
-		tokens = new LinkedList<List<String>>();
+		Map<Integer, Pair<NewTemporalSentence, Integer>> startCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
+		Map<Integer, Pair<NewTemporalSentence, Integer>> endCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
+		
+		sentences = new LinkedList<NewTemporalSentence>();
 
 		for(CoreMap sentence: a.get(SentencesAnnotation.class)) {
-			//System.out.printf("Sentence: '%s'\n", sentence);
-			List<String> newSentence = new LinkedList<String>();
+			NewTemporalSentence newSentence = new NewTemporalSentence(docID);
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				offsetToTokenIndex.put(token.beginPosition(), Pair.of(tokens.size(), newSentence.size()));
-				newSentence.add(token.get(TextAnnotation.class));
+				startCharIndexToTokenIndex.put(token.beginPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
+				endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
+				newSentence.insertToken(token.get(TextAnnotation.class));
 			}
-			//SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
+			sentences.add(newSentence);
 		}
 		for(Timex t : timexes.values()) {
-			if(t.offset != -1) {
-				if(offsetToTokenIndex.containsKey(t.offset)) {
-					t.tokenIndex = offsetToTokenIndex.get(t.offset);
-					//System.out.printf("Timex (%s) at %dth token\n", t.text, t.tokenIndex.second());
+			if(t.getStartChar() != -1) {
+				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {
+					Pair<NewTemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
+					Pair<NewTemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar());
+					t.setTokenRange(startIndexes.second(), endIndexes.second());
+					// Assume start and end occur in the same sentence
+					startIndexes.first().insertTimex(t);
 				}
 				else
-					System.out.printf("Unable to find offset for timex [#%d] (%s)\n", t.offset, t.text);
+					System.out.printf("Unable to find offset for timex [#%d - #%d] (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
 			}
 		}
 	}
