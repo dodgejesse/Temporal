@@ -12,11 +12,22 @@ import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.trees.EnglishGrammaticalStructure;
+import edu.stanford.nlp.trees.GrammaticalStructure;
+import edu.stanford.nlp.trees.GrammaticalStructureFactory;
+import edu.stanford.nlp.trees.PennTreebankLanguagePack;
+import edu.stanford.nlp.trees.SemanticHeadFinder;
+import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.util.Filters;
+import edu.uw.cs.lil.tiny.tempeval.DependencyParser;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDocument {
 	// Temporary class used before flattening all documents
+	// Necessary intermediate class since XML reader is event-driven
+
 	private String docID;
 	private String text; //raw text, do not use after preprocessing
 	private Map<Integer, Timex> timexes; // from tid to Timex. timexes[1] is reference time
@@ -50,7 +61,7 @@ public class TemporalDocument {
 	public void setTimexText(int timexID, String text) {
 		timexes.get(timexID).setText(text);
 	}
-	
+
 	public List<NewTemporalSentence> getSentences() {
 		return sentences;
 	}
@@ -59,13 +70,13 @@ public class TemporalDocument {
 		return text;
 	}
 
-	public void doPreprocessing(StanfordCoreNLP pipeline) {
+	public void doPreprocessing(StanfordCoreNLP pipeline, GrammaticalStructureFactory gsf) {
 		Annotation a = new Annotation(text);
 		pipeline.annotate(a);
 
 		Map<Integer, Pair<NewTemporalSentence, Integer>> startCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
 		Map<Integer, Pair<NewTemporalSentence, Integer>> endCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
-		
+
 		sentences = new LinkedList<NewTemporalSentence>();
 
 		for(CoreMap sentence: a.get(SentencesAnnotation.class)) {
@@ -75,8 +86,13 @@ public class TemporalDocument {
 				endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
 				newSentence.insertToken(token.get(TextAnnotation.class));
 			}
+			Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+			GrammaticalStructure gs = gsf.newGrammaticalStructure(tree);
+			String dp = EnglishGrammaticalStructure.dependenciesToString(gs, gs.typedDependencies(false), tree, true, false);
+			newSentence.saveDependencyParse(dp);
 			sentences.add(newSentence);
 		}
+		
 		for(Timex t : timexes.values()) {
 			if(t.getStartChar() != -1) {
 				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {

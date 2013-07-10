@@ -3,11 +3,13 @@ package edu.uw.cs.lil.tiny.tempeval.readdata;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NewTemporalSentence {
+public class NewTemporalSentence implements java.io.Serializable{
+	private static final long serialVersionUID = 2013931525176952047L;
 	private String docID;
-	private List<String> tokens;
-	private List<Timex> timexes;
-
+	private LinkedList<String> tokens;
+	private LinkedList<Timex> timexes;
+	private String dp; //dependency parse
+	
 	public NewTemporalSentence(String docID) {
 		this.docID = docID;
 		this.tokens = new LinkedList<String>();
@@ -42,5 +44,13 @@ public class NewTemporalSentence {
 			s += t + " ";
 		s += ")";
 		return s;
+	}
+	
+	public String getDependencyParse() {
+		return dp;
+	}
+
+	public void saveDependencyParse(String dp) {
+		this.dp = dp;
 	}
 }

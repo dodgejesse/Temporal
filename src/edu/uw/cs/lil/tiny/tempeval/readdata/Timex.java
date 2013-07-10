@@ -1,16 +1,15 @@
 package edu.uw.cs.lil.tiny.tempeval.readdata;
 
-import edu.uw.cs.utils.composites.Pair;
-
-
-public class Timex {
+public class Timex implements java.io.Serializable{
+	private static final long serialVersionUID = -5859852309847402300L;
 	private String type;
 	private String value;
 	private Timex anchor;
-	private Pair<Integer, Integer> tokenRange; //inclusive-exclusive
-
-	// Temporary character offset during preprocessing
-	private int offset;
+	private int tokenStart;
+	private int tokenEnd; //inclusive-exclusive
+	
+	// Temporary variables used during preprocessing
+	private int offset; //character offset
 	private String text;
 	
 	public Timex(String type, String value, Timex anchor, int offset) {
@@ -20,8 +19,9 @@ public class Timex {
 		this.offset = offset;
 	}
 	
-	public void setTokenRange(int start, int end) {
-		tokenRange = Pair.of(start, end - 1);
+	public void setTokenRange(int tokenStart, int tokenEnd) {
+		this.tokenStart = tokenStart;
+		this.tokenEnd = tokenEnd;
 	}
 	
 	public void setText(String text) {
@@ -41,6 +41,6 @@ public class Timex {
 	}
 	
 	public String toString() {
-		return "[" + tokenRange.first() + "-" + tokenRange.second() + "]";
+		return "[" + tokenStart + "-" + tokenEnd + "]";
 	}
 }

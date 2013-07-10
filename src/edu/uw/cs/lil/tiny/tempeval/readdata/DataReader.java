@@ -1,7 +1,12 @@
 package edu.uw.cs.lil.tiny.tempeval.readdata;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -15,52 +20,85 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.trees.GrammaticalStructure;
+import edu.stanford.nlp.trees.GrammaticalStructureFactory;
+import edu.stanford.nlp.trees.PennTreebankLanguagePack;
+import edu.stanford.nlp.trees.SemanticHeadFinder;
+import edu.stanford.nlp.util.Filters;
+import edu.uw.cs.lil.tiny.tempeval.DependencyParser;
 
 public class DataReader extends DefaultHandler {
-	final private static boolean DEBUG = false;
+	final private static int DEBUG = 2;
 	final private static String XML_DIR = "data/TempEval3/TBAQ-cleaned/TimeBank/";
-	private static String currentText;
-	private static String currentTimex;
-	private static String currentDocID;
-	private static int lastTimexID;
-	private static boolean isReadingText;
-	private static boolean isReadingTimex;
-	private static boolean isReadingDocID;
-	private static TemporalDocument currentDocument;
+	final private static String SERIALIZED_DIR = "data/new_serialized_data/";
+	private String currentText;
+	private String currentTimex;
+	private String currentDocID;
+	private int lastTimexID;
+	private boolean isReadingText;
+	private boolean isReadingTimex;
+	private boolean isReadingDocID;
+	private TemporalDocument currentDocument;
+	private StanfordCoreNLP pipeline;
+	private GrammaticalStructureFactory gsf;
+	private SAXParser sp;
 
-	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-		List<NewTemporalSentence> dataset = readDocuments(XML_DIR);
-		System.out.printf("%d sentences read\n", dataset.size());
-		if (DEBUG)
-			for (NewTemporalSentence s : dataset)
-				System.out.println(s);
+	public DataReader() throws ParserConfigurationException, SAXException{
+		// Initialize annotation pipeline for preprocessing
+		Properties props = new Properties();
+		props.put("annotators", "tokenize, ssplit, parse");
+		pipeline = new StanfordCoreNLP(props);
+		gsf = new PennTreebankLanguagePack().grammaticalStructureFactory(Filters.<String>acceptFilter(), new SemanticHeadFinder(false));
+
+		// Initialize xml parser
+		SAXParserFactory spfac = SAXParserFactory.newInstance();
+		sp = spfac.newSAXParser();
 	}
 
-	public static List<NewTemporalSentence> readDocuments(String xmlDir) throws SAXException, IOException, ParserConfigurationException {
-		SAXParserFactory spfac = SAXParserFactory.newInstance();
-		SAXParser sp = spfac.newSAXParser();
 
-		DataReader handler = new DataReader();
+	private void serializeDataset(LinkedList<NewTemporalSentence> dataset, String filename) throws IOException {
+		FileOutputStream fileOut = new FileOutputStream(filename);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(dataset);
+		out.close();
+		fileOut.close();
+	}
 
-		List<NewTemporalSentence> dataset = new LinkedList<NewTemporalSentence>();
-
-		// Initialize pipeline for preprocessing
-		Properties props = new Properties();
-		props.put("annotators", "tokenize, ssplit");
-		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-
-		// Read in raw xml files
-		File folder = new File(xmlDir);
-		for(File f: folder.listFiles()) {
-			currentDocument = new TemporalDocument();
-			sp.parse(xmlDir + f.getName(), handler);
-			currentDocument.doPreprocessing(pipeline);
-			dataset.addAll(currentDocument.getSentences());
-			if (DEBUG)
-				break;
-		}
-
+	private LinkedList<NewTemporalSentence> deserializeDataset(String filename) throws IOException, ClassNotFoundException {
+		FileInputStream fileIn = new FileInputStream(filename);
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		LinkedList<NewTemporalSentence>dataset = (LinkedList<NewTemporalSentence>) in.readObject();
+		in.close();
+		fileIn.close();
 		return dataset;
+	}
+
+	public List<NewTemporalSentence> getDataset(String xmlDirName, boolean forceSerialize) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		File xmlDir = new File(xmlDirName);
+		String datasetName = xmlDir.getName();
+		File serializedFile = new File(SERIALIZED_DIR + datasetName + ".ser");
+		if(forceSerialize || !serializedFile.exists()) {
+			System.out.println("Serialized data unavailable or forcing serialization.");
+			System.out.println("Reading and dependency parsing data...");
+			LinkedList<NewTemporalSentence> dataset = new LinkedList<NewTemporalSentence>();
+			File[] xmlFiles = xmlDir.listFiles();
+			System.out.printf("Reading %d files\n", xmlFiles.length);
+			for(File f: xmlFiles) {
+				System.out.println("Parsing " + f.getName());
+				currentDocument = new TemporalDocument();
+				sp.parse(xmlDirName + f.getName(), this);
+				currentDocument.doPreprocessing(pipeline, gsf);
+				dataset.addAll(currentDocument.getSentences());
+				if (DEBUG >= 1)
+					break;
+			}
+			serializeDataset(dataset, serializedFile.getPath());
+			return dataset;
+		}
+		else {
+			System.out.println("Serialized data found. Deserializing data...");
+			return deserializeDataset(serializedFile.getPath());
+		}
 	}
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -115,5 +153,15 @@ public class DataReader extends DefaultHandler {
 			currentTimex += new String(buffer, start, length);
 		if (isReadingDocID)
 			currentDocID += new String(buffer, start, length);
+	}
+
+	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+		long startTime = System.nanoTime();
+		List<NewTemporalSentence> dataset = new DataReader().getDataset(XML_DIR, false);
+		long endTime = System.nanoTime();
+		System.out.printf("%d sentences read (%.2f seconds)\n", dataset.size(), (endTime - startTime)*1.0e-9);
+		if (DEBUG >= 2)
+			for (NewTemporalSentence s : dataset)
+				System.out.println(s);
 	}
 }
