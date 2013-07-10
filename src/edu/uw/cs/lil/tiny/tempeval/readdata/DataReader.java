@@ -2,7 +2,6 @@ package edu.uw.cs.lil.tiny.tempeval.readdata;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,15 +19,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.trees.GrammaticalStructure;
 import edu.stanford.nlp.trees.GrammaticalStructureFactory;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.SemanticHeadFinder;
 import edu.stanford.nlp.util.Filters;
-import edu.uw.cs.lil.tiny.tempeval.DependencyParser;
 
 public class DataReader extends DefaultHandler {
-	final private static int DEBUG = 2;
+	final private static int DEBUG = 0;
 	final private static String XML_DIR = "data/TempEval3/TBAQ-cleaned/TimeBank/";
 	final private static String SERIALIZED_DIR = "data/new_serialized_data/";
 	private String currentText;
@@ -67,7 +64,7 @@ public class DataReader extends DefaultHandler {
 	private LinkedList<NewTemporalSentence> deserializeDataset(String filename) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = new FileInputStream(filename);
 		ObjectInputStream in = new ObjectInputStream(fileIn);
-		LinkedList<NewTemporalSentence>dataset = (LinkedList<NewTemporalSentence>) in.readObject();
+		LinkedList<NewTemporalSentence> dataset = (LinkedList<NewTemporalSentence>) in.readObject();
 		in.close();
 		fileIn.close();
 		return dataset;
@@ -84,7 +81,6 @@ public class DataReader extends DefaultHandler {
 			File[] xmlFiles = xmlDir.listFiles();
 			System.out.printf("Reading %d files\n", xmlFiles.length);
 			for(File f: xmlFiles) {
-				System.out.println("Parsing " + f.getName());
 				currentDocument = new TemporalDocument();
 				sp.parse(xmlDirName + f.getName(), this);
 				currentDocument.doPreprocessing(pipeline, gsf);
