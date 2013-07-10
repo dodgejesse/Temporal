@@ -32,10 +32,9 @@ String[], LogicalExpression, LogicalExpression>{
 
 	// mess with always having this feature vs only having it when the phrase is a temporal reference phrase
 	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, String[]>> dataItem) {
-		//if (isTempRefPhrase(dataItem.getSample().first()).length()>0){
+		//if (!isTempRefPhrase(dataItem.getSample().first()).equals("notTempRef")){//0){
 		//if (logic.toString().startsWith("(temporal_ref"))
 			feats.set(FEATURE_TAG + "temporal_ref" + getOuterPred(logic.toString()) + isTempRefPhrase(dataItem.getSample().first()) , 1);
-		
 		//}
 		return feats;
 	}

@@ -50,7 +50,7 @@ public class TemporalThread extends Thread {
 				//		new LogicalExpressionTypeFeatureSet<Sentence>())
 				.addJointFeatureSet(new TemporalContextFeatureSet())
 				.addJointFeatureSet(new TemporalReferenceFeatureSet())
-				.addJointFeatureSet(new TemporalTypeFeatureSet())
+				//.addJointFeatureSet(new TemporalTypeFeatureSet())
 				.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
 				.addLexicalFeatureSet(lexPhi)//.addLexicalFeatureSet(lexemeFeats)
 				//.addLexicalFeatureSet(templateFeats)
