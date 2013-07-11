@@ -1,7 +1,6 @@
 package edu.uw.cs.lil.tiny.tempeval.preprocessing;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +26,13 @@ public class TemporalDocument {
 	// Necessary intermediate class since XML reader is event-driven
 
 	private String docID;
-	private String text; //raw text, do not use after preprocessing
-	private Map<Integer, Timex> timexes; // from tid to Timex. timexes[1] is reference time
+	private String text;
+	private List<Timex> timexes;
 	private List<TemporalSentence> sentences;
-
+	private String referenceTime;
+	
 	public TemporalDocument() {
-		this.timexes = new LinkedHashMap<Integer, Timex>();
+		this.timexes = new LinkedList<Timex>();
 	}
 
 	public void setText(String text) {
@@ -47,17 +47,12 @@ public class TemporalDocument {
 		return docID;
 	}
 
-	public void insertTimex(int timexID, String type, String value, int anchorID, int offset) {
-		Timex anchor;
-		if (anchorID == -1)
-			anchor = null;
-		else
-			anchor = timexes.get(anchorID);
-		timexes.put(timexID, new Timex(type, value, anchor, offset));
+	public void insertTimex(String type, String value, int offset) {
+		timexes.add(new Timex(type, value, offset));
 	}
 
-	public void setTimexText(int timexID, String text) {
-		timexes.get(timexID).setText(text);
+	public void setLastTimexText(String text) {
+		timexes.get(timexes.size() - 1).setText(text);
 	}
 
 	public List<TemporalSentence> getSentences() {
@@ -78,7 +73,7 @@ public class TemporalDocument {
 		sentences = new LinkedList<TemporalSentence>();
 
 		for(CoreMap sentence: a.get(SentencesAnnotation.class)) {
-			TemporalSentence newSentence = new TemporalSentence(docID);
+			TemporalSentence newSentence = new TemporalSentence(docID, referenceTime);
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
 				startCharIndexToTokenIndex.put(token.beginPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
 				endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
@@ -91,7 +86,7 @@ public class TemporalDocument {
 			sentences.add(newSentence);
 		}
 
-		for(Timex t : timexes.values()) {
+		for(Timex t : timexes) {
 			if(t.getStartChar() != -1) {
 				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {
 					Pair<TemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
@@ -112,5 +107,12 @@ public class TemporalDocument {
 					System.out.printf("Unable to find offset for timex [#%d - #%d] (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
 			}
 		}
+	}
+
+	public void setReferenceTime(String referenceTime) {
+		this.referenceTime = referenceTime;
+	}
+	public String getReferenceTime() {
+		return referenceTime;
 	}
 }

@@ -177,13 +177,9 @@ public class TemporalJointParser extends
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon,
 			Integer beamSize) {
 
-		// is this phrase from the same document as the previous one?
-		boolean sameDocID = dataItem.getSample().second()[0].equals(dataItem
-				.getSample().second()[3]) && prevISO != null;
-
+		boolean hasPreviousObservation = dataItem.getSample().second()[4].equals("1") && prevISO != null;
 		Sentence phrase = dataItem.getSample().first();
-		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(
-				phrase, model);
+		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(phrase, model);
 		
 		final List<IParseResult<LogicalExpression>> CKYModelParses = pruneLogicWithLambdas(CKYParserOutput
 				.getBestParses());
@@ -197,27 +193,22 @@ public class TemporalJointParser extends
 		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
 		
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
-			
-			LogicalExpression[] labels = getArrayOfLabels(l.getY(), sameDocID);
+			LogicalExpression[] labels = getArrayOfLabels(l.getY(), !hasPreviousObservation);
 			for (int i = 0; i < labels.length; i++) {
-
-				
-				//boolean sameDocID = (prevISO == null || prevDocID.equals(docID));
-
 				// execute the logical form to get a final Pair<String, String>.
 				// score the logical form.
 				// create a TemporalExecResultWrapper class using the
 				// Pair<String, String> and the score.
 				// use that wrapper to create
-				String ref_time = dataItem.getSample().second()[2];
-				if (!sameDocID)
+				String referenceTime = dataItem.getSample().second()[1];
+				if (hasPreviousObservation)
 					prevISO = null;
 
 				// TODO: Unsolved mystery: the CKY parser gives different parses depending on the dataset, even if one is a subset of another.
 				//System.out.println("Executing the phrase: " + phrase);
 				//System.out.println("with logic: " + labels[i].toString());
 				//System.out.println("and lexical entries: " + l.getAllLexicalEntries());
-				TemporalISO tmp = TemporalVisitor.of(labels[i], ref_time,
+				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime,
 						prevISO);
 				
 				

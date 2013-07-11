@@ -4,7 +4,6 @@ public class Timex implements java.io.Serializable{
 	private static final long serialVersionUID = -5859852309847402300L;
 	private String type;
 	private String value;
-	private Timex anchor;
 	private int tokenStart;
 	private int tokenEnd; //inclusive-exclusive
 	
@@ -12,10 +11,9 @@ public class Timex implements java.io.Serializable{
 	private int offset; //character offset
 	private String text;
 	
-	public Timex(String type, String value, Timex anchor, int offset) {
+	public Timex(String type, String value, int offset) {
 		this.type = type;
 		this.value = value;
-		this.anchor = anchor;
 		this.offset = offset;
 	}
 	
@@ -48,10 +46,6 @@ public class Timex implements java.io.Serializable{
 		return tokenEnd;
 	}
 	
-	public Timex getAnchor() {
-		return anchor;
-	}
-	
 	public String getType() {
 		return type;
 	}
@@ -61,6 +55,10 @@ public class Timex implements java.io.Serializable{
 	}
 	
 	public String toString() {
+		return text + "(" + value + ")";
+	}
+	
+	public String prettyString() {
 		return "[" + tokenStart + "-" + tokenEnd + "]";
 	}
 }

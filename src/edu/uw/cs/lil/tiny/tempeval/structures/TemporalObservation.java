@@ -14,33 +14,36 @@ import edu.uw.cs.utils.composites.Pair;
  */
 
 public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>{
-	
 	private final String sentence;
 	private final Sentence phrase;
-	private final String refDate;
+	private final String referenceTime;
 	private final String type;
 	private final String val;
 	private final String dependencyParse;
+	private final int tokenIndex;
+	private boolean isFirstObservation;
 	
-	public TemporalObservation(Sentence p, String s, String r, String t, String v, String dp){
-		phrase = p;
-		sentence = s;
-		refDate = r;
-		type = t;
-		val = v;
-		dependencyParse = dp;
+	public TemporalObservation(Sentence phrase, String sentence, String referenceTime, String type, String val, String dependencyParse, int tokenIndex, boolean isFirstObservation){
+		this.phrase = phrase;
+		this.sentence = sentence;
+		this.referenceTime = referenceTime;
+		this.type = type;
+		this.val = val;
+		this.dependencyParse = dependencyParse;
+		this.isFirstObservation = isFirstObservation;
+		this.tokenIndex = tokenIndex;
 	}
 	
 	public TemporalObservation() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, 0, true);
 	}
 
 	public TemporalResult getLabel() {
 		return new TemporalResult(null, type, val, null, null, null);
 	}
 
-	public String getRefDate() {
-		return this.refDate;
+	public String getReferenceTime() {
+		return this.referenceTime;
 	}
 	
 	public String getSentence(){
@@ -56,7 +59,7 @@ public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, Stri
 	}
 
 	public Pair<Sentence, String[]> getSample() {
-		String[] s = {sentence, refDate, dependencyParse};
+		String[] s = {sentence, referenceTime, dependencyParse, "" + tokenIndex, isFirstObservation?"1":"0"};
 		return Pair.of(phrase, s);
 	}
 
@@ -67,17 +70,9 @@ public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, Stri
 	public String toString() {
 		String s = "phrase:            " + phrase.toString() + "\n";
 		s += "sentence:          " + sentence + "\n";
-		s += "ref_time:          " + refDate + "\n";
+		s += "refTime:          " + referenceTime + "\n";
 		s += "gold type:         " + type + "\n";
 		s += "gold val:          " + val;
-		//out.println("Lexical Entries:   " + lexicalEntries);
-		//out.println("Logic:             " + label);
-		//out.println("Average max feats: " + theta.printValues(averageMaxFeatureVector));
-		//out.println("Guess type:        " + guessType);
-		//out.println("Guess val:         " + guessVal);
-		//out.println("Correct type?      " + (correct == 0 || correct == 1));
-		//out.println("Correct val?       " + (correct == 0 || correct == 2));
-		//out.println("Correct logics:    " + correctLogicalForms);
 		return s;
 	}
 

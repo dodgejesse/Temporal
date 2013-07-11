@@ -38,7 +38,7 @@ String[], LogicalExpression, LogicalExpression>{
 		List<String> weekdays = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
 		for (String s : weekdays){
 			if (logic.toString().contains(s)){
-				TemporalDate ref_time = TemporalDate.readDocumentDate(dataItem.getSample().second()[2]);
+				TemporalDate ref_time = TemporalDate.readDocumentDate(dataItem.getSample().second()[1]);
 				if (weekdays.get((TemporalJoda.convertISOToLocalDate(ref_time).dayOfWeek().get())-1).equals(s))
 					feats.set(FEATURE_TAG + "sameDay_" + getOuterPred(logic.toString()), 1);
 				else

@@ -11,12 +11,14 @@ import edu.uw.cs.utils.composites.Pair;
 public class TemporalSentence implements java.io.Serializable{
 	private static final long serialVersionUID = 2013931525176952047L;
 	private String docID;
+	private String referenceTime;
 	private LinkedList<String> tokens;
 	private LinkedList<Timex> timexes;
 	private String dp; //dependency parse
 
-	public TemporalSentence(String docID) {
+	public TemporalSentence(String docID, String referenceTime) {
 		this.docID = docID;
+		this.referenceTime = referenceTime;
 		this.tokens = new LinkedList<String>();
 		this.timexes = new LinkedList<Timex>();
 	}
@@ -84,7 +86,7 @@ public class TemporalSentence implements java.io.Serializable{
 	public List<TemporalObservation> getObservations() {
 		List<TemporalObservation> observations = new LinkedList<TemporalObservation>();
 		for(Timex t : timexes) {
-			observations.add(new TemporalObservation(new Sentence(tokens), prettyString(), t.getAnchor().getValue(), t.getType(), t.getValue(), dp));
+			observations.add(new TemporalObservation(new Sentence(tokens), prettyString(), referenceTime, t.getType(), t.getValue(), dp, t.getStartToken(), observations.isEmpty()));
 		}
 		return observations;
 	}

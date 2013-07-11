@@ -1,28 +1,22 @@
 package edu.uw.cs.lil.tiny.tempeval.util;
 
-import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.PTBTokenizer;
 import edu.uw.cs.utils.composites.Pair;
 
 public class GovernerVerbPOSExtractor {
-	// @Param: a String[] that contains world knowledge about a given pharse, including the sentence, the dependency parse,
+	// @Param: a String[] that contains world knowledge about a given parse, including the sentence, the dependency parse,
 	// 		   and the character number that the phrase starts on.
 	public static Pair<String, String> getGovVerbTag(String[] dataItem) {
-		String depParse = dataItem[5];
-		int charNum = Integer.parseInt(dataItem[4]);
-		String sentence = dataItem[1];
+		String depParse = dataItem[2];
 		// tokenNum is the number of the starting token of the temporal phrase. starts at 0.
-		int tokenNum = getTokenNumFromCharNum(charNum, sentence);
+		int tokenIndex = Integer.parseInt(dataItem[3]);
 		
 		// split the dependency parse into a string[], splitting on new lines.
 		String[] depParseArray = depParse.split("\n");
-		Pair<String, String> verb = findVerb(depParseArray, tokenNum);
-				
+		Pair<String, String> verb = findVerb(depParseArray, tokenIndex);
+			
 		return verb;
 	}
 	
@@ -83,27 +77,4 @@ public class GovernerVerbPOSExtractor {
 			throw new IllegalArgumentException("Problem getting info from regexResult! Probably used on the dependency parse");
 		return val;
 	}
-
-	// @params: the character number of the first character of the starting word of the phrase I'm interseted in, and a string representing the sentence
-	// @result: returns the token number (after being tokenized by the stanford parser) of the word that the given charNum points to. 
-	private static int getTokenNumFromCharNum(int charNum, String sentence) {
-	    PTBTokenizer<CoreLabel> ptbt = new PTBTokenizer<CoreLabel>(new StringReader(sentence),
-	              new CoreLabelTokenFactory(), "");
-	    int tokenCounter = 0;
-	    // weirdest loop ever. Thanks chris manning.
-	    for (CoreLabel label ; ptbt.hasNext(); ){
-	    	label = ptbt.next();
-	    	if (Integer.parseInt(getCharOffsetEndAnnotationNum(label.toString())) > charNum)
-	    		break;
-	    	tokenCounter++;
-	    }
-	    return tokenCounter;
-	}
-	
-	// helper method for getTokenNumFromCharNum
-	private static String getCharOffsetEndAnnotationNum(String s){
-		String charOffset = regexResult(s, "CharacterOffsetEndAnnotation=[0-9]+");
-		return regexResult(charOffset, "[0-9]+");
-	}
-
 }

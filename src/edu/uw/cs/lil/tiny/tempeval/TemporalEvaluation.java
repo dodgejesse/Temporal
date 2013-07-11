@@ -49,6 +49,7 @@ public class TemporalEvaluation {
 	private static final boolean FORCE_SERIALIZATION = true;
 	private static final boolean CROSS_VALIDATION = false;
 	private static final int CV_FOLDS = 10;
+	private static final int PERCEPTRON_ITERATIONS = 1;
 	private ICategoryServices<LogicalExpression> categoryServices;
 	private ILexicon<LogicalExpression> fixed;
 	private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
@@ -68,7 +69,6 @@ public class TemporalEvaluation {
 
 
 	public static ILexicon<LogicalExpression> getFixedLexicon(ICategoryServices<LogicalExpression> categoryServices) {
-		// Init the lexicon
 		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
 		fixedInput.addEntriesFromFile(new File(RESOURCES_DIR
 				+ "tempeval.lexicon.txt"), new StubStringFilter(),
@@ -141,7 +141,7 @@ public class TemporalEvaluation {
 					if (i != j)
 						trainData.addSentences(partitions.get(j));
 
-				threads[i] = new TemporalEvaluationThread(trainData, testData, parser, fixed, lexPhi, i);
+				threads[i] = new TemporalEvaluationThread(trainData, testData, parser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i);
 				threads[i].start();
 			}
 			for (int i = 0; i < threads.length; i++){
@@ -153,7 +153,8 @@ public class TemporalEvaluation {
 				}
 			}
 		} else {
-			new TemporalEvaluationThread(dataset, dataset, parser, fixed, lexPhi, -1).run();
+			// Train and test on the same dataset for debugging
+			new TemporalEvaluationThread(dataset, dataset, parser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1).run();
 		}
 		System.out.println("Done");
 	}

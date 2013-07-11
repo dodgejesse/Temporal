@@ -105,14 +105,11 @@ public class TemporalTester {
 		// To extract all of the information from the mention.
 		// The key to know how to unpack this is in TemporalSentence.java.
 		Sentence phrase = dataItem.getSample().first();
-		String docID = dataItem.getSample().second()[0];
-		String sentence = dataItem.getSample().second()[1];
-		String ref_time = dataItem.getSample().second()[2];
-		String prevDocID = dataItem.getSample().second()[3];
+		String sentence = dataItem.getSample().second()[0];
+		String ref_time = dataItem.getSample().second()[1];
+		String depParse = dataItem.getSample().second()[2];
 		String goldType = dataItem.getLabel().type;
 		String goldVal = dataItem.getLabel().val;
-		String charNum = dataItem.getSample().second()[4];
-		String depParse = dataItem.getSample().second()[5];
 		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
 		String govVerbPOS = govVerbPOSWithMod.second();
 		String mod = govVerbPOSWithMod.first();
@@ -157,7 +154,7 @@ public class TemporalTester {
 		} else { // zero parses
 			output = 4;
 		}
-		printing(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output, charNum, 
+		printing(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output,  
 				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta);
 		return output;
 	}
@@ -239,7 +236,7 @@ public class TemporalTester {
 	// args: output is the output of the system
 	private void printing(LogicalExpression label, String goldType, String goldVal,
 			String guessType, String guessVal, String phrase, String ref_time,
-			int correct, String charNum, String depParse, String govVerbPOS, String sentence, String mod, 
+			int correct, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
 		
 		//boolean c = (correct == 0);

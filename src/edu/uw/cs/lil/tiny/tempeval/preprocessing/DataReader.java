@@ -25,7 +25,6 @@ public class DataReader extends DefaultHandler {
 	private String currentText;
 	private String currentTimex;
 	private String currentDocID;
-	private int lastTimexID;
 	private boolean isReadingText;
 	private boolean isReadingTimex;
 	private boolean isReadingDocID;
@@ -36,7 +35,7 @@ public class DataReader extends DefaultHandler {
 
 	public DataReader(){
 	}
-	
+
 	private void initLibraries() throws ParserConfigurationException, SAXException {
 		// Initialize annotation pipeline for preprocessing
 		Properties props = new Properties();
@@ -62,9 +61,9 @@ public class DataReader extends DefaultHandler {
 				System.out.println("Forcing serialization.");
 			else
 				System.out.println("Serialized data unavailable.");
-			
+
 			initLibraries();
-			
+
 			System.out.println("Reading and dependency parsing data...");
 
 			long startTime = System.nanoTime();
@@ -99,22 +98,21 @@ public class DataReader extends DefaultHandler {
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (qName.equals("TIMEX3")) {
-			int id = Integer.parseInt(attributes.getValue("tid").substring(1));
-			String type = attributes.getValue("type");
 			String value = attributes.getValue("value");
-			int anchor;
-			if (attributes.getIndex("anchorTimeID") == -1)
-				anchor = -1;
-			else
-				anchor = Integer.parseInt(attributes.getValue("anchorTimeID").substring(1));
-			int offset;
-			if (isReadingText)
-				offset = currentText.length();
-			else
-				offset = -1;
-			lastTimexID = id;
-			currentDocument.insertTimex(id, type, value, anchor, offset);
-			isReadingTimex = true;
+
+			if (attributes.getValue("tid").equals("t0"))
+				currentDocument.setReferenceTime(value);
+			else {
+				String type = attributes.getValue("type");
+				int offset;
+				if (isReadingText)
+					offset = currentText.length();
+				else
+					offset = -1;
+
+				currentDocument.insertTimex(type, value, offset);
+				isReadingTimex = true;
+			}
 			currentTimex = "";
 		}
 		else if (qName.equals("TEXT")) {
@@ -128,8 +126,8 @@ public class DataReader extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		if (qName.equals("TIMEX3")) {
-			currentDocument.setTimexText(lastTimexID, currentTimex);
+		if (isReadingTimex && qName.equals("TIMEX3")) {
+			currentDocument.setLastTimexText(currentTimex);
 			isReadingTimex = false;
 		}
 		else if (qName.equals("TEXT")) {
