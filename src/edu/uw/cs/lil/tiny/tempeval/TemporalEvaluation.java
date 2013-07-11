@@ -41,7 +41,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 public class TemporalEvaluation {
-	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/TimeBank/";
+	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
+	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
 	private static final String RESOURCES_DIR = "data/resources/";
 
 	private static final boolean FORCE_SERIALIZATION = true;
@@ -53,7 +54,7 @@ public class TemporalEvaluation {
 	private AbstractCKYParser<LogicalExpression> parser;
 	private TemporalDataset dataset;
 
-	public TemporalEvaluation(String datasetDirectory) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+	public TemporalEvaluation(String datasetDirectory, String[] datasets) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
 		LogicLanguageServices.setInstance(new LogicLanguageServices.Builder(
 				new TypeRepository(new File(RESOURCES_DIR + "tempeval.types.txt"))).setNumeralTypeName("i")
 				.setTypeComparator(new FlexibleTypeComparator()).build());
@@ -61,7 +62,7 @@ public class TemporalEvaluation {
 		fixed = getFixedLexicon(categoryServices);
 		lexPhi = getLexPhi(categoryServices);
 		parser = getParser(categoryServices);
-		dataset = new DataReader().getDataset(datasetDirectory, FORCE_SERIALIZATION);
+		dataset = new DataReader().getDataset(datasetDirectory, datasets, FORCE_SERIALIZATION);
 	}
 
 
@@ -157,6 +158,6 @@ public class TemporalEvaluation {
 		System.out.println("Done");
 	}
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		new TemporalEvaluation(DATASET_DIR).evaluate();
+		new TemporalEvaluation(DATASET_DIR, DATASETS).evaluate();
 	}
 }

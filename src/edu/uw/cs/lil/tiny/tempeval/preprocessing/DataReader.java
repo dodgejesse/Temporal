@@ -46,10 +46,14 @@ public class DataReader extends DefaultHandler {
 		sp = spfac.newSAXParser();
 	}
 
-	public TemporalDataset getDataset(String xmlDirName, boolean forceSerialize) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		File xmlDir = new File(xmlDirName);
-		String datasetName = xmlDir.getName();
-		File serializedFile = new File(SERIALIZED_DIR + datasetName + ".ser");
+	public TemporalDataset getDataset(String datasetRoot, String[] datasetNames, boolean forceSerialize) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		String serializedName = "";
+		for(String s : datasetNames) {
+			if (serializedName.length() > 0)
+				serializedName += "_";
+			serializedName += s;
+		}
+		File serializedFile = new File(SERIALIZED_DIR + serializedName + ".ser");
 		if(forceSerialize || !serializedFile.exists()) {
 			if (forceSerialize)			
 				System.out.println("Forcing serialization.");
@@ -60,13 +64,20 @@ public class DataReader extends DefaultHandler {
 			long startTime = System.nanoTime();
 
 			TemporalDataset dataset = new TemporalDataset();
-			File[] xmlFiles = xmlDir.listFiles();
-			System.out.printf("Reading %d files\n", xmlFiles.length);
-			for(File f: xmlFiles) {
-				currentDocument = new TemporalDocument();
-				sp.parse(xmlDirName + f.getName(), this);
-				currentDocument.doPreprocessing(pipeline, gsf);
-				dataset.addSentences(currentDocument.getSentences());
+
+			for(String datasetName : datasetNames) {
+				File xmlDir = new File(datasetRoot + datasetName);
+				File[] xmlFiles = xmlDir.listFiles();
+				System.out.printf("Reading %d files from %s\n", xmlFiles.length, datasetName);
+				int count = 0;
+				for(File f: xmlFiles) {
+					count ++;
+					System.out.printf("[%d/%d] Parsing %s\n", count, xmlFiles.length, f.getName());
+					currentDocument = new TemporalDocument();
+					sp.parse(xmlDir.getPath() + "/" + f.getName(), this);
+					currentDocument.doPreprocessing(pipeline, gsf);
+					dataset.addSentences(currentDocument.getSentences());
+				}
 			}
 			dataset.serialize(serializedFile.getPath());
 
@@ -135,7 +146,8 @@ public class DataReader extends DefaultHandler {
 	}
 
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/TimeBank/", true);
+		String[] datasets = {"AQUAINT", "Timebank"};
+		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
 		for (NewTemporalSentence s : dataset) {
 			if (s.getNumMentions() < 0)
 				System.out.println(s);
