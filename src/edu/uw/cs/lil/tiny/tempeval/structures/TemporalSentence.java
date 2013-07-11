@@ -8,14 +8,14 @@ import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
 
-public class NewTemporalSentence implements java.io.Serializable, IDataItem<Pair<Sentence, String[]>> {
+public class TemporalSentence implements java.io.Serializable, IDataItem<Pair<Sentence, String[]>> {
 	private static final long serialVersionUID = 2013931525176952047L;
 	private String docID;
 	private LinkedList<String> tokens;
 	private LinkedList<Timex> timexes;
 	private String dp; //dependency parse
 
-	public NewTemporalSentence(String docID) {
+	public TemporalSentence(String docID) {
 		this.docID = docID;
 		this.tokens = new LinkedList<String>();
 		this.timexes = new LinkedList<Timex>();

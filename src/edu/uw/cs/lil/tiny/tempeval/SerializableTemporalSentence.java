@@ -1,7 +1,7 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
-import edu.uw.cs.lil.tiny.tempeval.structures.GoldSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
 
 public class SerializableTemporalSentence implements java.io.Serializable {
 	private static final long serialVersionUID = 352404484131899126L;
@@ -13,14 +13,14 @@ public class SerializableTemporalSentence implements java.io.Serializable {
 	private final String[] worldInfo;
 	private final String phrase;
 	
-	public SerializableTemporalSentence(GoldSentence ts){
+	public SerializableTemporalSentence(TemporalObservation ts){
 		type = ts.getLabel().type;
 		val = ts.getLabel().val;
 		worldInfo = ts.getSample().second();
 		phrase = ts.getSample().first().getString();
 	}
 	
-	public GoldSentence makeTemporalSentence(){
+	public TemporalObservation makeTemporalSentence(){
 
 // 		order of params: 
 //		docID = d;
@@ -33,7 +33,7 @@ public class SerializableTemporalSentence implements java.io.Serializable {
 //		prevDocID = prev;
 //		dependencyParse = dp;
 
-		return new GoldSentence(new Sentence(phrase), worldInfo[0], worldInfo[1], worldInfo[4], worldInfo[2], type, val, worldInfo[3], worldInfo[5]);
+		return new TemporalObservation(new Sentence(phrase), worldInfo[0], worldInfo[1], worldInfo[4], worldInfo[2], type, val, worldInfo[3], worldInfo[5]);
 	}
 
 }

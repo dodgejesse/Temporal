@@ -27,7 +27,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
 import edu.uw.cs.lil.tiny.tempeval.preprocessing.DataReader;
-import edu.uw.cs.lil.tiny.tempeval.structures.NewTemporalSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import java.io.File;
@@ -132,7 +132,7 @@ public class TemporalEvaluation {
 	public void evaluate() {
 		System.out.printf("Evaluating %d sentences...\n", dataset.size());
 		if (CROSS_VALIDATION){
-			List<List<NewTemporalSentence>> partitions = dataset.partition(CV_FOLDS);
+			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluationThread[] threads = new TemporalEvaluationThread[partitions.size()];
 			for (int i = 0; i < partitions.size(); i++){
 				TemporalDataset trainData = new TemporalDataset();

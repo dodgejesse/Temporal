@@ -17,7 +17,7 @@ import edu.stanford.nlp.trees.GrammaticalStructureFactory;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.SemanticHeadFinder;
 import edu.stanford.nlp.util.Filters;
-import edu.uw.cs.lil.tiny.tempeval.structures.NewTemporalSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 
 public class DataReader extends DefaultHandler {
@@ -149,7 +149,7 @@ public class DataReader extends DefaultHandler {
 		//String[] datasets = {"AQUAINT", "Timebank"};
 		String[] datasets = {"debug_dataset"};
 		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
-		for (NewTemporalSentence s : dataset) {
+		for (TemporalSentence s : dataset) {
 			if (s.getTimexes().size() < 0)
 				System.out.println(s);
 		}

@@ -1,7 +1,7 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import java.util.*;
-import edu.uw.cs.lil.tiny.tempeval.structures.GoldSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
 
 
 public class SerializableTemporalDataset implements java.io.Serializable {
@@ -10,13 +10,13 @@ public class SerializableTemporalDataset implements java.io.Serializable {
 	
 	public SerializableTemporalDataset(TemporalSentenceDataset tsd){
 		data = new LinkedList<SerializableTemporalSentence>();
-		for (GoldSentence ts : tsd){
+		for (TemporalObservation ts : tsd){
 			data.add(new SerializableTemporalSentence(ts));
 		}
 	}
 	
 	public TemporalSentenceDataset makeTemporalSentenceDataset(){
-		List<GoldSentence> newData = new LinkedList<GoldSentence>();
+		List<TemporalObservation> newData = new LinkedList<TemporalObservation>();
 		for ( SerializableTemporalSentence sts : data){
 			newData.add(sts.makeTemporalSentence());
 		}

@@ -13,7 +13,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
-import edu.uw.cs.lil.tiny.tempeval.structures.NewTemporalSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.Timex;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtilities;
@@ -112,7 +112,7 @@ public class TemporalEvaluationThread extends Thread {
 		int numCorrectMentions = 0;
 
 		int sentenceCount = 0;
-		for (NewTemporalSentence ts : testData) {
+		for (TemporalSentence ts : testData) {
 			sentenceCount++;
 			if (sentenceCount % 100 == 0)
 				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, testData.size());

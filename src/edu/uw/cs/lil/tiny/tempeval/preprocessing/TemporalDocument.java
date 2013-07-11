@@ -18,7 +18,7 @@ import edu.stanford.nlp.trees.GrammaticalStructureFactory;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
-import edu.uw.cs.lil.tiny.tempeval.structures.NewTemporalSentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.Timex;
 import edu.uw.cs.utils.composites.Pair;
 
@@ -29,7 +29,7 @@ public class TemporalDocument {
 	private String docID;
 	private String text; //raw text, do not use after preprocessing
 	private Map<Integer, Timex> timexes; // from tid to Timex. timexes[1] is reference time
-	private List<NewTemporalSentence> sentences;
+	private List<TemporalSentence> sentences;
 
 	public TemporalDocument() {
 		this.timexes = new LinkedHashMap<Integer, Timex>();
@@ -60,7 +60,7 @@ public class TemporalDocument {
 		timexes.get(timexID).setText(text);
 	}
 
-	public List<NewTemporalSentence> getSentences() {
+	public List<TemporalSentence> getSentences() {
 		return sentences;
 	}
 
@@ -72,13 +72,13 @@ public class TemporalDocument {
 		Annotation a = new Annotation(text);
 		pipeline.annotate(a);
 
-		Map<Integer, Pair<NewTemporalSentence, Integer>> startCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
-		Map<Integer, Pair<NewTemporalSentence, Integer>> endCharIndexToTokenIndex = new HashMap<Integer, Pair<NewTemporalSentence, Integer>>();
+		Map<Integer, Pair<TemporalSentence, Integer>> startCharIndexToTokenIndex = new HashMap<Integer, Pair<TemporalSentence, Integer>>();
+		Map<Integer, Pair<TemporalSentence, Integer>> endCharIndexToTokenIndex = new HashMap<Integer, Pair<TemporalSentence, Integer>>();
 
-		sentences = new LinkedList<NewTemporalSentence>();
+		sentences = new LinkedList<TemporalSentence>();
 
 		for(CoreMap sentence: a.get(SentencesAnnotation.class)) {
-			NewTemporalSentence newSentence = new NewTemporalSentence(docID);
+			TemporalSentence newSentence = new TemporalSentence(docID);
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
 				startCharIndexToTokenIndex.put(token.beginPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
 				endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
@@ -94,16 +94,16 @@ public class TemporalDocument {
 		for(Timex t : timexes.values()) {
 			if(t.getStartChar() != -1) {
 				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {
-					Pair<NewTemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
-					Pair<NewTemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar());
+					Pair<TemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
+					Pair<TemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar());
 					t.setTokenRange(startIndexes.second(), endIndexes.second());
 					// Assume start and end occur in the same sentence
 					startIndexes.first().insertTimex(t);
 				}
 				else if (endCharIndexToTokenIndex.containsKey(t.getEndChar() + 1)) {
 					// Hack to accommodate mistakes in annotation where "10 p.m", rather than "10 p.m." is labeled as the mention
-					Pair<NewTemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
-					Pair<NewTemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar() + 1);
+					Pair<TemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
+					Pair<TemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar() + 1);
 					t.setTokenRange(startIndexes.second(), endIndexes.second());
 					// Assume start and end occur in the same sentence
 					startIndexes.first().insertTimex(t);

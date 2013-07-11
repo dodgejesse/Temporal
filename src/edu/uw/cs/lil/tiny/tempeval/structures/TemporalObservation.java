@@ -13,7 +13,7 @@ import edu.uw.cs.utils.composites.Pair;
  * 
  */
 
-public class GoldSentence implements
+public class TemporalObservation implements
 		ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>{
 	/**
 	 * 
@@ -30,7 +30,7 @@ public class GoldSentence implements
 
 	
 	// This previous isn't actually being used! Could take it out. Will need to change temporalSentenceDataset.
-	public GoldSentence(String d, String s, String c, Sentence p, String r, String t, String v, GoldSentence prev, String dp) {
+	public TemporalObservation(String d, String s, String c, Sentence p, String r, String t, String v, TemporalObservation prev, String dp) {
 		docID = d;
 		sentence = s;
 		charNum = c;
@@ -45,7 +45,7 @@ public class GoldSentence implements
 		dependencyParse = dp;
 	}
 	
-	public GoldSentence( Sentence p, String d, String s, String c, String r, String t, String v, String prev, String dp){
+	public TemporalObservation( Sentence p, String d, String s, String c, String r, String t, String v, String prev, String dp){
 		docID = d;
 		sentence = s;
 		charNum = c;

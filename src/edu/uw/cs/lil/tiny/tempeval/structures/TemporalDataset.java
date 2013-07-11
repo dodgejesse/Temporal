@@ -12,19 +12,19 @@ import java.util.List;
 
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 
-public class TemporalDataset implements IDataCollection<NewTemporalSentence>, java.io.Serializable{
-	LinkedList<NewTemporalSentence> sentences;
+public class TemporalDataset implements IDataCollection<TemporalSentence>, java.io.Serializable{
+	LinkedList<TemporalSentence> sentences;
 	private static final long serialVersionUID = -9138434230690313768L;
 
 	public TemporalDataset() {
-		sentences = new LinkedList<NewTemporalSentence>();
+		sentences = new LinkedList<TemporalSentence>();
 	}
 	
-	public TemporalDataset(List<NewTemporalSentence> sentences) {
-		this.sentences = new LinkedList<NewTemporalSentence>(sentences);
+	public TemporalDataset(List<TemporalSentence> sentences) {
+		this.sentences = new LinkedList<TemporalSentence>(sentences);
 	}
 
-	public Iterator<NewTemporalSentence> iterator() {
+	public Iterator<TemporalSentence> iterator() {
 		return sentences.iterator();
 	}
 
@@ -32,7 +32,7 @@ public class TemporalDataset implements IDataCollection<NewTemporalSentence>, ja
 		return sentences.size();
 	}
 
-	public void addSentences(List<NewTemporalSentence> newSentences) {
+	public void addSentences(List<TemporalSentence> newSentences) {
 		sentences.addAll(newSentences);
 	}
 
@@ -53,12 +53,12 @@ public class TemporalDataset implements IDataCollection<NewTemporalSentence>, ja
 		return dataset;
 	}
 
-	public List<List<NewTemporalSentence>> partition(int k) {
-		List<List<NewTemporalSentence>> partitions = new ArrayList<List<NewTemporalSentence>>(k);
+	public List<List<TemporalSentence>> partition(int k) {
+		List<List<TemporalSentence>> partitions = new ArrayList<List<TemporalSentence>>(k);
 		for(int i = 0 ; i < k ; i++)
-			partitions.add(new LinkedList<NewTemporalSentence>());
+			partitions.add(new LinkedList<TemporalSentence>());
 		int count = 0;
-		for (NewTemporalSentence s : this)
+		for (TemporalSentence s : this)
 			partitions.get(count % k).add(s);
 		return partitions;
 	}
