@@ -46,7 +46,7 @@ public class TemporalEvaluation {
 	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
 	//final private static String[] DATASETS =  {"debug_dataset"};
 
-	private static final boolean FORCE_SERIALIZATION = true;
+	private static final boolean FORCE_SERIALIZATION = false;
 	private static final boolean CROSS_VALIDATION = false;
 	private static final int CV_FOLDS = 10;
 	private static final int PERCEPTRON_ITERATIONS = 1;

@@ -2,7 +2,7 @@ package edu.uw.cs.lil.tiny.tempeval.structures;
 
 public class TemporalMention implements java.io.Serializable{
 	private static final long serialVersionUID = -5859852309847402300L;
-	private static final boolean STRICT_MATCHING = false;
+	private static final boolean STRICT_MATCHING = true;
 	private String type;
 	private String value;
 	private int tokenStart;
@@ -63,7 +63,7 @@ public class TemporalMention implements java.io.Serializable{
 	}
 
 	public String toString() {
-		return text + "(" + value + ")";
+		return text + (value == null ? "" : "(" + value + ")");
 	}
 
 	public String prettyString() {

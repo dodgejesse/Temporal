@@ -19,6 +19,7 @@ import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTester {
+	private final boolean PRINTRESULTS = false;
 	private final boolean ONLYPRINTINCORRECT = false;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
@@ -173,9 +174,9 @@ public class TemporalTester {
 			String guessType, String guessVal, String phrase, String ref_time,
 			int correct, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
-		
-		if (!ONLYPRINTONEPHRASE
-				|| (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
+		if(!PRINTRESULTS)
+			return;
+		if (!ONLYPRINTONEPHRASE || (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
 			if (correct >= -1 && correct <= 2) {
 				if ((ONLYPRINTINCORRECT && (correct == -1)) 
 						|| !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
