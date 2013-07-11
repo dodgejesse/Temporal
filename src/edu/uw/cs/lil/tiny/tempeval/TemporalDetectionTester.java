@@ -74,7 +74,7 @@ public class TemporalDetectionTester {
 		List<TemporalMention> correctMentions = new LinkedList<TemporalMention>();
 		for (TemporalMention gm : goldMentions) {
 			for (TemporalMention pm : predictedMentions) {
-				if (gm.overlapsWith(pm)) {
+				if (gm.matches(pm)) {
 					// Fill in gold information from gold mention for evaluation
 					pm.mergeWith(gm);
 					correctMentions.add(pm);
@@ -89,7 +89,7 @@ public class TemporalDetectionTester {
 		List<TemporalMention> falseNegatives = new LinkedList<TemporalMention>(goldMentions);
 		for (TemporalMention gm : goldMentions) {
 			for(TemporalMention cm : correctMentions) {
-				if (gm.overlapsWith(cm))
+				if (gm.matches(cm))
 					falseNegatives.remove(gm);
 			}
 		}
@@ -100,7 +100,7 @@ public class TemporalDetectionTester {
 		List<TemporalMention> falsePositives = new LinkedList<TemporalMention>(predictedMentions);
 		for (TemporalMention pm : predictedMentions) {
 			for(TemporalMention cm : correctMentions) {
-				if (pm.overlapsWith(cm))
+				if (pm.matches(cm))
 					falsePositives.remove(pm);
 			}
 		}

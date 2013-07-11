@@ -21,7 +21,7 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 
 public class TemporalReader extends DefaultHandler {
-	final private static String SERIALIZED_DIR = "data/new_serialized_data/";
+	final private static String SERIALIZED_DIR = "data/serialized_data/";
 	private String currentText;
 	private String currentMention;
 	private String currentDocID;
