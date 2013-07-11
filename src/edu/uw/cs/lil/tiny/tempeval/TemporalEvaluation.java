@@ -26,7 +26,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
-import edu.uw.cs.lil.tiny.tempeval.preprocessing.DataReader;
+import edu.uw.cs.lil.tiny.tempeval.preprocessing.TemporalReader;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
@@ -43,8 +43,8 @@ import org.xml.sax.SAXException;
 public class TemporalEvaluation {
 	private static final String RESOURCES_DIR = "data/resources/";
 	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	final private static String[] DATASETS =  {"debug_dataset"};
+	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//final private static String[] DATASETS =  {"debug_dataset"};
 
 	private static final boolean FORCE_SERIALIZATION = true;
 	private static final boolean CROSS_VALIDATION = false;
@@ -64,7 +64,7 @@ public class TemporalEvaluation {
 		fixed = getFixedLexicon(categoryServices);
 		lexPhi = getLexPhi(categoryServices);
 		jointParser = new TemporalJointParser(getParser(categoryServices));
-		dataset = new DataReader().getDataset(datasetDirectory, datasets, FORCE_SERIALIZATION);
+		dataset = new TemporalReader().getDataset(datasetDirectory, datasets, FORCE_SERIALIZATION);
 	}
 
 

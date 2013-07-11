@@ -20,7 +20,7 @@ import edu.stanford.nlp.util.Filters;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 
-public class DataReader extends DefaultHandler {
+public class TemporalReader extends DefaultHandler {
 	final private static String SERIALIZED_DIR = "data/new_serialized_data/";
 	private String currentText;
 	private String currentMention;
@@ -33,7 +33,7 @@ public class DataReader extends DefaultHandler {
 	private GrammaticalStructureFactory gsf;
 	private SAXParser sp;
 
-	public DataReader(){
+	public TemporalReader(){
 	}
 
 	private void initLibraries() throws ParserConfigurationException, SAXException {
@@ -152,7 +152,7 @@ public class DataReader extends DefaultHandler {
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
 		//String[] datasets = {"AQUAINT", "Timebank"};
 		String[] datasets = {"debug_dataset"};
-		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
+		TemporalDataset dataset = new TemporalReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
 		for (TemporalSentence s : dataset) {
 			if (s.getMentions().size() < 0)
 				System.out.println(s);
