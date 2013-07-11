@@ -52,6 +52,14 @@ public class Timex implements java.io.Serializable{
 		return anchor;
 	}
 	
+	public String getType() {
+		return type;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	
 	public String toString() {
 		return "[" + tokenStart + "-" + tokenEnd + "]";
 	}

@@ -13,48 +13,26 @@ import edu.uw.cs.utils.composites.Pair;
  * 
  */
 
-public class TemporalObservation implements
-		ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>{
-	/**
-	 * 
-	 */
-	private final String docID;
+public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>{
+	
 	private final String sentence;
-	private final String charNum;
 	private final Sentence phrase;
 	private final String refDate;
 	private final String type;
 	private final String val;
-	private final String prevDocID;
 	private final String dependencyParse;
-
 	
-	// This previous isn't actually being used! Could take it out. Will need to change temporalSentenceDataset.
-	public TemporalObservation(String d, String s, String c, Sentence p, String r, String t, String v, TemporalObservation prev, String dp) {
-		docID = d;
-		sentence = s;
-		charNum = c;
+	public TemporalObservation(Sentence p, String s, String r, String t, String v, String dp){
 		phrase = p;
+		sentence = s;
 		refDate = r;
 		type = t;
 		val = v;
-		if (prev != null)
-			prevDocID = prev.getSample().second()[0];
-		else
-			prevDocID = "";
 		dependencyParse = dp;
 	}
 	
-	public TemporalObservation( Sentence p, String d, String s, String c, String r, String t, String v, String prev, String dp){
-		docID = d;
-		sentence = s;
-		charNum = c;
-		phrase = p;
-		refDate = r;
-		type = t;
-		val = v;
-		prevDocID = prev;
-		dependencyParse = dp;
+	public TemporalObservation() {
+		this(null, null, null, null, null, null);
 	}
 
 	public TemporalResult getLabel() {
@@ -78,36 +56,19 @@ public class TemporalObservation implements
 	}
 
 	public Pair<Sentence, String[]> getSample() {
-		String[] s = {docID, sentence, refDate, prevDocID, charNum, dependencyParse};
+		String[] s = {sentence, refDate, dependencyParse};
 		return Pair.of(phrase, s);
 	}
-
-	/*
-	public boolean prune(LogicalExpression y) {
-		final Map<LogicalConstant, Counter> currentPredCounts = GetPredicateCounts
-				.of(y);
-		for (final Map.Entry<LogicalConstant, Counter> entry : predCounts
-				.entrySet()) {
-			if (currentPredCounts.containsKey(entry.getKey())
-					&& currentPredCounts.get(entry.getKey()).value() > entry
-							.getValue().value()) {
-				// Prune because of too many predicates
-				return true;
-			}
-		}
-		return false;
-	}
-	*/
 
 	public double quality() {
 		return 1.0D;
 	}
 
 	public String toString() {
-		String s = "Phrase:            " + phrase.toString() + "\n";
-		s += "Sentence:          " + sentence + "\n";
+		String s = "phrase:            " + phrase.toString() + "\n";
+		s += "sentence:          " + sentence + "\n";
 		s += "ref_time:          " + refDate + "\n";
-		s += "Gold type:         " + type + "\n";
+		s += "gold type:         " + type + "\n";
 		s += "gold val:          " + val;
 		//out.println("Lexical Entries:   " + lexicalEntries);
 		//out.println("Logic:             " + label);

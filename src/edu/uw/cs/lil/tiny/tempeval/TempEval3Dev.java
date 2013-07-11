@@ -28,6 +28,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import edu.uw.cs.utils.log.ILogger;
 import edu.uw.cs.utils.log.Log;
@@ -70,7 +71,7 @@ public class TempEval3Dev {
 	private static final int PERCEPTRON_ITERATIONS = 1;
 	private static final double CV_FOLDS = 10;
 
-	public static List<List<TemporalObservation>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
+	public static List<List<TemporalObservation>> getCVPartitions(TemporalObservationDataset dataset, double numberOfPartitions) {
 		// make a list
 		// use the constructor with TemporalSentenceDataset to make a new dataset. 
 		System.out.println("Splitting the data...");
@@ -96,23 +97,23 @@ public class TempEval3Dev {
 		return splitData;
 	}
 
-	public static TemporalSentenceDataset getSerializedData(String datasetName) throws IOException, ClassNotFoundException {
-		return TemporalSentenceDataset.readSerialized(SERIALIZED_DIR + datasetName);
+	public static TemporalObservationDataset getSerializedData(String datasetName) throws IOException, ClassNotFoundException {
+		return TemporalObservationDataset.readSerialized(SERIALIZED_DIR + datasetName);
 	}
 
-	public static TemporalSentenceDataset getData(String datasetName, String serializedName) throws FileNotFoundException, IOException {
+	public static TemporalObservationDataset getData(String datasetName, String serializedName) throws FileNotFoundException, IOException {
 		//dataLoc = "tempeval.dataset.corrected.txt";
 		// these train and test should be of type
 		// IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, Pair<String, String>>> 
 		// reading in the serialized datasets so we don't have to run the dependency parser again.
 
-		TemporalSentenceDataset dataset = TemporalSentenceDataset
+		TemporalObservationDataset dataset = TemporalObservationDataset
 				.read(new File(DATASET_DIR + datasetName),
 						new StubStringFilter(), true);
 
 		if (SERIALIZE_DATASETS){
 			System.out.print("Serializing the training data... ");
-			TemporalSentenceDataset.save(SERIALIZED_DIR + serializedName, dataset);
+			TemporalObservationDataset.save(SERIALIZED_DIR + serializedName, dataset);
 			System.out.println("Done!");
 		}
 		LOG.info(datasetName + " size: " + dataset.size());
@@ -269,7 +270,7 @@ public class TempEval3Dev {
 		Logger.setSkipPrefix(true);
 		LogLevel.INFO.set();
 
-		TemporalSentenceDataset train, test;
+		TemporalObservationDataset train, test;
 		if (READ_SERIALIZED_DATASETS) {
 			train = getSerializedData(SERIALIZED_TRAINING);
 			test = getSerializedData(SERIALIZED_TESTING);
@@ -326,8 +327,8 @@ public class TempEval3Dev {
 						newTrainList.addAll(splitData.get(j));
 				}
 
-				TemporalSentenceDataset newTest = new TemporalSentenceDataset(newTestList);
-				TemporalSentenceDataset newTrain = new TemporalSentenceDataset(newTrainList);
+				TemporalObservationDataset newTest = new TemporalObservationDataset(newTestList);
+				TemporalObservationDataset newTrain = new TemporalObservationDataset(newTrainList);
 
 				outList[i] = new OutputData();
 

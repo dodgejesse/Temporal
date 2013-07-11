@@ -8,7 +8,7 @@ import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.utils.composites.Pair;
 
-public class TemporalSentence implements java.io.Serializable, IDataItem<Pair<Sentence, String[]>> {
+public class TemporalSentence implements java.io.Serializable{
 	private static final long serialVersionUID = 2013931525176952047L;
 	private String docID;
 	private LinkedList<String> tokens;
@@ -81,8 +81,11 @@ public class TemporalSentence implements java.io.Serializable, IDataItem<Pair<Se
 		return prettyString(0, tokens.size());
 	}
 	
-	@Override
-	public Pair<Sentence, String[]> getSample() {
-		return Pair.of(new Sentence(tokens), null);
+	public List<TemporalObservation> getObservations() {
+		List<TemporalObservation> observations = new LinkedList<TemporalObservation>();
+		for(Timex t : timexes) {
+			observations.add(new TemporalObservation(new Sentence(tokens), prettyString(), t.getAnchor().getValue(), t.getType(), t.getValue(), dp));
+		}
+		return observations;
 	}
 }

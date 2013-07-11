@@ -13,6 +13,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.Timex;
@@ -112,14 +113,16 @@ public class TemporalEvaluationThread extends Thread {
 		int numCorrectMentions = 0;
 
 		int sentenceCount = 0;
+
+		JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dummyDataItemModel = 
+				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, new TemporalObservation());
+
 		for (TemporalSentence ts : testData) {
 			sentenceCount++;
 			if (sentenceCount % 100 == 0)
 				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, testData.size());
 			numGoldMentions += ts.getTimexes().size();
-			JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> jointDataItemModel = 
-					new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts);
-			List<Pair<Integer, Integer>> predictedMentions = getPredictedMentions(ts.getTokens(), jointDataItemModel);
+			List<Pair<Integer, Integer>> predictedMentions = getPredictedMentions(ts.getTokens(), dummyDataItemModel);
 			numPredictedMentions += predictedMentions.size();
 			List<Pair<Integer, Integer>> correctMentions = getCorrectMentions(ts.getTimexes(), predictedMentions);
 			numCorrectMentions += correctMentions.size();

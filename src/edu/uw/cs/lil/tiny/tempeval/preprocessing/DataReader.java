@@ -34,7 +34,10 @@ public class DataReader extends DefaultHandler {
 	private GrammaticalStructureFactory gsf;
 	private SAXParser sp;
 
-	public DataReader() throws ParserConfigurationException, SAXException{
+	public DataReader(){
+	}
+	
+	private void initLibraries() throws ParserConfigurationException, SAXException {
 		// Initialize annotation pipeline for preprocessing
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, parse");
@@ -59,6 +62,9 @@ public class DataReader extends DefaultHandler {
 				System.out.println("Forcing serialization.");
 			else
 				System.out.println("Serialized data unavailable.");
+			
+			initLibraries();
+			
 			System.out.println("Reading and dependency parsing data...");
 
 			long startTime = System.nanoTime();

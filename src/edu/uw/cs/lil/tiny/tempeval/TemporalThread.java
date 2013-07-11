@@ -17,6 +17,7 @@ import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalTypeFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 
 public class TemporalThread extends Thread {
@@ -26,8 +27,8 @@ public class TemporalThread extends Thread {
 	final OutputData outputData;
 	final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
 
-	public TemporalThread( TemporalSentenceDataset train,
-			TemporalSentenceDataset test,
+	public TemporalThread( TemporalObservationDataset train,
+			TemporalObservationDataset test,
 			AbstractCKYParser<LogicalExpression> parser,
 			ILexicon<LogicalExpression> fixed,
 			LexicalFeatureSet<Sentence, LogicalExpression> lexPhi,
