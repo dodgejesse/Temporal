@@ -166,8 +166,8 @@ public class TemporalEvaluationThread extends Thread {
 			}
 		}
 		System.out.println("\nMention detection stats:");
-		System.out.printf("Recall: %f\n", TemporalUtilities.getRecall(numCorrectMentions, numGoldMentions, numPredictedMentions));
-		System.out.printf("Precision: %f\n", TemporalUtilities.getPrecision(numCorrectMentions, numGoldMentions, numPredictedMentions));
-		System.out.printf("F1: %f\n", TemporalUtilities.getF1(numCorrectMentions, numGoldMentions, numPredictedMentions));
+		System.out.printf("Recall: %.1f\n", 100*TemporalUtilities.getRecall(numCorrectMentions, numGoldMentions, numPredictedMentions));
+		System.out.printf("Precision: %.1f\n", 100*TemporalUtilities.getPrecision(numCorrectMentions, numGoldMentions, numPredictedMentions));
+		System.out.printf("F1: %.1f\n", 100*TemporalUtilities.getF1(numCorrectMentions, numGoldMentions, numPredictedMentions));
 	}
 }
