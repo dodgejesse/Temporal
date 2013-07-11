@@ -27,6 +27,7 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
+import edu.uw.cs.lil.tiny.tempeval.structures.GoldSentence;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import edu.uw.cs.utils.log.ILogger;
 import edu.uw.cs.utils.log.Log;
@@ -69,21 +70,21 @@ public class TempEval3Dev {
 	private static final int PERCEPTRON_ITERATIONS = 1;
 	private static final double CV_FOLDS = 10;
 
-	public static List<List<TemporalSentence>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
+	public static List<List<GoldSentence>> getCVPartitions(TemporalSentenceDataset dataset, double numberOfPartitions) {
 		// make a list
 		// use the constructor with TemporalSentenceDataset to make a new dataset. 
 		System.out.println("Splitting the data...");
-		List<List<TemporalSentence>> splitData = new LinkedList<List<TemporalSentence>>();
-		Iterator<TemporalSentence> iter = dataset.iterator();
+		List<List<GoldSentence>> splitData = new LinkedList<List<GoldSentence>>();
+		Iterator<GoldSentence> iter = dataset.iterator();
 		int sentenceCount = 1;
-		List<TemporalSentence> tmp = new LinkedList<TemporalSentence>();
+		List<GoldSentence> tmp = new LinkedList<GoldSentence>();
 
 		while (iter.hasNext()){
 			tmp.add(iter.next());
 			// for testing:
 			if (sentenceCount % Math.round(dataset.size() / numberOfPartitions) == 0){
 				splitData.add(tmp);
-				tmp = new LinkedList<TemporalSentence>();
+				tmp = new LinkedList<GoldSentence>();
 				System.out.println();
 				System.out.println("sentenceCount: " + sentenceCount);
 				System.out.println("Train size: " + dataset.size());
@@ -307,7 +308,7 @@ public class TempEval3Dev {
 		AbstractCKYParser<LogicalExpression> parser = getParser(categoryServices);
 
 		if (CROSS_VAL){
-			List<List<TemporalSentence>> splitData = getCVPartitions (train, CV_FOLDS);
+			List<List<GoldSentence>> splitData = getCVPartitions (train, CV_FOLDS);
 			OutputData[] outList = new OutputData[splitData.size()];
 
 			// to make the threads
@@ -316,8 +317,8 @@ public class TempEval3Dev {
 			for (int i = 0; i < splitData.size(); i++){
 
 				// to make the training and testing corpora
-				List<TemporalSentence> newTrainList = new LinkedList<TemporalSentence>();
-				List<TemporalSentence> newTestList = new LinkedList<TemporalSentence>();
+				List<GoldSentence> newTrainList = new LinkedList<GoldSentence>();
+				List<GoldSentence> newTestList = new LinkedList<GoldSentence>();
 				for (int j = 0; j < splitData.size(); j++){
 					if (i == j)
 						newTestList.addAll(splitData.get(i));

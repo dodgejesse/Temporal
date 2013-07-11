@@ -4,10 +4,10 @@ import java.util.*;
 
 import org.joda.time.LocalDate;
 
-import edu.uw.cs.lil.tiny.tempeval.TemporalJoda;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
 
 public class TemporalThis extends TemporalPredicate {
 	public TemporalISO perform() {

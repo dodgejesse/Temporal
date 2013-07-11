@@ -3,6 +3,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 import edu.uw.cs.lil.tiny.data.DatasetException;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
+import edu.uw.cs.lil.tiny.tempeval.structures.GoldSentence;
 import edu.uw.cs.lil.tiny.tempeval.util.DependencyParser;
 import edu.uw.cs.lil.tiny.utils.string.IStringFilter;
 
@@ -12,11 +13,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TemporalSentenceDataset implements IDataCollection<TemporalSentence>{
-	private final List<TemporalSentence> data;
+public class TemporalSentenceDataset implements IDataCollection<GoldSentence>{
+	private final List<GoldSentence> data;
 	// needed to serialize
 
-	public TemporalSentenceDataset(List<TemporalSentence> data) {
+	public TemporalSentenceDataset(List<GoldSentence> data) {
 		this.data = Collections.unmodifiableList(data);
 	}
 
@@ -24,7 +25,7 @@ public class TemporalSentenceDataset implements IDataCollection<TemporalSentence
 			IStringFilter textFilter, boolean lockConstants) {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(f));
-			List<TemporalSentence> data = new LinkedList<TemporalSentence>();
+			List<GoldSentence> data = new LinkedList<GoldSentence>();
 			
 			String docID = null;
 			String sentence = null;
@@ -34,7 +35,7 @@ public class TemporalSentenceDataset implements IDataCollection<TemporalSentence
 			String type = null;
 			String val = null;
 			String line;
-			TemporalSentence prev = null;
+			GoldSentence prev = null;
 			DependencyParser dp = new DependencyParser();
 			System.out.println("Reading in the dataset, and running a dependency parser on each sentence... ");
 			int sentenceCounter = 0;
@@ -58,12 +59,12 @@ public class TemporalSentenceDataset implements IDataCollection<TemporalSentence
 						type = textFilter.filter(line);
 					} else if (val == null){
 						val = textFilter.filter(line);
-						TemporalSentence current;
+						GoldSentence current;
 						String depParse = dp.getParse(sentence);
 						if (prev != null && prev.getSample().second()[0].equals(docID))
-							current = new TemporalSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, prev, depParse);
+							current = new GoldSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, prev, depParse);
 						else
-							current = new TemporalSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, null, depParse);
+							current = new GoldSentence(docID, sentence, charNum, new Sentence(phrase), refDate, type, val, null, depParse);
 						data.add(current);
 						
 						prev = current;
@@ -91,7 +92,7 @@ public class TemporalSentenceDataset implements IDataCollection<TemporalSentence
 		}
 	}
 
-	public Iterator<TemporalSentence> iterator() {
+	public Iterator<GoldSentence> iterator() {
 		return this.data.iterator();
 	}
 

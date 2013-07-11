@@ -16,11 +16,12 @@ import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.tempeval.structures.NewTemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.Timex;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtilities;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalEvaluationThread extends Thread {
 	final int cvFold;
-	final int MAX_MENTION_LENGTH = 5;
+	final int MAX_MENTION_LENGTH = 3;
 	final JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
 	final TemporalDataset trainData, testData;
 	final AbstractCKYParser<LogicalExpression> parser;
@@ -51,16 +52,11 @@ public class TemporalEvaluationThread extends Thread {
 		return newAllModelParses;
 	}
 
-	private boolean hasOverlap (int x1, int x2, int y1, int y2) {
-		// Whether the first and second string at respective indexes have overlapping regions
-		return x2 >= y1 && x1 <= y2;
-	}
-
 	private List<Pair<Integer, Integer>> getCorrectMentions(List<Timex> timexes, List<Pair<Integer, Integer>> predictedMentions) {
 		List<Pair<Integer, Integer>> correctMentions = new LinkedList<Pair<Integer, Integer>>();
 		for (Timex t : timexes) {
 			for (Pair<Integer, Integer> p : predictedMentions) {
-				if (hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken())) {
+				if (TemporalUtilities.hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken())) {
 					correctMentions.add(p);
 					break;
 				}
@@ -73,7 +69,7 @@ public class TemporalEvaluationThread extends Thread {
 		List<Timex> falseNegatives = new LinkedList<Timex>(timexes);
 		for (Timex t : timexes) {
 			for(Pair<Integer, Integer> p : correctMentions) {
-				if (hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken()))
+				if (TemporalUtilities.hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken()))
 					falseNegatives.remove(t);
 			}
 		}
@@ -116,10 +112,10 @@ public class TemporalEvaluationThread extends Thread {
 		int numCorrectMentions = 0;
 
 		int sentenceCount = 0;
-		for (NewTemporalSentence ts : trainData) {
+		for (NewTemporalSentence ts : testData) {
 			sentenceCount++;
 			if (sentenceCount % 100 == 0)
-				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, trainData.size());
+				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, testData.size());
 			numGoldMentions += ts.getTimexes().size();
 			JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> jointDataItemModel = 
 					new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts);
@@ -130,7 +126,7 @@ public class TemporalEvaluationThread extends Thread {
 			if (correctMentions.size() < ts.getTimexes().size()) {
 				System.out.printf ("False negatives from '%s':\n", ts.prettyString());
 				for(Timex t : getFalseNegatives(correctMentions, ts.getTimexes()))
-					System.out.printf(" %s", t.getText());
+					System.out.printf("[%s]", t.getText());
 				System.out.println();
 			}
 			if (correctMentions.size() < predictedMentions.size()) {
@@ -141,22 +137,8 @@ public class TemporalEvaluationThread extends Thread {
 			}
 		}
 		System.out.println("\nMention detection stats:");
-		System.out.printf("Recall: %f\n", getRecall(numCorrectMentions, numGoldMentions, numPredictedMentions));
-		System.out.printf("Precision: %f\n", getPrecision(numCorrectMentions, numGoldMentions, numPredictedMentions));
-		System.out.printf("F1: %f\n", getF1(numCorrectMentions, numGoldMentions, numPredictedMentions));
-	}
-
-	private double getRecall(int correct, int gold, int predicted) {
-		return ((double) correct)/gold;
-	}
-
-	private double getPrecision(int correct, int gold, int predicted) {
-		return ((double) correct)/predicted;
-	}
-
-	private double getF1(int correct, int gold, int predicted) {
-		double r = getRecall(correct, gold, predicted);
-		double p = getPrecision(correct, gold, predicted);
-		return 2*r*p/(r+p);
+		System.out.printf("Recall: %f\n", TemporalUtilities.getRecall(numCorrectMentions, numGoldMentions, numPredictedMentions));
+		System.out.printf("Precision: %f\n", TemporalUtilities.getPrecision(numCorrectMentions, numGoldMentions, numPredictedMentions));
+		System.out.printf("F1: %f\n", TemporalUtilities.getF1(numCorrectMentions, numGoldMentions, numPredictedMentions));
 	}
 }

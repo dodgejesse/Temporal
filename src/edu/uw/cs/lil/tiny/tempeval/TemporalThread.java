@@ -17,6 +17,7 @@ import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalTypeFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 
 public class TemporalThread extends Thread {
 	final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner;

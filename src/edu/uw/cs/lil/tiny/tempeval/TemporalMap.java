@@ -13,18 +13,19 @@ import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
 
 import java.util.*;
 
 import org.joda.time.LocalDate;
 
 public class TemporalMap {
-		final Map<String, Integer> months;
-		final Map<String, Integer> timesOfDay;
-		final Map<String, Integer> weekdays;
-		final Map<String, Integer> seasons;
-		final String ref_time;
-		
+	final Map<String, Integer> months;
+	final Map<String, Integer> timesOfDay;
+	final Map<String, Integer> weekdays;
+	final Map<String, Integer> seasons;
+	final String ref_time;
+
 	public TemporalMap(String ref_time){
 		months = new HashMap<String, Integer>();
 		timesOfDay = new HashMap<String, Integer>();
@@ -36,7 +37,7 @@ public class TemporalMap {
 		makeWeekdays();
 		makeSeasons();
 	}
-	
+
 	private void makeSeasons(){
 		seasons.put("spring", 1);
 		seasons.put("summer", 2);
@@ -44,7 +45,7 @@ public class TemporalMap {
 		seasons.put("autumn", 3);
 		seasons.put("winter", 4);
 	}
-	
+
 	private void makeTimesOfDay(){
 		timesOfDay.put("morning", 0);
 		timesOfDay.put("mid-day", 1);
@@ -53,7 +54,7 @@ public class TemporalMap {
 		timesOfDay.put("night", 4);
 		timesOfDay.put("daytime", 5);
 	}
-	
+
 	private void makeWeekdays(){
 		weekdays.put("monday",1);
 		weekdays.put("tuesday",2);
@@ -63,7 +64,7 @@ public class TemporalMap {
 		weekdays.put("saturday",6);
 		weekdays.put("sunday",7);
 	}
-	
+
 	private void makeMonths(){
 		months.put("january",1);
 		months.put("february",2);
@@ -78,7 +79,7 @@ public class TemporalMap {
 		months.put("november",11);
 		months.put("december",12);
 	}
-	
+
 
 	// Finds maps for predicates. Should just be about 10 if statements.
 	public TemporalPredicate findComplexMap(LogicalConstant l, TemporalISO previous){
@@ -100,7 +101,7 @@ public class TemporalMap {
 			throw new IllegalArgumentException("found predicate (" + l + ") that hasn't been implemented yet!");
 		}
 	}
-	
+
 	// Finds map for all simple constants.
 	public TemporalISO findNonComplexMap(LogicalConstant l){
 		if (l.getType().getName().toString().equals("s")){
@@ -114,7 +115,7 @@ public class TemporalMap {
 		} else 
 			throw new IllegalArgumentException("Unknown logical constant " + l);
 	}
-	
+
 	private TemporalISO findDurationMap(LogicalConstant l){
 		if (l.getName().equals("year:d"))
 			return new TemporalDuration("year");
@@ -143,7 +144,7 @@ public class TemporalMap {
 		else
 			throw new IllegalArgumentException("Unimplemented stuff in TemporalMap's findDurationMap.");
 	}
-	
+
 	private TemporalISO findNumberMap(LogicalConstant l){
 		if (l.getName().toString().endsWith("o:n")){
 			int n = Integer.parseInt(l.getName().substring(0,l.getName().length()-3));
@@ -154,7 +155,7 @@ public class TemporalMap {
 		} else
 			throw new IllegalArgumentException("Unknown number in findNumberMap, within TemporalMap!");
 	}
-	
+
 	private TemporalISO findRangeMap(LogicalConstant l){
 		if (l.getName().equals("ref_time:r")){
 			return TemporalDate.readDocumentDate(ref_time);
@@ -176,7 +177,7 @@ public class TemporalMap {
 		} else 
 			throw new IllegalArgumentException("constants of type range other than years and document times are not implemented.");
 	}
-	
+
 	// Shifts a given ISO by n days. If n is negative, shifts it backwards in time.
 	private TemporalISO shiftISOByDay(TemporalISO t, int n){
 		LocalDate tmp = TemporalJoda.convertISOToLocalDate(t);
@@ -186,7 +187,7 @@ public class TemporalMap {
 			tmp = tmp.minusDays(-n);
 		return TemporalJoda.convertLocalDateToISO(tmp);
 	}
-	
+
 	private boolean isNumber(String s){
 		try {
 			Integer.parseInt(s);
@@ -195,7 +196,7 @@ public class TemporalMap {
 			return false;
 		}
 	}
-	
+
 	private TemporalISO findSequenceMap(LogicalConstant l){
 		if (l.getName().endsWith("d:s")){
 			return findDayOfMonthMap(l);
@@ -220,27 +221,27 @@ public class TemporalMap {
 		} else 
 			throw new IllegalArgumentException("Unimplemented map for logical constant " + l);
 	}
-	
+
 	private TemporalISO findSeasonMap(LogicalConstant l){
 		int num = seasons.get((l.getName().substring(0, l.getName().length()-2)));
 		return new TemporalDate("season", num);
 	}
-	
+
 	private TemporalISO findWeekdayMap(LogicalConstant l){
 		int num = weekdays.get((l.getName().substring(0, l.getName().length()-2)));
 		return new TemporalDate("weekday", num);
 	}
-	
+
 	private TemporalISO findMonthMap(LogicalConstant l){
 		int num = months.get((l.getName().substring(0, l.getName().length()-2)));
 		return new TemporalDate("month", num);
 	}
-	
+
 	private TemporalISO findTimesOfDayMap(LogicalConstant l){
 		int num = timesOfDay.get((l.getName().substring(0, l.getName().length()-2)));
 		return new TemporalDate("timeOfDay", num);
 	}
-	
+
 	private TemporalISO findDayOfMonthMap(LogicalConstant l){
 		int num = Integer.parseInt(l.getName().substring(0, l.getName().length()-3));
 		return new TemporalDate("day",num);
@@ -261,4 +262,4 @@ private TemporalISO findQuarterMap(LogicalConstant l){
 		throw new IllegalArgumentException("Trying to map a constant " + l + " which isn't an implemented quarter!");
 	}
 }
-*/
+ */
