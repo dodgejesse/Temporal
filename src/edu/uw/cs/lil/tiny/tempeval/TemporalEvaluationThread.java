@@ -44,6 +44,7 @@ public class TemporalEvaluationThread extends Thread {
 
 	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
 		TemporalObservationDataset observations = dataset.getObservations();
+		System.out.println(observations);
 		final TemporalJointParser jParser = new TemporalJointParser(parser);
 		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> learner = new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
 				perceptronIterations, observations, jParser);
@@ -60,11 +61,12 @@ public class TemporalEvaluationThread extends Thread {
 
 
 	public void run(){
+		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
+		
 		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, parser, fixed);
 		TemporalStatistics detectionStats = detectionTester.test();
 		System.out.println("\nMention detection stats:");
 		System.out.println(detectionStats);
-		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
 
 		TemporalObservationDataset conditionalData = detectionTester.getCorrectObservations();
 		TemporalTester attributeTester = TemporalTester.build(conditionalData, new TemporalJointParser(parser));

@@ -21,8 +21,8 @@ public class TemporalDate extends TemporalISO{
 
 	public static TemporalDate readDocumentDate(String s){
 		Map<String, Set<Integer>> data = new HashMap<String, Set<Integer>>();
-		String[] dateInfo = s.split("-");
-		if (dateInfo.length != 3){
+		String[] dateInfo = s.split("-|T");
+		if (dateInfo.length != 3 && dateInfo.length != 4){
 			throw new IllegalArgumentException(s + " is not a valid date!");
 		}
 		addToData("year", Integer.parseInt(dateInfo[0]), data);

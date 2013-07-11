@@ -25,6 +25,12 @@ public class TemporalObservationDataset implements IDataCollection<TemporalObser
 		observations.addAll(newObservations);
 	}
 
+	public String toString() {
+		String s = "";
+		for(TemporalObservation o : observations)
+			s += "[" + o.getReferenceTime() + "]\n";
+		return s;
+	}
 
 	public int size() {
 		return observations.size();

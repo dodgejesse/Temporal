@@ -43,10 +43,10 @@ import org.xml.sax.SAXException;
 public class TemporalEvaluation {
 	private static final String RESOURCES_DIR = "data/resources/";
 	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	final private static String[] DATASETS =  {"debug_dataset"};
+	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//final private static String[] DATASETS =  {"debug_dataset"};
 
-	private static final boolean FORCE_SERIALIZATION = true;
+	private static final boolean FORCE_SERIALIZATION = false;
 	private static final boolean CROSS_VALIDATION = false;
 	private static final int CV_FOLDS = 10;
 	private static final int PERCEPTRON_ITERATIONS = 1;
