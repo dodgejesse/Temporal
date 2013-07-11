@@ -90,12 +90,20 @@ public class TemporalDocument {
 			newSentence.saveDependencyParse(dp);
 			sentences.add(newSentence);
 		}
-		
+
 		for(Timex t : timexes.values()) {
 			if(t.getStartChar() != -1) {
 				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {
 					Pair<NewTemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
 					Pair<NewTemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar());
+					t.setTokenRange(startIndexes.second(), endIndexes.second());
+					// Assume start and end occur in the same sentence
+					startIndexes.first().insertTimex(t);
+				}
+				else if (endCharIndexToTokenIndex.containsKey(t.getEndChar() + 1)) {
+					// Hack to accommodate mistakes in annotation where "10 p.m", rather than "10 p.m." is labeled as the mention
+					Pair<NewTemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
+					Pair<NewTemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar() + 1);
 					t.setTokenRange(startIndexes.second(), endIndexes.second());
 					// Assume start and end occur in the same sentence
 					startIndexes.first().insertTimex(t);

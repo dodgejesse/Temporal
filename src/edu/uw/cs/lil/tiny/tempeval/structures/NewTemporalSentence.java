@@ -40,11 +40,7 @@ public class NewTemporalSentence implements java.io.Serializable, IDataItem<Pair
 	public List<Timex> getTimexes() {
 		return timexes;
 	}
-
-	public int getNumMentions() {
-		return timexes.size();
-	}
-
+	
 	public String getDocID() {
 		return docID;
 	}

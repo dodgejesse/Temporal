@@ -59,12 +59,36 @@ public class TemporalEvaluationThread extends Thread {
 	private List<Pair<Integer, Integer>> getCorrectMentions(List<Timex> timexes, List<Pair<Integer, Integer>> predictedMentions) {
 		List<Pair<Integer, Integer>> correctMentions = new LinkedList<Pair<Integer, Integer>>();
 		for (Timex t : timexes) {
-			for(Pair<Integer, Integer> p: predictedMentions) {
-				if (hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken()))
+			for (Pair<Integer, Integer> p : predictedMentions) {
+				if (hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken())) {
 					correctMentions.add(p);
+					break;
+				}
 			}
 		}
 		return correctMentions;
+	}
+	
+	private List<Timex> getFalseNegatives(List<Pair<Integer, Integer>> correctMentions, List<Timex> timexes) {
+		List<Timex> falseNegatives = new LinkedList<Timex>(timexes);
+		for (Timex t : timexes) {
+			for(Pair<Integer, Integer> p : correctMentions) {
+				if (hasOverlap(p.first(), p.second(), t.getStartToken(), t.getEndToken()))
+					falseNegatives.remove(t);
+			}
+		}
+		return falseNegatives;
+	}
+	
+	private List<Pair<Integer, Integer>> getFalsePositives(List<Pair<Integer, Integer>> correctMentions, List<Pair<Integer, Integer>> predictedMentions) {
+		List<Pair<Integer, Integer>> falsePositives = new LinkedList<Pair<Integer, Integer>>(predictedMentions);
+		for (Pair<Integer, Integer> pp : predictedMentions) {
+			for(Pair<Integer, Integer> cp : correctMentions) {
+				if (pp.equals(cp))
+					falsePositives.remove(cp);
+			}
+		}
+		return falsePositives;
 	}
 
 	private List<Pair<Integer, Integer>> getPredictedMentions(List<String> tokens, JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> jointDataItemModel) {
@@ -91,25 +115,29 @@ public class TemporalEvaluationThread extends Thread {
 		int numGoldMentions = 0;
 		int numCorrectMentions = 0;
 
+		int sentenceCount = 0;
 		for (NewTemporalSentence ts : trainData) {
-			numGoldMentions += ts.getNumMentions();
+			sentenceCount++;
+			if (sentenceCount % 100 == 0)
+				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, trainData.size());
+			numGoldMentions += ts.getTimexes().size();
 			JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> jointDataItemModel = 
 					new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts);
 			List<Pair<Integer, Integer>> predictedMentions = getPredictedMentions(ts.getTokens(), jointDataItemModel);
 			numPredictedMentions += predictedMentions.size();
 			List<Pair<Integer, Integer>> correctMentions = getCorrectMentions(ts.getTimexes(), predictedMentions);
 			numCorrectMentions += correctMentions.size();
-			if (correctMentions.size() < ts.getNumMentions()) {
-				System.out.printf ("False negatives: '%s'\n", ts);
-				System.out.printf("\tGold mentions:\n");
-				for(Timex t : ts.getTimexes())
-					System.out.printf("\t%s\n", t.getText());
+			if (correctMentions.size() < ts.getTimexes().size()) {
+				System.out.printf ("False negatives from '%s':\n", ts.prettyString());
+				for(Timex t : getFalseNegatives(correctMentions, ts.getTimexes()))
+					System.out.printf(" %s", t.getText());
+				System.out.println();
 			}
 			if (correctMentions.size() < predictedMentions.size()) {
-				System.out.printf ("False positives: '%s'\n", ts);
-				System.out.printf("\tPredicted mentions:\n");
-				for(Pair<Integer, Integer> p: predictedMentions)
-					System.out.printf("\t%s\n", ts.prettyString(p.first(), p.second()));
+				System.out.printf ("False positives from '%s':\n", ts.prettyString());
+				for(Pair<Integer, Integer> p : getFalsePositives(correctMentions, predictedMentions))
+					System.out.printf(" %s", ts.prettyString(p.first(), p.second()));
+				System.out.println();
 			}
 		}
 		System.out.println("\nMention detection stats:");

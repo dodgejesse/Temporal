@@ -43,9 +43,10 @@ import org.xml.sax.SAXException;
 public class TemporalEvaluation {
 	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
 	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//final private static String[] DATASETS =  {"debug_dataset"};
 	private static final String RESOURCES_DIR = "data/resources/";
 
-	private static final boolean FORCE_SERIALIZATION = true;
+	private static final boolean FORCE_SERIALIZATION = false;
 	private static final boolean CROSS_VALIDATION = false;
 	private static final int CV_FOLDS = 10;
 	private ICategoryServices<LogicalExpression> categoryServices;
@@ -128,9 +129,8 @@ public class TemporalEvaluation {
 
 	}
 
-
-
 	public void evaluate() {
+		System.out.printf("Evaluating %d sentences...\n", dataset.size());
 		if (CROSS_VALIDATION){
 			List<List<NewTemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluationThread[] threads = new TemporalEvaluationThread[partitions.size()];

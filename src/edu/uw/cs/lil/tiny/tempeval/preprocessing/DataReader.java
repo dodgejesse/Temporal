@@ -146,10 +146,11 @@ public class DataReader extends DefaultHandler {
 	}
 
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-		String[] datasets = {"AQUAINT", "Timebank"};
+		//String[] datasets = {"AQUAINT", "Timebank"};
+		String[] datasets = {"debug_dataset"};
 		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
 		for (NewTemporalSentence s : dataset) {
-			if (s.getNumMentions() < 0)
+			if (s.getTimexes().size() < 0)
 				System.out.println(s);
 		}
 	}
