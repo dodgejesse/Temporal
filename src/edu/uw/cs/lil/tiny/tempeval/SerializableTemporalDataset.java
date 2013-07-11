@@ -2,6 +2,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.util.*;
 
+
 public class SerializableTemporalDataset implements java.io.Serializable {
 	private static final long serialVersionUID = -9026405447128276097L;
 	private final List<SerializableTemporalSentence> data;

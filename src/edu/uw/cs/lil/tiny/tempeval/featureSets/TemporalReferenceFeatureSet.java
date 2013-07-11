@@ -1,4 +1,4 @@
-package edu.uw.cs.lil.tiny.tempeval.featureSets;
+package edu.uw.cs.lil.tiny.tempeval.featuresets;
 
 import java.util.LinkedList;
 import java.util.List;

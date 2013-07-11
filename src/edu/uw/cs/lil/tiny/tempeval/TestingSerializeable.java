@@ -16,6 +16,7 @@ import java.util.List;
 
 import edu.uw.cs.lil.tiny.data.DatasetException;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
+import edu.uw.cs.lil.tiny.tempeval.util.DependencyParser;
 import edu.uw.cs.lil.tiny.utils.string.IStringFilter;
 
 public class TestingSerializeable implements java.io.Serializable {

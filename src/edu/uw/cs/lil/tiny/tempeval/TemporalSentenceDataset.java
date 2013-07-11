@@ -3,6 +3,7 @@ package edu.uw.cs.lil.tiny.tempeval;
 import edu.uw.cs.lil.tiny.data.DatasetException;
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
+import edu.uw.cs.lil.tiny.tempeval.util.DependencyParser;
 import edu.uw.cs.lil.tiny.utils.string.IStringFilter;
 
 import java.io.*;
@@ -11,8 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TemporalSentenceDataset implements
-		IDataCollection<TemporalSentence>{
+public class TemporalSentenceDataset implements IDataCollection<TemporalSentence>{
 	private final List<TemporalSentence> data;
 	// needed to serialize
 

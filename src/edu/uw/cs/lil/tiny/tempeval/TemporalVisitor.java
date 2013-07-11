@@ -8,7 +8,7 @@ import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.mr.lambda.Variable;
 import edu.uw.cs.lil.tiny.mr.lambda.visitor.ILogicalExpressionVisitor;
 import edu.uw.cs.lil.tiny.mr.language.type.Type;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalPredicate;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalPredicate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 
 public class TemporalVisitor implements ILogicalExpressionVisitor{

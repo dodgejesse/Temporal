@@ -13,10 +13,10 @@ import edu.uw.cs.lil.tiny.parser.ccg.features.basic.LexicalFeatureSet;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalContextFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalDayOfWeekFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalReferenceFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featureSets.TemporalTypeFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalTypeFeatureSet;
 
 public class TemporalThread extends Thread {
 	final ILearner<Sentence, LogicalExpression, JointModel<Sentence, String[], LogicalExpression, LogicalExpression>> learner;

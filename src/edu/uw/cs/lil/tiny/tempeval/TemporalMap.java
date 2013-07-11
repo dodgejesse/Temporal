@@ -1,14 +1,14 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalConstant;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalIntersect;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalMultiplication;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalNext;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalNth;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalPredicate;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalPrevious;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalReference;
-import edu.uw.cs.lil.tiny.tempeval.categories.TemporalThis;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalIntersect;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalMultiplication;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalNext;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalNth;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalPredicate;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalPrevious;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalReference;
+import edu.uw.cs.lil.tiny.tempeval.predicates.TemporalThis;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
