@@ -3,10 +3,7 @@ package edu.uw.cs.lil.tiny.tempeval.structures;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uw.cs.lil.tiny.data.IDataItem;
-import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
-import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalSentence implements java.io.Serializable{
 	private static final long serialVersionUID = 2013931525176952047L;

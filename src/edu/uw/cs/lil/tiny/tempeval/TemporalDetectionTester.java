@@ -17,7 +17,6 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
-import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDetectionTester {
 	final private int MAX_MENTION_LENGTH = 5;

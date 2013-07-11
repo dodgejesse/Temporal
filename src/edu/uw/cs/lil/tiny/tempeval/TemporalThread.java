@@ -16,7 +16,6 @@ import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalTypeFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
