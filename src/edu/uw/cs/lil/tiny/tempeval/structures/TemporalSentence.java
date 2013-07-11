@@ -83,11 +83,15 @@ public class TemporalSentence implements java.io.Serializable{
 		return prettyString(0, tokens.size());
 	}
 	
-	public List<TemporalObservation> getObservations() {
+	public List<TemporalObservation> getObservations(List<Timex> timexSubset) {
 		List<TemporalObservation> observations = new LinkedList<TemporalObservation>();
-		for(Timex t : timexes) {
-			observations.add(new TemporalObservation(new Sentence(tokens), prettyString(), referenceTime, t.getType(), t.getValue(), dp, t.getStartToken(), observations.isEmpty()));
+		for(Timex t : timexSubset) {
+			observations.add(new TemporalObservation(new Sentence(tokens.subList(t.getStartToken(), t.getEndToken())), prettyString(), referenceTime, t.getType(), t.getValue(), dp, t.getStartToken(), observations.isEmpty()));
 		}
 		return observations;
+	}
+	
+	public List<TemporalObservation> getObservations() {
+		return getObservations(timexes);
 	}
 }
