@@ -1,7 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.io.PrintStream;
-
 import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
@@ -21,13 +19,13 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 public class TemporalEvaluationThread extends Thread {
 	final private int cvFold;
 	final private TemporalDataset trainData, testData;
-	final private AbstractCKYParser<LogicalExpression> parser;
+	final private TemporalJointParser jointParser;
 	final private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
 	final private int perceptronIterations;
 	final private ILexicon<LogicalExpression> fixed;
 	public TemporalEvaluationThread(TemporalDataset trainData,
 			TemporalDataset testData,
-			AbstractCKYParser<LogicalExpression> parser,
+			TemporalJointParser jointParser,
 			ILexicon<LogicalExpression> fixed,
 			LexicalFeatureSet<Sentence, LogicalExpression> lexPhi,
 			int perceptronIterations,
@@ -36,7 +34,7 @@ public class TemporalEvaluationThread extends Thread {
 		this.cvFold = cvFold;
 		this.trainData = trainData;
 		this.testData = testData;
-		this.parser = parser;
+		this.jointParser = jointParser;
 		this.lexPhi = lexPhi;
 		this.fixed = fixed;
 		this.perceptronIterations = perceptronIterations;
@@ -44,10 +42,8 @@ public class TemporalEvaluationThread extends Thread {
 
 	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
 		TemporalObservationDataset observations = dataset.getObservations();
-		System.out.println(observations);
-		final TemporalJointParser jParser = new TemporalJointParser(parser);
 		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> learner = new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
-				perceptronIterations, observations, jParser);
+				perceptronIterations, observations, jointParser);
 		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
 				.addJointFeatureSet(new TemporalContextFeatureSet())
 				.addJointFeatureSet(new TemporalReferenceFeatureSet())
@@ -60,16 +56,16 @@ public class TemporalEvaluationThread extends Thread {
 	}
 
 
-	public void run(){
-		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
-		
-		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, parser, fixed);
+	public void run(){		
+		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
 		TemporalStatistics detectionStats = detectionTester.test();
 		System.out.println("\nMention detection stats:");
 		System.out.println(detectionStats);
 
+		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
+
 		TemporalObservationDataset conditionalData = detectionTester.getCorrectObservations();
-		TemporalTester attributeTester = TemporalTester.build(conditionalData, new TemporalJointParser(parser));
+		TemporalTester attributeTester = TemporalTester.build(conditionalData, jointParser);
 		attributeTester.test(model, System.out, new OutputData());
 	}
 }

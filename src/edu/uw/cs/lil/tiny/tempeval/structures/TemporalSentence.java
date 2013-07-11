@@ -13,14 +13,14 @@ public class TemporalSentence implements java.io.Serializable{
 	private String docID;
 	private String referenceTime;
 	private LinkedList<String> tokens;
-	private LinkedList<Timex> timexes;
+	private LinkedList<TemporalMention> mentions;
 	private String dp; //dependency parse
 
 	public TemporalSentence(String docID, String referenceTime) {
 		this.docID = docID;
 		this.referenceTime = referenceTime;
 		this.tokens = new LinkedList<String>();
-		this.timexes = new LinkedList<Timex>();
+		this.mentions = new LinkedList<TemporalMention>();
 	}
 
 	public List<String> getTokens() {
@@ -35,12 +35,12 @@ public class TemporalSentence implements java.io.Serializable{
 		return tokens.size();
 	}
 
-	public void insertTimex(Timex t) {
-		timexes.add(t);
+	public void insertMention(TemporalMention t) {
+		mentions.add(t);
 	}
 
-	public List<Timex> getTimexes() {
-		return timexes;
+	public List<TemporalMention> getMentions() {
+		return mentions;
 	}
 	
 	public String getDocID() {
@@ -63,7 +63,7 @@ public class TemporalSentence implements java.io.Serializable{
 			counter++;
 		}
 		s += "( ";
-		for (Timex t : timexes)
+		for (TemporalMention t : mentions)
 			s += t + " ";
 		s += ")";
 		return s;
@@ -83,15 +83,15 @@ public class TemporalSentence implements java.io.Serializable{
 		return prettyString(0, tokens.size());
 	}
 	
-	public List<TemporalObservation> getObservations(List<Timex> timexSubset) {
+	public List<TemporalObservation> getObservations(List<TemporalMention> mentionSubset) {
 		List<TemporalObservation> observations = new LinkedList<TemporalObservation>();
-		for(Timex t : timexSubset) {
+		for(TemporalMention t : mentionSubset) {
 			observations.add(new TemporalObservation(new Sentence(tokens.subList(t.getStartToken(), t.getEndToken())), prettyString(), referenceTime, t.getType(), t.getValue(), dp, t.getStartToken(), observations.isEmpty()));
 		}
 		return observations;
 	}
 	
 	public List<TemporalObservation> getObservations() {
-		return getObservations(timexes);
+		return getObservations(mentions);
 	}
 }

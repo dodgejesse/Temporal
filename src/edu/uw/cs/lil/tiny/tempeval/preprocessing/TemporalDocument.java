@@ -18,7 +18,7 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
-import edu.uw.cs.lil.tiny.tempeval.structures.Timex;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDocument {
@@ -27,12 +27,12 @@ public class TemporalDocument {
 
 	private String docID;
 	private String text;
-	private List<Timex> timexes;
+	private List<TemporalMention> mentions;
 	private List<TemporalSentence> sentences;
 	private String referenceTime;
 	
 	public TemporalDocument() {
-		this.timexes = new LinkedList<Timex>();
+		this.mentions = new LinkedList<TemporalMention>();
 	}
 
 	public void setText(String text) {
@@ -47,12 +47,12 @@ public class TemporalDocument {
 		return docID;
 	}
 
-	public void insertTimex(String type, String value, int offset) {
-		timexes.add(new Timex(type, value, offset));
+	public void insertMention(String type, String value, int offset) {
+		mentions.add(new TemporalMention(type, value, offset));
 	}
 
-	public void setLastTimexText(String text) {
-		timexes.get(timexes.size() - 1).setText(text);
+	public void setLastMentionText(String text) {
+		mentions.get(mentions.size() - 1).setText(text);
 	}
 
 	public List<TemporalSentence> getSentences() {
@@ -86,25 +86,25 @@ public class TemporalDocument {
 			sentences.add(newSentence);
 		}
 
-		for(Timex t : timexes) {
+		for(TemporalMention t : mentions) {
 			if(t.getStartChar() != -1) {
 				if(startCharIndexToTokenIndex.containsKey(t.getStartChar()) && endCharIndexToTokenIndex.containsKey(t.getEndChar())) {
 					Pair<TemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
 					Pair<TemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar());
-					t.setTokenRange(startIndexes.second(), endIndexes.second());
+					t.setTokenRange(startIndexes.second(), endIndexes.second() + 1);
 					// Assume start and end occur in the same sentence
-					startIndexes.first().insertTimex(t);
+					startIndexes.first().insertMention(t);
 				}
 				else if (endCharIndexToTokenIndex.containsKey(t.getEndChar() + 1)) {
 					// Hack to accommodate mistakes in annotation where "10 p.m", rather than "10 p.m." is labeled as the mention
 					Pair<TemporalSentence, Integer> startIndexes = startCharIndexToTokenIndex.get(t.getStartChar());
 					Pair<TemporalSentence, Integer> endIndexes = endCharIndexToTokenIndex.get(t.getEndChar() + 1);
-					t.setTokenRange(startIndexes.second(), endIndexes.second());
+					t.setTokenRange(startIndexes.second(), endIndexes.second() + 1);
 					// Assume start and end occur in the same sentence
-					startIndexes.first().insertTimex(t);
+					startIndexes.first().insertMention(t);
 				}
 				else
-					System.out.printf("Unable to find offset for timex [#%d - #%d] (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
+					System.out.printf("Unable to find offset for mention [#%d - #%d]: (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
 			}
 		}
 	}

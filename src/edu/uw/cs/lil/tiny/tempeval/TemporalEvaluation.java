@@ -43,17 +43,17 @@ import org.xml.sax.SAXException;
 public class TemporalEvaluation {
 	private static final String RESOURCES_DIR = "data/resources/";
 	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	//final private static String[] DATASETS =  {"debug_dataset"};
+	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	final private static String[] DATASETS =  {"debug_dataset"};
 
-	private static final boolean FORCE_SERIALIZATION = false;
+	private static final boolean FORCE_SERIALIZATION = true;
 	private static final boolean CROSS_VALIDATION = false;
 	private static final int CV_FOLDS = 10;
 	private static final int PERCEPTRON_ITERATIONS = 1;
 	private ICategoryServices<LogicalExpression> categoryServices;
 	private ILexicon<LogicalExpression> fixed;
 	private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
-	private AbstractCKYParser<LogicalExpression> parser;
+	private TemporalJointParser jointParser;
 	private TemporalDataset dataset;
 
 	public TemporalEvaluation(String datasetDirectory, String[] datasets) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
@@ -63,7 +63,7 @@ public class TemporalEvaluation {
 		categoryServices = new LogicalExpressionCategoryServices();
 		fixed = getFixedLexicon(categoryServices);
 		lexPhi = getLexPhi(categoryServices);
-		parser = getParser(categoryServices);
+		jointParser = new TemporalJointParser(getParser(categoryServices));
 		dataset = new DataReader().getDataset(datasetDirectory, datasets, FORCE_SERIALIZATION);
 	}
 
@@ -141,7 +141,7 @@ public class TemporalEvaluation {
 					if (j != i)
 						trainData.addSentences(partitions.get(j));
 
-				threads[i] = new TemporalEvaluationThread(trainData, testData, parser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i);
+				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i);
 				threads[i].start();
 			}
 			for (int i = 0; i < threads.length; i++){
@@ -154,7 +154,7 @@ public class TemporalEvaluation {
 			}
 		} else {
 			// Train and test on the same dataset for debugging
-			new TemporalEvaluationThread(dataset, dataset, parser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1).run();
+			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1).run();
 		}
 		System.out.println("Done");
 	}

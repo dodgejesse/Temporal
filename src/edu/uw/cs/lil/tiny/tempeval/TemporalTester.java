@@ -145,7 +145,7 @@ public class TemporalTester {
 			String guessVal = l.getResult().second().val;
 			LogicalExpression guessLabel = l.getResult().second().e;
 			if (oneParse(goldType, goldVal, guessType, guessVal) == 0)
-				correctLogicalForms += "[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector()) + "\n\t ";
+				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
 		}
 		return correctLogicalForms;
 	}

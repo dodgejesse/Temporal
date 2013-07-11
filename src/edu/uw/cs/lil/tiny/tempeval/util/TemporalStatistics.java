@@ -35,15 +35,9 @@ public class TemporalStatistics {
 
 	public String toString() {
 		String s = "";
-		s += String.format("Recall: %.2f\n", 100*getRecall());
-		s += String.format("Precision: %.2f\n", 100*getPrecision());
+		s += String.format("Recall: %.2f (%d/%d)\n", 100*getRecall(), correct, gold);
+		s += String.format("Precision: %.2f (%d/%d)\n", 100*getPrecision(), correct, predicted);
 		s += String.format("F1: %.2f\n", 100*getF1());
 		return s;
 	}
-
-	public static boolean hasOverlap (int x1, int x2, int y1, int y2) {
-		// Whether the first and second string at respective indexes have overlapping regions
-		return x2 >= y1 && x1 <= y2;
-	}
-
 }

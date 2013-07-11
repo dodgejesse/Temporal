@@ -23,10 +23,10 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 public class DataReader extends DefaultHandler {
 	final private static String SERIALIZED_DIR = "data/new_serialized_data/";
 	private String currentText;
-	private String currentTimex;
+	private String currentMention;
 	private String currentDocID;
 	private boolean isReadingText;
-	private boolean isReadingTimex;
+	private boolean isReadingMention;
 	private boolean isReadingDocID;
 	private TemporalDocument currentDocument;
 	private StanfordCoreNLP pipeline;
@@ -110,10 +110,10 @@ public class DataReader extends DefaultHandler {
 				else
 					offset = -1;
 
-				currentDocument.insertTimex(type, value, offset);
-				isReadingTimex = true;
+				currentDocument.insertMention(type, value, offset);
+				isReadingMention = true;
 			}
-			currentTimex = "";
+			currentMention = "";
 		}
 		else if (qName.equals("TEXT")) {
 			isReadingText = true;
@@ -126,9 +126,9 @@ public class DataReader extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		if (isReadingTimex && qName.equals("TIMEX3")) {
-			currentDocument.setLastTimexText(currentTimex);
-			isReadingTimex = false;
+		if (isReadingMention && qName.equals("TIMEX3")) {
+			currentDocument.setLastMentionText(currentMention);
+			isReadingMention = false;
 		}
 		else if (qName.equals("TEXT")) {
 			currentDocument.setText(currentText);
@@ -143,8 +143,8 @@ public class DataReader extends DefaultHandler {
 	public void characters(char[] buffer, int start, int length) {
 		if (isReadingText)
 			currentText += new String(buffer, start, length);
-		if (isReadingTimex)
-			currentTimex += new String(buffer, start, length);
+		if (isReadingMention)
+			currentMention += new String(buffer, start, length);
 		if (isReadingDocID)
 			currentDocID += new String(buffer, start, length);
 	}
@@ -154,7 +154,7 @@ public class DataReader extends DefaultHandler {
 		String[] datasets = {"debug_dataset"};
 		TemporalDataset dataset = new DataReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
 		for (TemporalSentence s : dataset) {
-			if (s.getTimexes().size() < 0)
+			if (s.getMentions().size() < 0)
 				System.out.println(s);
 		}
 	}
