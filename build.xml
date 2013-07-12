@@ -4,47 +4,38 @@
     <javac includeantruntime="false" />
   </presetdef>
   <property name="build.dir" value="bin" />
+  <property name="dist.dir" value="dist" />
   <property name="src.dir" value="src" />
   <property name="lib.dir" value="lib" />
-  <property name="jar.file" value="TempEval3Dev.jar" />
-  <property name="main.class" value="edu.uw.cs.lil.tiny.tempeval.TempEval3Dev" />
+  <property name="jar.file" value="TemporalMain.jar" />
+  <property name="main.class" value="edu.uw.cs.lil.tiny.tempeval.TemporalMain" />
   <path id="classpath">
     <fileset dir="${lib.dir}">
-      <include name="*"/>
+      <include name="*.jar"/>
     </fileset>
   </path>
-  
-  <target description="Creates temporary directories" name="init">
-    <mkdir dir="${build.dir}/classes" />
+  <target name="init" description="Creates temporary directories">
+    <mkdir dir="${build.dir}" />
   </target>
-  <target depends="init" description="Removes temporary directories" name="clean">
+  <target name="clean" depends="init" description="Removes temporary directories">
     <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
   </target>
   <target name="compile" depends="init">
-    <javac destdir="${build.dir}/classes" srcdir="${src.dir}" debug="true" verbose="true">
+    <javac destdir="${build.dir}" srcdir="${src.dir}" debug="true" verbose="true">
       <classpath refid="classpath"/>
     </javac>
   </target>
-  <target depends="compile" description="Build the jar files" name="jar">
-    <mkdir dir="${build.dir}/jar"/>
-    <jar destfile="${build.dir}/jar/${jar.file}" basedir="${build.dir}/classes">
-      <fileset dir="${lib.dir}" includes="**/*.class" />
+  <target name="jar" depends="compile" description="Build the jar files">
+    <mkdir dir="${dist.dir}" />
+    <jar destfile="${dist.dir}/${jar.file}" basedir="${build.dir}">
+      <zipgroupfileset dir="${lib.dir}" includes="*.jar" />
       <manifest>
         <attribute name="Main-Class" value="${main.class}" />
       </manifest>
     </jar>
   </target>
-
-  <target depends="jar" description="Run the evaluation" name="eval">
-    <java jar="${build.dir}/jar/${jar.file}" fork="true" />
-  </target>
-
   <target name="run" depends="jar" description="Run the evaluation">
-    <java fork="true" classname="${main.class}">
-      <classpath>
-        <path refid="classpath" />
-        <path location="${build.dir}/jar/${jar.file}" />
-      </classpath>
-    </java>
+    <java jar="${dist.dir}/${jar.file}" fork="true"/>
   </target>
 </project>
