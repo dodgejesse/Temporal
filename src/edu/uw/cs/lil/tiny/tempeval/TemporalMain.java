@@ -15,12 +15,11 @@ import org.xml.sax.SAXException;
 
 public class TemporalMain {
 	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	private static final String LOG_DIR = "logs/";
 
-	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	final private static String[] DATASETS =  {"debug_dataset"};
+	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//final private static String[] DATASETS =  {"debug_dataset"};
 
-	private static final boolean FORCE_SERIALIZATION = true;
+	private static final boolean FORCE_SERIALIZATION = false;
 	private static final boolean CROSS_VALIDATION = true;
 	private static final int CV_FOLDS = 10;
 
@@ -59,12 +58,13 @@ public class TemporalMain {
 	}
 	
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		Debug.setLogs();
 		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);
 		Debug.addFilter("ERROR:", System.out, Type.ERROR);
 		Debug.addFilter("DEBUG:", System.out, Type.DEBUG);
-		Debug.addFilter("", LOG_DIR + "stats.txt", Type.STATS);
-		Debug.addFilter("", LOG_DIR + "attributes.txt", Type.ATTRIBUTE);
-		Debug.addFilter("", LOG_DIR + "detection.txt", Type.DETECTION);
+		Debug.addFilter("", "stats.txt", Type.STATS);
+		Debug.addFilter("", "attributes.txt", Type.ATTRIBUTE);
+		Debug.addFilter("", "detection.txt", Type.DETECTION);
 		TemporalDataset dataset = new TemporalReader().getDataset(DATASET_DIR, DATASETS, FORCE_SERIALIZATION);
 		evaluate(dataset);
 	}

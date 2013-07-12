@@ -11,11 +11,23 @@ import java.util.Set;
 import edu.uw.cs.utils.composites.Pair;
 
 public class Debug {
+	private static final String LOG_ROOT = "logs/";
+	private static String logDir = LOG_ROOT; // Put logs in root by default
+	
 	public static enum Type {
 		PROGRESS, STATS, ATTRIBUTE, DETECTION, DEBUG, ERROR;
 	}
 	private static Map<Type, Set<Pair<String, PrintStream>>> filter = new HashMap<Type, Set<Pair<String, PrintStream>>>();
 
+	private static String getTimestamp() {
+		return System.currentTimeMillis()/1000 + "";
+	}
+	
+	public static void setLogs() {
+		logDir = LOG_ROOT + getTimestamp() + "/";
+		new File(logDir).mkdir();
+	}
+	
 	public static void addFilter(String prefix, PrintStream out, Type... types) {
 		for (Type t : types){
 			if (!filter.containsKey(t))
@@ -25,7 +37,7 @@ public class Debug {
 	}
 	
 	public static void addFilter(String prefix, String filename, Type... types) throws FileNotFoundException {
-		addFilter(prefix, new PrintStream(new File(filename)), types);
+		addFilter(prefix, new PrintStream(new File(logDir + filename)), types);
 	}
 
 	public static void println(Type t, Object s) {
