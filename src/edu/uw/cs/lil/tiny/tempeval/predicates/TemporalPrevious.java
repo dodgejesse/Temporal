@@ -263,8 +263,6 @@ public class TemporalPrevious extends TemporalPredicate {
 					// TODO: talk to people about this!!
 					return first;
 				} else{
-					//System.out.println("Day: " + TemporalDate.getValueFromDate(first, "day"));
-
 					throw new IllegalArgumentException(
 							"Haven't implemented 'prevous' for convex set " + first);
 				}

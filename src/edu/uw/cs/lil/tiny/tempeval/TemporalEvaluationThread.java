@@ -13,8 +13,10 @@ import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 
 public class TemporalEvaluationThread extends Thread {
 	final private int cvFold;
@@ -23,13 +25,16 @@ public class TemporalEvaluationThread extends Thread {
 	final private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
 	final private int perceptronIterations;
 	final private ILexicon<LogicalExpression> fixed;
+	final private OutputData outputData;
+	
 	public TemporalEvaluationThread(TemporalDataset trainData,
 			TemporalDataset testData,
 			TemporalJointParser jointParser,
 			ILexicon<LogicalExpression> fixed,
 			LexicalFeatureSet<Sentence, LogicalExpression> lexPhi,
 			int perceptronIterations,
-			int cvFold){
+			int cvFold, 
+			OutputData outputData){
 
 		this.cvFold = cvFold;
 		this.trainData = trainData;
@@ -38,6 +43,7 @@ public class TemporalEvaluationThread extends Thread {
 		this.lexPhi = lexPhi;
 		this.fixed = fixed;
 		this.perceptronIterations = perceptronIterations;
+		this.outputData = outputData;
 	}
 
 	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
@@ -59,13 +65,13 @@ public class TemporalEvaluationThread extends Thread {
 	public void run(){		
 		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
 		TemporalStatistics detectionStats = detectionTester.test();
-		System.out.println("\nMention detection stats:");
-		System.out.println(detectionStats);
+		Debug.println(Type.STATS, "Mention detection statistics:");
+		Debug.println(Type.STATS, detectionStats);
 
 		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
 
 		TemporalObservationDataset conditionalData = detectionTester.getCorrectObservations();
 		TemporalTester attributeTester = TemporalTester.build(conditionalData, jointParser);
-		attributeTester.test(model, System.out, new OutputData());
+		attributeTester.test(model, outputData);
 	}
 }

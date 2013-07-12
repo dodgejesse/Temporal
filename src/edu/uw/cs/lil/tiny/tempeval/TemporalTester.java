@@ -1,6 +1,5 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.io.PrintStream;
 import java.util.*;
 
 import edu.uw.cs.lil.tiny.data.IDataCollection;
@@ -13,13 +12,14 @@ import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.model.*;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.GovernerVerbPOSExtractor;
 import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTester {
-	private final boolean PRINTRESULTS = false;
 	private final boolean ONLYPRINTINCORRECT = false;
 	private final boolean ONLYPRINTTOOMANYPARSES = false;
 	private final boolean ONLYPRINTNOPARSES = false;
@@ -27,7 +27,6 @@ public class TemporalTester {
 	private final String PHRASE = "a year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
-	private PrintStream out;
 	OutputData outputData;
 
 
@@ -36,16 +35,14 @@ public class TemporalTester {
 		this.jointParser = jointParser;
 	}
 
-	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, 
-			PrintStream out, OutputData outData) {
-		this.out = out;
+	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, OutputData outData) {
 		outputData = outData;
 		test(test, model);
 	}
 
 	private void test(
 			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> testData,
-			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
+					JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		// The number of phrases in total.
 		int counter = 0;
 		// Correctly parsed and executed, both type and val.
@@ -82,7 +79,6 @@ public class TemporalTester {
 		}
 		int[] tmpOutput = {counter, correct, correctVal, correctType, incorrect, tooManyParses, notParsed};
 		outputData.setCounters(tmpOutput);
-		out.println(outputData.toString());
 	}
 
 	private int test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
@@ -93,7 +89,7 @@ public class TemporalTester {
 		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
 		IHashVector averageMaxFeatureVector = null;
 		IHashVector theta = model.getTheta();
-		
+
 		// To extract all of the information from the mention.
 		// The key to know how to unpack this is in TemporalSentence.java.
 		Sentence phrase = dataItem.getSample().first();
@@ -106,40 +102,40 @@ public class TemporalTester {
 		String govVerbPOS = govVerbPOSWithMod.second();
 		String mod = govVerbPOSWithMod.first();
 		// TODO clean this up! I don't need the governor verb here.
-	
+
 		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = 
 				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, dataItem);
 		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(dataItem, jointDataItemModel);
 		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
 		// there is more than one 
 		if (bestParses.size() > 0) {
-			
+
 			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
-			
+
 			averageMaxFeatureVector = topParse.getAverageMaxFeatureVector();
-			
-			
+
+
 			guessType = topParse.getResult().second().type;
 			guessVal = topParse.getResult().second().val;
 			guessLabel = topParse.getResult().second().e;
 			lexicalEntries = topParse.getResult().second().lexicalEntries;
-			
+
 			output = oneParse(goldType, goldVal, guessType, guessVal);
 			correctLogicalForms = anyCorrectLogic(goldType, goldVal, parserOutput.getAllJointParses(), theta);
-			
-			
-		
-		// TODO: Check every parse to make sure a correct one is included.
-		//} else if (bestModelParses.size() > 1) {
-		//	output = 3;
+
+
+
+			// TODO: Check every parse to make sure a correct one is included.
+			//} else if (bestModelParses.size() > 1) {
+			//	output = 3;
 		} else { // zero parses
 			output = 4;
 		}
-		printing(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output,  
-				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta);
+		Debug.println(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output,  
+				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta));
 		return output;
 	}
-	
+
 	private String anyCorrectLogic(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
 		String correctLogicalForms = "";
 		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
@@ -151,7 +147,7 @@ public class TemporalTester {
 		}
 		return correctLogicalForms;
 	}
-	
+
 	// Case we have a single parse
 	// return a Pair<label, int>, where the int indicates if the label is correct.
 	// 0 == correct type and val
@@ -169,46 +165,42 @@ public class TemporalTester {
 			return -1;
 	}
 
-	// args: output is the output of the system
-	private void printing(LogicalExpression label, String goldType, String goldVal,
+	private String formatResult(LogicalExpression label, String goldType, String goldVal,
 			String guessType, String guessVal, String phrase, String ref_time,
 			int correct, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
-		if(!PRINTRESULTS)
-			return;
+		String s =  "\n";
 		if (!ONLYPRINTONEPHRASE || (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
 			if (correct >= -1 && correct <= 2) {
-				if ((ONLYPRINTINCORRECT && (correct == -1)) 
-						|| !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
-					out.println();
-					out.println("Phrase:            " + phrase);
-					out.println("Lexical Entries:   " + lexicalEntries);
-					out.println("Sentence:          " + sentence);
-					out.println("Logic:             " + label);
-					
-					out.println("Average max feats: " + theta.printValues(averageMaxFeatureVector));
-					out.println("ref_time:          " + ref_time);
-					out.println("Gold type:         " + goldType);
-					out.println("gold val:          " + goldVal);
-					out.println("Guess type:        " + guessType);
-					out.println("Guess val:         " + guessVal);
-					out.println("Correct type?      " + (correct == 0 || correct == 1));
-					out.println("Correct val?       " + (correct == 0 || correct == 2));
-					out.println("Correct logics:    " + correctLogicalForms);
-					out.println("Governor verb POS: " + govVerbPOS);
-					out.println("Mod:               " + mod.equals("MD"));
+				if ((ONLYPRINTINCORRECT && (correct == -1)) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
+					s += "Phrase:            " + phrase + "\n";
+					s += "Lexical Entries:   " + lexicalEntries + "\n";
+					s += "Sentence:          " + sentence + "\n";
+					s += "Logic:             " + label + "\n";
+
+					s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
+					s += "ref_time:          " + ref_time + "\n";
+					s += "Gold type:         " + goldType + "\n";
+					s += "gold val:          " + goldVal + "\n";
+					s += "Guess type:        " + guessType + "\n";
+					s += "Guess val:         " + guessVal + "\n";
+					s += "Correct type?      " + (correct == 0 || correct == 1) + "\n";
+					s += "Correct val?       " + (correct == 0 || correct == 2) + "\n";
+					s += "Correct logics:    " + correctLogicalForms + "\n";
+					s += "Governor verb POS: " + govVerbPOS + "\n";
+					s += "Mod:               " + mod.equals("MD") + "\n";
 				}
 			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
-				out.println();
-				out.println("Phrase:            " + phrase);
-				out.println("Sentence:          " + sentence);
-				out.println("ref_time:          " + ref_time);
-				out.println("Gold type:         " + goldType);
-				out.println("gold val:          " + goldVal);
-				out.println("No parses! Will implement something"
-						+ " to throw out words and try again.");
+				s += "Phrase:            " + phrase + "\n";
+				s += "Sentence:          " + sentence + "\n";
+				s += "ref_time:          " + ref_time + "\n";
+				s += "Gold type:         " + goldType + "\n";
+				s += "gold val:          " + goldVal + "\n";
+				s += "No parses! Will implement something"
+						+ " to throw out words and try again.\n";
 			}
 		}
+		return s;
 	}
 
 	public static TemporalTester build(TemporalObservationDataset test,	TemporalJointParser parser) {

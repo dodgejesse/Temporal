@@ -205,9 +205,6 @@ public class TemporalJointParser extends
 					prevISO = null;
 
 				// TODO: Unsolved mystery: the CKY parser gives different parses depending on the dataset, even if one is a subset of another.
-				//System.out.println("Executing the phrase: " + phrase);
-				//System.out.println("with logic: " + labels[i].toString());
-				//System.out.println("and lexical entries: " + l.getAllLexicalEntries());
 				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime,
 						prevISO);
 				

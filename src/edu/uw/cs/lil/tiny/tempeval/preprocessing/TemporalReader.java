@@ -19,6 +19,8 @@ import edu.stanford.nlp.trees.SemanticHeadFinder;
 import edu.stanford.nlp.util.Filters;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 
 public class TemporalReader extends DefaultHandler {
 	final private static String SERIALIZED_DIR = "data/serialized_data/";
@@ -58,13 +60,13 @@ public class TemporalReader extends DefaultHandler {
 		File serializedFile = new File(SERIALIZED_DIR + serializedName + ".ser");
 		if(forceSerialize || !serializedFile.exists()) {
 			if (forceSerialize)			
-				System.out.println("Forcing serialization.");
+				Debug.println(Type.PROGRESS, "Forcing serialization.");
 			else
-				System.out.println("Serialized data unavailable.");
+				Debug.println(Type.PROGRESS,"Serialized data unavailable.");
 
 			initLibraries();
 
-			System.out.println("Reading and dependency parsing data...");
+			Debug.println(Type.PROGRESS,"Reading and dependency parsing data...");
 
 			long startTime = System.nanoTime();
 
@@ -73,11 +75,11 @@ public class TemporalReader extends DefaultHandler {
 			for(String datasetName : datasetNames) {
 				File xmlDir = new File(datasetRoot + datasetName);
 				File[] xmlFiles = xmlDir.listFiles();
-				System.out.printf("Reading %d files from %s\n", xmlFiles.length, datasetName);
+				Debug.printf(Type.PROGRESS,"Reading %d files from %s\n", xmlFiles.length, datasetName);
 				int count = 0;
 				for(File f: xmlFiles) {
 					count ++;
-					System.out.printf("[%d/%d] Parsing %s\n", count, xmlFiles.length, f.getName());
+					Debug.printf(Type.PROGRESS,"[%d/%d] Parsing %s\n", count, xmlFiles.length, f.getName());
 					currentDocument = new TemporalDocument();
 					sp.parse(xmlDir.getPath() + "/" + f.getName(), this);
 					currentDocument.doPreprocessing(pipeline, gsf);
@@ -87,11 +89,11 @@ public class TemporalReader extends DefaultHandler {
 			dataset.serialize(serializedFile.getPath());
 
 			long endTime = System.nanoTime();
-			System.out.printf("%d sentences parsed and serialized (%.2f seconds)\n", dataset.size(), (endTime - startTime)*1.0e-9);
+			Debug.printf(Type.PROGRESS,"%d sentences parsed and serialized (%.2f seconds)\n", dataset.size(), (endTime - startTime)*1.0e-9);
 			return dataset;
 		}
 		else {
-			System.out.println("Serialized data found. Deserializing data...");
+			Debug.println(Type.PROGRESS,"Serialized data found. Deserializing data...");
 			return TemporalDataset.deserialize(serializedFile.getPath());
 		}
 	}
@@ -155,7 +157,7 @@ public class TemporalReader extends DefaultHandler {
 		TemporalDataset dataset = new TemporalReader().getDataset("data/TempEval3/TBAQ-cleaned/", datasets, true);
 		for (TemporalSentence s : dataset) {
 			if (s.getMentions().size() < 0)
-				System.out.println(s);
+				Debug.println(Type.DEBUG,s);
 		}
 	}
 }

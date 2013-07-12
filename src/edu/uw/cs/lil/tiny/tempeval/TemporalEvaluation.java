@@ -29,6 +29,9 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
 import edu.uw.cs.lil.tiny.tempeval.preprocessing.TemporalReader;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import java.io.File;
 import java.io.IOException;
@@ -42,13 +45,15 @@ import org.xml.sax.SAXException;
 
 public class TemporalEvaluation {
 	private static final String RESOURCES_DIR = "data/resources/";
-	final private static String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	//final private static String[] DATASETS =  {"debug_dataset"};
+	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
+	private static final String LOG_DIR = "logs/";
+
+	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	final private static String[] DATASETS =  {"debug_dataset"};
 
 	private static final boolean FORCE_SERIALIZATION = false;
-	private static final boolean CROSS_VALIDATION = false;
-	private static final int CV_FOLDS = 10;
+	private static final boolean CROSS_VALIDATION = true;
+	private static final int CV_FOLDS = 2;
 	private static final int PERCEPTRON_ITERATIONS = 1;
 	private ICategoryServices<LogicalExpression> categoryServices;
 	private ILexicon<LogicalExpression> fixed;
@@ -130,18 +135,21 @@ public class TemporalEvaluation {
 	}
 
 	public void evaluate() {
-		System.out.printf("Evaluating %d sentences...\n", dataset.size());
+		Debug.printf (Type.PROGRESS,"Evaluating %d sentences...\n\n", dataset.size());
 		if (CROSS_VALIDATION){
 			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluationThread[] threads = new TemporalEvaluationThread[partitions.size()];
+			OutputData[] outList = new OutputData[partitions.size()];
+
 			for (int i = 0; i < partitions.size(); i++){
+				outList[i] = new OutputData();
 				TemporalDataset trainData = new TemporalDataset();
 				TemporalDataset testData = new TemporalDataset(partitions.get(i));
 				for (int j = 0; j < partitions.size(); j++)
 					if (j != i)
 						trainData.addSentences(partitions.get(j));
 
-				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i);
+				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i, outList[i]);
 				threads[i].start();
 			}
 			for (int i = 0; i < threads.length; i++){
@@ -152,13 +160,23 @@ public class TemporalEvaluation {
 					System.err.println("Some problems getting the threads to join again!");
 				}
 			}
+			Debug.println(Type.STATS, "Attribute detection statistics:");
+			Debug.println(Type.STATS,(OutputData.average(outList)));
 		} else {
 			// Train and test on the same dataset for debugging
-			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1).run();
+			OutputData outputData = new OutputData();
+			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1, outputData).run();
+
+			Debug.println(Type.STATS, "Attribute detection statistics:");
+			Debug.println(Type.STATS, outputData);
 		}
-		System.out.println("Done");
+		Debug.printf(Type.PROGRESS, "Done");
 	}
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		Debug.addFilter(System.out, Type.ERROR, Type.DEBUG, Type.PROGRESS, Type.STATS);
+		Debug.addFilter(LOG_DIR + "stats.txt", Type.STATS);
+		Debug.addFilter(LOG_DIR + "attributes.txt", Type.ATTRIBUTE);
+		Debug.addFilter(LOG_DIR + "detection.txt", Type.DETECTION);
 		new TemporalEvaluation(DATASET_DIR, DATASETS).evaluate();
 	}
 }

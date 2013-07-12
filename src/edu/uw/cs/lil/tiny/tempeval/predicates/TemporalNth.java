@@ -79,8 +79,6 @@ public class TemporalNth extends TemporalPredicate{
 			return new TemporalDate("week");
 		else if (first.isSet("hour"))
 			return new TemporalDate("day");
-		System.out.println("first: " + first);
-		System.out.println(first.isConvexSet());
 		throw new IllegalArgumentException("Problem with the first stored ISO in TemporalNth!");
 	}
 }

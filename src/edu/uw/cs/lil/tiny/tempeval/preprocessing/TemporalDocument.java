@@ -19,6 +19,8 @@ import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDocument {
@@ -104,7 +106,7 @@ public class TemporalDocument {
 					startIndexes.first().insertMention(t);
 				}
 				else
-					System.out.printf("Unable to find offset for mention [#%d - #%d]: (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
+					Debug.printf(Type.ERROR, "Unable to find offset for mention [#%d - #%d]: (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
 			}
 		}
 	}

@@ -30,15 +30,14 @@ public class OutputData {
 	}
 	
 	public String toString(){
-		String s = "\n";
-		s += "\n";
-		s += "\n" + "Total phrases: " + counters[0];
+		String s = "";
+		s += "Total phrases: " + counters[0];
 		s += "\n" + "Number correctly parsed and executed, with correct type and val: " + counters[1]
-						+ ", which is " + (double) counters[1] * 100 / counters[0] + " percent";
-		s += "\n" + "Number parsed with correct val, but not type: " + counters[2] + ", which is "  + (double) counters[2] * 100 / counters[0] + " percent.";
-		s += "\n" + "Number parsed with correct type, but not val: " + counters[3] + ", which is "  + (double) counters[3] * 100 / counters[0] + " percent.";
+						+ ", which is " + String.format("%.2f", counters[1] * 100.0 / counters[0]) + "%";
+		s += "\n" + "Number parsed with correct val, but not type: " + counters[2] + ", which is "  + String.format("%.2f", counters[2] * 100.0 / counters[0]) + "%";
+		s += "\n" + "Number parsed with correct type, but not val: " + counters[3] + ", which is "  + String.format("%.2f", counters[3] * 100.0 / counters[0]) + "%";
 		s += "\n" + "Number parsed, but with incorrect type and val: "
-						+ counters[4] + ", which his " + (double) counters[4] * 100 / counters[0] + " percent";
+						+ counters[4] + ", which his " + String.format("%.2f", counters[4] * 100.0 / counters[0]) + "%";
 		s += "\n" + "Number with too many parses: " + counters[5];
 		s += "\n" + "Number with no parses: " + counters[6];
 		return s;

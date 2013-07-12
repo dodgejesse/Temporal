@@ -18,15 +18,7 @@ public class TemporalReference extends TemporalPredicate{
 	
 	public TemporalISO perform(){
 		if (previous == null || first.isFullySpecified() || !(first instanceof TemporalDuration) || notSameFields()){
-//			System.out.println();
-//			System.out.println("first");
-//			System.out.println(first);
-//			System.out.println();
-//			System.out.println("second");
-//			System.out.println(second);
-//			System.out.println();
 			return new TemporalDate("year", 0);
-			//return first;
 		}
 
 		
@@ -44,15 +36,6 @@ public class TemporalReference extends TemporalPredicate{
 				tmpMap.get(s).add(firstValue + prevValue);
 			}
 		}
-		
-//		System.out.println("TemporalRefenece time!");
-//		System.out.println("First argument: " );
-//		System.out.println(first);
-//		System.out.println("Second argument: " );
-//		System.out.println(second);
-//		System.out.println();
-//		System.out.println("The output from this call: ");
-//		System.out.println(new TemporalDate(tmpMap));
 		return new TemporalDate(tmpMap);
 	}
 	

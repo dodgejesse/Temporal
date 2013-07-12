@@ -16,6 +16,8 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 
 public class TemporalDetectionTester {
@@ -46,23 +48,23 @@ public class TemporalDetectionTester {
 		for (TemporalSentence ts : testData) {
 			sentenceCount++;
 			if (sentenceCount % 100 == 0)
-				System.out.printf("Evaluating %d/%d sentences...\n", sentenceCount, testData.size());
+				Debug.printf(Type.PROGRESS, "Evaluating %d/%d sentences...\n", sentenceCount, testData.size());
 			stats.addGold(ts.getMentions().size());
 			List<TemporalMention> predictedMentions = getPredictedMentions(ts.getTokens(), dummyDataItemModel);
 			stats.addPredicted(predictedMentions.size());
 			List<TemporalMention> correctMentions = getCorrectMentions(ts.getMentions(), predictedMentions);
 			stats.addCorrect(correctMentions.size());
 			if (correctMentions.size() < ts.getMentions().size()) {
-				System.out.printf ("False negative from '%s':\n", ts.prettyString());
+				Debug.printf(Type.DETECTION, "False negative from '%s':\n", ts.prettyString());
 				for(TemporalMention fn: getFalseNegatives(correctMentions, ts.getMentions()))
-					System.out.printf("[%s]", fn);
-				System.out.println();
+					Debug.printf(Type.DETECTION, "[%s]", fn);
+				Debug.println(Type.DETECTION);
 			}
 			if (correctMentions.size() < predictedMentions.size()) {
-				System.out.printf ("False positive from '%s':\n", ts.prettyString());
+				Debug.printf(Type.DETECTION, "False positive from '%s':\n", ts.prettyString());
 				for(TemporalMention fp : getFalsePositives(correctMentions, predictedMentions))
-					System.out.printf("[%s]", fp);
-				System.out.println();
+					Debug.printf(Type.DETECTION, "[%s]", fp);
+				Debug.println(Type.DETECTION);
 			}
 			if (!correctMentions.isEmpty())
 				correctObservations.addObservations(ts.getObservations(correctMentions));
