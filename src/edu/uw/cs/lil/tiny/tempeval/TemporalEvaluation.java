@@ -1,5 +1,10 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
+import edu.uw.cs.lil.learn.simple.joint.JointSimplePerceptron;
 import edu.uw.cs.lil.tiny.ccg.categories.ICategoryServices;
 import edu.uw.cs.lil.tiny.ccg.categories.syntax.Syntax;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
@@ -26,54 +31,45 @@ import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardApplication;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.primitivebinary.ForwardComposition;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.BackwardSkippingRule;
 import edu.uw.cs.lil.tiny.parser.ccg.rules.skipping.ForwardSkippingRule;
-import edu.uw.cs.lil.tiny.tempeval.preprocessing.TemporalReader;
-import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
+import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-public class TemporalEvaluation {
+public class TemporalEvaluation extends Thread {
 	private static final String RESOURCES_DIR = "data/resources/";
-	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
-	private static final String LOG_DIR = "logs/";
-
-	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	final private static String[] DATASETS =  {"debug_dataset"};
-
-	private static final boolean FORCE_SERIALIZATION = false;
-	private static final boolean CROSS_VALIDATION = true;
-	private static final int CV_FOLDS = 2;
 	private static final int PERCEPTRON_ITERATIONS = 1;
-	private ICategoryServices<LogicalExpression> categoryServices;
-	private ILexicon<LogicalExpression> fixed;
-	private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
-	private TemporalJointParser jointParser;
-	private TemporalDataset dataset;
 
-	public TemporalEvaluation(String datasetDirectory, String[] datasets) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+	final private TemporalDataset trainData, testData;
+	final private TemporalJointParser jointParser;
+	final private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
+	final private ILexicon<LogicalExpression> fixed;
+	final private TemporalStatistics stats;
+	
+	static {
 		LogicLanguageServices.setInstance(new LogicLanguageServices.Builder(
 				new TypeRepository(new File(RESOURCES_DIR + "tempeval.types.txt"))).setNumeralTypeName("i")
 				.setTypeComparator(new FlexibleTypeComparator()).build());
-		categoryServices = new LogicalExpressionCategoryServices();
+	}
+	
+	public TemporalEvaluation(TemporalDataset trainData, TemporalDataset testData, TemporalStatistics stats){
+		this.trainData = trainData;
+		this.testData = testData;
+		this.stats = stats;
+		
+		
+		LogicalExpressionCategoryServices categoryServices = new LogicalExpressionCategoryServices();
 		fixed = getFixedLexicon(categoryServices);
 		lexPhi = getLexPhi(categoryServices);
 		jointParser = new TemporalJointParser(getParser(categoryServices));
-		dataset = new TemporalReader().getDataset(datasetDirectory, datasets, FORCE_SERIALIZATION);
 	}
-
-
-	public static ILexicon<LogicalExpression> getFixedLexicon(ICategoryServices<LogicalExpression> categoryServices) {
+	
+	public ILexicon<LogicalExpression> getFixedLexicon(ICategoryServices<LogicalExpression> categoryServices) {
 		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
 		fixedInput.addEntriesFromFile(new File(RESOURCES_DIR
 				+ "tempeval.lexicon.txt"), new StubStringFilter(),
@@ -86,7 +82,7 @@ public class TemporalEvaluation {
 		return fixed;
 	}
 
-	public static LexicalFeatureSet<Sentence, LogicalExpression> getLexPhi(ICategoryServices<LogicalExpression> categoryServices) {
+	public LexicalFeatureSet<Sentence, LogicalExpression> getLexPhi(ICategoryServices<LogicalExpression> categoryServices) {
 		return new LexicalFeatureSet.Builder<Sentence,LogicalExpression>()
 				.setInitialFixedScorer(
 						new ExpLengthLexicalEntryScorer<LogicalExpression>(
@@ -100,7 +96,7 @@ public class TemporalEvaluation {
 														.build();
 	}
 
-	public static AbstractCKYParser<LogicalExpression> getParser (ICategoryServices<LogicalExpression> categoryServices) {
+	public AbstractCKYParser<LogicalExpression> getParser (ICategoryServices<LogicalExpression> categoryServices) {
 		final RuleSetBuilder<LogicalExpression> ruleSetBuilder = new RuleSetBuilder<LogicalExpression>();
 		// Binary rules
 		ruleSetBuilder.add(new ForwardComposition<LogicalExpression>(
@@ -134,48 +130,30 @@ public class TemporalEvaluation {
 
 	}
 
-	public void evaluate() {
-		Debug.printf (Type.PROGRESS,"Evaluating %d sentences...\n\n", dataset.size());
-		TemporalStatistics stats = new TemporalStatistics();
-		
-		if (CROSS_VALIDATION){
-			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
-			TemporalEvaluationThread[] threads = new TemporalEvaluationThread[partitions.size()];
-			
-			for (int i = 0; i < partitions.size(); i++){
-				TemporalDataset trainData = new TemporalDataset();
-				TemporalDataset testData = new TemporalDataset(partitions.get(i));
-				for (int j = 0; j < partitions.size(); j++)
-					if (j != i)
-						trainData.addSentences(partitions.get(j));
-
-				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i, stats);
-				threads[i].start();
-			}
-			for (int i = 0; i < threads.length; i++){
-				try{
-					threads[i].join();
-				} catch (InterruptedException e){
-					e.printStackTrace();
-					System.err.println("Some problems getting the threads to join again!");
-				}
-			}
-		} else {
-			// Train and test on the same dataset for debugging
-			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1, stats).run();
-		}
-		
-		Debug.println(Type.STATS, stats);
-		
-		Debug.printf(Type.PROGRESS, "Done with analysis.");
+	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
+		TemporalObservationDataset observations = dataset.getObservations();
+		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> learner = new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
+				PERCEPTRON_ITERATIONS, observations, jointParser);
+		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
+				.addJointFeatureSet(new TemporalContextFeatureSet())
+				.addJointFeatureSet(new TemporalReferenceFeatureSet())
+				.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
+				.addLexicalFeatureSet(lexPhi)
+				.setLexicon(new Lexicon<LogicalExpression>()).build();
+		model.addFixedLexicalEntries(fixed.toCollection());
+		learner.train(model);
+		return model;
 	}
-	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);
-		Debug.addFilter("ERROR:", System.out, Type.ERROR);
-		Debug.addFilter("DEBUG:", System.out, Type.DEBUG);
-		Debug.addFilter("", LOG_DIR + "stats.txt", Type.STATS);
-		Debug.addFilter("", LOG_DIR + "attributes.txt", Type.ATTRIBUTE);
-		Debug.addFilter("", LOG_DIR + "detection.txt", Type.DETECTION);
-		new TemporalEvaluation(DATASET_DIR, DATASETS).evaluate();
+
+
+	public void run(){		
+		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
+		detectionTester.test(stats);
+
+		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
+
+		TemporalObservationDataset conditionalData = detectionTester.getCorrectObservations();
+		TemporalAttributeTester attributeTester = TemporalAttributeTester.build(conditionalData, jointParser);
+		attributeTester.test(model, stats);
 	}
 }

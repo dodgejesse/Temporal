@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.utils.composites.Pair;
 
 public class Debug {

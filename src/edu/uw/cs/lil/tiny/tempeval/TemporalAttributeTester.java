@@ -20,17 +20,17 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
-public class TemporalTester {
-	private final boolean PRINT_CORRECT = false;
-	private final boolean PRINT_INCORRECT = false;
-	private final boolean PRINT_NOPARSES = false;
+public class TemporalAttributeTester {
+	private final boolean PRINT_CORRECT = true;
+	private final boolean PRINT_INCORRECT = true;
+	private final boolean PRINT_NOPARSES = true;
 	private final String PHRASE = "a year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
 	private TemporalStatistics stats;
 
 
-	private TemporalTester(TemporalObservationDataset test,	TemporalJointParser jointParser) {
+	private TemporalAttributeTester(TemporalObservationDataset test,	TemporalJointParser jointParser) {
 		this.test = test;
 		this.jointParser = jointParser;
 	}
@@ -163,7 +163,7 @@ public class TemporalTester {
 		return s;
 	}
 
-	public static TemporalTester build(TemporalObservationDataset test,	TemporalJointParser parser) {
-		return new TemporalTester(test, parser);
+	public static TemporalAttributeTester build(TemporalObservationDataset test,	TemporalJointParser parser) {
+		return new TemporalAttributeTester(test, parser);
 	}
 }
