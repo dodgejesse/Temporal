@@ -36,6 +36,7 @@ public class TemporalReader extends DefaultHandler {
 	private SAXParser sp;
 
 	public TemporalReader(){
+		// Don't initialize anything until we know we need it.
 	}
 
 	private void initLibraries() throws ParserConfigurationException, SAXException {
@@ -51,6 +52,7 @@ public class TemporalReader extends DefaultHandler {
 	}
 
 	public TemporalDataset getDataset(String datasetRoot, String[] datasetNames, boolean forceSerialize) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		new File(SERIALIZED_DIR).mkdirs();
 		String serializedName = "";
 		for(String s : datasetNames) {
 			if (serializedName.length() > 0)

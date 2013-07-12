@@ -28,7 +28,7 @@ public class Debug {
 
 	public static void setLogs(String dir) {
 		logDir = LOG_ROOT + dir + "/";
-		new File(logDir).mkdir();
+		new File(logDir).mkdirs();
 	}
 	
 	public static void setLogs() {

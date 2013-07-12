@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="compile">
+<project basedir="." default="run">
+
   <presetdef name="javac">
     <javac includeantruntime="false" />
   </presetdef>
+
   <property name="build.dir" value="bin" />
   <property name="dist.dir" value="dist" />
   <property name="src.dir" value="src" />
   <property name="lib.dir" value="lib" />
   <property name="jar.file" value="TemporalMain.jar" />
   <property name="main.class" value="edu.uw.cs.lil.tiny.tempeval.TemporalMain" />
+
   <path id="classpath">
+    <pathelement location="${build.dir}" />
     <fileset dir="${lib.dir}">
       <include name="*.jar"/>
     </fileset>
   </path>
+
   <target name="init" description="Creates temporary directories">
     <mkdir dir="${build.dir}" />
   </target>
-  <target name="clean" depends="init" description="Removes temporary directories">
-    <delete dir="${build.dir}" />
-    <delete dir="${dist.dir}" />
-  </target>
+
   <target name="compile" depends="init">
     <javac destdir="${build.dir}" srcdir="${src.dir}" debug="true" verbose="true">
       <classpath refid="classpath"/>
     </javac>
   </target>
+
+  <target name="run" depends="compile" description="Run the evaluation">
+    <java classname="${main.class}"> 
+      <classpath refid="classpath" />
+    </java> 
+  </target>
+
   <target name="jar" depends="compile" description="Build the jar files">
     <mkdir dir="${dist.dir}" />
     <jar destfile="${dist.dir}/${jar.file}" basedir="${build.dir}">
@@ -35,7 +44,10 @@
       </manifest>
     </jar>
   </target>
-  <target name="run" depends="jar" description="Run the evaluation">
-    <java jar="${dist.dir}/${jar.file}" fork="true"/>
+
+  <target name="clean" description="Removes temporary directories">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
   </target>
+
 </project>
