@@ -16,8 +16,8 @@ import org.xml.sax.SAXException;
 public class TemporalMain {
 	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
 
-	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	//final private static String[] DATASETS =  {"debug_dataset"};
+	//final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	final private static String[] DATASETS =  {"debug_dataset"};
 
 	private static final boolean FORCE_SERIALIZATION = false;
 	private static final boolean CROSS_VALIDATION = true;
@@ -58,6 +58,7 @@ public class TemporalMain {
 	}
 	
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
+		//Debug.setLogs("debug");
 		Debug.setLogs();
 		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);
 		Debug.addFilter("ERROR:", System.out, Type.ERROR);

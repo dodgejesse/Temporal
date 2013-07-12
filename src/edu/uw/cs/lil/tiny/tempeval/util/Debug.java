@@ -3,6 +3,8 @@ package edu.uw.cs.lil.tiny.tempeval.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,19 +15,24 @@ import edu.uw.cs.utils.composites.Pair;
 public class Debug {
 	private static final String LOG_ROOT = "logs/";
 	private static String logDir = LOG_ROOT; // Put logs in root by default
-	
+	private static SimpleDateFormat formatter = new SimpleDateFormat("HH-mm-ss_MM-dd-yyyy");
+
 	public static enum Type {
 		PROGRESS, STATS, ATTRIBUTE, DETECTION, DEBUG, ERROR;
 	}
 	private static Map<Type, Set<Pair<String, PrintStream>>> filter = new HashMap<Type, Set<Pair<String, PrintStream>>>();
 
 	private static String getTimestamp() {
-		return System.currentTimeMillis()/1000 + "";
+		return formatter.format(new Date());
+	}
+
+	public static void setLogs(String dir) {
+		logDir = LOG_ROOT + dir + "/";
+		new File(logDir).mkdir();
 	}
 	
 	public static void setLogs() {
-		logDir = LOG_ROOT + getTimestamp() + "/";
-		new File(logDir).mkdir();
+		setLogs("autogen-" + getTimestamp());
 	}
 	
 	public static void addFilter(String prefix, PrintStream out, Type... types) {
