@@ -42,7 +42,7 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 
 public class TemporalEvaluation extends Thread {
-	private static final String RESOURCES_DIR = "data/resources/";
+	private static final String RESOURCES_DIR = "resources/";
 	private static final int PERCEPTRON_ITERATIONS = 1;
 
 	final private TemporalDataset trainData, testData;
