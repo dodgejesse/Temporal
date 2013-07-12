@@ -1,6 +1,7 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import edu.uw.cs.lil.tiny.data.IDataCollection;
 import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
@@ -15,19 +16,18 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.GovernerVerbPOSExtractor;
-import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalTester {
-	private final boolean ONLYPRINTINCORRECT = false;
-	private final boolean ONLYPRINTTOOMANYPARSES = false;
-	private final boolean ONLYPRINTNOPARSES = false;
-	private final boolean ONLYPRINTONEPHRASE = false;
+	private final boolean PRINT_CORRECT = false;
+	private final boolean PRINT_INCORRECT = false;
+	private final boolean PRINT_NOPARSES = false;
 	private final String PHRASE = "a year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
-	OutputData outputData;
+	private TemporalStatistics stats;
 
 
 	private TemporalTester(TemporalObservationDataset test,	TemporalJointParser jointParser) {
@@ -35,55 +35,21 @@ public class TemporalTester {
 		this.jointParser = jointParser;
 	}
 
-	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, OutputData outData) {
-		outputData = outData;
+	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, TemporalStatistics stats) {
+		this.stats = stats;
 		test(test, model);
 	}
 
-	private void test(
-			IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> testData,
-					JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
-		// The number of phrases in total.
-		int counter = 0;
-		// Correctly parsed and executed, both type and val.
-		int correct = 0;
-		// Parsed and executed, but either type or val are wrong.
-		int incorrect = 0;
-		// Number with the correct type.
-		int correctType = 0;
-		// Number with the correct value.
-		int correctVal = 0;
-		// Too many parses.
-		int tooManyParses = 0;
-		// Not parsed.
-		int notParsed = 0;
+	private void test(IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> testData,
+			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		for (final ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> item : testData) {
-			counter++;
-			int c = test(item, model);
-			// 0 == correct type and val
-			// 1 == correct type, not val
-			// 2 == incorrect type, correct val
-			// -1 == incorrect type and val
-			if (c == -1)
-				incorrect++;
-			else if (c == 0)
-				correct++;
-			else if (c == 1)
-				correctType++;
-			else if (c == 2)
-				correctVal++;
-			else if (c == 3)
-				tooManyParses++;
-			else// if (c == 4)
-				notParsed++;
+			stats.incrementTotalObservations();
+			test(item, model);
 		}
-		int[] tmpOutput = {counter, correct, correctVal, correctType, incorrect, tooManyParses, notParsed};
-		outputData.setCounters(tmpOutput);
 	}
 
-	private int test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
+	private void test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
 			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
-		int output;
 		LogicalExpression guessLabel = null;
 		String guessType = "", guessVal = "", correctLogicalForms = "";
 		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
@@ -107,9 +73,10 @@ public class TemporalTester {
 				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, dataItem);
 		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(dataItem, jointDataItemModel);
 		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
+		boolean isCorrect;
+		boolean hasParse = bestParses.size() > 0;
 		// there is more than one 
-		if (bestParses.size() > 0) {
-
+		if (hasParse) {
 			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
 
 			averageMaxFeatureVector = topParse.getAverageMaxFeatureVector();
@@ -120,20 +87,18 @@ public class TemporalTester {
 			guessLabel = topParse.getResult().second().e;
 			lexicalEntries = topParse.getResult().second().lexicalEntries;
 
-			output = oneParse(goldType, goldVal, guessType, guessVal);
+			isCorrect = evaluateTopParse(goldType, goldVal, guessType, guessVal);
 			correctLogicalForms = anyCorrectLogic(goldType, goldVal, parserOutput.getAllJointParses(), theta);
-
-
 
 			// TODO: Check every parse to make sure a correct one is included.
 			//} else if (bestModelParses.size() > 1) {
 			//	output = 3;
 		} else { // zero parses
-			output = 4;
+			stats.incrementNoParses();
+			isCorrect = false;
 		}
-		Debug.println(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, output,  
+		Debug.println(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
 				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta));
-		return output;
 	}
 
 	private String anyCorrectLogic(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
@@ -142,63 +107,58 @@ public class TemporalTester {
 			String guessType = l.getResult().second().type;
 			String guessVal = l.getResult().second().val;
 			LogicalExpression guessLabel = l.getResult().second().e;
-			if (oneParse(goldType, goldVal, guessType, guessVal) == 0)
+			if (goldType.equals(guessType) && goldVal.equals(guessVal))
 				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
 		}
 		return correctLogicalForms;
 	}
 
-	// Case we have a single parse
-	// return a Pair<label, int>, where the int indicates if the label is correct.
-	// 0 == correct type and val
-	// 1 == correct type, not val
-	// 2 == incorrect type, correct val
-	// -1 == incorrect type and val
-	private int oneParse(String goldType, String goldVal, String guessType, String guessVal){
-		if (goldType.equals(guessType) && goldVal.equals(guessVal))
-			return 0;
+	private boolean evaluateTopParse(String goldType, String goldVal, String guessType, String guessVal){
+		if (goldType.equals(guessType) && goldVal.equals(guessVal)) {
+			stats.incrementCorrectObservations();
+			return true;
+		}
 		else if (goldType.equals(guessType) && !goldVal.equals(guessVal))
-			return 1;
+			stats.incrementCorrectTypes();
 		else if (!goldType.equals(guessType) && goldVal.equals(guessVal))
-			return 2;
+			stats.incrementCorrectValues();
 		else 
-			return -1;
+			stats.incrementIncorrectObservations();
+		return false;
 	}
 
 	private String formatResult(LogicalExpression label, String goldType, String goldVal,
 			String guessType, String guessVal, String phrase, String ref_time,
-			int correct, String depParse, String govVerbPOS, String sentence, String mod, 
+			boolean isCorrect, boolean hasParse, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
 		String s =  "\n";
-		if (!ONLYPRINTONEPHRASE || (ONLYPRINTONEPHRASE && phrase.contains(PHRASE))) {
-			if (correct >= -1 && correct <= 2) {
-				if ((ONLYPRINTINCORRECT && (correct == -1)) || !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES && !ONLYPRINTNOPARSES) {
-					s += "Phrase:            " + phrase + "\n";
-					s += "Lexical Entries:   " + lexicalEntries + "\n";
-					s += "Sentence:          " + sentence + "\n";
-					s += "Logic:             " + label + "\n";
-
-					s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
-					s += "ref_time:          " + ref_time + "\n";
-					s += "Gold type:         " + goldType + "\n";
-					s += "gold val:          " + goldVal + "\n";
-					s += "Guess type:        " + guessType + "\n";
-					s += "Guess val:         " + guessVal + "\n";
-					s += "Correct type?      " + (correct == 0 || correct == 1) + "\n";
-					s += "Correct val?       " + (correct == 0 || correct == 2) + "\n";
-					s += "Correct logics:    " + correctLogicalForms + "\n";
-					s += "Governor verb POS: " + govVerbPOS + "\n";
-					s += "Mod:               " + mod.equals("MD") + "\n";
-				}
-			} else if ((correct == 4 && !ONLYPRINTINCORRECT && !ONLYPRINTTOOMANYPARSES) || correct == 4 && ONLYPRINTNOPARSES) {
+		if (hasParse) {
+			if(PRINT_CORRECT && isCorrect || PRINT_INCORRECT && !isCorrect || phrase.contains(PHRASE)) {
 				s += "Phrase:            " + phrase + "\n";
+				s += "Lexical Entries:   " + lexicalEntries + "\n";
 				s += "Sentence:          " + sentence + "\n";
+				s += "Logic:             " + label + "\n";
+
+				s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
 				s += "ref_time:          " + ref_time + "\n";
 				s += "Gold type:         " + goldType + "\n";
 				s += "gold val:          " + goldVal + "\n";
-				s += "No parses! Will implement something"
-						+ " to throw out words and try again.\n";
+				s += "Guess type:        " + guessType + "\n";
+				s += "Guess val:         " + guessVal + "\n";
+				s += "Correct?           " + isCorrect + "\n";
+				s += "Correct logics:    " + correctLogicalForms + "\n";
+				s += "Governor verb POS: " + govVerbPOS + "\n";
+				s += "Mod:               " + mod.equals("MD") + "\n";
 			}
+		}
+		else if (PRINT_NOPARSES) {
+			s += "Phrase:            " + phrase + "\n";
+			s += "Sentence:          " + sentence + "\n";
+			s += "ref_time:          " + ref_time + "\n";
+			s += "Gold type:         " + goldType + "\n";
+			s += "gold val:          " + goldVal + "\n";
+			s += "No parses! Will implement something"
+					+ " to throw out words and try again.\n";
 		}
 		return s;
 	}

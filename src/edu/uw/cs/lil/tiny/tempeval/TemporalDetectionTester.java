@@ -22,7 +22,6 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 
 public class TemporalDetectionTester {
 	final private int MAX_MENTION_LENGTH = 5;
-	private TemporalStatistics stats;
 	private TemporalDataset testData;
 	private JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dummyDataItemModel;
 	private TemporalJointParser jointParser;
@@ -38,12 +37,10 @@ public class TemporalDetectionTester {
 
 		// dataItem doesn't actually matter, since there is no scoring involved
 		dummyDataItemModel = new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, new TemporalObservation());		
-	
-		stats = new TemporalStatistics();
 		correctObservations = new TemporalObservationDataset();
 	}
 	
-	public TemporalStatistics test() {
+	public TemporalStatistics test(TemporalStatistics stats) {
 		int sentenceCount = 0;
 		for (TemporalSentence ts : testData) {
 			sentenceCount++;
@@ -130,9 +127,5 @@ public class TemporalDetectionTester {
 	
 	public TemporalObservationDataset getCorrectObservations() {
 		return correctObservations;
-	}
-	
-	public TemporalStatistics getStatistics() {
-		return stats;
 	}
 }

@@ -30,8 +30,8 @@ import edu.uw.cs.lil.tiny.tempeval.preprocessing.TemporalReader;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
-import edu.uw.cs.lil.tiny.tempeval.util.OutputData;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 import java.io.File;
 import java.io.IOException;
@@ -136,20 +136,20 @@ public class TemporalEvaluation {
 
 	public void evaluate() {
 		Debug.printf (Type.PROGRESS,"Evaluating %d sentences...\n\n", dataset.size());
+		TemporalStatistics stats = new TemporalStatistics();
+		
 		if (CROSS_VALIDATION){
 			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluationThread[] threads = new TemporalEvaluationThread[partitions.size()];
-			OutputData[] outList = new OutputData[partitions.size()];
-
+			
 			for (int i = 0; i < partitions.size(); i++){
-				outList[i] = new OutputData();
 				TemporalDataset trainData = new TemporalDataset();
 				TemporalDataset testData = new TemporalDataset(partitions.get(i));
 				for (int j = 0; j < partitions.size(); j++)
 					if (j != i)
 						trainData.addSentences(partitions.get(j));
 
-				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i, outList[i]);
+				threads[i] = new TemporalEvaluationThread(trainData, testData, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, i, stats);
 				threads[i].start();
 			}
 			for (int i = 0; i < threads.length; i++){
@@ -160,23 +160,22 @@ public class TemporalEvaluation {
 					System.err.println("Some problems getting the threads to join again!");
 				}
 			}
-			Debug.println(Type.STATS, "Attribute detection statistics:");
-			Debug.println(Type.STATS,(OutputData.average(outList)));
 		} else {
 			// Train and test on the same dataset for debugging
-			OutputData outputData = new OutputData();
-			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1, outputData).run();
-
-			Debug.println(Type.STATS, "Attribute detection statistics:");
-			Debug.println(Type.STATS, outputData);
+			new TemporalEvaluationThread(dataset, dataset, jointParser, fixed, lexPhi, PERCEPTRON_ITERATIONS, -1, stats).run();
 		}
-		Debug.printf(Type.PROGRESS, "Done");
+		
+		Debug.println(Type.STATS, stats);
+		
+		Debug.printf(Type.PROGRESS, "Done with analysis.");
 	}
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		Debug.addFilter(System.out, Type.ERROR, Type.DEBUG, Type.PROGRESS, Type.STATS);
-		Debug.addFilter(LOG_DIR + "stats.txt", Type.STATS);
-		Debug.addFilter(LOG_DIR + "attributes.txt", Type.ATTRIBUTE);
-		Debug.addFilter(LOG_DIR + "detection.txt", Type.DETECTION);
+		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);
+		Debug.addFilter("ERROR:", System.out, Type.ERROR);
+		Debug.addFilter("DEBUG:", System.out, Type.DEBUG);
+		Debug.addFilter("", LOG_DIR + "stats.txt", Type.STATS);
+		Debug.addFilter("", LOG_DIR + "attributes.txt", Type.ATTRIBUTE);
+		Debug.addFilter("", LOG_DIR + "detection.txt", Type.DETECTION);
 		new TemporalEvaluation(DATASET_DIR, DATASETS).evaluate();
 	}
 }

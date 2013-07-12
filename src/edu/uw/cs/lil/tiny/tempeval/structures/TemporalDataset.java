@@ -58,8 +58,10 @@ public class TemporalDataset implements IDataCollection<TemporalSentence>, java.
 		for(int i = 0 ; i < k ; i++)
 			partitions.add(new LinkedList<TemporalSentence>());
 		int count = 0;
-		for (TemporalSentence s : this)
+		for (TemporalSentence s : this) {
 			partitions.get(count % k).add(s);
+			count++;
+		}
 		return partitions;
 	}
 	
