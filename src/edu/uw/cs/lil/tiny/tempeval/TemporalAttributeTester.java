@@ -22,9 +22,9 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
 	private static final boolean PRINT_CORRECT = false;
-	private static final boolean PRINT_INCORRECT = false;
+	private static final boolean PRINT_INCORRECT = true;
 	private static final boolean PRINT_NOPARSES = true;
-	private static final String DEBUG_PHRASE = "a year earlier";
+	private static final String DEBUG_PHRASE = "asdfsada year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
 	private TemporalStatistics stats;

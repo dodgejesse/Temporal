@@ -21,21 +21,17 @@ public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, Stri
 	private final String val;
 	private final String dependencyParse;
 	private final int tokenIndex;
-	private boolean isFirstObservation;
+	private final String docID;
 	
-	public TemporalObservation(Sentence phrase, String sentence, String referenceTime, String type, String val, String dependencyParse, int tokenIndex, boolean isFirstObservation){
+	public TemporalObservation(Sentence phrase, String sentence, String referenceTime, String type, String val, String dependencyParse, int tokenIndex, String docID){
 		this.phrase = phrase;
 		this.sentence = sentence;
 		this.referenceTime = referenceTime;
 		this.type = type;
 		this.val = val;
 		this.dependencyParse = dependencyParse;
-		this.isFirstObservation = isFirstObservation;
+		this.docID = docID;
 		this.tokenIndex = tokenIndex;
-	}
-	
-	public TemporalObservation() {
-		this(null, null, null, null, null, null, 0, true);
 	}
 
 	public TemporalResult getLabel() {
@@ -59,7 +55,7 @@ public class TemporalObservation implements ILabeledDataItem<Pair<Sentence, Stri
 	}
 
 	public Pair<Sentence, String[]> getSample() {
-		String[] s = {sentence, referenceTime, dependencyParse, "" + tokenIndex, isFirstObservation?"1":"0"};
+		String[] s = {sentence, referenceTime, dependencyParse, "" + tokenIndex, docID};
 		return Pair.of(phrase, s);
 	}
 

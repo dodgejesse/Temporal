@@ -150,7 +150,7 @@ public class TemporalEvaluation extends Thread {
 		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
 		TemporalObservationDataset attributeData;
 		if (!TemporalMain.GOLD_MENTIONS) {
-			TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
+			TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, model);
 			detectionTester.test(stats);
 			attributeData = detectionTester.getCorrectObservations();
 		}

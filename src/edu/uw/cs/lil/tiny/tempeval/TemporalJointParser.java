@@ -22,6 +22,8 @@ import edu.uw.cs.lil.tiny.parser.joint.JointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.utils.composites.Pair;
 
 /**
@@ -42,19 +44,21 @@ import edu.uw.cs.utils.composites.Pair;
  */
 
 public class TemporalJointParser extends
-		AbstractParser<Sentence, LogicalExpression>
-		implements
-		IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> {
+AbstractParser<Sentence, LogicalExpression>
+implements
+IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> {
 
 	private AbstractCKYParser<LogicalExpression> baseParser;
 	private final LogicalExpressionCategoryServices categoryServices;
 	private TemporalISO prevISO;
+	private String prevDocID;
 
 	// Constructor takes the CKY parser.
 	TemporalJointParser(AbstractCKYParser<LogicalExpression> baseParser) {
 		this.baseParser = baseParser;
 		categoryServices = new LogicalExpressionCategoryServices();
 		prevISO = null;
+		prevDocID = "";
 	}
 
 	@Override
@@ -98,11 +102,11 @@ public class TemporalJointParser extends
 				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
 		if (sameDocID)
 			functionsS[3] = categoryServices
-					.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
+			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
 		else
 			functionsS[3] = l;
 
-		
+
 		// Making the Predicates to apply to the logical expressions for
 		// DURATIONS
 		// Or reall, don't, because this only confuses the system.
@@ -114,10 +118,10 @@ public class TemporalJointParser extends
 				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");
 		if (sameDocID)
 			functionsD[3] = categoryServices
-					.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
+			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
 		else
 			functionsD[3] = l;
-		
+
 
 		// Looping over the predicates, applying them each to the given logical
 		// expression
@@ -130,16 +134,16 @@ public class TemporalJointParser extends
 			//	newLogicArray[i + 1] = categoryServices.doSemanticApplication(
 			//			functionsD[i], l);
 			//}
-	
+
 			if (newLogicArray[i + 1] == null)
 				newLogicArray[i + 1] = l;
-			
+
 		}
 		newLogicArray[0] = l;
 
 		return newLogicArray;
 	}
-	
+
 	private boolean logicStartsWithContextDependentPredicate(LogicalExpression l){
 		return (l.toString().startsWith("(previous:") || 
 				l.toString().startsWith("(this:") ||
@@ -177,21 +181,22 @@ public class TemporalJointParser extends
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon,
 			Integer beamSize) {
 
-		boolean hasPreviousObservation = dataItem.getSample().second()[4].equals("1") && prevISO != null;
+		String docID = dataItem.getSample().second()[4];
+		boolean hasPreviousObservation = prevDocID.equals(docID) && prevISO != null;
 		Sentence phrase = dataItem.getSample().first();
 		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(phrase, model);
-		
+
 		final List<IParseResult<LogicalExpression>> CKYModelParses = pruneLogicWithLambdas(CKYParserOutput
 				.getBestParses());
 
 		List<IJointParse<LogicalExpression, TemporalResult>> allExecutedParses = 
 				new ArrayList<IJointParse<LogicalExpression, TemporalResult>>();
-		
+
 		long startTime = System.currentTimeMillis();
 
 		// to store the temporalISOs, so i can choose the highest scoring one to keep in prevISO
 		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
-		
+
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
 			LogicalExpression[] labels = getArrayOfLabels(l.getY(), !hasPreviousObservation);
 			for (int i = 0; i < labels.length; i++) {
@@ -201,32 +206,31 @@ public class TemporalJointParser extends
 				// Pair<String, String> and the score.
 				// use that wrapper to create
 				String referenceTime = dataItem.getSample().second()[1];
-				if (hasPreviousObservation)
+				if (!hasPreviousObservation)
 					prevISO = null;
 
 				// TODO: Unsolved mystery: the CKY parser gives different parses depending on the dataset, even if one is a subset of another.
-				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime,
-						prevISO);
-				
-				
-				// TODO THIS IS JUST FOR TESTING.
-				//labels[i] = null;
-				
+				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime, prevISO);
+
 				TemporalResult tr = new TemporalResult(labels[i], tmp.getType(), tmp.getVal(), l.getAllLexicalEntries(), model, l);
 				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
 
-				
+
 				ISOsByScore.put(jp.getScore(), tmp);
 				allExecutedParses.add(jp);
 			}
 		}
 
-		
-		if (ISOsByScore.size() > 0)
+
+		if (ISOsByScore.size() > 0) {
 			prevISO = ISOsByScore.lastEntry().getValue();
-		else 
+			prevDocID = docID;
+		}
+		else { 
 			prevISO = null;
-		
+			prevDocID = "";
+		}
+
 		long parsingTime = System.currentTimeMillis() - startTime;
 		JointOutput<LogicalExpression, TemporalResult> out = new JointOutput<LogicalExpression, TemporalResult>(
 				CKYParserOutput, allExecutedParses, parsingTime);

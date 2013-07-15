@@ -7,12 +7,9 @@ import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.IParseResult;
 import edu.uw.cs.lil.tiny.parser.IParserOutput;
-import edu.uw.cs.lil.tiny.parser.ccg.lexicon.ILexicon;
-import edu.uw.cs.lil.tiny.parser.ccg.lexicon.Lexicon;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
-import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservation;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
@@ -23,20 +20,13 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 public class TemporalDetectionTester {
 	final private int MAX_MENTION_LENGTH = 5;
 	private TemporalDataset testData;
-	private JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dummyDataItemModel;
 	private TemporalJointParser jointParser;
 	private TemporalObservationDataset correctObservations;
-	
-	public TemporalDetectionTester(TemporalDataset testData, TemporalJointParser jointParser, ILexicon<LogicalExpression> fixed) {
+	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
+	public TemporalDetectionTester(TemporalDataset testData, TemporalJointParser jointParser, JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		this.testData = testData;
 		this.jointParser = jointParser;
-		
-		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
-				.setLexicon(new Lexicon<LogicalExpression>()).build();
-		model.addFixedLexicalEntries(fixed.toCollection());
-
-		// dataItem doesn't actually matter, since there is no scoring involved
-		dummyDataItemModel = new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, new TemporalObservation());		
+		this.model = model;
 		correctObservations = new TemporalObservationDataset();
 	}
 	
@@ -47,7 +37,7 @@ public class TemporalDetectionTester {
 			if (sentenceCount % 100 == 0)
 				Debug.printf(Type.PROGRESS, "Detecting mentions from %d/%d sentences...\n", sentenceCount, testData.size());
 			stats.addGold(ts.getMentions().size());
-			List<TemporalMention> predictedMentions = getPredictedMentions(ts.getTokens(), dummyDataItemModel);
+			List<TemporalMention> predictedMentions = getPredictedMentions(ts);
 			stats.addPredicted(predictedMentions.size());
 			List<TemporalMention> correctMentions = getCorrectMentions(ts.getMentions(), predictedMentions);
 			stats.addCorrect(correctMentions.size());
@@ -55,13 +45,13 @@ public class TemporalDetectionTester {
 				Debug.printf(Type.DETECTION, "False negative from '%s':\n", ts.prettyString());
 				for(TemporalMention fn: getFalseNegatives(correctMentions, ts.getMentions()))
 					Debug.printf(Type.DETECTION, "[%s]", fn);
-				Debug.println(Type.DETECTION);
+				Debug.print(Type.DETECTION, "\n\n");
 			}
 			if (correctMentions.size() < predictedMentions.size()) {
 				Debug.printf(Type.DETECTION, "False positive from '%s':\n", ts.prettyString());
 				for(TemporalMention fp : getFalsePositives(correctMentions, predictedMentions))
 					Debug.printf(Type.DETECTION, "[%s]", fp);
-				Debug.println(Type.DETECTION);
+				Debug.print(Type.DETECTION, "\n\n");
 			}
 			if (!correctMentions.isEmpty())
 				correctObservations.addObservations(ts.getObservations(correctMentions));
@@ -106,13 +96,14 @@ public class TemporalDetectionTester {
 		return falsePositives;
 	}
 
-	private List<TemporalMention> getPredictedMentions(List<String> tokens, JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dummyDataItemModel) {
+	private List<TemporalMention> getPredictedMentions(TemporalSentence ts) {
 		List<TemporalMention> predictedMentions = new LinkedList<TemporalMention>();
-		for (int i = 0 ; i < tokens.size(); i++) {	
+		for (int i = 0 ; i < ts.getTokens().size(); i++) {	
 			// Work backwards to get the longest possible mention
-			for (int span = Math.min(MAX_MENTION_LENGTH, tokens.size() - i)  ; span > 0 ; span--) {
-				Sentence mentionCandidate = new Sentence(tokens.subList(i, i + span));
-				IParserOutput<LogicalExpression> parserOutput = jointParser.parse(mentionCandidate, dummyDataItemModel);
+			for (int span = Math.min(MAX_MENTION_LENGTH, ts.getTokens().size() - i)  ; span > 0 ; span--) {
+				Sentence mentionCandidate = new Sentence(ts.getTokens().subList(i, i + span));
+				JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dataItemModel = new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts.getPossibleObservation(i, i + span));		
+				IParserOutput<LogicalExpression> parserOutput = jointParser.parse(mentionCandidate, dataItemModel);
 				final List<IParseResult<LogicalExpression>> bestParses = parserOutput.getBestParses();
 				if (bestParses.size() > 0) {
 					predictedMentions.add(new TemporalMention(i, i + span, mentionCandidate.toString()));				
