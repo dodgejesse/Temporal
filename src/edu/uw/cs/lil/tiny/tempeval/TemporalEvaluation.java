@@ -38,15 +38,12 @@ import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 
 public class TemporalEvaluation extends Thread {
 	private static final String RESOURCES_DIR = "resources/";
 	private static final int PERCEPTRON_ITERATIONS = 1;
-	private static final boolean GOLD_MENTIONS = true;
 	
 	final private TemporalDataset trainData, testData;
 	final private TemporalJointParser jointParser;
@@ -152,7 +149,7 @@ public class TemporalEvaluation extends Thread {
 	public void run(){		
 		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
 		TemporalObservationDataset attributeData;
-		if (!GOLD_MENTIONS) {
+		if (!TemporalMain.GOLD_MENTIONS) {
 			TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
 			detectionTester.test(stats);
 			attributeData = detectionTester.getCorrectObservations();

@@ -15,23 +15,25 @@ import org.xml.sax.SAXException;
 
 public class TemporalMain {
 	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
+	private static final String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//private static final String[] DATASETS = {"TimeBank"};
+	//private static final String[] DATASETS =  {"debug_dataset"};
 
-	final private static String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	//final private static String[] DATASETS = {"TimeBank"};
-	//final private static String[] DATASETS =  {"debug_dataset"};
-
-	private static final boolean FORCE_SERIALIZATION = false;
-	private static final boolean CROSS_VALIDATION = true;
-	private static final int CV_FOLDS = 10;
+	public static final boolean FORCE_SERIALIZATION = false;
+	public static final boolean CROSS_VALIDATION = true;
+	public static final int CV_FOLDS = 10;
+	public static final boolean STRICT_MATCHING = false;
+	public static final boolean GOLD_MENTIONS = true;
+	public static final boolean PARALLEL_EXECUTION = true;
 
 	private static void evaluate(TemporalDataset dataset) {
 		Debug.printf (Type.PROGRESS,"Evaluating %d sentences...\n\n", dataset.size());
 		TemporalStatistics stats = new TemporalStatistics();
-		
+
 		if (CROSS_VALIDATION){
 			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluation[] threads = new TemporalEvaluation[partitions.size()];
-			
+
 			for (int i = 0; i < partitions.size(); i++){
 				TemporalDataset trainData = new TemporalDataset();
 				TemporalDataset testData = new TemporalDataset(partitions.get(i));
@@ -40,7 +42,10 @@ public class TemporalMain {
 						trainData.addSentences(partitions.get(j));
 
 				threads[i] = new TemporalEvaluation(trainData, testData, stats);
-				threads[i].start();
+				if(PARALLEL_EXECUTION)
+					threads[i].start();
+				else
+					threads[i].run();
 			}
 			for (int i = 0; i < threads.length; i++){
 				try{
@@ -57,7 +62,7 @@ public class TemporalMain {
 		Debug.println(Type.STATS, stats);
 		Debug.println(Type.PROGRESS, "Done with analysis.");
 	}
-	
+
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
 		Debug.setLogs("gold_mentions");
 		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);

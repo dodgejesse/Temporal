@@ -67,7 +67,7 @@ public class Debug {
 		if (filter.containsKey(t)) {
 			Set<Pair<String, PrintStream>> pairs = filter.get(t);
 			for(Pair<String, PrintStream> p : pairs)
-				p.second().println(p.first() + s);
+				p.second().print(p.first() + s);
 		}
 	}
 	

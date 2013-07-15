@@ -1,8 +1,9 @@
 package edu.uw.cs.lil.tiny.tempeval.structures;
 
+import edu.uw.cs.lil.tiny.tempeval.TemporalMain;
+
 public class TemporalMention implements java.io.Serializable{
 	private static final long serialVersionUID = -5859852309847402300L;
-	private static final boolean STRICT_MATCHING = false;
 	private String type;
 	private String value;
 	private int tokenStart;
@@ -71,7 +72,7 @@ public class TemporalMention implements java.io.Serializable{
 	}
 
 	public boolean matches(TemporalMention other) {
-		if (STRICT_MATCHING)
+		if (TemporalMain.STRICT_MATCHING)
 			return this.tokenStart == other.tokenStart && this.tokenEnd == other.tokenEnd;
 		else
 			return this.tokenEnd >= other.tokenStart && this.tokenStart <= other.tokenEnd;

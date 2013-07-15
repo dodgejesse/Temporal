@@ -66,7 +66,7 @@ public class TemporalDocument {
 	}
 
 	public void doPreprocessing(StanfordCoreNLP pipeline, GrammaticalStructureFactory gsf) {
-		Annotation a = new Annotation(text);
+		Annotation a = new Annotation(text.replace('-', ' '));
 		pipeline.annotate(a);
 
 		Map<Integer, Pair<TemporalSentence, Integer>> startCharIndexToTokenIndex = new HashMap<Integer, Pair<TemporalSentence, Integer>>();

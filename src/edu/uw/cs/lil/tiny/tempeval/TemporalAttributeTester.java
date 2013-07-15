@@ -21,10 +21,10 @@ import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
-	private final boolean PRINT_CORRECT = true;
-	private final boolean PRINT_INCORRECT = true;
-	private final boolean PRINT_NOPARSES = true;
-	private final String PHRASE = "a year earlier";
+	private static final boolean PRINT_CORRECT = false;
+	private static final boolean PRINT_INCORRECT = false;
+	private static final boolean PRINT_NOPARSES = true;
+	private static final String DEBUG_PHRASE = "a year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
 	private TemporalStatistics stats;
@@ -97,7 +97,7 @@ public class TemporalAttributeTester {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
-		Debug.println(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+		Debug.print(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
 				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta));
 	}
 
@@ -131,34 +131,28 @@ public class TemporalAttributeTester {
 			String guessType, String guessVal, String phrase, String ref_time,
 			boolean isCorrect, boolean hasParse, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
-		String s =  "\n";
-		if (hasParse) {
-			if(PRINT_CORRECT && isCorrect || PRINT_INCORRECT && !isCorrect || phrase.contains(PHRASE)) {
-				s += "Phrase:            " + phrase + "\n";
-				s += "Lexical Entries:   " + lexicalEntries + "\n";
-				s += "Sentence:          " + sentence + "\n";
-				s += "Logic:             " + label + "\n";
-
-				s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
-				s += "ref_time:          " + ref_time + "\n";
-				s += "Gold type:         " + goldType + "\n";
-				s += "gold val:          " + goldVal + "\n";
+		String s = "";
+		if(PRINT_NOPARSES && !hasParse || PRINT_CORRECT && isCorrect || PRINT_INCORRECT && !isCorrect || phrase.contains(DEBUG_PHRASE)) {
+			s += "Phrase:            " + phrase + "\n";
+			s += "Sentence:          " + sentence + "\n";
+			s += "ref_time:          " + ref_time + "\n";
+			s += "Gold type:         " + goldType + "\n";
+			s += "Gold val:          " + goldVal + "\n";
+			if(hasParse) {
 				s += "Guess type:        " + guessType + "\n";
 				s += "Guess val:         " + guessVal + "\n";
+				s += "Lexical Entries:   " + lexicalEntries + "\n";
+				s += "Logic:             " + label + "\n";
+				s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
 				s += "Correct?           " + isCorrect + "\n";
 				s += "Correct logics:    " + correctLogicalForms + "\n";
 				s += "Governor verb POS: " + govVerbPOS + "\n";
 				s += "Mod:               " + mod.equals("MD") + "\n";
 			}
-		}
-		else if (PRINT_NOPARSES) {
-			s += "Phrase:            " + phrase + "\n";
-			s += "Sentence:          " + sentence + "\n";
-			s += "ref_time:          " + ref_time + "\n";
-			s += "Gold type:         " + goldType + "\n";
-			s += "gold val:          " + goldVal + "\n";
-			s += "No parses! Will implement something"
-					+ " to throw out words and try again.\n";
+			else {
+				s += "NO PARSES!";
+			}
+			s += "\n\n";
 		}
 		return s;
 	}
