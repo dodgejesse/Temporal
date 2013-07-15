@@ -38,13 +38,16 @@ import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 
 public class TemporalEvaluation extends Thread {
 	private static final String RESOURCES_DIR = "resources/";
 	private static final int PERCEPTRON_ITERATIONS = 1;
-
+	private static final boolean GOLD_MENTIONS = true;
+	
 	final private TemporalDataset trainData, testData;
 	final private TemporalJointParser jointParser;
 	final private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
@@ -147,13 +150,17 @@ public class TemporalEvaluation extends Thread {
 
 
 	public void run(){		
-		TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
-		detectionTester.test(stats);
-
 		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
-
-		TemporalObservationDataset conditionalData = detectionTester.getCorrectObservations();
-		TemporalAttributeTester attributeTester = TemporalAttributeTester.build(conditionalData, jointParser);
+		TemporalObservationDataset attributeData;
+		if (!GOLD_MENTIONS) {
+			TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, fixed);
+			detectionTester.test(stats);
+			attributeData = detectionTester.getCorrectObservations();
+		}
+		else
+			attributeData = testData.getObservations();
+		
+		TemporalAttributeTester attributeTester = TemporalAttributeTester.build(attributeData, jointParser);
 		attributeTester.test(model, stats);
 	}
 }

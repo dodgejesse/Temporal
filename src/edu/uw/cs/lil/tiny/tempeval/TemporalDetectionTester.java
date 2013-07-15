@@ -45,7 +45,7 @@ public class TemporalDetectionTester {
 		for (TemporalSentence ts : testData) {
 			sentenceCount++;
 			if (sentenceCount % 100 == 0)
-				Debug.printf(Type.PROGRESS, "Evaluating %d/%d sentences...\n", sentenceCount, testData.size());
+				Debug.printf(Type.PROGRESS, "Detecting mentions from %d/%d sentences...\n", sentenceCount, testData.size());
 			stats.addGold(ts.getMentions().size());
 			List<TemporalMention> predictedMentions = getPredictedMentions(ts.getTokens(), dummyDataItemModel);
 			stats.addPredicted(predictedMentions.size());

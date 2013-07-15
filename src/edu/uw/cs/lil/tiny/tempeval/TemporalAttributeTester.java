@@ -30,7 +30,7 @@ public class TemporalAttributeTester {
 	private TemporalStatistics stats;
 
 
-	private TemporalAttributeTester(TemporalObservationDataset test,	TemporalJointParser jointParser) {
+	private TemporalAttributeTester(TemporalObservationDataset test, TemporalJointParser jointParser) {
 		this.test = test;
 		this.jointParser = jointParser;
 	}
@@ -163,7 +163,8 @@ public class TemporalAttributeTester {
 		return s;
 	}
 
-	public static TemporalAttributeTester build(TemporalObservationDataset test,	TemporalJointParser parser) {
+	public static TemporalAttributeTester build(TemporalObservationDataset test, TemporalJointParser parser) {
+		Debug.printf(Type.PROGRESS, "Testing %d observations\n", test.size());
 		return new TemporalAttributeTester(test, parser);
 	}
 }

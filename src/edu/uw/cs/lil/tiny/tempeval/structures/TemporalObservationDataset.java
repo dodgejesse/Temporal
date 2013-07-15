@@ -1,6 +1,9 @@
 package edu.uw.cs.lil.tiny.tempeval.structures;
 
 import edu.uw.cs.lil.tiny.data.IDataCollection;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
