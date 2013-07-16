@@ -75,12 +75,16 @@ public class TemporalMention implements java.io.Serializable{
 		if (TemporalMain.STRICT_MATCHING)
 			return this.tokenStart == other.tokenStart && this.tokenEnd == other.tokenEnd;
 		else
-			return this.tokenEnd >= other.tokenStart && this.tokenStart <= other.tokenEnd;
+			return overlapsWith(other);
 	}
 
 	public void mergeWith(TemporalMention gm) {
 		this.type = gm.type;
 		this.value = gm.value;
+	}
+
+	public boolean overlapsWith(TemporalMention other) {
+		return this.tokenEnd >= other.tokenStart && this.tokenStart <= other.tokenEnd;
 	}
 
 }

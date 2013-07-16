@@ -158,7 +158,7 @@ public class TemporalAttributeTester {
 	}
 
 	public static TemporalAttributeTester build(TemporalObservationDataset test, TemporalJointParser parser) {
-		Debug.printf(Type.PROGRESS, "Testing %d observations\n", test.size());
+		Debug.printf(Type.PROGRESS, "Predicting attributes for %d observations\n", test.size());
 		return new TemporalAttributeTester(test, parser);
 	}
 }

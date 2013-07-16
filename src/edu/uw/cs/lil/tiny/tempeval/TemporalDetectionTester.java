@@ -1,7 +1,11 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
@@ -16,6 +20,7 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
+import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalDetectionTester {
 	final private int MAX_MENTION_LENGTH = 5;
@@ -29,7 +34,7 @@ public class TemporalDetectionTester {
 		this.model = model;
 		correctObservations = new TemporalObservationDataset();
 	}
-	
+
 	public TemporalStatistics test(TemporalStatistics stats) {
 		int sentenceCount = 0;
 		for (TemporalSentence ts : testData) {
@@ -58,7 +63,7 @@ public class TemporalDetectionTester {
 		}
 		return stats;
 	}
-	
+
 	private List<TemporalMention> getCorrectMentions(List<TemporalMention> goldMentions, List<TemporalMention> predictedMentions) {
 		List<TemporalMention> correctMentions = new LinkedList<TemporalMention>();
 		for (TemporalMention gm : goldMentions) {
@@ -97,25 +102,37 @@ public class TemporalDetectionTester {
 	}
 
 	private List<TemporalMention> getPredictedMentions(TemporalSentence ts) {
-		List<TemporalMention> predictedMentions = new LinkedList<TemporalMention>();
+		PriorityQueue<Pair<TemporalMention, Double>> allPossibleMentions = new PriorityQueue<Pair<TemporalMention, Double>>(1,
+				new Comparator<Pair<TemporalMention, Double>>() {
+			public int compare(Pair<TemporalMention, Double> p1, Pair<TemporalMention, Double> p2) {
+				// Higher score goes first
+				return p2.second().compareTo(p1.second());
+			}
+		});
 		for (int i = 0 ; i < ts.getTokens().size(); i++) {	
-			// Work backwards to get the longest possible mention
 			for (int span = Math.min(MAX_MENTION_LENGTH, ts.getTokens().size() - i)  ; span > 0 ; span--) {
 				Sentence mentionCandidate = new Sentence(ts.getTokens().subList(i, i + span));
 				JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dataItemModel = new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts.getPossibleObservation(i, i + span));		
 				IParserOutput<LogicalExpression> parserOutput = jointParser.parse(mentionCandidate, dataItemModel);
-				final List<IParseResult<LogicalExpression>> bestParses = parserOutput.getBestParses();
-				if (bestParses.size() > 0) {
-					predictedMentions.add(new TemporalMention(i, i + span, mentionCandidate.toString()));				
-					// skip used tokens
-					i += span - 1; // - 1 to account for i++ in for-loop
-					break;
-				}
+				List<IParseResult<LogicalExpression>> bestParses = parserOutput.getBestParses();
+				if (bestParses.size() > 0) 
+					allPossibleMentions.add(Pair.of(new TemporalMention(i, i + span, mentionCandidate.toString()), bestParses.get(0).getScore()));
 			}
 		}	
+		List<TemporalMention> predictedMentions = new LinkedList<TemporalMention>();
+		Set<TemporalMention> conflictingMentions = new HashSet<TemporalMention>();
+		for(Pair<TemporalMention, Double> p: allPossibleMentions) {
+			if(!conflictingMentions.contains(p.first())) {
+				predictedMentions.add(p.first());
+				for(Pair<TemporalMention, Double> pConflict: allPossibleMentions) {
+					if (pConflict.first().overlapsWith(p.first()))
+						conflictingMentions.add(pConflict.first());
+				}
+			}
+		}
 		return predictedMentions;
 	}
-	
+
 	public TemporalObservationDataset getCorrectObservations() {
 		return correctObservations;
 	}
