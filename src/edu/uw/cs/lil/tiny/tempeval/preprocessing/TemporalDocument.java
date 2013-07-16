@@ -32,7 +32,7 @@ public class TemporalDocument {
 	private List<TemporalMention> mentions;
 	private List<TemporalSentence> sentences;
 	private String referenceTime;
-	
+
 	public TemporalDocument() {
 		this.mentions = new LinkedList<TemporalMention>();
 	}
@@ -77,9 +77,11 @@ public class TemporalDocument {
 		for(CoreMap sentence: a.get(SentencesAnnotation.class)) {
 			TemporalSentence newSentence = new TemporalSentence(docID, referenceTime);
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				startCharIndexToTokenIndex.put(token.beginPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
-				endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
-				newSentence.insertToken(token.get(TextAnnotation.class).toLowerCase());
+				if (!(token.get(TextAnnotation.class).equals("-LRB-") || token.get(TextAnnotation.class).equals("-RRB-"))) {
+					startCharIndexToTokenIndex.put(token.beginPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
+					endCharIndexToTokenIndex.put(token.endPosition(), Pair.of(newSentence, newSentence.getNumTokens()));
+					newSentence.insertToken(token.get(TextAnnotation.class).toLowerCase());
+				}
 			}
 			Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
 			GrammaticalStructure gs = gsf.newGrammaticalStructure(tree);

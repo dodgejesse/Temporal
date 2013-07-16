@@ -22,8 +22,6 @@ import edu.uw.cs.lil.tiny.parser.joint.JointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug;
-import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.utils.composites.Pair;
 
 /**
