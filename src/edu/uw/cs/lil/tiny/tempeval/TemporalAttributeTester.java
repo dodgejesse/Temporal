@@ -90,7 +90,9 @@ public class TemporalAttributeTester {
 
 			isCorrect = evaluateTopParse(goldType, goldVal, guessType, guessVal);
 			correctLogicalForms = anyCorrectLogic(goldType, goldVal, parserOutput.getAllJointParses(), theta);
-
+			if (!isCorrect && correctLogicalForms.length() > 0) {
+				stats.incrementIncorrectParseSelection();
+			}
 			// TODO: Check every parse to make sure a correct one is included.
 			//} else if (bestModelParses.size() > 1) {
 			//	output = 3;
