@@ -62,7 +62,7 @@ public class TemporalAttributeTester {
 		String sentence = dataItem.getSample().second()[0];
 		String ref_time = dataItem.getSample().second()[1];
 		String depParse = dataItem.getSample().second()[2];
-		String docID = dataItem.getSample().second()[3];
+		String docID = dataItem.getSample().second()[4];
 		String goldType = dataItem.getLabel().type;
 		String goldVal = dataItem.getLabel().val;
 		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
