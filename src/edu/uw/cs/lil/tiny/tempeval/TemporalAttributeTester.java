@@ -62,6 +62,7 @@ public class TemporalAttributeTester {
 		String sentence = dataItem.getSample().second()[0];
 		String ref_time = dataItem.getSample().second()[1];
 		String depParse = dataItem.getSample().second()[2];
+		String docID = dataItem.getSample().second()[3];
 		String goldType = dataItem.getLabel().type;
 		String goldVal = dataItem.getLabel().val;
 		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
@@ -97,7 +98,7 @@ public class TemporalAttributeTester {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
-		Debug.print(Type.ATTRIBUTE, formatResult(guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+		Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
 				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta));
 	}
 
@@ -127,7 +128,7 @@ public class TemporalAttributeTester {
 		return false;
 	}
 
-	private String formatResult(LogicalExpression label, String goldType, String goldVal,
+	private String formatResult(String docID, LogicalExpression label, String goldType, String goldVal,
 			String guessType, String guessVal, String phrase, String ref_time,
 			boolean isCorrect, boolean hasParse, String depParse, String govVerbPOS, String sentence, String mod, 
 			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
@@ -136,6 +137,7 @@ public class TemporalAttributeTester {
 			s += "Phrase:            " + phrase + "\n";
 			s += "Sentence:          " + sentence + "\n";
 			s += "ref_time:          " + ref_time + "\n";
+			s += "Doc ID:            " + docID + "\n";
 			s += "Gold type:         " + goldType + "\n";
 			s += "Gold val:          " + goldVal + "\n";
 			if(hasParse) {

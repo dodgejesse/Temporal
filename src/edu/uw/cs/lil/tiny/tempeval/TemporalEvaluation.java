@@ -43,7 +43,7 @@ import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 
 public class TemporalEvaluation extends Thread {
 	private static final String RESOURCES_DIR = "resources/";
-	private static final int PERCEPTRON_ITERATIONS = 1;
+	private static final int PERCEPTRON_ITERATIONS = 10;
 	
 	final private TemporalDataset trainData, testData;
 	final private TemporalJointParser jointParser;

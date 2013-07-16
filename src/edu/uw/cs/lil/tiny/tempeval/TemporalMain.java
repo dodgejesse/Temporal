@@ -20,7 +20,7 @@ public class TemporalMain {
 	//private static final String[] DATASETS =  {"debug_dataset"};
 
 	public static final int CV_FOLDS = 10;
-	public static final boolean STRICT_MATCHING = true;
+	public static final boolean STRICT_MATCHING = false;
 	public static final boolean GOLD_MENTIONS = false;
 	public static final boolean FORCE_SERIALIZATION = false;
 	public static final boolean CROSS_VALIDATION = true;
@@ -64,7 +64,7 @@ public class TemporalMain {
 	}
 
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		Debug.setLogs("strict");
+		Debug.setLogs("relaxed");
 		Debug.addFilter("", System.out, Type.PROGRESS, Type.STATS);
 		Debug.addFilter("ERROR:", System.out, Type.ERROR);
 		Debug.addFilter("DEBUG:", System.out, Type.DEBUG);

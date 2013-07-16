@@ -122,6 +122,7 @@ public class TemporalDetectionTester {
 		List<TemporalMention> predictedMentions = new LinkedList<TemporalMention>();
 		Set<TemporalMention> conflictingMentions = new HashSet<TemporalMention>();
 		for(Pair<TemporalMention, Double> p: allPossibleMentions) {
+			//Debug.printf(Type.DEBUG, "Mention: %s, Score: %f\n", p.first(), p.second());
 			if(!conflictingMentions.contains(p.first())) {
 				predictedMentions.add(p.first());
 				for(Pair<TemporalMention, Double> pConflict: allPossibleMentions) {
