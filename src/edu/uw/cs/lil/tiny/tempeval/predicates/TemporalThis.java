@@ -27,9 +27,12 @@ public class TemporalThis extends TemporalPredicate {
 					(TemporalJoda.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
 				tmpMap = second.getFullMapping();
 				tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
-			} else if (tmpMap.containsKey("weekday") && 
-					(TemporalJoda.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
-				return second;
+			} else if (tmpMap.containsKey("weekday")) {
+				LocalDate date = TemporalJoda.convertISOToLocalDate(this.second);
+				// Comment out the following while loop to intentionally make mistakes
+				while (date.getDayOfWeek() != TemporalISO.getValueFromDate(this.first, "weekday"))
+					date = date.plusDays(1);
+				return TemporalJoda.convertLocalDateToISO(date);
 			} else if (!tmpMap.containsKey("year")) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
 				tmpSet.add(TemporalISO.getValueFromDate(second, "year"));
