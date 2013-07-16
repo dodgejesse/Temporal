@@ -157,24 +157,35 @@ public class TemporalMap {
 	}
 
 	private TemporalISO findRangeMap(LogicalConstant l){
-		if (l.getName().equals("ref_time:r")){
+		String constant = l.getName().substring(0,l.getName().length()-2);
+		if (constant.equals("ref_time"))
 			return TemporalDate.readDocumentDate(ref_time);
-		} else if (l.getName().equals("present_ref:r")){
+		else if (constant.equals("present_ref"))
 			return new TemporalDate("present_ref", 0);
-		} else if (l.getName().equals("past_ref:r")){
+		else if (constant.equals("past_ref"))
 			return new TemporalDate("past_ref", 0);
-		} else if (l.getName().equals("future_ref:r")) {
+		else if (constant.equals("future_ref"))
 			return new TemporalDate("future_ref",0);
-		} else if (l.getName().equals("today:r")){
+		else if (constant.equals("today"))
 			return TemporalDate.readDocumentDate(ref_time);
-		} else if (l.getName().equals("tomorrow:r")){
+		else if (constant.equals("tomorrow"))
 			return shiftISOByDay(TemporalDate.readDocumentDate(ref_time), 1);
-		} else if (l.getName().equals("yesterday:r")){
+		else if (constant.equals("yesterday"))
 			return shiftISOByDay(TemporalDate.readDocumentDate(ref_time), -1);
-		}else if (isNumber(l.getName().substring(0,l.getName().length()-2))){
-			int year = Integer.parseInt(l.getName().substring(0,l.getName().length()-2));
-			return new TemporalDate("year", year);
-		} else 
+		else if (isNumber(constant)){
+			int num = Integer.parseInt(constant);
+			switch(constant.length()) {
+			case 4:
+				return new TemporalDate("year", num);
+			case 3:
+				return new TemporalDate("decade", num);
+			case 2:
+				return new TemporalDate("century", num);
+			default:
+				throw new IllegalArgumentException("Invalid numerical constant");
+			}
+		}
+		else 
 			throw new IllegalArgumentException("constants of type range other than years and document times are not implemented.");
 	}
 

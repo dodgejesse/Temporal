@@ -286,7 +286,7 @@ public class TemporalPrevious extends TemporalPredicate {
 				prevDate = dayAndNotMonth();
 			} else
 				throw new IllegalArgumentException(
-						"Haven't implemented 'prevous' for " + first);
+						"Haven't implemented 'previous' for " + first);
 		}
 
 		return prevDate;

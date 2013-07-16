@@ -121,6 +121,10 @@ public class TemporalDate extends TemporalISO{
 
 	private String dateFormat(){
 		String s = "";
+		if (isSet("century"))
+			return getIntValue("century") + "XX";
+		if (isSet("decade"))
+			return getIntValue("decade") + "X";
 		if (super.isSet("year")){
 			s = s + getIntValue("year");
 		} else {
@@ -183,7 +187,9 @@ public class TemporalDate extends TemporalISO{
 	@Override
 	public boolean isFullySpecified() {
 		return (this.isSet("year") && this.isSet("month") && this.isSet("day")) || 
-				(this.isSet("year") && this.isSet("quarter")) || 
+				(this.isSet("year") && this.isSet("quarter")) ||
+				this.isSet("century") ||
+				this.isSet("decade") ||
 				this.isSet("present_ref") ||
 				this.isSet("past_ref") ||
 				this.isSet("future_ref");
