@@ -18,7 +18,7 @@ public class Debug {
 	private static SimpleDateFormat formatter = new SimpleDateFormat("HH-mm-ss_MM-dd-yyyy");
 
 	public static enum Type {
-		PROGRESS, STATS, ATTRIBUTE, DETECTION, DEBUG, ERROR;
+		PROGRESS, STATS, ATTRIBUTE, DETECTION, DEBUG, ERROR, INCORRECT_ATTRIBUTE, DEBUG_ATTRIBUTE, PARSE_SELECTION;
 	}
 	private static Map<Type, Set<Pair<String, PrintStream>>> filter = new HashMap<Type, Set<Pair<String, PrintStream>>>();
 

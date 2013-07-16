@@ -21,9 +21,6 @@ import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
-	private static final boolean PRINT_CORRECT = false;
-	private static final boolean PRINT_INCORRECT = true;
-	private static final boolean PRINT_NOPARSES = true;
 	private static final String DEBUG_PHRASE = "asdfsada year earlier";
 	private final TemporalObservationDataset test;
 	private final TemporalJointParser jointParser;
@@ -51,7 +48,7 @@ public class TemporalAttributeTester {
 	private void test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
 			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
 		LogicalExpression guessLabel = null;
-		String guessType = "", guessVal = "", correctLogicalForms = "";
+		String guessType = "", guessVal = "", correctLogicalForms = "", incorrectLogicalForms = "";
 		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
 		IHashVector averageMaxFeatureVector = null;
 		IHashVector theta = model.getTheta();
@@ -89,7 +86,8 @@ public class TemporalAttributeTester {
 			lexicalEntries = topParse.getResult().second().lexicalEntries;
 
 			isCorrect = evaluateTopParse(goldType, goldVal, guessType, guessVal);
-			correctLogicalForms = anyCorrectLogic(goldType, goldVal, parserOutput.getAllJointParses(), theta);
+			incorrectLogicalForms = getIncorrectLogicalForms(goldType, goldVal, parserOutput.getAllJointParses(), theta);
+			correctLogicalForms = getCorrectLogicalForms(goldType, goldVal, parserOutput.getAllJointParses(), theta);
 			if (!isCorrect && correctLogicalForms.length() > 0) {
 				stats.incrementIncorrectParseSelection();
 			}
@@ -100,17 +98,40 @@ public class TemporalAttributeTester {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
-		Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
-				depParse, govVerbPOS, sentence, mod, correctLogicalForms,lexicalEntries,averageMaxFeatureVector, theta));
+		if (!isCorrect) {
+			Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
+			if (correctLogicalForms.length() > 0)
+				Debug.print(Type.PARSE_SELECTION, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+						depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
+		}
+		if (phrase.toString().contains(DEBUG_PHRASE))
+			Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
+		if (!isCorrect && correctLogicalForms.length() > 0) 
+			Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 	}
 
-	private String anyCorrectLogic(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
+	private String getCorrectLogicalForms(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
 		String correctLogicalForms = "";
 		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
 			String guessType = l.getResult().second().type;
 			String guessVal = l.getResult().second().val;
 			LogicalExpression guessLabel = l.getResult().second().e;
 			if (goldType.equals(guessType) && goldVal.equals(guessVal))
+				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
+		}
+		return correctLogicalForms;
+	}
+	
+	private String getIncorrectLogicalForms(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
+		String correctLogicalForms = "";
+		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
+			String guessType = l.getResult().second().type;
+			String guessVal = l.getResult().second().val;
+			LogicalExpression guessLabel = l.getResult().second().e;
+			if (!(goldType.equals(guessType) && goldVal.equals(guessVal)))
 				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
 		}
 		return correctLogicalForms;
@@ -133,31 +154,30 @@ public class TemporalAttributeTester {
 	private String formatResult(String docID, LogicalExpression label, String goldType, String goldVal,
 			String guessType, String guessVal, String phrase, String ref_time,
 			boolean isCorrect, boolean hasParse, String depParse, String govVerbPOS, String sentence, String mod, 
-			String correctLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
+			String correctLogicalForms, String incorrectLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
 		String s = "";
-		if(PRINT_NOPARSES && !hasParse || PRINT_CORRECT && isCorrect || PRINT_INCORRECT && !isCorrect || phrase.contains(DEBUG_PHRASE)) {
-			s += "Phrase:            " + phrase + "\n";
-			s += "Sentence:          " + sentence + "\n";
-			s += "ref_time:          " + ref_time + "\n";
-			s += "Doc ID:            " + docID + "\n";
-			s += "Gold type:         " + goldType + "\n";
-			s += "Gold val:          " + goldVal + "\n";
-			if(hasParse) {
-				s += "Guess type:        " + guessType + "\n";
-				s += "Guess val:         " + guessVal + "\n";
-				s += "Lexical Entries:   " + lexicalEntries + "\n";
-				s += "Logic:             " + label + "\n";
-				s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
-				s += "Correct?           " + isCorrect + "\n";
-				s += "Correct logics:    " + correctLogicalForms + "\n";
-				s += "Governor verb POS: " + govVerbPOS + "\n";
-				s += "Mod:               " + mod.equals("MD") + "\n";
-			}
-			else {
-				s += "NO PARSES!";
-			}
-			s += "\n\n";
+		s += "Phrase:            " + phrase + "\n";
+		s += "Sentence:          " + sentence + "\n";
+		s += "ref_time:          " + ref_time + "\n";
+		s += "Doc ID:            " + docID + "\n";
+		s += "Gold type:         " + goldType + "\n";
+		s += "Gold val:          " + goldVal + "\n";
+		if(hasParse) {
+			s += "Guess type:        " + guessType + "\n";
+			s += "Guess val:         " + guessVal + "\n";
+			s += "Lexical Entries:   " + lexicalEntries + "\n";
+			s += "Logic:             " + label + "\n";
+			s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
+			s += "Correct?           " + isCorrect + "\n";
+			s += "Correct logics:    " + correctLogicalForms + "\n";
+			s += "Incorrect logics:  " + incorrectLogicalForms + "\n";
+			s += "Governor verb POS: " + govVerbPOS + "\n";
+			s += "Mod:               " + mod.equals("MD") + "\n";
 		}
+		else {
+			s += "NO PARSES!";
+		}
+		s += "\n\n";
 		return s;
 	}
 
