@@ -35,7 +35,8 @@ import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalContextFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalDayOfWeekFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.featuresets.TemporalReferenceFeatureSet;
-import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMentionDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
@@ -44,31 +45,31 @@ import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 public class TemporalEvaluation extends Thread {
 	private static final String RESOURCES_DIR = "resources/";
 	private static final int PERCEPTRON_ITERATIONS = 10;
-	
+
 	final private TemporalDataset trainData, testData;
 	final private TemporalJointParser jointParser;
 	final private LexicalFeatureSet<Sentence, LogicalExpression> lexPhi;
 	final private ILexicon<LogicalExpression> fixed;
 	final private TemporalStatistics stats;
-	
+
 	static {
 		LogicLanguageServices.setInstance(new LogicLanguageServices.Builder(
 				new TypeRepository(new File(RESOURCES_DIR + "tempeval.types.txt"))).setNumeralTypeName("i")
 				.setTypeComparator(new FlexibleTypeComparator()).build());
 	}
-	
+
 	public TemporalEvaluation(TemporalDataset trainData, TemporalDataset testData, TemporalStatistics stats){
 		this.trainData = trainData;
 		this.testData = testData;
 		this.stats = stats;
-		
-		
+
+
 		LogicalExpressionCategoryServices categoryServices = new LogicalExpressionCategoryServices();
 		fixed = getFixedLexicon(categoryServices);
 		lexPhi = getLexPhi(categoryServices);
 		jointParser = new TemporalJointParser(getParser(categoryServices));
 	}
-	
+
 	public ILexicon<LogicalExpression> getFixedLexicon(ICategoryServices<LogicalExpression> categoryServices) {
 		final ILexicon<LogicalExpression> fixedInput = new Lexicon<LogicalExpression>();
 		fixedInput.addEntriesFromFile(new File(RESOURCES_DIR
@@ -130,11 +131,12 @@ public class TemporalEvaluation extends Thread {
 
 	}
 
-	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
-		TemporalObservationDataset observations = dataset.getObservations();
-		JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> learner = new JointSimplePerceptron<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult>(
-				PERCEPTRON_ITERATIONS, observations, jointParser);
-		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = new JointModel.Builder<Sentence, String[], LogicalExpression, LogicalExpression>()
+	private JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> learnModel(TemporalDataset dataset) {
+		TemporalMentionDataset observations = dataset.getMentions();
+		JointSimplePerceptron<Sentence, TemporalMention, LogicalExpression, LogicalExpression, TemporalResult> learner = 
+				new JointSimplePerceptron<Sentence, TemporalMention, LogicalExpression, LogicalExpression, TemporalResult>(
+						PERCEPTRON_ITERATIONS, observations, jointParser);
+		JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model = new JointModel.Builder<Sentence, TemporalMention, LogicalExpression, LogicalExpression>()
 				.addJointFeatureSet(new TemporalContextFeatureSet())
 				.addJointFeatureSet(new TemporalReferenceFeatureSet())
 				.addJointFeatureSet(new TemporalDayOfWeekFeatureSet())
@@ -147,16 +149,16 @@ public class TemporalEvaluation extends Thread {
 
 
 	public void run(){		
-		JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model = learnModel(trainData);
-		TemporalObservationDataset attributeData;
+		JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model = learnModel(trainData);
+		TemporalMentionDataset attributeData;
 		if (!TemporalMain.GOLD_MENTIONS) {
 			TemporalDetectionTester detectionTester = new TemporalDetectionTester (testData, jointParser, model);
 			detectionTester.test(stats);
 			attributeData = detectionTester.getCorrectObservations();
 		}
 		else
-			attributeData = testData.getObservations();
-		
+			attributeData = testData.getMentions();
+
 		TemporalAttributeTester attributeTester = TemporalAttributeTester.build(attributeData, jointParser);
 		attributeTester.test(model, stats);
 	}

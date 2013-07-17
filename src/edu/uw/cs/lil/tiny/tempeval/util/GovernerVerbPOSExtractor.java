@@ -3,15 +3,16 @@ package edu.uw.cs.lil.tiny.tempeval.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.utils.composites.Pair;
 
 public class GovernerVerbPOSExtractor {
 	// @Param: a String[] that contains world knowledge about a given parse, including the sentence, the dependency parse,
 	// 		   and the character number that the phrase starts on.
-	public static Pair<String, String> getGovVerbTag(String[] dataItem) {
-		String depParse = dataItem[2];
+	public static Pair<String, String> getGovVerbTag(TemporalMention mention) {
+		String depParse = mention.getSentence().getDependencyParse();
 		// tokenNum is the number of the starting token of the temporal phrase. starts at 0.
-		int tokenIndex = Integer.parseInt(dataItem[3]);
+		int tokenIndex = mention.getStartToken();
 		
 		// split the dependency parse into a string[], splitting on new lines.
 		String[] depParseArray = depParse.split("\n");

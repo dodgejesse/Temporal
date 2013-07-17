@@ -14,7 +14,7 @@ import edu.uw.cs.lil.tiny.parser.IParserOutput;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointDataItemModel;
 import edu.uw.cs.lil.tiny.parser.joint.model.JointModel;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
-import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMentionDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
@@ -26,13 +26,13 @@ public class TemporalDetectionTester {
 	final private int MAX_MENTION_LENGTH = 5;
 	private TemporalDataset testData;
 	private TemporalJointParser jointParser;
-	private TemporalObservationDataset correctObservations;
-	private JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model;
-	public TemporalDetectionTester(TemporalDataset testData, TemporalJointParser jointParser, JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
+	private TemporalMentionDataset correctionMentions;
+	private JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model;
+	public TemporalDetectionTester(TemporalDataset testData, TemporalJointParser jointParser, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model) {
 		this.testData = testData;
 		this.jointParser = jointParser;
 		this.model = model;
-		correctObservations = new TemporalObservationDataset();
+		correctionMentions = new TemporalMentionDataset();
 	}
 
 	public TemporalStatistics test(TemporalStatistics stats) {
@@ -59,7 +59,7 @@ public class TemporalDetectionTester {
 				Debug.print(Type.DETECTION, "\n\n");
 			}
 			if (!correctMentions.isEmpty())
-				correctObservations.addObservations(ts.getObservations(correctMentions));
+				correctionMentions.addMentions(correctMentions);
 		}
 		return stats;
 	}
@@ -111,12 +111,12 @@ public class TemporalDetectionTester {
 		});
 		for (int i = 0 ; i < ts.getTokens().size(); i++) {	
 			for (int span = Math.min(MAX_MENTION_LENGTH, ts.getTokens().size() - i)  ; span > 0 ; span--) {
-				Sentence mentionCandidate = new Sentence(ts.getTokens().subList(i, i + span));
-				JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression> dataItemModel = new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, ts.getPossibleObservation(i, i + span));		
+				TemporalMention mentionCandidate = ts.getPossibleMention(i,  i + span);
+				JointDataItemModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> dataItemModel = new JointDataItemModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression>(model, ts.getPossibleMention(i, i + span));		
 				IParserOutput<LogicalExpression> parserOutput = jointParser.parse(mentionCandidate, dataItemModel);
 				List<IParseResult<LogicalExpression>> bestParses = parserOutput.getBestParses();
 				if (bestParses.size() > 0) 
-					allPossibleMentions.add(Pair.of(new TemporalMention(i, i + span, mentionCandidate.toString()), bestParses.get(0).getScore()));
+					allPossibleMentions.add(Pair.of(mentionCandidate, bestParses.get(0).getScore()));
 			}
 		}	
 		List<TemporalMention> predictedMentions = new LinkedList<TemporalMention>();
@@ -134,7 +134,7 @@ public class TemporalDetectionTester {
 		return predictedMentions;
 	}
 
-	public TemporalObservationDataset getCorrectObservations() {
-		return correctObservations;
+	public TemporalMentionDataset getCorrectObservations() {
+		return correctionMentions;
 	}
 }

@@ -195,12 +195,12 @@ earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 //a year ago :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 //year earlier :- NP : (temproal_ref:<d,s> (*:<d,<n,d>> year:d -1:n))
 // Without temporal_ref in the lexicon:
-a year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
-a year ago :- NP : (*:<d,<n,d>> year:d -1:n)
-year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
-year ago quarter :- NP : (*:<d,<n,d>> year:d -1:n)
-following :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 1:n)
-that year :- NP : year:d
+//a year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+//a year ago :- NP : (*:<d,<n,d>> year:d -1:n)
+//year earlier :- NP : (*:<d,<n,d>> year:d -1:n)
+//year ago quarter :- NP : (*:<d,<n,d>> year:d -1:n)
+//following :- NP/NP : (lambda $0:d (*:<d,<n,d>> $0 1:n)
+//that year :- NP : year:d
 
 // this entry really screws things up, for some reason. 
 //year ago period :- NP : (*:<d,<n,d>> year:d -1:n)

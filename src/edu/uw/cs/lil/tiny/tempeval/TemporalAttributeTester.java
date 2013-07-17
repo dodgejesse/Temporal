@@ -3,15 +3,14 @@ package edu.uw.cs.lil.tiny.tempeval;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import edu.uw.cs.lil.tiny.data.IDataCollection;
-import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
 import edu.uw.cs.lil.tiny.parser.joint.IJointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.model.*;
-import edu.uw.cs.lil.tiny.tempeval.structures.TemporalObservationDataset;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMentionDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
@@ -22,31 +21,29 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
 	private static final String DEBUG_PHRASE = "asdfsada year earlier";
-	private final TemporalObservationDataset test;
+	private final TemporalMentionDataset test;
 	private final TemporalJointParser jointParser;
 	private TemporalStatistics stats;
 
 
-	private TemporalAttributeTester(TemporalObservationDataset test, TemporalJointParser jointParser) {
+	private TemporalAttributeTester(TemporalMentionDataset test, TemporalJointParser jointParser) {
 		this.test = test;
 		this.jointParser = jointParser;
 	}
 
-	public void test(JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model, TemporalStatistics stats) {
+	public void test(JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model, TemporalStatistics stats) {
 		this.stats = stats;
 		test(test, model);
 	}
 
-	private void test(IDataCollection<? extends ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult>> testData,
-			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
-		for (final ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> item : testData) {
+	private void test(TemporalMentionDataset testData, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model) {
+		for (TemporalMention mention : testData) {
 			stats.incrementTotalObservations();
-			test(item, model);
+			test(mention, model);
 		}
 	}
 
-	private void test(ILabeledDataItem<Pair<Sentence, String[]>, TemporalResult> dataItem,
-			JointModel<Sentence, String[], LogicalExpression, LogicalExpression> model) {
+	private void test(TemporalMention mention, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model) {
 		LogicalExpression guessLabel = null;
 		String guessType = "", guessVal = "", correctLogicalForms = "", incorrectLogicalForms = "";
 		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
@@ -55,21 +52,19 @@ public class TemporalAttributeTester {
 
 		// To extract all of the information from the mention.
 		// The key to know how to unpack this is in TemporalSentence.java.
-		Sentence phrase = dataItem.getSample().first();
-		String sentence = dataItem.getSample().second()[0];
-		String ref_time = dataItem.getSample().second()[1];
-		String depParse = dataItem.getSample().second()[2];
-		String docID = dataItem.getSample().second()[4];
-		String goldType = dataItem.getLabel().type;
-		String goldVal = dataItem.getLabel().val;
-		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
+		Sentence phrase = mention.getPhrase();
+		String sentence = mention.getSentence().prettyString();
+		String referenceTime = mention.getSentence().getReferenceTime();
+		String depParse = mention.getSentence().getDependencyParse();
+		String docID = mention.getSentence().getDocID();
+		String goldType = mention.getType();
+		String goldVal = mention.getValue();
+		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(mention);
 		String govVerbPOS = govVerbPOSWithMod.second();
 		String mod = govVerbPOSWithMod.first();
-		// TODO clean this up! I don't need the governor verb here.
 
-		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = 
-				new JointDataItemModel<Sentence, String[], LogicalExpression, LogicalExpression>(model, dataItem);
-		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(dataItem, jointDataItemModel);
+		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = new JointDataItemModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression>(model, mention);
+		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(mention, jointDataItemModel);
 		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
 		boolean isCorrect;
 		boolean hasParse = bestParses.size() > 0;
@@ -78,7 +73,6 @@ public class TemporalAttributeTester {
 			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
 
 			averageMaxFeatureVector = topParse.getAverageMaxFeatureVector();
-
 
 			guessType = topParse.getResult().second().type;
 			guessVal = topParse.getResult().second().val;
@@ -98,18 +92,17 @@ public class TemporalAttributeTester {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
+		Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
+				depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 		if (!isCorrect) {
-			Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+			Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
 					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 			if (correctLogicalForms.length() > 0)
-				Debug.print(Type.PARSE_SELECTION, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+				Debug.print(Type.PARSE_SELECTION, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
 						depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 		}
 		if (phrase.toString().contains(DEBUG_PHRASE))
-			Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
-					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
-		if (!isCorrect && correctLogicalForms.length() > 0) 
-			Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), ref_time, isCorrect, hasParse,
+			Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
 					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 	}
 
@@ -124,7 +117,7 @@ public class TemporalAttributeTester {
 		}
 		return correctLogicalForms;
 	}
-	
+
 	private String getIncorrectLogicalForms(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
 		String correctLogicalForms = "";
 		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
@@ -177,11 +170,12 @@ public class TemporalAttributeTester {
 		else {
 			s += "NO PARSES!";
 		}
+		//s += "Dep. parse:      \n" + depParse + "\n";
 		s += "\n\n";
 		return s;
 	}
 
-	public static TemporalAttributeTester build(TemporalObservationDataset test, TemporalJointParser parser) {
+	public static TemporalAttributeTester build(TemporalMentionDataset test, TemporalJointParser parser) {
 		Debug.printf(Type.PROGRESS, "Predicting attributes for %d observations\n", test.size());
 		return new TemporalAttributeTester(test, parser);
 	}

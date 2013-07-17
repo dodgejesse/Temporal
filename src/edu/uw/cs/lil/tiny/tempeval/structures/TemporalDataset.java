@@ -65,10 +65,10 @@ public class TemporalDataset implements IDataCollection<TemporalSentence>, java.
 		return partitions;
 	}
 	
-	public TemporalObservationDataset getObservations() {
-		TemporalObservationDataset observations = new TemporalObservationDataset();
+	public TemporalMentionDataset getMentions() {
+		TemporalMentionDataset mentions = new TemporalMentionDataset();
 		for(TemporalSentence ts : sentences)
-			observations.addObservations(ts.getObservations());
-		return observations;
+			mentions.addMentions(ts.getMentions());
+		return mentions;
 	}
 }

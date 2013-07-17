@@ -3,8 +3,6 @@ package edu.uw.cs.lil.tiny.tempeval.structures;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uw.cs.lil.tiny.data.sentence.Sentence;
-
 public class TemporalSentence implements java.io.Serializable{
 	private static final long serialVersionUID = 2013931525176952047L;
 	private String docID;
@@ -51,6 +49,10 @@ public class TemporalSentence implements java.io.Serializable{
 	public void saveDependencyParse(String dp) {
 		this.dp = dp;
 	}
+	
+	public String getReferenceTime() {
+		return referenceTime;
+	}
 
 	public String toString() {
 		String s = "";
@@ -80,19 +82,7 @@ public class TemporalSentence implements java.io.Serializable{
 		return prettyString(0, tokens.size());
 	}
 	
-	public List<TemporalObservation> getObservations(List<TemporalMention> mentionSubset) {
-		List<TemporalObservation> observations = new LinkedList<TemporalObservation>();
-		for(TemporalMention t : mentionSubset) {
-			observations.add(new TemporalObservation(new Sentence(tokens.subList(t.getStartToken(), t.getEndToken())), prettyString(), referenceTime, t.getType(), t.getValue(), dp, t.getStartToken(), docID));
-		}
-		return observations;
-	}
-	
-	public TemporalObservation getPossibleObservation(int startToken, int endToken) {
-		return new TemporalObservation(new Sentence(tokens.subList(startToken, endToken)), prettyString(), referenceTime, null, null, dp, startToken, docID);
-	}
-	
-	public List<TemporalObservation> getObservations() {
-		return getObservations(mentions);
+	public TemporalMention getPossibleMention(int startToken, int endToken) {
+		return new TemporalMention(this, startToken, endToken);
 	}
 }

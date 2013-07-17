@@ -50,11 +50,11 @@ public class TemporalDocument {
 	}
 
 	public void insertMention(String type, String value, int offset) {
-		mentions.add(new TemporalMention(type, value, offset));
+		mentions.add(new TemporalMention(null, type, value, offset));
 	}
 
 	public void setLastMentionText(String text) {
-		mentions.get(mentions.size() - 1).setText(text);
+		mentions.get(mentions.size() - 1).setCharEnd(text);
 	}
 
 	public List<TemporalSentence> getSentences() {
@@ -98,6 +98,7 @@ public class TemporalDocument {
 					t.setTokenRange(startIndexes.second(), endIndexes.second() + 1);
 					// Assume start and end occur in the same sentence
 					startIndexes.first().insertMention(t);
+					t.setSentence(startIndexes.first());
 				}
 				else if (endCharIndexToTokenIndex.containsKey(t.getEndChar() + 1)) {
 					// Hack to accommodate mistakes in annotation where "10 p.m", rather than "10 p.m." is labeled as the mention
@@ -106,9 +107,10 @@ public class TemporalDocument {
 					t.setTokenRange(startIndexes.second(), endIndexes.second() + 1);
 					// Assume start and end occur in the same sentence
 					startIndexes.first().insertMention(t);
+					t.setSentence(startIndexes.first());
 				}
 				else
-					Debug.printf(Type.ERROR, "Unable to find offset for mention [#%d - #%d]: (%s)\n", t.getStartChar(), t.getEndChar(), t.getText());
+					Debug.printf(Type.ERROR, "Unable to find offset for mention [#%d - #%d]: (%s)\n", t.getStartChar(), t.getEndChar(), t.toString());
 			}
 		}
 	}

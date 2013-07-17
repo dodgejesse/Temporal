@@ -20,7 +20,9 @@ import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.IJointParser;
 import edu.uw.cs.lil.tiny.parser.joint.JointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 import edu.uw.cs.utils.composites.Pair;
 
@@ -41,10 +43,7 @@ import edu.uw.cs.utils.composites.Pair;
  *            the value. Type of execution output.
  */
 
-public class TemporalJointParser extends
-AbstractParser<Sentence, LogicalExpression>
-implements
-IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalResult> {
+public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpression> implements IJointParser<Sentence, TemporalMention, LogicalExpression, LogicalExpression, TemporalResult> {
 
 	private AbstractCKYParser<LogicalExpression> baseParser;
 	private final LogicalExpressionCategoryServices categoryServices;
@@ -150,14 +149,14 @@ IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalR
 
 	@Override
 	public IJointOutput<LogicalExpression, TemporalResult> parse(
-			IDataItem<Pair<Sentence, String[]>> dataItem,
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model) {
 		return parse(dataItem, model, false);
 	}
 
 	@Override
 	public IJointOutput<LogicalExpression, TemporalResult> parse(
-			IDataItem<Pair<Sentence, String[]>> dataItem,
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping) {
 		return parse(dataItem, model, allowWordSkipping, null);
@@ -165,7 +164,7 @@ IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalR
 
 	@Override
 	public IJointOutput<LogicalExpression, TemporalResult> parse(
-			IDataItem<Pair<Sentence, String[]>> dataItem,
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon) {
 		return parse(dataItem, model, allowWordSkipping, tempLexicon, -1);
@@ -174,12 +173,13 @@ IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalR
 	// this is where the parsing happens. 
 	@Override
 	public IJointOutput<LogicalExpression, TemporalResult> parse(
-			IDataItem<Pair<Sentence, String[]>> dataItem,
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem,
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model,
 			boolean allowWordSkipping, ILexicon<LogicalExpression> tempLexicon,
 			Integer beamSize) {
 
-		String docID = dataItem.getSample().second()[4];
+		TemporalSentence ts = dataItem.getSample().second().getSentence();
+		String docID = ts.getDocID();
 		boolean hasPreviousObservation = prevDocID.equals(docID) && prevISO != null;
 		Sentence phrase = dataItem.getSample().first();
 		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(phrase, model);
@@ -203,7 +203,7 @@ IJointParser<Sentence, String[], LogicalExpression, LogicalExpression, TemporalR
 				// create a TemporalExecResultWrapper class using the
 				// Pair<String, String> and the score.
 				// use that wrapper to create
-				String referenceTime = dataItem.getSample().second()[1];
+				String referenceTime = ts.getReferenceTime();
 				if (!hasPreviousObservation)
 					prevISO = null;
 

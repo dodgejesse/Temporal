@@ -16,15 +16,14 @@ import org.xml.sax.SAXException;
 public class TemporalMain {
 	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
 	private static final String[] DATASETS =  {"AQUAINT", "TimeBank"};
-	//private static final String[] DATASETS = {"TimeBank"};
 	//private static final String[] DATASETS =  {"debug_dataset"};
 
 	public static final int CV_FOLDS = 10;
 	public static final boolean STRICT_MATCHING = false;
 	public static final boolean GOLD_MENTIONS = false;
-	public static final boolean FORCE_SERIALIZATION = false;
+	public static final boolean FORCE_SERIALIZATION = true;
 	public static final boolean CROSS_VALIDATION = true;
-	public static final boolean PARALLEL_EXECUTION = true;
+	public static final boolean PARALLEL_EXECUTION = false;
 
 	private static void evaluate(TemporalDataset dataset) {
 		Debug.printf (Type.PROGRESS,"Evaluating %d sentences...\n\n", dataset.size());

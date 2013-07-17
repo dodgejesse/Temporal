@@ -7,6 +7,7 @@ import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.util.GovernerVerbPOSExtractor;
 import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
@@ -15,8 +16,7 @@ import edu.uw.cs.lil.tiny.utils.hashvector.KeyArgs;
 import edu.uw.cs.utils.composites.Pair;
 import edu.uw.cs.utils.composites.Triplet;
 
-public class TemporalContextFeatureSet implements IJointFeatureSet<Sentence, 
-String[], LogicalExpression, LogicalExpression>{
+public class TemporalContextFeatureSet implements IJointFeatureSet<Sentence, TemporalMention, LogicalExpression, LogicalExpression>{
 	private static final String	FEATURE_TAG	= "TEMPORAL_CONTEXT_";
 
 	@Override
@@ -32,7 +32,7 @@ String[], LogicalExpression, LogicalExpression>{
 	}
 
 
-	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, String[]>> dataItem) {
+	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		String logicToString = logic.toString();
 		Pair<String, String>  govVerbTag = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
 		String mod = govVerbTag.first();
@@ -62,12 +62,11 @@ String[], LogicalExpression, LogicalExpression>{
 			return "_none";
 		}
 	}
-	
 
 
 	@Override
 	public double score(LogicalExpression executionStep, IHashVector theta,
-			IDataItem<Pair<Sentence, String[]>> dataItem) {
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		return setTemporalFeats(executionStep, HashVectorFactory.create(), dataItem)
 				.vectorMultiply(theta);
 	}
@@ -75,7 +74,7 @@ String[], LogicalExpression, LogicalExpression>{
 
 	@Override
 	public void setFeats(LogicalExpression executionStep, IHashVector feats,
-			IDataItem<Pair<Sentence, String[]>> dataItem) {
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		setTemporalFeats(executionStep, feats, dataItem);		
 	}
 

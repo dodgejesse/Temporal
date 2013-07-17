@@ -1,28 +1,33 @@
 package edu.uw.cs.lil.tiny.tempeval.structures;
 
+import edu.uw.cs.lil.tiny.data.ILabeledDataItem;
+import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.tempeval.TemporalMain;
+import edu.uw.cs.utils.composites.Pair;
 
-public class TemporalMention implements java.io.Serializable{
+public class TemporalMention implements java.io.Serializable, ILabeledDataItem<Pair<Sentence, TemporalMention>, TemporalResult>{
 	private static final long serialVersionUID = -5859852309847402300L;
+	private TemporalSentence sentence;
 	private String type;
 	private String value;
 	private int tokenStart;
 	private int tokenEnd; //inclusive-exclusive
 
 	// Temporary variables used only during preprocessing
-	private int offset; //character offset
-	private String text;
+	private int charStart; //character offset
+	private int charEnd;
 
 	// Used during preprocessing
-	public TemporalMention(String type, String value, int offset) {
+	public TemporalMention(TemporalSentence sentence, String type, String value, int charStart) {
+		this.sentence = sentence;
 		this.type = type;
 		this.value = value;
-		this.offset = offset;
+		this.charStart = charStart;
 	}
 
 	// Used during detection
-	public TemporalMention(int tokenStart, int tokenEnd, String text) {
-		this.text = text;
+	public TemporalMention(TemporalSentence sentence, int tokenStart, int tokenEnd) {
+		this.sentence = sentence;
 		setTokenRange(tokenStart, tokenEnd);
 	}
 
@@ -31,20 +36,16 @@ public class TemporalMention implements java.io.Serializable{
 		this.tokenEnd = tokenEnd;
 	}
 
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getText() {
-		return text;
+	public void setCharEnd(String text) {
+		charEnd = charStart + text.length();
 	}
 
 	public int getStartChar() {
-		return offset;
+		return charStart;
 	}
 
 	public int getEndChar() {
-		return offset + text.length();
+		return charEnd;
 	}
 
 	public int getStartToken() {
@@ -62,13 +63,23 @@ public class TemporalMention implements java.io.Serializable{
 	public String getValue() {
 		return value;
 	}
-
-	public String toString() {
-		return text + (value == null ? "" : "(" + value + ")");
+	
+	public TemporalSentence getSentence() {
+		return sentence;
 	}
-
-	public String prettyString() {
-		return "[" + tokenStart + "-" + tokenEnd + "]";
+	
+	public String toString() {
+		String s = "";
+		s += "Phrase:            " + getPhrase().toString() + "\n";
+		s += "Sentence:          " + getSentence().prettyString() + "\n";
+		s += "Reference time:    " + getSentence().getReferenceTime() + "\n";
+		s += "Gold type:         " + type + "\n";
+		s += "Gold val:          " + value;
+		return s;
+	}
+	
+	public Sentence getPhrase() {
+		return new Sentence(sentence.getTokens().subList(tokenStart, tokenEnd));
 	}
 
 	public boolean matches(TemporalMention other) {
@@ -85,6 +96,40 @@ public class TemporalMention implements java.io.Serializable{
 
 	public boolean overlapsWith(TemporalMention other) {
 		return this.tokenEnd >= other.tokenStart && this.tokenStart <= other.tokenEnd;
+	}
+
+	@Override
+	public double calculateLoss(TemporalResult label) {
+		return 0;
+	}
+
+	@Override
+	public boolean prune(TemporalResult y) {
+		throw new IllegalArgumentException("Cannot prune a TemporalSentence becuase it doesn't contain logic.");
+	}
+
+	@Override
+	public double quality() {
+		return 1.0D;
+	}
+
+	@Override
+	public Pair<Sentence, TemporalMention> getSample() {
+		return Pair.of(getPhrase(), this);
+	}
+
+	@Override
+	public TemporalResult getLabel() {
+		return new TemporalResult(null, type, value, null, null, null);
+	}
+
+	@Override
+	public boolean isCorrect(TemporalResult other) {
+		return other.type.equals(type) && other.val.equals(value);
+	}
+
+	public void setSentence(TemporalSentence sentence) {
+		this.sentence = sentence;
 	}
 
 }

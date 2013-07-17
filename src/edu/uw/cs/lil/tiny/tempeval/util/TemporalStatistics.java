@@ -5,7 +5,7 @@ public class TemporalStatistics {
 	private int totalObservations, correctObservations, correctTypesOnly, correctValuesOnly, incorrectObservations, incorrectParseSelection, noParses;
 	public TemporalStatistics() {
 		correctMentions = goldMentions = predictedMentions = 0;
-		totalObservations = correctObservations = correctTypesOnly = correctValuesOnly = incorrectObservations = incorrectParseSelection = noParses = 0;
+		totalObservations = correctObservations = correctValuesOnly = incorrectObservations = incorrectParseSelection = noParses = 0;
 	}
 
 	public synchronized void addCorrect(int newCorrect) {

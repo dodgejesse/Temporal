@@ -7,6 +7,7 @@ import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
+import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVectorImmutable;
@@ -14,8 +15,7 @@ import edu.uw.cs.lil.tiny.utils.hashvector.KeyArgs;
 import edu.uw.cs.utils.composites.Pair;
 import edu.uw.cs.utils.composites.Triplet;
 
-public class TemporalReferenceFeatureSet implements IJointFeatureSet<Sentence, 
-String[], LogicalExpression, LogicalExpression>{
+public class TemporalReferenceFeatureSet implements IJointFeatureSet<Sentence, TemporalMention, LogicalExpression, LogicalExpression>{
 	private static final String	FEATURE_TAG	= "TEMPORAL_REFERENCE_";
 
 	@Override
@@ -31,7 +31,7 @@ String[], LogicalExpression, LogicalExpression>{
 	}
 
 	// mess with always having this feature vs only having it when the phrase is a temporal reference phrase
-	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, String[]>> dataItem) {
+	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		//if (!isTempRefPhrase(dataItem.getSample().first()).equals("notTempRef")){//0){
 		//if (logic.toString().startsWith("(temporal_ref"))
 			feats.set(FEATURE_TAG + "temporal_ref" + getOuterPred(logic.toString()) + isTempRefPhrase(dataItem.getSample().first()) , 1);
@@ -70,15 +70,15 @@ String[], LogicalExpression, LogicalExpression>{
 
 	@Override
 	public double score(LogicalExpression executionStep, IHashVector theta,
-			IDataItem<Pair<Sentence, String[]>> dataItem) {
-		return setTemporalFeats(executionStep, HashVectorFactory.create(), dataItem)
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
+		return setTemporalFeats(executionStep, HashVectorFactory.create(), dataItem.getSample().second())
 				.vectorMultiply(theta);
 	}
 
 
 	@Override
 	public void setFeats(LogicalExpression executionStep, IHashVector feats,
-			IDataItem<Pair<Sentence, String[]>> dataItem) {
+			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		setTemporalFeats(executionStep, feats, dataItem);		
 	}
 
