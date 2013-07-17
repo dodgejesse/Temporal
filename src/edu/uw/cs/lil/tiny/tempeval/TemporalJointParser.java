@@ -2,7 +2,6 @@ package edu.uw.cs.lil.tiny.tempeval;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
@@ -83,59 +82,26 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 	 * To perform the first step of the execution - getting all possible
 	 * context-dependent logical forms.
 	 */
-	private LogicalExpression[] getArrayOfLabels(LogicalExpression l,
-			boolean sameDocID) {
-		int numOfFunctions = sameDocID?4:3;
-		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
-		LogicalExpression[] functionsS = new LogicalExpression[numOfFunctions];
-		LogicalExpression[] functionsD = new LogicalExpression[numOfFunctions];
-		// Making the Predicates to apply to the logical expressions for
-		// SEQUENCES
-		functionsS[0] = categoryServices
-				.parseSemantics("(lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))");
-		functionsS[1] = categoryServices
-				.parseSemantics("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))");
-		functionsS[2] = categoryServices
-				.parseSemantics("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))");
-		if (sameDocID)
-			functionsS[3] = categoryServices
-			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
-
-		// Making the Predicates to apply to the logical expressions for
-		// DURATIONS
-		// Or reall, don't, because this only confuses the system.
-		functionsD[0] = categoryServices
-				.parseSemantics("(lambda $0:d (previous:<d,<r,s>> $0 ref_time:r))");
-		functionsD[1] = categoryServices
-				.parseSemantics("(lambda $0:d (this:<d,<r,s>> $0 ref_time:r))");
-		functionsD[2] = categoryServices
-				.parseSemantics("(lambda $0:d (next:<d,<r,s>> $0 ref_time:r))");
-		if (sameDocID)
-			functionsD[3] = categoryServices
-			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
-
-		// Looping over the predicates, applying them each to the given logical
-		// expression
-		
-		newLogicArray[0] = l;
-		
-		for (int i = 0; i < functionsS.length; i++) {
-			if (!logicStartsWithContextDependentPredicate(l)){
-				newLogicArray[i + 1] = categoryServices.doSemanticApplication(
-						functionsS[i], l);
-			}
-			//if (newLogicArray[i + 1] == null && i == 3) {
-			//	newLogicArray[i + 1] = categoryServices.doSemanticApplication(
-			//			functionsD[i], l);
-			//}
-
-			if (newLogicArray[i + 1] == null)
-				newLogicArray[i + 1] = l;
-
+	private List<LogicalExpression> getLabels(LogicalExpression l, boolean sameDocID) {
+		List<LogicalExpression> expressions = new ArrayList<LogicalExpression>(8);
+		expressions.add(l);
+		if (!logicStartsWithContextDependentPredicate(l)){
+			addFunction("(lambda $0:s (previous:<s,<r,s>> $0 ref_time:r))", l, expressions);
+			addFunction("(lambda $0:s (this:<s,<r,s>> $0 ref_time:r))", l, expressions);
+			addFunction("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))", l, expressions);
+			if (sameDocID)
+				addFunction("(lambda $0:d (temporal_ref:<d,s> $0))", l, expressions);
+				
 		}
-
-		return newLogicArray;
+		return expressions;
 	}
+
+	private void addFunction(String semantics, LogicalExpression l, List<LogicalExpression> expressions) {			
+		LogicalExpression e = categoryServices.doSemanticApplication(categoryServices.parseSemantics(semantics), l);
+		if (e != null)
+			expressions.add(e);
+	}
+
 
 	private boolean logicStartsWithContextDependentPredicate(LogicalExpression l){
 		return (l.toString().startsWith("(previous:") || 
@@ -179,7 +145,6 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 		boolean hasPreviousISO = prevDocID.equals(docID) && prevISO != null;
 		if (!hasPreviousISO)
 			prevISO = null;
-		
 		Sentence phrase = dataItem.getSample().first();
 		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(phrase, model);
 
@@ -193,12 +158,11 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 
 		TemporalISO bestISO = null;
 		double bestScore = -Double.MAX_VALUE;
-		
-		for (IParseResult<LogicalExpression> l : CKYModelParses) {
-			LogicalExpression[] labels = getArrayOfLabels(l.getY(), hasPreviousISO);
-			for (int i = 0; i < labels.length; i++) {
-				TemporalISO iso = TemporalVisitor.of(labels[i], ts.getReferenceTime(), prevISO);
-				TemporalResult tr = new TemporalResult(labels[i], iso.getType(), iso.getVal(), l.getAllLexicalEntries(), model, l);
+
+		for (IParseResult<LogicalExpression> parseResult : CKYModelParses) {
+			for(LogicalExpression label : getLabels(parseResult.getY(), hasPreviousISO)) {
+				TemporalISO iso = TemporalVisitor.of(label, ts.getReferenceTime(), prevISO);
+				TemporalResult tr = new TemporalResult(label, iso.getType(), iso.getVal(), parseResult.getAllLexicalEntries(), model, parseResult);
 				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
 				if (jp.getScore() > bestScore) {
 					bestScore = jp.getScore();

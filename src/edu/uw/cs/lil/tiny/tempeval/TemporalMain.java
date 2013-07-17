@@ -32,7 +32,6 @@ public class TemporalMain {
 		if (CROSS_VALIDATION){
 			List<List<TemporalSentence>> partitions = dataset.partition(CV_FOLDS);
 			TemporalEvaluation[] threads = new TemporalEvaluation[partitions.size()];
-
 			for (int i = 0; i < partitions.size(); i++){
 				TemporalDataset trainData = new TemporalDataset();
 				TemporalDataset testData = new TemporalDataset(partitions.get(i));
