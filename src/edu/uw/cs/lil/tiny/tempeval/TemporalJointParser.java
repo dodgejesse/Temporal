@@ -85,7 +85,7 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 	 */
 	private LogicalExpression[] getArrayOfLabels(LogicalExpression l,
 			boolean sameDocID) {
-		int numOfFunctions = 4;
+		int numOfFunctions = sameDocID?4:3;
 		LogicalExpression[] newLogicArray = new LogicalExpression[numOfFunctions + 1];
 		LogicalExpression[] functionsS = new LogicalExpression[numOfFunctions];
 		LogicalExpression[] functionsD = new LogicalExpression[numOfFunctions];
@@ -100,9 +100,6 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 		if (sameDocID)
 			functionsS[3] = categoryServices
 			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
-		else
-			functionsS[3] = l;
-
 
 		// Making the Predicates to apply to the logical expressions for
 		// DURATIONS
@@ -116,12 +113,12 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 		if (sameDocID)
 			functionsD[3] = categoryServices
 			.parseSemantics("(lambda $0:d (temporal_ref:<d,s> $0))");
-		else
-			functionsD[3] = l;
-
 
 		// Looping over the predicates, applying them each to the given logical
 		// expression
+		
+		newLogicArray[0] = l;
+		
 		for (int i = 0; i < functionsS.length; i++) {
 			if (!logicStartsWithContextDependentPredicate(l)){
 				newLogicArray[i + 1] = categoryServices.doSemanticApplication(
@@ -136,7 +133,6 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 				newLogicArray[i + 1] = l;
 
 		}
-		newLogicArray[0] = l;
 
 		return newLogicArray;
 	}
@@ -180,7 +176,10 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 
 		TemporalSentence ts = dataItem.getSample().second().getSentence();
 		String docID = ts.getDocID();
-		boolean hasPreviousObservation = prevDocID.equals(docID) && prevISO != null;
+		boolean hasPreviousISO = prevDocID.equals(docID) && prevISO != null;
+		if (!hasPreviousISO)
+			prevISO = null;
+		
 		Sentence phrase = dataItem.getSample().first();
 		IParserOutput<LogicalExpression> CKYParserOutput = baseParser.parse(phrase, model);
 
@@ -196,7 +195,7 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
 
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
-			LogicalExpression[] labels = getArrayOfLabels(l.getY(), !hasPreviousObservation);
+			LogicalExpression[] labels = getArrayOfLabels(l.getY(), hasPreviousISO);
 			for (int i = 0; i < labels.length; i++) {
 				// execute the logical form to get a final Pair<String, String>.
 				// score the logical form.
@@ -204,8 +203,6 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 				// Pair<String, String> and the score.
 				// use that wrapper to create
 				String referenceTime = ts.getReferenceTime();
-				if (!hasPreviousObservation)
-					prevISO = null;
 
 				// TODO: Unsolved mystery: the CKY parser gives different parses depending on the dataset, even if one is a subset of another.
 				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime, prevISO);
