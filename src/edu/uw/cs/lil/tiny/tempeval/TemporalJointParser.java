@@ -191,34 +191,25 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 
 		long startTime = System.currentTimeMillis();
 
-		// to store the temporalISOs, so i can choose the highest scoring one to keep in prevISO
-		TreeMap<Double, TemporalISO> ISOsByScore = new TreeMap<Double, TemporalISO>();
-
+		TemporalISO bestISO = null;
+		double bestScore = -Double.MAX_VALUE;
+		
 		for (IParseResult<LogicalExpression> l : CKYModelParses) {
 			LogicalExpression[] labels = getArrayOfLabels(l.getY(), hasPreviousISO);
 			for (int i = 0; i < labels.length; i++) {
-				// execute the logical form to get a final Pair<String, String>.
-				// score the logical form.
-				// create a TemporalExecResultWrapper class using the
-				// Pair<String, String> and the score.
-				// use that wrapper to create
-				String referenceTime = ts.getReferenceTime();
-
-				// TODO: Unsolved mystery: the CKY parser gives different parses depending on the dataset, even if one is a subset of another.
-				TemporalISO tmp = TemporalVisitor.of(labels[i], referenceTime, prevISO);
-
-				TemporalResult tr = new TemporalResult(labels[i], tmp.getType(), tmp.getVal(), l.getAllLexicalEntries(), model, l);
+				TemporalISO iso = TemporalVisitor.of(labels[i], ts.getReferenceTime(), prevISO);
+				TemporalResult tr = new TemporalResult(labels[i], iso.getType(), iso.getVal(), l.getAllLexicalEntries(), model, l);
 				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
-
-
-				ISOsByScore.put(jp.getScore(), tmp);
+				if (jp.getScore() > bestScore) {
+					bestScore = jp.getScore();
+					bestISO = iso;
+				}
 				allExecutedParses.add(jp);
 			}
 		}
 
-
-		if (ISOsByScore.size() > 0) {
-			prevISO = ISOsByScore.lastEntry().getValue();
+		if (bestISO != null) {
+			prevISO = bestISO;
 			prevDocID = docID;
 		}
 		else { 
