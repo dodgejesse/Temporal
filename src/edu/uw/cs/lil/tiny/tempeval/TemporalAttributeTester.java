@@ -21,29 +21,26 @@ import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
 	private static final String DEBUG_PHRASE = "asdfsada year earlier";
-	private final TemporalMentionDataset test;
+	private final TemporalMentionDataset testData;
 	private final TemporalJointParser jointParser;
 	private TemporalStatistics stats;
+	private JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model;
 
-
-	private TemporalAttributeTester(TemporalMentionDataset test, TemporalJointParser jointParser) {
-		this.test = test;
+	public TemporalAttributeTester(TemporalMentionDataset testData, TemporalJointParser jointParser, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model, TemporalStatistics stats) {
+		this.testData = testData;
 		this.jointParser = jointParser;
-	}
-
-	public void test(JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model, TemporalStatistics stats) {
+		this.model = model;
 		this.stats = stats;
-		test(test, model);
 	}
 
-	private void test(TemporalMentionDataset testData, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model) {
-		for (TemporalMention mention : testData) {
-			stats.incrementTotalObservations();
-			test(mention, model);
-		}
+	public void test() {
+		Debug.printf(Type.PROGRESS, "Predicting attributes for %d observations\n", testData.size());
+		for (TemporalMention mention : testData)
+			testMention(mention);
 	}
 
-	private void test(TemporalMention mention, JointModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression> model) {
+	private void testMention(TemporalMention mention) {
+		stats.incrementTotalObservations();
 		LogicalExpression guessLabel = null;
 		String guessType = "", guessVal = "", correctLogicalForms = "", incorrectLogicalForms = "";
 		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
@@ -92,6 +89,7 @@ public class TemporalAttributeTester {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
+
 		Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
 				depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
 		if (!isCorrect) {
@@ -173,10 +171,5 @@ public class TemporalAttributeTester {
 		//s += "Dep. parse:      \n" + depParse + "\n";
 		s += "\n\n";
 		return s;
-	}
-
-	public static TemporalAttributeTester build(TemporalMentionDataset test, TemporalJointParser parser) {
-		Debug.printf(Type.PROGRESS, "Predicting attributes for %d observations\n", test.size());
-		return new TemporalAttributeTester(test, parser);
 	}
 }

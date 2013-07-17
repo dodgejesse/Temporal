@@ -39,6 +39,8 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMentionDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalDataset;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
 import edu.uw.cs.lil.tiny.utils.string.StubStringFilter;
 
@@ -143,6 +145,7 @@ public class TemporalEvaluation extends Thread {
 				.addLexicalFeatureSet(lexPhi)
 				.setLexicon(new Lexicon<LogicalExpression>()).build();
 		model.addFixedLexicalEntries(fixed.toCollection());
+		Debug.println(Type.PROGRESS, "Training model...");
 		learner.train(model);
 		return model;
 	}
@@ -159,7 +162,7 @@ public class TemporalEvaluation extends Thread {
 		else
 			attributeData = testData.getMentions();
 
-		TemporalAttributeTester attributeTester = TemporalAttributeTester.build(attributeData, jointParser);
-		attributeTester.test(model, stats);
+		TemporalAttributeTester attributeTester = new TemporalAttributeTester(attributeData, jointParser, model, stats);
+		attributeTester.test();
 	}
 }
