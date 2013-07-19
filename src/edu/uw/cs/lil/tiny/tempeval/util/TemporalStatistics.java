@@ -2,10 +2,10 @@ package edu.uw.cs.lil.tiny.tempeval.util;
 
 public class TemporalStatistics {
 	private int correctMentions, goldMentions, predictedMentions;
-	private int totalObservations, correctObservations, correctTypesOnly, correctValuesOnly, incorrectObservations, incorrectParseSelection, noParses;
+	private int totalObservations, correctObservations, correctValues, incorrectParseSelection, noParses;
 	public TemporalStatistics() {
 		correctMentions = goldMentions = predictedMentions = 0;
-		totalObservations = correctObservations = correctValuesOnly = incorrectObservations = incorrectParseSelection = noParses = 0;
+		totalObservations = correctObservations = incorrectParseSelection = noParses = 0;
 	}
 
 	public synchronized void addCorrect(int newCorrect) {
@@ -27,19 +27,11 @@ public class TemporalStatistics {
 	public synchronized void incrementCorrectObservations() {
 		correctObservations ++;
 	}
-
-	public synchronized void incrementCorrectTypes() {
-		correctTypesOnly ++;
-	}
 	
 	public synchronized void incrementCorrectValues() {
-		correctValuesOnly ++;
+		correctValues ++;
 	}
-	
-	public synchronized void incrementIncorrectObservations() {
-		incorrectObservations ++;
-	}
-	
+
 	public synchronized void incrementNoParses() {
 		noParses ++;
 	}
@@ -79,13 +71,11 @@ public class TemporalStatistics {
 	}
 	
 	public String attributetoString(){
-		int correctValues = correctObservations + correctValuesOnly;
 		int incorrectValues = totalObservations - correctValues - noParses;
 		String s = "";
 		s += String.format("Correct value:              %.2f%% (%d/%d)\n", percentage(correctValues, totalObservations), correctValues, totalObservations);
 		s += String.format("  Correct value and type:   %.2f%% (%d/%d)\n", percentage(correctObservations, totalObservations), correctObservations, totalObservations);
 		s += String.format("Incorrect value:            %.2f%% (%d/%d)\n", percentage(incorrectValues, totalObservations), incorrectValues, totalObservations);
-		s += String.format("  Incorrect value and type: %.2f%% (%d/%d)\n", percentage(incorrectObservations, totalObservations), incorrectObservations, totalObservations);
 		s += String.format("  Incorrect parse selection:%.2f%% (%d/%d)\n", percentage(incorrectParseSelection, totalObservations), incorrectParseSelection, totalObservations);
 		s += String.format("No parses:                  %.2f%% (%d/%d)\n", percentage(noParses, totalObservations), noParses, totalObservations);
 		return s;

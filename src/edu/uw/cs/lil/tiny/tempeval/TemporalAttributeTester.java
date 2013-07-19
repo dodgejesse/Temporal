@@ -65,7 +65,6 @@ public class TemporalAttributeTester {
 		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
 		boolean isCorrect;
 		boolean hasParse = bestParses.size() > 0;
-		// there is more than one 
 		if (hasParse) {
 			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
 
@@ -85,7 +84,7 @@ public class TemporalAttributeTester {
 			// TODO: Check every parse to make sure a correct one is included.
 			//} else if (bestModelParses.size() > 1) {
 			//	output = 3;
-		} else { // zero parses
+		} else {
 			stats.incrementNoParses();
 			isCorrect = false;
 		}
@@ -129,16 +128,13 @@ public class TemporalAttributeTester {
 	}
 
 	private boolean evaluateTopParse(String goldType, String goldVal, String guessType, String guessVal){
-		if (goldType.equals(guessType) && goldVal.equals(guessVal)) {
-			stats.incrementCorrectObservations();
-			return true;
-		}
-		else if (goldType.equals(guessType) && !goldVal.equals(guessVal))
-			stats.incrementCorrectTypes();
-		else if (!goldType.equals(guessType) && goldVal.equals(guessVal))
+		if (goldVal.equals(guessVal)) {
 			stats.incrementCorrectValues();
-		else 
-			stats.incrementIncorrectObservations();
+			if (goldType.equals(guessType)) {
+				stats.incrementCorrectObservations();
+				return true;
+			}
+		}
 		return false;
 	}
 

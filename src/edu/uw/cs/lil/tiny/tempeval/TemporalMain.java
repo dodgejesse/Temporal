@@ -16,6 +16,8 @@ import org.xml.sax.SAXException;
 public class TemporalMain {
 	private static final String DATASET_DIR = "data/TempEval3/TBAQ-cleaned/";
 	private static final String[] DATASETS =  {"AQUAINT", "TimeBank"};
+	//private static final String DATASET_DIR = "data/TempEval3/";
+	//private static final String[] DATASETS =  {"TE3-Silver-data"};
 	//private static final String[] DATASETS =  {"debug_dataset"};
 
 	public static final int CV_FOLDS = 10;

@@ -29,7 +29,6 @@ public class TemporalThis extends TemporalPredicate {
 				tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
 			} else if (tmpMap.containsKey("weekday")) {
 				LocalDate date = TemporalJoda.convertISOToLocalDate(this.second);
-				// Comment out the following while loop to intentionally make mistakes
 				while (date.getDayOfWeek() != TemporalISO.getValueFromDate(this.first, "weekday"))
 					date = date.plusDays(1);
 				return TemporalJoda.convertLocalDateToISO(date);

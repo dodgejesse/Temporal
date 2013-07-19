@@ -1,38 +1,16 @@
 package edu.uw.cs.lil.tiny.tempeval.featuresets;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import edu.uw.cs.lil.tiny.data.IDataItem;
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
-import edu.uw.cs.lil.tiny.parser.joint.model.IJointFeatureSet;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.util.GovernerVerbPOSExtractor;
-import edu.uw.cs.lil.tiny.utils.hashvector.HashVectorFactory;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
 import edu.uw.cs.lil.tiny.utils.hashvector.IHashVectorImmutable;
-import edu.uw.cs.lil.tiny.utils.hashvector.KeyArgs;
 import edu.uw.cs.utils.composites.Pair;
-import edu.uw.cs.utils.composites.Triplet;
 
-public class TemporalContextFeatureSet implements IJointFeatureSet<Sentence, TemporalMention, LogicalExpression, LogicalExpression>{
-	private static final String	FEATURE_TAG	= "TEMPORAL_CONTEXT_";
-
-	@Override
-	public List<Triplet<KeyArgs, Double, String>> getFeatureWeights(
-			IHashVector theta) {
-		// TODO throw error
-		final List<Triplet<KeyArgs, Double, String>> weights = new LinkedList<Triplet<KeyArgs, Double, String>>();
-		for (final Pair<KeyArgs, Double> feature : theta.getAll(FEATURE_TAG)) {
-			weights.add(Triplet.of(feature.first(), feature.second(),
-					(String) null));
-		}
-		return weights;
-	}
-
-
-	private IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
+public class TemporalContextFeatureSet extends TemporalFeatureSet {
+	protected IHashVectorImmutable setTemporalFeats(LogicalExpression logic, IHashVector feats, IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
 		String logicToString = logic.toString();
 		Pair<String, String>  govVerbTag = GovernerVerbPOSExtractor.getGovVerbTag(dataItem.getSample().second());
 		String mod = govVerbTag.first();
@@ -43,39 +21,14 @@ public class TemporalContextFeatureSet implements IJointFeatureSet<Sentence, Tem
 		if (logic.getType().getName().toString().equals("s")){
 			verb = mod + "_" + govVerbPOS;
 			String outerPredicate = getOuterPred(logicToString);
-			feats.set(FEATURE_TAG + outerPredicate + verb, 1);
+			feats.set(getFeatureTag() + outerPredicate + verb, 1);
 		}
 		return feats;
 	}
 
+	@Override
+	protected String getFeatureTag() {
+		return "TEMPORAL_CONTEXT_";
+	}
 	
-	private String getOuterPred(String l){
-		if (l.startsWith("(previous:<")){
-			return "_previous";
-		} else if (l.startsWith("(this:<")){
-			return "_this";
-		} else if (l.startsWith("(next:<")){
-			return "_next";
-		} else if (l.startsWith("(temporal_ref:<")){
-			return "temporal_ref";
-		} else {
-			return "_none";
-		}
-	}
-
-
-	@Override
-	public double score(LogicalExpression executionStep, IHashVector theta,
-			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
-		return setTemporalFeats(executionStep, HashVectorFactory.create(), dataItem)
-				.vectorMultiply(theta);
-	}
-
-
-	@Override
-	public void setFeats(LogicalExpression executionStep, IHashVector feats,
-			IDataItem<Pair<Sentence, TemporalMention>> dataItem) {
-		setTemporalFeats(executionStep, feats, dataItem);		
-	}
-
 }
