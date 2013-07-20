@@ -1,11 +1,20 @@
 package edu.uw.cs.lil.tiny.tempeval.util;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
 public class TemporalStatistics {
 	private int correctMentions, goldMentions, predictedMentions;
-	private int totalObservations, correctObservations, correctValues, incorrectParseSelection, noParses;
+	private int totalAttributes, correctAttributes;
+	private Map<String, Integer> correctClasses;
+	private Map<String, Integer> incorrectClasses;
+	
 	public TemporalStatistics() {
 		correctMentions = goldMentions = predictedMentions = 0;
-		totalObservations = correctObservations = incorrectParseSelection = noParses = 0;
+		totalAttributes = correctAttributes = 0;
+		correctClasses = new TreeMap<String, Integer>();
+		incorrectClasses = new TreeMap<String, Integer>();
 	}
 
 	public synchronized void addCorrect(int newCorrect) {
@@ -20,26 +29,26 @@ public class TemporalStatistics {
 		predictedMentions += newPredicted;
 	}
 
-	public synchronized void incrementTotalObservations() {
-		totalObservations ++;
+	public synchronized void incrementTotalAttributes() {
+		totalAttributes ++;
 	}
 	
-	public synchronized void incrementCorrectObservations() {
-		correctObservations ++;
+	public synchronized void incrementCorrectAttributes() {
+		correctAttributes ++;
 	}
 	
-	public synchronized void incrementCorrectValues() {
-		correctValues ++;
+	public synchronized void incrementIncorrectClass(String exampleClass) {
+		if(!incorrectClasses.containsKey(exampleClass))
+			incorrectClasses.put(exampleClass, 0);
+		incorrectClasses.put(exampleClass, incorrectClasses.get(exampleClass) + 1);
 	}
 
-	public synchronized void incrementNoParses() {
-		noParses ++;
+	public synchronized void incrementCorrectClass(String exampleClass) {
+		if(!correctClasses.containsKey(exampleClass))
+			correctClasses.put(exampleClass, 0);
+		correctClasses.put(exampleClass, correctClasses.get(exampleClass) + 1);
 	}
 
-	public synchronized void incrementIncorrectParseSelection() {
-		incorrectParseSelection ++;
-	}
-	
 	public double getRecall() {
 		return ((double) correctMentions)/goldMentions;
 	}
@@ -71,13 +80,18 @@ public class TemporalStatistics {
 	}
 	
 	public String attributetoString(){
-		int incorrectValues = totalObservations - correctValues - noParses;
+		String format = "%-40s%.2f%% (%d/%d)\n";
+		int incorrectAttributes = totalAttributes - correctAttributes;
 		String s = "";
-		s += String.format("Correct value:              %.2f%% (%d/%d)\n", percentage(correctValues, totalObservations), correctValues, totalObservations);
-		s += String.format("  Correct value and type:   %.2f%% (%d/%d)\n", percentage(correctObservations, totalObservations), correctObservations, totalObservations);
-		s += String.format("Incorrect value:            %.2f%% (%d/%d)\n", percentage(incorrectValues, totalObservations), incorrectValues, totalObservations);
-		s += String.format("  Incorrect parse selection:%.2f%% (%d/%d)\n", percentage(incorrectParseSelection, totalObservations), incorrectParseSelection, totalObservations);
-		s += String.format("No parses:                  %.2f%% (%d/%d)\n", percentage(noParses, totalObservations), noParses, totalObservations);
+		
+		s += String.format(format, "Correct values", percentage(correctAttributes, totalAttributes), correctAttributes, totalAttributes);
+		for (Entry<String, Integer> entry : correctClasses.entrySet())
+			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
+		
+		s += String.format(format, "Inorrect values", percentage(incorrectAttributes, totalAttributes), incorrectAttributes, totalAttributes);
+		for (Entry<String, Integer> entry : incorrectClasses.entrySet())
+			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
+		
 		return s;
 	}
 }

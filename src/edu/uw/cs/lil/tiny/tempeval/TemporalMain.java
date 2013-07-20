@@ -74,6 +74,7 @@ public class TemporalMain {
 		Debug.addFilter("", "incorrect_attribute.txt", Type.INCORRECT_ATTRIBUTE);
 		Debug.addFilter("", "debug_attribute.txt", Type.DEBUG_ATTRIBUTE);
 		Debug.addFilter("", "parse_selection.txt", Type.PARSE_SELECTION);
+		Debug.addFilter("", "unknown_incorrect.txt", Type.UNKNOWN_INCORRECT);
 		TemporalDataset dataset = new TemporalReader().getDataset(DATASET_DIR, DATASETS, FORCE_SERIALIZATION);
 		evaluate(dataset);
 	}

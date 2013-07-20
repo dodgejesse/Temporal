@@ -54,21 +54,7 @@ public class TemporalSentence implements java.io.Serializable{
 		return referenceTime;
 	}
 
-	public String toString() {
-		String s = "";
-		int counter = 0;
-		for (String t : tokens) {
-			s += "[" + counter + "]" + t + " ";
-			counter++;
-		}
-		s += "( ";
-		for (TemporalMention t : mentions)
-			s += t + " ";
-		s += ")";
-		return s;
-	}
-
-	public String prettyString(int start, int end) {
+	public String toString(int start, int end) {
 		String output = "";
 		for (String s : tokens.subList(start, end)) {
 			if (output.length() > 0)
@@ -78,8 +64,8 @@ public class TemporalSentence implements java.io.Serializable{
 		return output;
 	}
 	
-	public String prettyString() {
-		return prettyString(0, tokens.size());
+	public String toString() {
+		return toString(0, tokens.size());
 	}
 	
 	public TemporalMention getPossibleMention(int startToken, int endToken) {

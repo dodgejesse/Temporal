@@ -47,13 +47,13 @@ public class TemporalDetectionTester {
 			List<TemporalMention> correctMentions = getCorrectMentions(ts.getMentions(), predictedMentions);
 			stats.addCorrect(correctMentions.size());
 			if (correctMentions.size() < ts.getMentions().size()) {
-				Debug.printf(Type.DETECTION, "False negative from '%s':\n", ts.prettyString());
+				Debug.printf(Type.DETECTION, "False negative from '%s':\n", ts);
 				for(TemporalMention fn: getFalseNegatives(correctMentions, ts.getMentions()))
 					Debug.printf(Type.DETECTION, "[%s]", fn);
 				Debug.print(Type.DETECTION, "\n\n");
 			}
 			if (correctMentions.size() < predictedMentions.size()) {
-				Debug.printf(Type.DETECTION, "False positive from '%s':\n", ts.prettyString());
+				Debug.printf(Type.DETECTION, "False positive from '%s':\n", ts);
 				for(TemporalMention fp : getFalsePositives(correctMentions, predictedMentions))
 					Debug.printf(Type.DETECTION, "[%s]", fp);
 				Debug.print(Type.DETECTION, "\n\n");

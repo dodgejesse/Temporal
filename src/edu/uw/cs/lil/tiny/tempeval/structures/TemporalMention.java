@@ -71,10 +71,10 @@ public class TemporalMention implements java.io.Serializable, ILabeledDataItem<P
 	public String toString() {
 		String s = "";
 		s += "Phrase:            " + getPhrase().toString() + "\n";
-		s += "Sentence:          " + getSentence().prettyString() + "\n";
+		s += "Sentence:          " + getSentence().toString() + "\n";
 		s += "Reference time:    " + getSentence().getReferenceTime() + "\n";
+		s += "Gold val:          " + value + "\n";
 		s += "Gold type:         " + type + "\n";
-		s += "Gold val:          " + value;
 		return s;
 	}
 	
