@@ -1,7 +1,12 @@
 package edu.uw.cs.lil.tiny.tempeval.util;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class TemporalStatistics {
@@ -9,7 +14,7 @@ public class TemporalStatistics {
 	private int totalAttributes, correctAttributes;
 	private Map<String, Integer> correctClasses;
 	private Map<String, Integer> incorrectClasses;
-	
+
 	public TemporalStatistics() {
 		correctMentions = goldMentions = predictedMentions = 0;
 		totalAttributes = correctAttributes = 0;
@@ -32,11 +37,11 @@ public class TemporalStatistics {
 	public synchronized void incrementTotalAttributes() {
 		totalAttributes ++;
 	}
-	
+
 	public synchronized void incrementCorrectAttributes() {
 		correctAttributes ++;
 	}
-	
+
 	public synchronized void incrementIncorrectClass(String exampleClass) {
 		if(!incorrectClasses.containsKey(exampleClass))
 			incorrectClasses.put(exampleClass, 0);
@@ -66,7 +71,7 @@ public class TemporalStatistics {
 	private double percentage(int numerator, int denominator) {
 		return numerator*100.0/denominator;
 	}
-	
+
 	public String toString() {
 		return detectionToString() + "\n" + attributetoString();
 	}
@@ -78,19 +83,30 @@ public class TemporalStatistics {
 		s += String.format("F1:        %.2f%%\n", 100*getF1());
 		return s;
 	}
-	
+
 	public String attributetoString(){
 		String format = "%-40s%.2f%% (%d/%d)\n";
 		String s = "";
-		
+
 		s += String.format(format, "Correct values", percentage(correctAttributes, totalAttributes), correctAttributes, totalAttributes);
-		for (Entry<String, Integer> entry : correctClasses.entrySet())
+		for (Entry<String, Integer> entry : getSortedClasses(correctClasses.entrySet()))
 			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
-		
+
 		s += String.format(format, "Incorrect values", percentage(totalAttributes - correctAttributes, totalAttributes), totalAttributes - correctAttributes, totalAttributes);
-		for (Entry<String, Integer> entry : incorrectClasses.entrySet())
+		for (Entry<String, Integer> entry : getSortedClasses(incorrectClasses.entrySet()))
 			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
-		
+
 		return s;
+	}
+
+	private List<Entry<String, Integer>> getSortedClasses(Set<Entry<String, Integer>> entrySet) {
+		List<Entry<String, Integer>> sortedEntries = new LinkedList<Entry<String, Integer>> (entrySet);
+		Collections.sort(sortedEntries, new Comparator<Entry<String, Integer>>() {
+			public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) {
+				// Flip e1 and e2 to get most occurrences first
+				return e2.getValue().compareTo(e1.getValue());
+			}        
+		});
+		return sortedEntries;
 	}
 }

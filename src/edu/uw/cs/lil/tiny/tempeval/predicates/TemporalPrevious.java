@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
-import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalPrevious extends TemporalPredicate {
 
@@ -55,9 +55,9 @@ public class TemporalPrevious extends TemporalPredicate {
 	}
 
 	private TemporalISO timeOfDay(){
-		LocalDate date = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate date = TemporalUtil.convertISOToLocalDate(second);
 		date = date.minusDays(1);
-		TemporalISO isoDate = TemporalJoda.convertLocalDateToISO(date);
+		TemporalISO isoDate = TemporalUtil.convertLocalDateToISO(date);
 		Map<String, Set<Integer>> tmpMap = isoDate.getFullMapping();
 		tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
 		return new TemporalDate(tmpMap);
@@ -100,7 +100,7 @@ public class TemporalPrevious extends TemporalPredicate {
 	}
 
 	private TemporalISO weekdayAndNotMonthOrDay() {
-		LocalDate date = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate date = TemporalUtil.convertISOToLocalDate(second);
 		if (date.getDayOfWeek() == TemporalISO.getValueFromDate(this.first,
 				"weekday")) {
 			date = date.minusDays(1);
@@ -109,7 +109,7 @@ public class TemporalPrevious extends TemporalPredicate {
 				"weekday")) {
 			date = date.minusDays(1);
 		}
-		return TemporalJoda.convertLocalDateToISO(date);
+		return TemporalUtil.convertLocalDateToISO(date);
 	}
 
 	// TODO something here isn't working as expected. See phrase 
@@ -217,7 +217,7 @@ public class TemporalPrevious extends TemporalPredicate {
 		if (TemporalDate.getValueFromDate(first, "week")> 0)
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
-		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate tmpLocalDate = TemporalUtil.convertISOToLocalDate(second);
 		tmpLocalDate = tmpLocalDate.minusWeeks(-TemporalDate.getValueFromDate(first, "week"));
 
 
@@ -237,9 +237,9 @@ public class TemporalPrevious extends TemporalPredicate {
 		if (TemporalISO.getValueFromDate(first, "day") > 0)
 			return first;
 
-		LocalDate refDate = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate refDate = TemporalUtil.convertISOToLocalDate(second);
 		refDate = refDate.minusDays(-TemporalDate.getValueFromDate(first, "day"));
-		return TemporalJoda.convertLocalDateToISO(refDate);
+		return TemporalUtil.convertLocalDateToISO(refDate);
 	}
 
 	private TemporalISO findPrevious() {

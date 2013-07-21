@@ -1,5 +1,6 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalAttributeTester {
 	private static final String DEBUG_PHRASE = "asdfsada year earlier";
@@ -46,7 +48,7 @@ public class TemporalAttributeTester {
 	private void evaluateParses(TemporalMention mention, TemporalResult result, List<? extends IJointParse<LogicalExpression, TemporalResult>> allParses){
 		List<TemporalResult> correctParses = getCorrectParses(mention, allParses);
 		List<TemporalResult> incorrectParses = getIncorrectParses(mention, allParses);
-		
+
 		stats.incrementTotalAttributes();
 		Debug.print(Type.ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
 
@@ -70,22 +72,55 @@ public class TemporalAttributeTester {
 			else {
 				if (mention.getPhrase().toString().contains(DEBUG_PHRASE))
 					Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
-				
+
 				/*
 				 * Error analysis goes here.
 				 */
+				boolean hasFoundErrorClass = false;
+
 				Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
 				if (correctParses.size() > 0) {
 					stats.incrementIncorrectClass("Incorrect parse selection");
 					Debug.print(Type.PARSE_SELECTION, formatResult(mention, result, correctParses, incorrectParses));
+					hasFoundErrorClass = true;
 				}
-				else if(goldValue.replace("X", "").replace("-", "").equals(guessValue.replace("X",  "").replace("-", "")))
-					stats.incrementIncorrectClass("Incorrect specificity");
-				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]"))
+				else if(TemporalUtil.getCalendar(goldValue) != null && TemporalUtil.getCalendar(guessValue) != null) {
+					Calendar goldCalendar = TemporalUtil.getCalendar(goldValue);
+					Calendar guessCalendar = TemporalUtil.getCalendar(guessValue);
+					if ((goldCalendar.get(Calendar.DAY_OF_MONTH) == guessCalendar.get(Calendar.DAY_OF_MONTH))&&
+							(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
+						if (Math.abs(goldCalendar.get(Calendar.YEAR) - guessCalendar.get(Calendar.YEAR))== 1)
+							stats.incrementIncorrectClass("Off by one year");
+						else
+							stats.incrementIncorrectClass("Off by more than one year");
+						hasFoundErrorClass = true;
+					}
+					else if ((goldCalendar.get(Calendar.YEAR) == guessCalendar.get(Calendar.YEAR))&&
+							(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
+						if (Math.abs(goldCalendar.get(Calendar.DAY_OF_YEAR) - guessCalendar.get(Calendar.DAY_OF_YEAR))== 7)
+							stats.incrementIncorrectClass("Off by one week");
+						else
+							stats.incrementIncorrectClass("Off by more than one week");
+						hasFoundErrorClass = true;
+					}
+				}
+				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]")) {
 					stats.incrementIncorrectClass("Incorrect week reference");
-				else if(goldValue.substring(0, goldValue.length() - 2).equals(guessValue.substring(0, guessValue.length() - 2)))
-					stats.incrementIncorrectClass("Incorrect day of month only");
-				else {
+					hasFoundErrorClass = true;
+				}
+				else if(goldValue.contains(guessValue)) {
+					stats.incrementIncorrectClass("Too specific");
+					hasFoundErrorClass = true;
+				}
+				else if(guessValue.contains(goldValue)) {
+					stats.incrementIncorrectClass("Not specific enough");
+					hasFoundErrorClass = true;
+				}
+				else if(goldValue.replaceAll("[0-9]", "X").equals(guessValue.replaceAll("[0-9]", "X"))) {
+					stats.incrementIncorrectClass("Incorrect certainty");
+					hasFoundErrorClass = true;
+				}
+				if (!hasFoundErrorClass) {
 					stats.incrementIncorrectClass("Unknown reason");
 					Debug.print(Type.UNKNOWN_INCORRECT, formatResult(mention, result, correctParses, incorrectParses));
 				}
@@ -100,7 +135,7 @@ public class TemporalAttributeTester {
 				correctParses.add(parse.getResult().second());		}
 		return correctParses;
 	}
-	
+
 	private List<TemporalResult> getIncorrectParses(TemporalMention mention, List<? extends IJointParse<LogicalExpression, TemporalResult>> allParses){
 		List<TemporalResult> incorrectParses = new LinkedList<TemporalResult>();
 		for (IJointParse<LogicalExpression, TemporalResult> parse : allParses){
@@ -117,7 +152,7 @@ public class TemporalAttributeTester {
 		s += "Doc ID:                  " + mention.getSentence().getDocID() + "\n";
 		s += "Gold value:              " + mention.getValue() + "\n";
 		s += "Gold type:               " + mention.getType() + "\n";
-		
+
 		if (result != null) {
 			s += "Guess value:             " + result.value + "\n";
 			s += "Guess type:              " + result.type + "\n";
@@ -128,9 +163,9 @@ public class TemporalAttributeTester {
 		}
 		else
 			s += "No parses!";
-		
+
 		s += "\n";
-		
+
 		return s;
 	}
 }

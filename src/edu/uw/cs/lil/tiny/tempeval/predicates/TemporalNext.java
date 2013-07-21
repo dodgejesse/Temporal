@@ -9,7 +9,7 @@ import org.joda.time.LocalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
-import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalNext extends TemporalPredicate {
 	public TemporalISO perform() {
@@ -109,7 +109,7 @@ public class TemporalNext extends TemporalPredicate {
 		if ((this.first.getKeys().contains("weekday"))
 				&& (!this.first.getKeys().contains("month"))
 				&& (!this.first.getKeys().contains("day"))) {
-			LocalDate date = TemporalJoda
+			LocalDate date = TemporalUtil
 					.convertISOToLocalDate(this.second);
 			if (date.getDayOfWeek() == TemporalISO
 					.getValueFromDate(this.first, "weekday")) {
@@ -119,7 +119,7 @@ public class TemporalNext extends TemporalPredicate {
 					.getValueFromDate(this.first, "weekday")) {
 				date = date.plusDays(1);
 			}
-			return TemporalJoda.convertLocalDateToISO(date);
+			return TemporalUtil.convertLocalDateToISO(date);
 		} else {
 			throw new IllegalArgumentException(
 					"haven't implemented things other than"
@@ -134,9 +134,9 @@ public class TemporalNext extends TemporalPredicate {
 	}
 	
 	private TemporalISO timeOfDay() {
-		LocalDate date = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate date = TemporalUtil.convertISOToLocalDate(second);
 		date = date.plusDays(1);
-		TemporalISO isoDate = TemporalJoda.convertLocalDateToISO(date);
+		TemporalISO isoDate = TemporalUtil.convertLocalDateToISO(date);
 		Map<String, Set<Integer>> tmpMap = isoDate.getFullMapping();
 		tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
 		return new TemporalDate(tmpMap);
@@ -160,9 +160,9 @@ public class TemporalNext extends TemporalPredicate {
 	private TemporalISO convexDay(){
 		if (TemporalDate.getValueFromDate(first, "day") > 0)
 			return first;
-		LocalDate refDate = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate refDate = TemporalUtil.convertISOToLocalDate(second);
 		refDate = refDate.plusDays(1);
-		return TemporalJoda.convertLocalDateToISO(refDate);
+		return TemporalUtil.convertLocalDateToISO(refDate);
 	}
 	
 	private TemporalISO dayAndNotMonth(){
@@ -237,7 +237,7 @@ public class TemporalNext extends TemporalPredicate {
 		if (firstWeek > 0)
 			return first;
 		Map<String, Set<Integer>> tmpMap = first.getFullMapping();
-		LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
+		LocalDate tmpLocalDate = TemporalUtil.convertISOToLocalDate(second);
 		tmpLocalDate = tmpLocalDate.plusWeeks(1);
 		int weekNum = tmpLocalDate.getWeekOfWeekyear();
 		Set<Integer> weekNums = new HashSet<Integer>();
@@ -257,9 +257,9 @@ public class TemporalNext extends TemporalPredicate {
 	// "day", or
 	// TemporalJoda.convertISOToLocalDate throws an error.
 	public boolean areTemporallyOrdered(TemporalDate f, TemporalDate s) {
-		LocalDate d1 = TemporalJoda.convertISOToLocalDate(f);
-		LocalDate d2 = TemporalJoda.convertISOToLocalDate(s);
-		LocalDate ref_time = TemporalJoda.convertISOToLocalDate(this.second);
+		LocalDate d1 = TemporalUtil.convertISOToLocalDate(f);
+		LocalDate d2 = TemporalUtil.convertISOToLocalDate(s);
+		LocalDate ref_time = TemporalUtil.convertISOToLocalDate(this.second);
 		if ((ref_time.isBefore(d1)) && (d1.isBefore(d2)))
 			return true;
 		else if ((d1.isBefore(ref_time) || d1.isEqual(ref_time)) && (ref_time.isBefore(d2)))

@@ -13,7 +13,7 @@ import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
-import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 import java.util.*;
 
@@ -191,12 +191,12 @@ public class TemporalMap {
 
 	// Shifts a given ISO by n days. If n is negative, shifts it backwards in time.
 	private TemporalISO shiftISOByDay(TemporalISO t, int n){
-		LocalDate tmp = TemporalJoda.convertISOToLocalDate(t);
+		LocalDate tmp = TemporalUtil.convertISOToLocalDate(t);
 		if (n > 0)
 			tmp = tmp.plusDays(n);
 		else if (n < 0)
 			tmp = tmp.minusDays(-n);
-		return TemporalJoda.convertLocalDateToISO(tmp);
+		return TemporalUtil.convertLocalDateToISO(tmp);
 	}
 
 	private boolean isNumber(String s){

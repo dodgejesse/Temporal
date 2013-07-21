@@ -7,7 +7,7 @@ import org.joda.time.LocalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDuration;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
-import edu.uw.cs.lil.tiny.tempeval.util.TemporalJoda;
+import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalThis extends TemporalPredicate {
 	public TemporalISO perform() {
@@ -24,14 +24,14 @@ public class TemporalThis extends TemporalPredicate {
 			if (tmpMap.containsKey("timeOfDay") && !tmpMap.containsKey("weekday")){
 				tmpMap.putAll(second.getFullMapping());
 			} else if (tmpMap.containsKey("timeOfDay") && 
-					(TemporalJoda.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
+					(TemporalUtil.convertISOToLocalDate(second).dayOfWeek().get() == TemporalISO.getValueFromDate(first, "weekday"))){
 				tmpMap = second.getFullMapping();
 				tmpMap.put("timeOfDay", first.getVal("timeOfDay"));
 			} else if (tmpMap.containsKey("weekday")) {
-				LocalDate date = TemporalJoda.convertISOToLocalDate(this.second);
+				LocalDate date = TemporalUtil.convertISOToLocalDate(this.second);
 				while (date.getDayOfWeek() != TemporalISO.getValueFromDate(this.first, "weekday"))
 					date = date.plusDays(1);
-				return TemporalJoda.convertLocalDateToISO(date);
+				return TemporalUtil.convertLocalDateToISO(date);
 			} else if (!tmpMap.containsKey("year")) {
 				Set<Integer> tmpSet = new HashSet<Integer>();
 				tmpSet.add(TemporalISO.getValueFromDate(second, "year"));
@@ -57,7 +57,7 @@ public class TemporalThis extends TemporalPredicate {
 				tmpMap.put("year", second.getVal("year"));
 				tmpMap.put("month", second.getVal("month"));
 			} else if (first.isSet("week")){
-				LocalDate tmpLocalDate = TemporalJoda.convertISOToLocalDate(second);
+				LocalDate tmpLocalDate = TemporalUtil.convertISOToLocalDate(second);
 				int weekNum = tmpLocalDate.getWeekOfWeekyear();
 				Set<Integer> weekNums = new HashSet<Integer>();
 				weekNums.add(weekNum);

@@ -1,5 +1,8 @@
 package edu.uw.cs.lil.tiny.tempeval.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,7 +13,8 @@ import org.joda.time.LocalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalDate;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 
-public class TemporalJoda {
+public class TemporalUtil {
+	private static final SimpleDateFormat ISO_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public static LocalDate convertISOToLocalDate(TemporalISO d) {
 		if (!d.isSet("year") || !d.isSet("month") || !d.isSet("day")){
@@ -33,5 +37,14 @@ public class TemporalJoda {
 		return new TemporalDate(tmpMap);
 	}
 	
+	public static Calendar getCalendar(String value) {
+		Calendar cal=Calendar.getInstance();
+	    try {
+			cal.setTime(ISO_FORMAT.parse(value));
+		} catch (ParseException e) {
+			return null;
+		}
+	    return cal;
+	}
 
 }
