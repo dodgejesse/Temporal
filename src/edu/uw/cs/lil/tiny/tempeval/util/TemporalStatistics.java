@@ -81,14 +81,13 @@ public class TemporalStatistics {
 	
 	public String attributetoString(){
 		String format = "%-40s%.2f%% (%d/%d)\n";
-		int incorrectAttributes = totalAttributes - correctAttributes;
 		String s = "";
 		
 		s += String.format(format, "Correct values", percentage(correctAttributes, totalAttributes), correctAttributes, totalAttributes);
 		for (Entry<String, Integer> entry : correctClasses.entrySet())
 			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
 		
-		s += String.format(format, "Inorrect values", percentage(incorrectAttributes, totalAttributes), incorrectAttributes, totalAttributes);
+		s += String.format(format, "Incorrect values", percentage(totalAttributes - correctAttributes, totalAttributes), totalAttributes - correctAttributes, totalAttributes);
 		for (Entry<String, Integer> entry : incorrectClasses.entrySet())
 			s += String.format(format, "  " + entry.getKey(), percentage(entry.getValue(), totalAttributes), entry.getValue(), totalAttributes);
 		

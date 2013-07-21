@@ -1,11 +1,10 @@
 package edu.uw.cs.lil.tiny.tempeval;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.cs.lil.tiny.data.sentence.Sentence;
 import edu.uw.cs.lil.tiny.mr.lambda.LogicalExpression;
-import edu.uw.cs.lil.tiny.parser.ccg.lexicon.LexicalEntry;
 import edu.uw.cs.lil.tiny.parser.joint.IJointOutput;
 import edu.uw.cs.lil.tiny.parser.joint.IJointParse;
 import edu.uw.cs.lil.tiny.parser.joint.model.*;
@@ -14,10 +13,7 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMentionDataset;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug;
 import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
-import edu.uw.cs.lil.tiny.tempeval.util.GovernerVerbPOSExtractor;
 import edu.uw.cs.lil.tiny.tempeval.util.TemporalStatistics;
-import edu.uw.cs.lil.tiny.utils.hashvector.IHashVector;
-import edu.uw.cs.utils.composites.Pair;
 
 public class TemporalAttributeTester {
 	private static final String DEBUG_PHRASE = "asdfsada year earlier";
@@ -40,158 +36,101 @@ public class TemporalAttributeTester {
 	}
 
 	private void testMention(TemporalMention mention) {
-		LogicalExpression guessLabel = null;
-		String guessType = "", guessVal = "", correctLogicalForms = "", incorrectLogicalForms = "";
-		LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries = null;
-		IHashVector averageMaxFeatureVector = null;
-		IHashVector theta = model.getTheta();
-
-		// To extract all of the information from the mention.
-		// The key to know how to unpack this is in TemporalSentence.java.
-		Sentence phrase = mention.getPhrase();
-		String sentence = mention.getSentence().toString();
-		String referenceTime = mention.getSentence().getReferenceTime();
-		String depParse = mention.getSentence().getDependencyParse();
-		String docID = mention.getSentence().getDocID();
-		String goldType = mention.getType();
-		String goldVal = mention.getValue();
-		Pair<String, String>  govVerbPOSWithMod = GovernerVerbPOSExtractor.getGovVerbTag(mention);
-		String govVerbPOS = govVerbPOSWithMod.second();
-		String mod = govVerbPOSWithMod.first();
-
 		IJointDataItemModel<LogicalExpression, LogicalExpression> jointDataItemModel = new JointDataItemModel<Sentence, TemporalMention, LogicalExpression, LogicalExpression>(model, mention);
 		final IJointOutput<LogicalExpression, TemporalResult> parserOutput = jointParser.parse(mention, jointDataItemModel);
 		final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses = parserOutput.getBestJointParses();
-		boolean isCorrect;
-		boolean hasParse = bestParses.size() > 0;
+		TemporalResult bestResult = bestParses.isEmpty() ? null : bestParses.get(0).getResult().second();
+		evaluateParses(mention, bestResult, parserOutput.getAllJointParses());
+	}
+
+	private void evaluateParses(TemporalMention mention, TemporalResult result, List<? extends IJointParse<LogicalExpression, TemporalResult>> allParses){
+		List<TemporalResult> correctParses = getCorrectParses(mention, allParses);
+		List<TemporalResult> incorrectParses = getIncorrectParses(mention, allParses);
 		
 		stats.incrementTotalAttributes();
-		if (hasParse) {
-			IJointParse<LogicalExpression, TemporalResult> topParse = bestParses.get(0);
+		Debug.print(Type.ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
 
-			averageMaxFeatureVector = topParse.getAverageMaxFeatureVector();
-
-			guessType = topParse.getResult().second().type;
-			guessVal = topParse.getResult().second().val;
-			guessLabel = topParse.getResult().second().e;
-			lexicalEntries = topParse.getResult().second().lexicalEntries;
-
-			isCorrect = evaluateTopParse(mention, guessType, guessVal);
-			incorrectLogicalForms = getIncorrectLogicalForms(goldType, goldVal, parserOutput.getAllJointParses(), theta);
-			correctLogicalForms = getCorrectLogicalForms(goldType, goldVal, parserOutput.getAllJointParses(), theta);
-			if (!isCorrect && correctLogicalForms.length() > 0) {
-				stats.incrementIncorrectClass("Incorrect parse selection");
-			}
-		} else {
+		if(result == null) {
 			stats.incrementIncorrectClass("No parses");
-			isCorrect = false;
-		}
-
-		Debug.print(Type.ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
-				depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
-		if (!isCorrect) {
-			Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
-					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
-			if (correctLogicalForms.length() > 0)
-				Debug.print(Type.PARSE_SELECTION, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
-						depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
-		}
-		if (phrase.toString().contains(DEBUG_PHRASE))
-			Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(docID, guessLabel, goldType, goldVal, guessType, guessVal, phrase.toString(), referenceTime, isCorrect, hasParse,
-					depParse, govVerbPOS, sentence, mod, correctLogicalForms, incorrectLogicalForms, lexicalEntries,averageMaxFeatureVector, theta));
-	}
-
-	private String getCorrectLogicalForms(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
-		String correctLogicalForms = "";
-		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
-			String guessType = l.getResult().second().type;
-			String guessVal = l.getResult().second().val;
-			LogicalExpression guessLabel = l.getResult().second().e;
-			if (goldType.equals(guessType) && goldVal.equals(guessVal))
-				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
-		}
-		return correctLogicalForms;
-	}
-
-	private String getIncorrectLogicalForms(String goldType, String goldVal, final List<? extends IJointParse<LogicalExpression, TemporalResult>> bestParses, IHashVector theta){
-		String correctLogicalForms = "";
-		for (IJointParse<LogicalExpression, TemporalResult> l : bestParses){
-			String guessType = l.getResult().second().type;
-			String guessVal = l.getResult().second().val;
-			LogicalExpression guessLabel = l.getResult().second().e;
-			if (!(goldType.equals(guessType) && goldVal.equals(guessVal)))
-				correctLogicalForms += "\n\t[" + guessLabel.toString() + "=>" + "(" + guessType + "," + guessVal + ")" + "]" + theta.printValues(l.getAverageMaxFeatureVector());
-		}
-		return correctLogicalForms;
-	}
-
-	private boolean evaluateTopParse(TemporalMention mention, String guessType, String guessValue){
-		String goldValue = mention.getValue();
-		String goldType = mention.getType();
-		
-		if (goldValue.equals(guessValue)) {
-			stats.incrementCorrectAttributes();
-			if (goldType.equals(guessType))
-				stats.incrementCorrectClass("Correct value and type");
-			if (guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]"))
-				stats.incrementCorrectClass("Correct week reference");
-			return true;
-		}
-		else {			
-			if(goldValue.replace("X", "").replace("-", "").equals(guessValue.replace("X",  "").replace("-", "")))
-				stats.incrementIncorrectClass("Incorrect specificity");
-			else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]"))
-				stats.incrementIncorrectClass("Incorrect week reference");
-			else if(goldValue.substring(0, goldValue.length() - 2).equals(guessValue.substring(0, guessValue.length() - 2)))
-				stats.incrementIncorrectClass("Incorrect day of month only");
-			else {
-				stats.incrementIncorrectClass("Unknown reason");
-				Debug.print(Type.UNKNOWN_INCORRECT, simpleFormatResult(mention, guessType, guessValue));
-			}
-			return false;
-		}
-	}
-	
-	private String simpleFormatResult(TemporalMention mention, String guessType, String guessVal) {
-		String s = "";
-		s += "Phrase:            " + mention.getPhrase().toString() + "\n";
-		s += "Sentence:          " + mention.getSentence().toString() + "\n";
-		s += "Reference time:    " + mention.getSentence().getReferenceTime() + "\n";
-		s += "Gold value:        " + mention.getValue() + "\n";
-		s += "Guess value:       " + guessVal + "\n";
-		s += "Gold type:         " + mention.getType() + "\n";
-		s += "Guess type:        " + guessType + "\n";
-		return s;
-	}
-
-	private String formatResult(String docID, LogicalExpression label, String goldType, String goldVal,
-			String guessType, String guessVal, String phrase, String referenceTime,
-			boolean isCorrect, boolean hasParse, String depParse, String govVerbPOS, String sentence, String mod, 
-			String correctLogicalForms, String incorrectLogicalForms, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, IHashVector averageMaxFeatureVector, IHashVector theta) {
-		String s = "";
-		s += "Phrase:            " + phrase + "\n";
-		s += "Sentence:          " + sentence + "\n";
-		s += "Reference time:    " + referenceTime + "\n";
-		s += "Doc ID:            " + docID + "\n";
-		s += "Gold type:         " + goldType + "\n";
-		s += "Gold val:          " + goldVal + "\n";
-		if(hasParse) {
-			s += "Guess type:        " + guessType + "\n";
-			s += "Guess val:         " + guessVal + "\n";
-			s += "Lexical Entries:   " + lexicalEntries + "\n";
-			s += "Logic:             " + label + "\n";
-			s += "Average max feats: " + theta.printValues(averageMaxFeatureVector) + "\n";
-			s += "Correct?           " + isCorrect + "\n";
-			s += "Correct logics:    " + correctLogicalForms + "\n";
-			s += "Incorrect logics:  " + incorrectLogicalForms + "\n";
-			s += "Governor verb POS: " + govVerbPOS + "\n";
-			s += "Mod:               " + mod.equals("MD") + "\n";
+			Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
 		}
 		else {
-			s += "NO PARSES!";
+			String goldValue = mention.getValue();
+			String goldType = mention.getType();
+			String guessType = result.type;
+			String guessValue = result.value;
+
+			if (goldValue.equals(guessValue)) {
+				stats.incrementCorrectAttributes();
+				if (goldType.equals(guessType))
+					stats.incrementCorrectClass("Correct value and type");
+				if (guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]"))
+					stats.incrementCorrectClass("Correct week reference");
+			}
+			else {
+				if (mention.getPhrase().toString().contains(DEBUG_PHRASE))
+					Debug.print(Type.DEBUG_ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
+				
+				/*
+				 * Error analysis goes here.
+				 */
+				Debug.print(Type.INCORRECT_ATTRIBUTE, formatResult(mention, result, correctParses, incorrectParses));
+				if (correctParses.size() > 0) {
+					stats.incrementIncorrectClass("Incorrect parse selection");
+					Debug.print(Type.PARSE_SELECTION, formatResult(mention, result, correctParses, incorrectParses));
+				}
+				else if(goldValue.replace("X", "").replace("-", "").equals(guessValue.replace("X",  "").replace("-", "")))
+					stats.incrementIncorrectClass("Incorrect specificity");
+				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]"))
+					stats.incrementIncorrectClass("Incorrect week reference");
+				else if(goldValue.substring(0, goldValue.length() - 2).equals(guessValue.substring(0, guessValue.length() - 2)))
+					stats.incrementIncorrectClass("Incorrect day of month only");
+				else {
+					stats.incrementIncorrectClass("Unknown reason");
+					Debug.print(Type.UNKNOWN_INCORRECT, formatResult(mention, result, correctParses, incorrectParses));
+				}
+			}
 		}
-		//s += "Dep. parse:      \n" + depParse + "\n";
-		s += "\n\n";
+	}
+
+	private List<TemporalResult> getCorrectParses(TemporalMention mention, List<? extends IJointParse<LogicalExpression, TemporalResult>> allParses){
+		List<TemporalResult> correctParses = new LinkedList<TemporalResult>();
+		for (IJointParse<LogicalExpression, TemporalResult> parse : allParses){
+			if (parse.getResult().second().value.equals(mention.getValue()))
+				correctParses.add(parse.getResult().second());		}
+		return correctParses;
+	}
+	
+	private List<TemporalResult> getIncorrectParses(TemporalMention mention, List<? extends IJointParse<LogicalExpression, TemporalResult>> allParses){
+		List<TemporalResult> incorrectParses = new LinkedList<TemporalResult>();
+		for (IJointParse<LogicalExpression, TemporalResult> parse : allParses){
+			if (!parse.getResult().second().value.equals(mention.getValue()))
+				incorrectParses.add(parse.getResult().second());		}
+		return incorrectParses;
+	}
+
+	private String formatResult(TemporalMention mention, TemporalResult result, List<TemporalResult> correctParses, List<TemporalResult> incorrectParses) {
+		String s = "";
+		s += "Phrase:                  " + mention.getPhrase().toString() + "\n";
+		s += "Sentence:                " + mention.getSentence().toString() + "\n";
+		s += "Reference time:          " + mention.getSentence().getReferenceTime() + "\n";
+		s += "Doc ID:                  " + mention.getSentence().getDocID() + "\n";
+		s += "Gold value:              " + mention.getValue() + "\n";
+		s += "Gold type:               " + mention.getType() + "\n";
+		
+		if (result != null) {
+			s += "Guess value:             " + result.value + "\n";
+			s += "Guess type:              " + result.type + "\n";
+			s += "Chosen logical form:     " + result.expression + "\n";
+			s += "Correct logical forms:   " + correctParses + "\n";
+			s += "Incorrect logical forms: " + incorrectParses + "\n";
+			s += "Lexical entries:         " + result.lexicalEntries + "\n";
+		}
+		else
+			s += "No parses!";
+		
+		s += "\n";
+		
 		return s;
 	}
 }

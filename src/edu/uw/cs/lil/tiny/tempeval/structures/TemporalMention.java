@@ -125,7 +125,7 @@ public class TemporalMention implements java.io.Serializable, ILabeledDataItem<P
 
 	@Override
 	public boolean isCorrect(TemporalResult other) {
-		return other.type.equals(type) && other.val.equals(value);
+		return other.type.equals(type) && other.value.equals(value);
 	}
 
 	public void setSentence(TemporalSentence sentence) {

@@ -12,39 +12,39 @@ import edu.uw.cs.lil.tiny.parser.joint.SingleExecResultWrapper;
 import edu.uw.cs.lil.tiny.parser.joint.model.IJointDataItemModel;
 
 public class TemporalResult {
-	public final LogicalExpression e;
+	public final LogicalExpression expression;
 	public final String type;
-	public final String val;
+	public final String value;
 	public final LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries;
 	private final IJointDataItemModel<LogicalExpression, LogicalExpression> model;
 	private final IParseResult<LogicalExpression> baseParse;
-	private IJointParse<LogicalExpression, TemporalResult> jp;
+	private IJointParse<LogicalExpression, TemporalResult> jointParse;
 	
 	
-	public TemporalResult(LogicalExpression e, String type, String val, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, 
+	public TemporalResult(LogicalExpression expression, String type, String value, LinkedHashSet<LexicalEntry<LogicalExpression>> lexicalEntries, 
 			IJointDataItemModel<LogicalExpression, LogicalExpression> model, IParseResult<LogicalExpression> baseParse){
-		this.e = e;
+		this.expression = expression;
 		this.type = type;
-		this.val = val;
+		this.value = value;
 		this.lexicalEntries = lexicalEntries;
 		this.model = model;
 		this.baseParse = baseParse;
-		jp = null;
+		jointParse = null;
 	}
 	
 	private void makeJointParse(){
 		SingleExecResultWrapper<LogicalExpression, TemporalResult> wrapper = 
 				new SingleExecResultWrapper<LogicalExpression, TemporalResult>(
-				e, model, this);
+				expression, model, this);
 		
-		jp = new JointParse<LogicalExpression, TemporalResult>(
+		jointParse = new JointParse<LogicalExpression, TemporalResult>(
 				baseParse, wrapper);
 	}
 	
 	public IJointParse<LogicalExpression, TemporalResult> getJointParse(){
-		if (jp == null)
+		if (jointParse == null)
 			makeJointParse();
-		return jp;
+		return jointParse;
 	}
 	
 	/* 
@@ -60,16 +60,12 @@ public class TemporalResult {
 
         if (obj instanceof TemporalResult) {
         	TemporalResult other = (TemporalResult) obj;
-        	return other.type.equals(this.type) && other.val.equals(this.val);
+        	return other.type.equals(this.type) && other.value.equals(this.value);
         } else
         	return false;
     }
 	
 	public String toString(){
-		//jp.getAverageMaxFeatureVector();
-		//jp.getAverageMaxFeatureVector();
-		//jp.getAverageMaxFeatureVector();
-	
-		return "(" + e.toString() + ") => (" + type + "," + val + ")"; //+ model.getTheta().printValues(jp.getAverageMaxFeatureVector());
+		return "(" + expression.toString() + ") => (" + type + "," + value + ")";
 	}
 }
