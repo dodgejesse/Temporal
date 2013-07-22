@@ -288,8 +288,7 @@ public class TemporalPrevious extends TemporalPredicate {
 			} else if (first.isSet("day") && !first.isSet("month")){
 				prevDate = dayAndNotMonth();
 			} else
-				throw new IllegalArgumentException(
-						"Haven't implemented 'previous' for " + first);
+				return null;
 		}
 
 		return prevDate;

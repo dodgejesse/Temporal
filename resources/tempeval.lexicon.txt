@@ -1,6 +1,6 @@
 //the lexicon
 
-//earlier :- NP : past_ref:r
+earlier :- NP : past_ref:r
 recently :- NP : past_ref:r
 recent :- NP : past_ref:r
 once :- NP : past_ref:r
@@ -15,7 +15,6 @@ last few :- NP/NP : (lambda $0:d past_ref:r)
 past several :- NP/NP : (lambda $0:d past_ref:r)
 recent :- NP/NP : (lambda $0:d past_ref:r)
 the time :- NP : past_ref:r
-
 
 now :- NP : present_ref:r
 currently :- NP : present_ref:r
@@ -39,7 +38,6 @@ from time to time :- NP : future_ref:r
 a year or two :- NP : future_ref:r
 a later date :- NP : future_ref:r
 coming :- NP/NP : (lambda $0:d future_ref:r)
-
 
 monday :- NP : monday:s
 tuesday :- NP : tuesday:s
@@ -867,6 +865,8 @@ nineteen ninety-four :- NP : 1994:r
 2017 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2017:r))
 2018 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2018:r))
 2019 :- NP\NP : (lambda $0:s (intersect:<s*,s> $0 2019:r))
+
+the :- NP/NP : (lambda $0:d (nth:<d,<n,s>> $0 0o:n))
 
 // those with empty semantics
 a :- NP/NP : (lambda $0:s $0)

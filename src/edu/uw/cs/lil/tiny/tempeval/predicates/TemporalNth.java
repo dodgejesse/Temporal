@@ -13,27 +13,19 @@ public class TemporalNth extends TemporalPredicate{
 	public TemporalISO perform() {
 		if (first == null || second == null)
 			return null;
-			
-		if (first instanceof TemporalNumber){
-			return new TemporalDate("quarter", ((TemporalNumber) first).getNum());
-		}
 		 
 		int existingN = getSpecifiedDuration(first);
 		// If the first argument already specified a non-zero number, e.g. first two months, use that instead
 		if (existingN > 0)
 			second = new TemporalNumber(existingN, true);
 		
-		
 		if (!(first instanceof TemporalDuration)){
 			throw new IllegalArgumentException("The first ISO stored in TemporalNth is not a TemporalDuration! (It really should  be.) ");
 		}
 		if (!(second instanceof TemporalNumber))
 			throw new IllegalArgumentException("The second ISO stored in TemporalNth is not a number!");
-		//TemporalNthOfEach nthOfEach = new TemporalNthOfEach();
-		//nthOfEach.storeISO(first);
-		//nthOfEach.storeISO(second);
+		
 		return nthOfEach();
-		//return nthOfEach.perform();
 	}
 	
 	
@@ -51,9 +43,9 @@ public class TemporalNth extends TemporalPredicate{
 		else if (first.isSet("day")) //day of the month
 			return new TemporalDate("day", secondNum.getNum());
 		else if (first.isSet("weekday")) //weekday of the week
-			return new TemporalDate("weekday", secondNum.getNum()); //hour of the weekday
-		else if (first.isSet("hour"))
-			return first;
+			return new TemporalDate("weekday", secondNum.getNum());
+		else if (first.isSet("hour")) //hour of the day
+			return new TemporalDate("hour", secondNum.getNum());
 		else 
 			return null;
 		//throw new IllegalArgumentException("Constants passed to NthOfEach are not implemented yet! " + "Check TemporalNthOfEach for list of implemented constants.");

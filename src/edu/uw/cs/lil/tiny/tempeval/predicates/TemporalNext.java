@@ -105,7 +105,7 @@ public class TemporalNext extends TemporalPredicate {
 			} else if (!first.isConvexSet()){
 				nextDate = first;
 			} else 
-				throw new IllegalArgumentException("Haven't implemented 'next' for convex set " + first);
+				return null;
 		}
 		return nextDate;
 	}
@@ -126,9 +126,7 @@ public class TemporalNext extends TemporalPredicate {
 			}
 			return TemporalUtil.convertLocalDateToISO(date);
 		} else {
-			throw new IllegalArgumentException(
-					"haven't implemented things other than"
-							+ " dates with months or days. Problem in TemporalNext's findNext()");
+			return null;
 		}
 	}
 
