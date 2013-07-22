@@ -104,20 +104,20 @@ public class TemporalAttributeTester {
 						hasFoundErrorClass = true;
 					}
 				}
-				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]")) {
-					stats.incrementIncorrectClass("Incorrect week reference");
+				else if(guessValue.contains(goldValue)) {
+					stats.incrementIncorrectClass("Not specific enough");
 					hasFoundErrorClass = true;
 				}
 				else if(goldValue.contains(guessValue)) {
 					stats.incrementIncorrectClass("Too specific");
 					hasFoundErrorClass = true;
 				}
-				else if(guessValue.contains(goldValue)) {
-					stats.incrementIncorrectClass("Not specific enough");
-					hasFoundErrorClass = true;
-				}
 				else if(goldValue.replaceAll("[0-9]", "X").equals(guessValue.replaceAll("[0-9]", "X"))) {
 					stats.incrementIncorrectClass("Incorrect certainty");
+					hasFoundErrorClass = true;
+				}
+				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]")) {
+					stats.incrementIncorrectClass("Incorrect week reference");
 					hasFoundErrorClass = true;
 				}
 				if (!hasFoundErrorClass) {

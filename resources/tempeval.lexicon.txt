@@ -1,6 +1,6 @@
 //the lexicon
 
-earlier :- NP : past_ref:r
+//earlier :- NP : past_ref:r
 recently :- NP : past_ref:r
 recent :- NP : past_ref:r
 once :- NP : past_ref:r
@@ -187,7 +187,7 @@ this :- NP/NP : (lambda $0:s (this:<s,<r,s>> $0 ref_time:r))
 this :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 full :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 current :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
-earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
+//earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 
 // For using temporal refernce
 //earlier :- NP\NP : (lambda $0:d (*:<d,<n,d>> $0 -1:n))
@@ -207,6 +207,7 @@ earlier in the :- NP/NP : (lambda $0:d (this:<d,<r,s>> $0 ref_time:r))
 
 // for phrases like "three weeks ago"
 ago :- NP\NP : (lambda $0:d (previous:<d,<r,s>> (*:<d,<n,d>> $0 -1:n) ref_time:r))
+earlier :- NP\NP : (lambda $0:d (previous:<d,<r,s>> (*:<d,<n,d>> $0 -1:n) ref_time:r))
 
 
 // these are numbers, to be multiplied by durations

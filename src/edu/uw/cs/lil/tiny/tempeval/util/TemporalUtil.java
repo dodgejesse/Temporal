@@ -43,6 +43,8 @@ public class TemporalUtil {
 			cal.setTime(ISO_FORMAT.parse(value));
 		} catch (ParseException e) {
 			return null;
+		} catch (NumberFormatException e) {
+			return null;
 		}
 	    return cal;
 	}
