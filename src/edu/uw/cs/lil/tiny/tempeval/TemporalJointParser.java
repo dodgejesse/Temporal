@@ -93,7 +93,7 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 			addFunction("(lambda $0:s (next:<s,<r,s>> $0 ref_time:r))", l, expressions);
 			if (sameDocID)
 				addFunction("(lambda $0:d (temporal_ref:<d,s> $0))", l, expressions);
-				
+
 		}
 		return expressions;
 	}
@@ -164,14 +164,16 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 		for (IParseResult<LogicalExpression> parseResult : CKYModelParses) {
 			for(LogicalExpression label : getLabels(parseResult.getY(), hasPreviousISO)) {
 				try {
-				TemporalISO iso = TemporalVisitor.of(label, ts.getReferenceTime(), prevISO);
-				TemporalResult tr = new TemporalResult(label, iso.getType(), iso.getVal(), parseResult.getAllLexicalEntries(), model, parseResult);
-				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
-				if (jp.getScore() > bestScore) {
-					bestScore = jp.getScore();
-					bestISO = iso;
-				}
-				allExecutedParses.add(jp);
+					TemporalISO iso = TemporalVisitor.of(label, ts.getReferenceTime(), prevISO);
+					if  (iso != null) {
+						TemporalResult tr = new TemporalResult(label, iso.getType(), iso.getVal(), parseResult.getAllLexicalEntries(), model, parseResult);
+						IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
+						if (jp.getScore() > bestScore) {
+							bestScore = jp.getScore();
+							bestISO = iso;
+						}
+						allExecutedParses.add(jp);
+					}
 				}
 				catch(ClassCastException e) {
 					Debug.println(Type.ERROR, "Executing: " + label);

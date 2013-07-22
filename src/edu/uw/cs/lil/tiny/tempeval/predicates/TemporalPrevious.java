@@ -16,12 +16,15 @@ public class TemporalPrevious extends TemporalPredicate {
 
 	@Override
 	public TemporalISO perform() {
+		if (first == null)
+			return null;
 		// TODO: This is a hack!! If the temporal phrase is just "last", it
 		// returns last year.
 		if (second == null)
 			return new TemporalDate("year", TemporalDate.getValueFromDate(
 					first, "year"));
-		testStoredDates();
+		if (!(first instanceof TemporalDate || first instanceof TemporalDuration)|| !(second instanceof TemporalDate))
+			return null;
 		return findPrevious();
 	}
 
@@ -313,13 +316,5 @@ public class TemporalPrevious extends TemporalPredicate {
 			tmpInt.add(Integer.valueOf(i - 1));
 		}
 		return tmpInt;
-	}
-
-	private void testStoredDates() {
-
-		if (!(first instanceof TemporalDate || first instanceof TemporalDuration)
-				|| !(second instanceof TemporalDate))
-			throw new IllegalArgumentException(
-					"The two parameters to TemporalPrevious aren't TemporalDate objects, which they should be.");
 	}
 }

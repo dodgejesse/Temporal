@@ -7,6 +7,8 @@ import edu.uw.cs.lil.tiny.tempeval.types.TemporalNumber;
 public class TemporalMultiplication extends TemporalPredicate {
 
 	public TemporalDuration perform() {
+		if (first == null || second == null)
+			return null;
 		checkInput();
 		TemporalNumber temporalNum = (TemporalNumber)second;
 
@@ -20,7 +22,7 @@ public class TemporalMultiplication extends TemporalPredicate {
 			newNum *= TemporalISO.getValueFromDate(first, baseDuration);
 		return new TemporalDuration(baseDuration, newNum);
 	}
-	
+
 	private void checkInput(){
 		// This first 'if' is in case of temporal phrases like "two" in the sentence "two or three days". "months" is the most common of durations, 
 		// but "days" is the example in the training set. 

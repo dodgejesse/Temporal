@@ -17,10 +17,12 @@ public class TemporalReference extends TemporalPredicate{
 	
 	
 	public TemporalISO perform(){
+		if (first == null)
+			return null;
+		
 		if (previous == null || first.isFullySpecified() || !(first instanceof TemporalDuration) || notSameFields()){
 			return new TemporalDate("year", 0);
 		}
-
 		
 		// TODO: Test here if first is a fully specified calendar date. If so, return it.
 		// TODO: Test to see if going back or forward by a day changes the month, etc.

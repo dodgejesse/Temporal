@@ -13,6 +13,11 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalNext extends TemporalPredicate {
 	public TemporalISO perform() {
+		if (first == null)
+			return null;
+
+		if (!(first instanceof TemporalDate || first instanceof TemporalDuration) || (!(second instanceof TemporalDate)))
+			return null;
 		testStoredDates();
 		return findNext();
 	}

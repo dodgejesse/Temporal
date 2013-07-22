@@ -932,7 +932,7 @@ more :- NP/NP : (lambda $0:d $0)
 , :- NP/NP : (lambda $0:d $0)
 fiscal :- NP/NP : (lambda $0:s $0)
 
-
+of :- NP\NP/NP : (lambda $0:s (lambda $1:s (intersect:<s*,s> $1 $0)))
 
 // Not sure if this guy is useful. Check in the data more throughly.
 a :- NP/NP : (lambda $0:d $0)

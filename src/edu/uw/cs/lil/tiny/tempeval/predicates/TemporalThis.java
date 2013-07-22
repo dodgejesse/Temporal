@@ -11,7 +11,10 @@ import edu.uw.cs.lil.tiny.tempeval.util.TemporalUtil;
 
 public class TemporalThis extends TemporalPredicate {
 	public TemporalISO perform() {
-		testStoredDates();
+		if (first == null)
+			return null;
+		if (!(first instanceof TemporalDate || first instanceof TemporalDuration)|| !(second instanceof TemporalDate))
+			return null;
 		return findThis();
 	}
 
@@ -68,14 +71,6 @@ public class TemporalThis extends TemporalPredicate {
 
 		return new TemporalDate(tmpMap);
 
-	}
-
-	private void testStoredDates() {
-		if (!(first instanceof TemporalDate || first instanceof TemporalDuration)
-				|| !(second instanceof TemporalDate)){			
-			throw new IllegalArgumentException(
-					"The two parameters to TemporalThis aren't TemporalDate objects, which they should be.");
-		}
 	}
 }
 
