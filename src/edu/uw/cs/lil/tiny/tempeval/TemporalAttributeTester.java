@@ -84,41 +84,43 @@ public class TemporalAttributeTester {
 					Debug.print(Type.PARSE_SELECTION, formatResult(mention, result, correctParses, incorrectParses));
 					hasFoundErrorClass = true;
 				}
-				else if(TemporalUtil.getCalendar(goldValue) != null && TemporalUtil.getCalendar(guessValue) != null) {
-					Calendar goldCalendar = TemporalUtil.getCalendar(goldValue);
-					Calendar guessCalendar = TemporalUtil.getCalendar(guessValue);
-					if ((goldCalendar.get(Calendar.DAY_OF_MONTH) == guessCalendar.get(Calendar.DAY_OF_MONTH))&&
-							(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
-						if (Math.abs(goldCalendar.get(Calendar.YEAR) - guessCalendar.get(Calendar.YEAR))== 1)
-							stats.incrementIncorrectClass("Off by one year");
-						else
-							stats.incrementIncorrectClass("Off by more than one year");
+				else {
+					if(TemporalUtil.getCalendar(goldValue) != null && TemporalUtil.getCalendar(guessValue) != null) {
+						Calendar goldCalendar = TemporalUtil.getCalendar(goldValue);
+						Calendar guessCalendar = TemporalUtil.getCalendar(guessValue);
+						if ((goldCalendar.get(Calendar.DAY_OF_MONTH) == guessCalendar.get(Calendar.DAY_OF_MONTH))&&
+								(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
+							if (Math.abs(goldCalendar.get(Calendar.YEAR) - guessCalendar.get(Calendar.YEAR))== 1)
+								stats.incrementIncorrectClass("Off by one year");
+							else
+								stats.incrementIncorrectClass("Off by more than one year");
+							hasFoundErrorClass = true;
+						}
+						else if ((goldCalendar.get(Calendar.YEAR) == guessCalendar.get(Calendar.YEAR))&&
+								(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
+							if (Math.abs(goldCalendar.get(Calendar.DAY_OF_YEAR) - guessCalendar.get(Calendar.DAY_OF_YEAR))== 7)
+								stats.incrementIncorrectClass("Off by one week");
+							else
+								stats.incrementIncorrectClass("Off by more than one week");
+							hasFoundErrorClass = true;
+						}
+					}
+					if(guessValue.contains(goldValue)) {
+						stats.incrementIncorrectClass("Not specific enough");
 						hasFoundErrorClass = true;
 					}
-					else if ((goldCalendar.get(Calendar.YEAR) == guessCalendar.get(Calendar.YEAR))&&
-							(goldCalendar.get(Calendar.MONTH) == guessCalendar.get(Calendar.MONTH))) {
-						if (Math.abs(goldCalendar.get(Calendar.DAY_OF_YEAR) - guessCalendar.get(Calendar.DAY_OF_YEAR))== 7)
-							stats.incrementIncorrectClass("Off by one week");
-						else
-							stats.incrementIncorrectClass("Off by more than one week");
+					if(goldValue.contains(guessValue)) {
+						stats.incrementIncorrectClass("Too specific");
 						hasFoundErrorClass = true;
 					}
-				}
-				else if(guessValue.contains(goldValue)) {
-					stats.incrementIncorrectClass("Not specific enough");
-					hasFoundErrorClass = true;
-				}
-				else if(goldValue.contains(guessValue)) {
-					stats.incrementIncorrectClass("Too specific");
-					hasFoundErrorClass = true;
-				}
-				else if(goldValue.replaceAll("[0-9]", "X").equals(guessValue.replaceAll("[0-9]", "X"))) {
-					stats.incrementIncorrectClass("Incorrect certainty");
-					hasFoundErrorClass = true;
-				}
-				else if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]")) {
-					stats.incrementIncorrectClass("Incorrect week reference");
-					hasFoundErrorClass = true;
+					if(goldValue.replaceAll("[0-9]", "X").equals(guessValue.replaceAll("[0-9]", "X"))) {
+						stats.incrementIncorrectClass("Incorrect certainty");
+						hasFoundErrorClass = true;
+					}
+					if(guessValue.matches("[0-9][0-9][0-9][0-9]-W[0-9][0-9]")) {
+						stats.incrementIncorrectClass("Incorrect week reference");
+						hasFoundErrorClass = true;
+					}
 				}
 				if (!hasFoundErrorClass) {
 					stats.incrementIncorrectClass("Unknown reason");
