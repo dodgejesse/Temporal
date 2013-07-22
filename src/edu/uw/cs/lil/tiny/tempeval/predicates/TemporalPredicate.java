@@ -11,7 +11,6 @@ import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
 public abstract class TemporalPredicate {
 	TemporalISO first;
 	TemporalISO second;
-	TemporalISO third;
 
 	public abstract TemporalISO perform();
 
@@ -20,12 +19,7 @@ public abstract class TemporalPredicate {
 			this.first = other;
 		else if (this.second == null)
 			this.second = other;
-		else if (this.third == null) {
-			if (!(this instanceof TemporalNthOfEach))
-				throw new IllegalArgumentException(
-						"Trying to add a third argument to a predicate that shouldn't need one.");
-			this.third = other;
-		} else
+		else
 			throw new IllegalArgumentException(
 					"We have a problem in storeISO(TemporalISO d), in TemporalPredicate! "
 							+ "There are already three ISOs stored, and we're trying to add another!");

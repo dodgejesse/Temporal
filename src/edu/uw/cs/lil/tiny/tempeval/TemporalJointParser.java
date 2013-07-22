@@ -23,6 +23,8 @@ import edu.uw.cs.lil.tiny.tempeval.structures.TemporalMention;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalResult;
 import edu.uw.cs.lil.tiny.tempeval.structures.TemporalSentence;
 import edu.uw.cs.lil.tiny.tempeval.types.TemporalISO;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug;
+import edu.uw.cs.lil.tiny.tempeval.util.Debug.Type;
 import edu.uw.cs.utils.composites.Pair;
 
 /**
@@ -161,6 +163,7 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 
 		for (IParseResult<LogicalExpression> parseResult : CKYModelParses) {
 			for(LogicalExpression label : getLabels(parseResult.getY(), hasPreviousISO)) {
+				try {
 				TemporalISO iso = TemporalVisitor.of(label, ts.getReferenceTime(), prevISO);
 				TemporalResult tr = new TemporalResult(label, iso.getType(), iso.getVal(), parseResult.getAllLexicalEntries(), model, parseResult);
 				IJointParse<LogicalExpression, TemporalResult> jp = tr.getJointParse();
@@ -169,6 +172,10 @@ public class TemporalJointParser extends AbstractParser<Sentence, LogicalExpress
 					bestISO = iso;
 				}
 				allExecutedParses.add(jp);
+				}
+				catch(ClassCastException e) {
+					Debug.println(Type.ERROR, "Executing: " + label);
+				}
 			}
 		}
 
